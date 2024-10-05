@@ -12,10 +12,18 @@ import {
 import i18n from "../../i18n";
 import { useTranslation } from "react-i18next";
 import MenuIcon from "@mui/icons-material/Menu";
+import LoginIcon from "@mui/icons-material/Login";
+import SearchIcon from "@mui/icons-material/Search";
+import it from "../../assets/flags/it.svg";
+import us from "../../assets/flags/us.svg";
 
 export const Header = () => {
-  const handleLanguageChange = (lang) => {
-    i18n.changeLanguage(lang);
+  const handleLanguageChange = () => {
+    if (i18n.language === "it") {
+      i18n.changeLanguage("en");
+    } else {
+      i18n.changeLanguage("it");
+    }
   };
 
   const { t } = useTranslation();
@@ -39,6 +47,7 @@ export const Header = () => {
           <div className="header-side">
             <li>
               <Link
+                className="Link"
                 color="primary"
                 disabled={false}
                 level="body-md"
@@ -47,10 +56,12 @@ export const Header = () => {
                 href="/login"
               >
                 Login
+                <LoginIcon />
               </Link>
             </li>
             <li>
               <Link
+                className="Link"
                 color="primary"
                 disabled={false}
                 level="body-md"
@@ -59,34 +70,26 @@ export const Header = () => {
                 href="/cerca-prenotazione"
               >
                 {t("Cerca prenotazione")}
+                <SearchIcon />
               </Link>
             </li>
-            <li>
-              <Select
-                color="primary"
-                placeholder="Italiano"
-                size="md"
-                variant="plain"
-              >
-                <Option onClick={() => handleLanguageChange("it")} value="it">
-                  Italiano
-                </Option>
-                <Option onClick={() => handleLanguageChange("en")} value="en">
-                  English
-                </Option>
-              </Select>
+            <li className="lang">
+              <img
+                onClick={handleLanguageChange}
+                src={i18n.language === "it" ? us : it}
+                alt=""
+              />
             </li>
           </div>
 
           <div className="header-mobile">
-            <Select color="primary" placeholder="Ita" size="md" variant="plain">
-              <Option onClick={() => handleLanguageChange("it")} value="it">
-                Ita
-              </Option>
-              <Option onClick={() => handleLanguageChange("en")} value="en">
-                Eng
-              </Option>
-            </Select>
+            <li className="lang">
+              <img
+                onClick={handleLanguageChange}
+                src={i18n.language === "it" ? us : it}
+                alt=""
+              />
+            </li>
 
             <Dropdown>
               <MenuButton color="primary" size="sm">
@@ -94,20 +97,6 @@ export const Header = () => {
               </MenuButton>
               <Menu variant="plain" color="primary" size="sm">
                 <MenuItem>
-                  {" "}
-                  <Link
-                    color="primary"
-                    disabled={false}
-                    level="body-md"
-                    underline="none"
-                    variant="plain"
-                    href="/"
-                  >
-                    Home
-                  </Link>
-                </MenuItem>
-                <MenuItem>
-                  {" "}
                   <Link
                     color="primary"
                     disabled={false}

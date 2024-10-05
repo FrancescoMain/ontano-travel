@@ -5,12 +5,17 @@
   padding: 20px;
   width: 100%;
   background-color: aliceblue;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Aggiungi questa linea per l'effetto rilievo */
 }
 
 .header nav {
   display: flex;
   align-items: center;
   width: 100%;
+}
+.Link {
+  display: flex;
+  gap: 10px;
 }
 
 .header nav ul {
@@ -38,6 +43,20 @@
 
 .header-mobile {
   display: none;
+}
+
+.lang {
+  display: flex;
+  gap: 10px;
+  width: 30px;
+  border-radius: 50%;
+}
+
+.lang img {
+  width: 100%;
+  height: auto;
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 @media (max-width: 460px) {
