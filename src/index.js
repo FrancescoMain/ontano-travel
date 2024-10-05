@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "@fontsource/inter";
 import "./i18n";
 import { HomePage } from "./pages/HomePage";
+import "./index.css";
 
 const router = createBrowserRouter([
   {
