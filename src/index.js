@@ -5,12 +5,12 @@ import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "@fontsource/inter";
 import "./i18n";
-import Translate from "./pages/Translate";
+import { HomePage } from "./pages/HomePage";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Translate />,
+    element: <HomePage />,
   },
 ]);
 
