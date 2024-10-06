@@ -8,11 +8,15 @@ const resources = {
   en: {
     translation: {
       "Cerca prenotazione": "Search reservation",
+      "Solo andata": "One way",
+      "Andata e ritorno": "Round trip",
     },
   },
   it: {
     translation: {
       "Cerca prenotazione": "Cerca prenotazione",
+      "Solo andata": "Solo andata",
+      "Andata e ritorno": "Andata e ritorno",
     },
   },
 };

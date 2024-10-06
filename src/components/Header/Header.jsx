@@ -1,14 +1,6 @@
 import React from "react";
 import "./Header.css";
-import {
-  Dropdown,
-  Link,
-  Menu,
-  MenuButton,
-  MenuItem,
-  Option,
-  Select,
-} from "@mui/joy";
+import { Dropdown, Link, Menu, MenuButton, MenuItem } from "@mui/joy";
 import i18n from "../../i18n";
 import { useTranslation } from "react-i18next";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -41,7 +33,11 @@ export const Header = () => {
               variant="plain"
               href="/"
             >
-              Home
+              <img
+                className="logo"
+                src="https://www.quickferries.com/wp-content/uploads/2018/12/Logo-QuickFerries.png"
+                alt=""
+              />
             </Link>
           </li>
           <div className="header-side">

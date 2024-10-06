@@ -7,6 +7,8 @@ import "@fontsource/inter";
 import "./i18n";
 import { HomePage } from "./pages/HomePage";
 import "./index.css";
+import { Header } from "./components/Header/Header";
+import { Footer } from "./components/Footer/Footer";
 
 const router = createBrowserRouter([
   {
@@ -19,7 +21,9 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
     <React.StrictMode>
+      <Header />
       <RouterProvider router={router} />
+      <Footer />
     </React.StrictMode>
   </Provider>
 );
