@@ -14,3 +14,15 @@
   width: 180px;
   height: 100%;
 }
+
+.passenger-card {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  cursor: pointer;
+}
+
+:hover.passenger-card {
+  background-color: aliceblue;
+}

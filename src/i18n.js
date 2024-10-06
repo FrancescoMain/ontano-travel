@@ -19,6 +19,9 @@ const resources = {
       "Dove Vuoi Andare?": "Where do you want to go?",
       "Tratta di andata": "Outbound route",
       "Tratta di ritorno": "Return route",
+      Passeggeri: "Passengers",
+      "Aggiungi passeggeri": "Add passengers",
+      Cerca: "SEARCH",
     },
   },
   it: {
@@ -35,6 +38,9 @@ const resources = {
       "Dove Vuoi Andare?": "Dove Vuoi Andare?",
       "Tratta di andata": "Tratta di andata",
       "Tratta di ritorno": "Tratta di ritorno",
+      Passeggeri: "Passeggeri",
+      "Aggiungi passeggeri": "Aggiungi passeggeri",
+      Cerca: "CERCA",
     },
   },
 };
