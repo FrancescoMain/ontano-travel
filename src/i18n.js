@@ -22,6 +22,10 @@ const resources = {
       Passeggeri: "Passengers",
       "Aggiungi passeggeri": "Add passengers",
       Cerca: "SEARCH",
+      "Seleziona i passeggeri": "Select passengers",
+      "Adulti oltre i 12 anni": "Adults over 12 years old",
+      "Bambini fino agli 11 anni": "Children up to 11 years old",
+      "Inserire età bambino": "Enter child age",
     },
   },
   it: {
@@ -41,6 +45,10 @@ const resources = {
       Passeggeri: "Passeggeri",
       "Aggiungi passeggeri": "Aggiungi passeggeri",
       Cerca: "CERCA",
+      "Seleziona i passeggeri": "Seleziona i passeggeri",
+      "Adulti oltre i 12 anni": "Adulti oltre i 12 anni",
+      "Bambini fino agli 11 anni": "Bambini fino agli 11 anni",
+      "Inserire età bambino": "Inserire età bambino",
     },
   },
 };

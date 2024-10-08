@@ -5,7 +5,9 @@ import { FormViaggioComponent } from "../FormViaggioComponent";
 export const HomePageComponent = () => {
   return (
     <div className="home-page">
-      <FormViaggioComponent />
+      <div className="home-page-viaggio">
+        <FormViaggioComponent />
+      </div>
     </div>
   );
 };

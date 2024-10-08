@@ -26,3 +26,23 @@
 :hover.passenger-card {
   background-color: aliceblue;
 }
+
+.card-viaggio {
+  width: 680px;
+
+  margin-bottom: 10px;
+}
+
+.home-page-viaggio {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.select-viaggio {
+  width: calc((100% / 3) - 20px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}

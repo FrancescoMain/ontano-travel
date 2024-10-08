@@ -9,28 +9,75 @@ import {
   Select,
   Tab,
   TabList,
-  TabPanel,
   Tabs,
   Typography,
 } from "@mui/joy";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { ModalPassengers } from "./ModalPassengers/ModalPassengers";
 
 export const FormViaggioComponent = () => {
   const [soloAndata, setSoloAndata] = useState(false);
+
+  const [rotte, setRotte] = useState([]);
+  const [fromLocations, setFromLocations] = useState([]);
+  const [fromLocationsA, setFromLocationsA] = useState("");
+  const [fromLocationsR, setFromLocationsR] = useState("");
+  const [toLocationsA, setToLocationsA] = useState([]);
+  const [toLocationsR, setToLocationsR] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+
   const { t } = useTranslation();
   const handleClickTab = (e) => {
     const value = e.target.textContent;
+    setToLocationsA([]);
+    setToLocationsR([]);
+    setFromLocationsA("");
+    setFromLocationsR("");
     if (value === "Solo andata") {
       setSoloAndata(true);
     } else {
       setSoloAndata(false);
     }
-
-    console.log(soloAndata);
   };
+
+  const handleFromLocationChangeA = (e) => {
+    setFromLocationsA(e?.target?.textContent);
+    const value = e?.target?.textContent;
+    const route = rotte.filter((route) => route.from === value);
+    const uniqueToLocations = [...new Set(route.map((route) => route.to))];
+    setToLocationsA(uniqueToLocations);
+  };
+
+  const handleFromLocationChangeR = (e) => {
+    setFromLocationsR(e?.target?.textContent);
+    const value = e?.target?.textContent;
+    const route = rotte.filter((route) => route.to === value);
+    const uniqueFromLocations = [...new Set(route.map((route) => route.from))];
+    setToLocationsR(uniqueFromLocations);
+  };
+
+  useEffect(() => {
+    fetch("https://bookingferries-5cc3853ba728.herokuapp.com/api/booking/route")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setRotte(data);
+        const uniqueFromLocations = [
+          ...new Set(data.map((route) => route.from)),
+        ];
+        setFromLocations(uniqueFromLocations);
+      })
+      .catch((error) => {
+        console.error("Fetch error:", error);
+      });
+  }, []);
   return (
     <Card
-      sx={{ width: 600, marginBottom: 10 }}
+      className="card-viaggio"
       color="neutral"
       orientation="vertical"
       size="lg"
@@ -64,20 +111,33 @@ export const FormViaggioComponent = () => {
         {t("Viaggio di andata")}
         <div className="row-cont">
           <Select
+            className="select-viaggio"
             sx={{ height: 55 }}
             color="primary"
             placeholder={t("Destinazione")}
             variant="soft"
+            value={fromLocationsA || ""}
+            onChange={handleFromLocationChangeA}
           >
-            <Option>...</Option>
+            {fromLocations.map((location, index) => (
+              <Option value={location} key={index}>
+                {location}
+              </Option>
+            ))}
           </Select>
           <Select
+            className="select-viaggio"
             sx={{ height: 55 }}
             color="primary"
             placeholder={t("Tratta di andata")}
             variant="soft"
+            disabled={toLocationsA.length === 0}
           >
-            <Option>...</Option>
+            {toLocationsA.map((location, index) => (
+              <Option value={location} key={index}>
+                {location}
+              </Option>
+            ))}
           </Select>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker sx={{ height: 70 }} className="date-picker" />
@@ -88,22 +148,34 @@ export const FormViaggioComponent = () => {
         {t("Viaggio di ritorno")}
         <div className="row-cont">
           <Select
+            className="select-viaggio"
             disabled={soloAndata}
             sx={{ height: 55 }}
             color="primary"
             placeholder={t("Porto di ritorno")}
             variant="soft"
+            value={fromLocationsR || ""}
+            onChange={handleFromLocationChangeR}
           >
-            <Option>...</Option>
+            {fromLocations.map((location, index) => (
+              <Option value={location} key={index}>
+                {location}
+              </Option>
+            ))}
           </Select>
           <Select
-            disabled={soloAndata}
+            className="select-viaggio"
+            disabled={toLocationsR.length === 0}
             sx={{ height: 55 }}
             color="primary"
             placeholder={t("Tratta di ritorno")}
             variant="soft"
           >
-            <Option>...</Option>
+            {toLocationsR.map((location, index) => (
+              <Option value={location} key={index}>
+                {location}
+              </Option>
+            ))}
           </Select>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
@@ -126,6 +198,7 @@ export const FormViaggioComponent = () => {
         orientation="vertical"
         size="sm"
         variant="outlined"
+        onClick={() => setOpenModal(true)}
       >
         <Typography color="primary" level="h5" noWrap={false} variant="plain">
           {t("Passeggeri")}
@@ -140,15 +213,10 @@ export const FormViaggioComponent = () => {
         </Typography>
       </Card>
 
-      <Button
-        variant="soft"
-        color="primary"
-        disabled
-        onClick={function () {}}
-        size="lg"
-      >
+      <Button variant="soft" color="primary" disabled size="lg">
         {t("Cerca")}
       </Button>
+      <ModalPassengers open={openModal} setOpen={setOpenModal} />
     </Card>
   );
 };
