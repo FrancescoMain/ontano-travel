@@ -1,0 +1,75 @@
+.home-page {
+  margin: 30px;
+}
+
+.row-cont {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.date-picker {
+  width: 180px;
+  height: 100%;
+}
+
+.passenger-card {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  cursor: pointer;
+}
+
+:hover.passenger-card {
+  background-color: aliceblue;
+}
+
+.card-viaggio {
+  width: 680px;
+
+  margin-bottom: 10px;
+}
+
+.home-page-viaggio {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.select-viaggio {
+  width: calc((100% / 3) - 20px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .home-page {
+    margin: 8px;
+  }
+
+  .card-viaggio {
+    width: 100%;
+  }
+
+  .row-cont {
+    flex-direction: column;
+    margin-top: 10px;
+  }
+
+  .select-viaggio {
+    width: 100%;
+    height: 10px !important;
+  }
+  .date-picker {
+    width: 100%;
+  }
+
+  .passenger-card {
+    width: 100% !important;
+  }
+}
