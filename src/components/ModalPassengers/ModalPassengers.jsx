@@ -153,7 +153,7 @@ export const ModalPassengers = ({ open, setOpen }) => {
               newChildrenAge[index] = e.target.value;
               dispatch(setEtaBambini(newChildrenAge));
             }}
-            value={etaBambini[index]}
+            value={etaBambini[index] || ""}
             type="number"
             key={index}
             color="neutral"

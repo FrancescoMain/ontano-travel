@@ -46,3 +46,30 @@
   flex-wrap: wrap;
   gap: 20px;
 }
+
+@media (max-width: 768px) {
+  .home-page {
+    margin: 8px;
+  }
+
+  .card-viaggio {
+    width: 100%;
+  }
+
+  .row-cont {
+    flex-direction: column;
+    margin-top: 10px;
+  }
+
+  .select-viaggio {
+    width: 100%;
+    height: 10px !important;
+  }
+  .date-picker {
+    width: 100%;
+  }
+
+  .passenger-card {
+    width: 100% !important;
+  }
+}
