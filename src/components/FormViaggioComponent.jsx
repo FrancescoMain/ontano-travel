@@ -13,7 +13,6 @@ import {
   Typography,
 } from "@mui/joy";
 import React, { useState, useEffect } from "react";
-import { ModalPassengers } from "./ModalPassengers/ModalPassengers";
 import { useDispatch, useSelector } from "react-redux";
 import {
   resetFormViaggio,
@@ -23,6 +22,9 @@ import {
   setTrattaAndata,
   setTrattaRitorno,
 } from "../features/viaggio/viaggioFormSlice";
+import { ModalAnimals } from "./Modals/ModalAnimals/ModalAnimals";
+import { ModalPassengers } from "./Modals/ModalPassengers/ModalPassengers";
+import { ModalBagagli } from "./Modals/ModalBagagli/ModalBagagli";
 
 export const FormViaggioComponent = () => {
   const [rotte, setRotte] = useState([]);
@@ -31,7 +33,9 @@ export const FormViaggioComponent = () => {
   const [fromLocationsR, setFromLocationsR] = useState("");
   const [toLocationsA, setToLocationsA] = useState([]);
   const [toLocationsR, setToLocationsR] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
+  const [openModalPassengers, setOpenModalPassengers] = useState(false);
+  const [openModalAnimals, setOpenModalAnimals] = useState(false);
+  const [openModalBagagli, setOpenModalBagagli] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
 
   const {
@@ -43,6 +47,8 @@ export const FormViaggioComponent = () => {
     bambini,
     adulti,
     etaBambini,
+    animali,
+    bagagli,
   } = useSelector((state) => state.viaggioForm);
 
   const dispatch = useDispatch();
@@ -115,6 +121,8 @@ export const FormViaggioComponent = () => {
     console.log("Adulti", adulti);
     console.log("Bambini", bambini);
     console.log("Età bambini", etaBambini);
+    console.log("Animali", animali);
+    console.log("Bagagli", bagagli);
   };
   useEffect(() => {
     fetch("https://bookingferries-5cc3853ba728.herokuapp.com/api/booking/route")
@@ -150,7 +158,7 @@ export const FormViaggioComponent = () => {
   return (
     <Card
       className="card-viaggio"
-      color="neutral"
+      color="white"
       orientation="vertical"
       size="lg"
       variant="soft"
@@ -160,20 +168,24 @@ export const FormViaggioComponent = () => {
         orientation="horizontal"
         onChange={handleClickTab}
       >
-        <TabList>
+        <TabList className="tablist-viaggio" disableUnderline>
           <Tab
+            className="tab-viaggio"
             sx={{ width: 320 }}
-            variant="soft"
-            color="primary"
+            variant="outlined"
+            color="neutral"
             value={"andata-ritorno"}
+            disableIndicator
           >
             {t("Andata e ritorno")}
           </Tab>
           <Tab
+            className="tab-viaggio"
             sx={{ width: 320 }}
-            variant="soft"
-            color="primary"
+            variant="outlined"
+            color="neutral"
             value={"solo-andata"}
+            disableIndicator
           >
             {t("Solo andata")}
           </Tab>
@@ -186,7 +198,7 @@ export const FormViaggioComponent = () => {
         <Select
           className="select-viaggio"
           sx={{ height: 55 }}
-          color="primary"
+          color="neutral"
           placeholder={t("Destinazione")}
           variant="soft"
           value={fromLocationsA || ""}
@@ -201,7 +213,7 @@ export const FormViaggioComponent = () => {
         <Select
           className="select-viaggio"
           sx={{ height: 55 }}
-          color="primary"
+          color="neutral"
           placeholder={t("Tratta di andata")}
           variant="soft"
           disabled={toLocationsA.length === 0}
@@ -223,85 +235,138 @@ export const FormViaggioComponent = () => {
       </div>
       <Typography color="primary" level="h4" noWrap={false} variant="plain">
         {t("Viaggio di ritorno")}
-        <div className="row-cont">
-          <Select
-            className="select-viaggio"
-            disabled={soloAndata}
-            sx={{ height: 55 }}
-            color="primary"
-            placeholder={t("Porto di ritorno")}
-            variant="soft"
-            value={fromLocationsR || ""}
-            onChange={handleFromLocationChangeR}
-          >
-            {fromLocations.map((location, index) => (
-              <Option value={location} key={index}>
-                {location}
-              </Option>
-            ))}
-          </Select>
-          <Select
-            className="select-viaggio"
-            disabled={toLocationsR.length === 0}
-            sx={{ height: 55 }}
-            color="primary"
-            placeholder={t("Tratta di ritorno")}
-            variant="soft"
-            onChange={handleToLocationChangeR}
-          >
-            {toLocationsR.map((location, index) => (
-              <Option value={location} key={index}>
-                {location}
-              </Option>
-            ))}
-          </Select>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              onChange={handleChangeDataB}
-              disabled={soloAndata}
-              sx={{ height: 70 }}
-              className="date-picker"
-            />
-          </LocalizationProvider>
-        </div>
       </Typography>
+      <div className="row-cont">
+        <Select
+          className="select-viaggio"
+          disabled={soloAndata}
+          sx={{ height: 55 }}
+          color="neutral"
+          placeholder={t("Porto di ritorno")}
+          variant="soft"
+          value={fromLocationsR || ""}
+          onChange={handleFromLocationChangeR}
+        >
+          {fromLocations.map((location, index) => (
+            <Option value={location} key={index}>
+              {location}
+            </Option>
+          ))}
+        </Select>
+        <Select
+          className="select-viaggio"
+          disabled={toLocationsR.length === 0}
+          sx={{ height: 55 }}
+          color="neutral"
+          placeholder={t("Tratta di ritorno")}
+          variant="soft"
+          onChange={handleToLocationChangeR}
+        >
+          {toLocationsR.map((location, index) => (
+            <Option value={location} key={index}>
+              {location}
+            </Option>
+          ))}
+        </Select>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            onChange={handleChangeDataB}
+            disabled={soloAndata}
+            sx={{ height: 70, backgroundColor: soloAndata ? "white" : "" }}
+            className="date-picker"
+          />
+        </LocalizationProvider>
+      </div>
       <Typography color="primary" level="h4" noWrap={false} variant="plain">
         {t("Dettagli viaggio")}
       </Typography>
-
-      <Card
-        className="passenger-card"
-        sx={{ width: 160 }}
-        color="primary"
-        invertedColors={false}
-        orientation="vertical"
-        size="sm"
-        variant="outlined"
-        onClick={() => setOpenModal(true)}
-      >
-        <Typography color="primary" level="h5" noWrap={false} variant="plain">
-          {t("Passeggeri")}
-        </Typography>
-        <Typography
+      <div className="row-cont__detail">
+        <Card
+          className="passenger-card"
+          sx={{ width: 160 }}
           color="neutral"
-          level="body-sm"
-          noWrap={false}
-          variant="plain"
+          invertedColors={false}
+          orientation="vertical"
+          size="sm"
+          variant="outlined"
+          onClick={() => setOpenModalPassengers(true)}
         >
-          {t("Aggiungi passeggeri")}
-        </Typography>
-      </Card>
+          <Typography color="primary" level="h5" noWrap={false} variant="plain">
+            {t("Passeggeri")}
+          </Typography>
+          <Typography
+            color="neutral"
+            level="body-sm"
+            noWrap={false}
+            variant="plain"
+          >
+            {t("Aggiungi passeggeri")}
+          </Typography>
+        </Card>
+
+        <Card
+          className="passenger-card"
+          sx={{ width: 160 }}
+          color="neutral"
+          invertedColors={false}
+          orientation="vertical"
+          size="sm"
+          variant="outlined"
+          onClick={() => setOpenModalAnimals(true)}
+        >
+          <Typography color="primary" level="h5" noWrap={false} variant="plain">
+            {t("Animali")}
+          </Typography>
+          <Typography
+            color="neutral"
+            level="body-sm"
+            noWrap={false}
+            variant="plain"
+          >
+            {t("Aggiungi animali")}
+          </Typography>
+        </Card>
+
+        <Card
+          className="passenger-card"
+          sx={{ width: 160 }}
+          color="neutral"
+          invertedColors={false}
+          orientation="vertical"
+          size="sm"
+          variant="outlined"
+          onClick={() => setOpenModalBagagli(true)}
+        >
+          <Typography color="primary" level="h5" noWrap={false} variant="plain">
+            {t("Bagagli")}
+          </Typography>
+          <Typography
+            color="neutral"
+            level="body-sm"
+            noWrap={false}
+            variant="plain"
+          >
+            {t("Aggiungi bagagli")}
+          </Typography>
+        </Card>
+      </div>
 
       <Button
         disabled={buttonDisabled}
         variant="soft"
-        color="primary"
+        color="neutral"
         size="lg"
         onClick={handleClickSearch}
       >
         {t("Cerca")}
       </Button>
-      <ModalPassengers open={openModal} setOpen={setOpenModal} />
+      <ModalPassengers
+        open={openModalPassengers}
+        setOpen={setOpenModalPassengers}
+      />
+      <ModalAnimals open={openModalAnimals} setOpen={setOpenModalAnimals} />
+
+      <ModalBagagli open={openModalBagagli} setOpen={setOpenModalBagagli} />
     </Card>
   );
 };

@@ -79,14 +79,6 @@ export const Header = () => {
           </div>
 
           <div className="header-mobile">
-            <li className="lang">
-              <img
-                onClick={handleLanguageChange}
-                src={i18n.language === "it" ? us : it}
-                alt=""
-              />
-            </li>
-
             <Dropdown>
               <MenuButton color="primary" size="sm">
                 <MenuIcon />
@@ -119,6 +111,13 @@ export const Header = () => {
                 </MenuItem>
               </Menu>
             </Dropdown>
+            <li className="lang">
+              <img
+                onClick={handleLanguageChange}
+                src={i18n.language === "it" ? us : it}
+                alt=""
+              />
+            </li>
           </div>
         </ul>
       </nav>

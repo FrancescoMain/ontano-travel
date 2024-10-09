@@ -1,6 +1,6 @@
 .modal-passengers {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   flex-wrap: wrap;
   align-items: center;
   background-color: white;

@@ -65,7 +65,12 @@
   width: 100px;
 }
 
-@media (max-width: 460px) {
+.tablist-viaggio {
+  display: flex;
+  gap: 20px;
+}
+
+@media (max-width: 660px) {
   .header-side {
     display: none;
   }

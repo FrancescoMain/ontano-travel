@@ -9,6 +9,8 @@ const initialState = {
   bambini: 0,
   etaBambini: [],
   soloAndata: false,
+  animali: 0,
+  bagagli: 0,
 };
 
 export const viaggioSlice = createSlice({
@@ -48,6 +50,14 @@ export const viaggioSlice = createSlice({
       state.bambini = 0;
       state.etaBambini = [];
       state.soloAndata = false;
+      state.animali = 0;
+      state.bagagli = 0;
+    },
+    setAnimali: (state, action) => {
+      state.animali = action.payload;
+    },
+    setBagagli: (state, action) => {
+      state.bagagli = action.payload;
     },
   },
 });
@@ -62,6 +72,8 @@ export const {
   setAdulti,
   setBambini,
   setEtaBambini,
+  setAnimali,
+  setBagagli,
 } = viaggioSlice.actions;
 
 export default viaggioSlice.reducer;

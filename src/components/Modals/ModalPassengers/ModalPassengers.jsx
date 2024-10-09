@@ -8,7 +8,7 @@ import {
   Button,
 } from "@mui/joy";
 import { useTranslation } from "react-i18next";
-import "./ModalPassengers.css";
+import "../Modal.css";
 import IconButton from "@mui/joy/IconButton";
 import { useEffect, useState } from "react";
 import { Add, Remove } from "@mui/icons-material";
@@ -17,7 +17,7 @@ import {
   setAdulti,
   setBambini,
   setEtaBambini,
-} from "../../features/viaggio/viaggioFormSlice";
+} from "../../../features/viaggio/viaggioFormSlice";
 
 export const ModalPassengers = ({ open, setOpen }) => {
   const { t } = useTranslation();
@@ -164,7 +164,7 @@ export const ModalPassengers = ({ open, setOpen }) => {
 
         <Button
           variant="soft"
-          color="primary"
+          color="neutral"
           size="lg"
           onClick={handleClickConfirm}
           disabled={buttonDisabled}
