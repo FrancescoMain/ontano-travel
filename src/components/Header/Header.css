@@ -50,17 +50,16 @@
 .lang {
   display: flex;
   gap: 10px;
-  width: 30px;
   border-radius: 50%;
 }
 
 .lang img {
-  width: 100%;
-  height: auto;
-  border-radius: 50%;
-  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+  display: inline-block;
+  vertical-align: middle;
 }
-
 .logo {
   width: 100px;
 }
@@ -68,6 +67,15 @@
 .tablist-viaggio {
   display: flex;
   gap: 20px;
+}
+
+.img-lang {
+  border-radius: 20px;
+}
+
+.lang-item {
+  width: 40px;
+  border-radius: 50%;
 }
 
 @media (max-width: 660px) {

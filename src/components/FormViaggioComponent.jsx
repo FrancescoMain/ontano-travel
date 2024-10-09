@@ -2,36 +2,38 @@ import { useTranslation } from "react-i18next";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Button, Card, Tab, TabList, Tabs, Typography } from "@mui/joy";
+import { createFilterOptions } from "@mui/material/Autocomplete";
+
+import { Button, Card, Input, Tab, TabList, Tabs, Typography } from "@mui/joy";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   resetFormViaggio,
+  setAdulti,
+  setAnimali,
+  setBagagli,
+  setBambini,
   setDataAndata,
   setDataRitorno,
+  setEtaBambini,
   setSoloAndata,
   setTrattaAndata,
   setTrattaRitorno,
 } from "../features/viaggio/viaggioFormSlice";
-import { ModalAnimals } from "./Modals/ModalAnimals/ModalAnimals";
-import { ModalPassengers } from "./Modals/ModalPassengers/ModalPassengers";
-import { ModalBagagli } from "./Modals/ModalBagagli/ModalBagagli";
 import Autocomplete from "@mui/joy/Autocomplete";
 import dayjs from "dayjs";
 import "dayjs/locale/it";
+import { matchSorter } from "match-sorter";
 
 export const FormViaggioComponent = () => {
   const [rotte, setRotte] = useState([]);
   const [fromLocations, setFromLocations] = useState([]);
   const [formAndata, setFormAndata] = useState("");
   const [formRitorno, setFormRitorno] = useState("");
-  const [openModalPassengers, setOpenModalPassengers] = useState(false);
-  const [openModalAnimals, setOpenModalAnimals] = useState(false);
-  const [openModalBagagli, setOpenModalBagagli] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [dataAndataForm, setDataAndataForm] = useState(null);
   const [dataRitornoForm, setDataRitornoForm] = useState(null);
-
+  const [option, setOption] = useState(null);
   const {
     trattaAndata,
     dataAndata,
@@ -48,18 +50,48 @@ export const FormViaggioComponent = () => {
   const dispatch = useDispatch();
 
   const { t } = useTranslation();
+  const etaBambinoString = t("Inserire età bambino");
+  const filterOptions = (options, { inputValue }) => {
+    return matchSorter(options, inputValue, { keys: ["value"] });
+  };
+
   const handleClickTab = (e) => {
     const value = e.target.textContent;
-    setFormAndata("");
-    setFormRitorno("");
-    setDataAndataForm(null);
-    setDataRitornoForm(null);
-    dispatch(resetFormViaggio());
+
     if (value === "Solo andata") {
       dispatch(setSoloAndata(true));
+      dispatch(setTrattaRitorno(""));
+      dispatch(setDataRitorno(""));
+      setDataRitornoForm(null);
+      setFormRitorno("");
     } else {
       dispatch(setSoloAndata(false));
     }
+  };
+
+  const handleChangeAdulti = (e) => {
+    const value = e.target.value;
+    dispatch(setAdulti(value));
+  };
+
+  const handleChangeBambini = (e) => {
+    const value = e.target.value;
+    dispatch(setBambini(value));
+    // eta bambini viene tagliato dall'index che coincide con value
+    if (value < bambini) {
+      dispatch(setEtaBambini(etaBambini.slice(0, value)));
+
+      return;
+    }
+  };
+  const handleChangeAnimali = (e) => {
+    const value = e.target.value;
+    dispatch(setAnimali(value));
+  };
+
+  const handleChangeBagagli = (e) => {
+    const value = e.target.value;
+    dispatch(setBagagli(value));
   };
 
   const handleChangeAndata = (e) => {
@@ -133,10 +165,16 @@ export const FormViaggioComponent = () => {
       })
       .then((data) => {
         setRotte(data);
-        const uniqueFromLocations = [
-          ...new Set(data.map((route) => route.from + " -> " + route.to)),
-        ];
-        setFromLocations(uniqueFromLocations);
+        const locations = data.map((route) => {
+          const fromNames = route.from.split(" ");
+          const toNames = route.to.split(" ");
+          const allNames = [...fromNames, ...toNames];
+          return {
+            value: allNames.join(" "),
+            label: `${route.from} -> ${route.to}`,
+          };
+        });
+        setFromLocations(locations);
       })
       .catch((error) => {
         console.error("Fetch error:", error);
@@ -199,9 +237,9 @@ export const FormViaggioComponent = () => {
           className="select-viaggio"
           placeholder={t("Seleziona una tratta")}
           options={fromLocations}
+          filterOptions={filterOptions}
           sx={{ height: 56 }}
           onChange={handleChangeAndata}
-          isOptionEqualToValue={(option, value) => option === value}
         />
 
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="it">
@@ -226,9 +264,14 @@ export const FormViaggioComponent = () => {
           options={fromLocations}
           disabled={soloAndata}
           value={formRitorno}
+          filterOptions={filterOptions}
           sx={{ height: 56 }}
           onChange={handleChangeRitorno}
-          isOptionEqualToValue={(option, value) => option === value}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+            }
+          }}
         />
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="it">
           <DatePicker
@@ -247,115 +290,122 @@ export const FormViaggioComponent = () => {
         {t("Dettagli viaggio")}
       </Typography>
       <div className="row-cont__detail">
-        <Card
-          className="passenger-card"
-          sx={{ width: 160 }}
-          color="neutral"
-          invertedColors={false}
-          orientation="vertical"
-          size="sm"
-          variant="outlined"
-          onClick={() => setOpenModalPassengers(true)}
-        >
-          <Typography color="primary" level="h5" noWrap={false} variant="plain">
-            {t("Passeggeri")}
-          </Typography>
-          <Typography
-            color="neutral"
-            level="body-sm"
-            noWrap={false}
-            variant="plain"
-          >
-            {t("Aggiungi passeggeri")}
-          </Typography>
-        </Card>
+        <div className="select-detail-cont">
+          <label htmlFor="adults">{t("Adulti")}</label>
 
-        <Card
-          className="passenger-card"
-          sx={{ width: 160 }}
-          color="neutral"
-          invertedColors={false}
-          orientation="vertical"
-          size="sm"
-          variant="outlined"
-          onClick={() => setOpenModalAnimals(true)}
-        >
-          <Typography color="primary" level="h5" noWrap={false} variant="plain">
-            {t("Animali")}
-          </Typography>
+          <select
+            value={adulti}
+            onChange={handleChangeAdulti}
+            id="adults"
+            className="select-detail"
+          >
+            {Array.from({ length: 9 }, (_, i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
+          </select>
           <Typography
             color="neutral"
-            level="body-sm"
+            level="body-xs"
             noWrap={false}
             variant="plain"
           >
-            {t("Aggiungi animali")}
+            {t("Oltre i 12 anni")}
           </Typography>
-        </Card>
+        </div>
+        <div className="select-detail-cont">
+          <label htmlFor="children">{t("Bambini")}</label>
 
-        <Card
-          className="passenger-card"
-          sx={{ width: 160 }}
-          color="neutral"
-          invertedColors={false}
-          orientation="vertical"
-          size="sm"
-          variant="outlined"
-          onClick={() => setOpenModalBagagli(true)}
-        >
-          <Typography color="primary" level="h5" noWrap={false} variant="plain">
-            {t("Bagagli")}
-          </Typography>
+          <select
+            value={bambini}
+            onChange={handleChangeBambini}
+            id="children"
+            className="select-detail"
+          >
+            {Array.from({ length: 10 }, (_, i) => (
+              <option key={i} value={i}>
+                {i}
+              </option>
+            ))}
+          </select>
           <Typography
             color="neutral"
-            level="body-sm"
+            level="body-xs"
             noWrap={false}
             variant="plain"
           >
-            {t("Aggiungi bagagli")}
+            {t("Fino agli 11 anni")}
           </Typography>
-        </Card>
+        </div>
+        <div className="select-detail-cont">
+          <label htmlFor="animals">{t("Animali Domestici")}</label>
+
+          <select
+            value={animali}
+            onChange={handleChangeAnimali}
+            id="animals"
+            className="select-detail"
+          >
+            {Array.from({ length: 10 }, (_, i) => (
+              <option key={i} value={i}>
+                {i}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="select-detail-cont">
+          <label htmlFor="bagagli">{t("Bagagli")}</label>
+
+          <select
+            value={bagagli}
+            onChange={handleChangeBagagli}
+            id="bagagli"
+            className="select-detail"
+          >
+            {Array.from({ length: 10 }, (_, i) => (
+              <option key={i} value={i}>
+                {i}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
-      {adulti > 0 && (
-        <Typography
-          color="neutral"
-          level="body-md"
-          noWrap={false}
-          variant="plain"
-        >
-          {"N. " + t("Adulti") + ": " + adulti}
-        </Typography>
-      )}
+
       {bambini > 0 && (
         <Typography
-          color="neutral"
+          color="primary"
           level="body-md"
           noWrap={false}
           variant="plain"
         >
-          {"N. " + t("Bambini") + ": " + bambini}
+          {t("Inserire età bambini")}
         </Typography>
       )}
-      {animali > 0 && (
-        <Typography
+      {Array.from({ length: bambini }).map((_, index) => (
+        <Input
+          onChange={(e) => {
+            if (e.target.value > 11) {
+              e.target.value = 11;
+            }
+            if (e.target.value < 0) {
+              e.target.value = 0;
+            }
+            const newChildrenAge = [...etaBambini];
+            newChildrenAge[index] = e.target.value;
+            dispatch(setEtaBambini(newChildrenAge));
+          }}
+          value={etaBambini[index] || ""}
+          type="number"
+          key={index}
           color="neutral"
-          level="body-md"
-          noWrap={false}
-          variant="plain"
-        >
-          {"N. " + t("Animali") + ": " + animali}
-        </Typography>
-      )}
-      {bagagli > 0 && (
-        <Typography
-          color="neutral"
-          level="body-md"
-          noWrap={false}
-          variant="plain"
-        >
-          {"N. " + t("Bagagli") + ": " + bagagli}
-        </Typography>
-      )}
+          placeholder={`${etaBambinoString} ${index + 1}`}
+          variant="outlined"
+          className="input-eta"
+        />
+      ))}
+
       <Button
         disabled={buttonDisabled}
         variant="soft"
@@ -365,13 +415,6 @@ export const FormViaggioComponent = () => {
       >
         {t("Cerca")}
       </Button>
-      <ModalPassengers
-        open={openModalPassengers}
-        setOpen={setOpenModalPassengers}
-      />
-      <ModalAnimals open={openModalAnimals} setOpen={setOpenModalAnimals} />
-
-      <ModalBagagli open={openModalBagagli} setOpen={setOpenModalBagagli} />
     </Card>
   );
 };

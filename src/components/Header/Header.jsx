@@ -8,14 +8,11 @@ import LoginIcon from "@mui/icons-material/Login";
 import SearchIcon from "@mui/icons-material/Search";
 import it from "../../assets/flags/it.svg";
 import us from "../../assets/flags/us.svg";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 export const Header = () => {
-  const handleLanguageChange = () => {
-    if (i18n.language === "it") {
-      i18n.changeLanguage("en");
-    } else {
-      i18n.changeLanguage("it");
-    }
+  const handleLanguageChange = (lang) => {
+    i18n.changeLanguage(lang);
   };
 
   const { t } = useTranslation();
@@ -70,11 +67,33 @@ export const Header = () => {
               </Link>
             </li>
             <li className="lang">
-              <img
-                onClick={handleLanguageChange}
-                src={i18n.language === "it" ? us : it}
-                alt=""
-              />
+              <Dropdown>
+                <MenuButton
+                  color="primary"
+                  size="sm"
+                  sx={{ padding: 0, border: 0 }}
+                >
+                  <img
+                    className="img-lang"
+                    src={i18n.language === "it" ? it : us}
+                    alt="language"
+                  />
+                  <ArrowDropDownIcon />
+                </MenuButton>
+                <Menu variant="plain" color="primary" size="sm">
+                  <MenuItem
+                    className="lang-item"
+                    onClick={() => handleLanguageChange("it")}
+                  >
+                    <img src={it} alt="Italiano" />
+                    <span></span>
+                  </MenuItem>
+                  <MenuItem onClick={() => handleLanguageChange("en")}>
+                    <img src={us} alt="English" />
+                    <span></span>
+                  </MenuItem>
+                </Menu>
+              </Dropdown>
             </li>
           </div>
 
@@ -112,11 +131,33 @@ export const Header = () => {
               </Menu>
             </Dropdown>
             <li className="lang">
-              <img
-                onClick={handleLanguageChange}
-                src={i18n.language === "it" ? us : it}
-                alt=""
-              />
+              <Dropdown>
+                <MenuButton
+                  color="primary"
+                  size="sm"
+                  sx={{ padding: 0, border: 0 }}
+                >
+                  <img
+                    className="img-lang"
+                    src={i18n.language === "it" ? it : us}
+                    alt="language"
+                  />
+                  {/* <ArrowDropDownIcon /> */}
+                </MenuButton>
+                <Menu variant="plain" color="primary" size="sm">
+                  <MenuItem
+                    className="lang-item"
+                    onClick={() => handleLanguageChange("it")}
+                  >
+                    <img src={it} alt="Italiano" />
+                    <span></span>
+                  </MenuItem>
+                  <MenuItem onClick={() => handleLanguageChange("en")}>
+                    <img src={us} alt="English" />
+                    <span></span>
+                  </MenuItem>
+                </Menu>
+              </Dropdown>
             </li>
           </div>
         </ul>

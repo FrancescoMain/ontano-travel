@@ -63,12 +63,29 @@
   gap: 20px;
   border: 1px solid #b8bcbf;
 }
+.select-detail-cont {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 6px;
+}
 
+.select-detail {
+  height: 40px;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.input-eta {
+  width: 300px;
+}
 @media (max-width: 768px) {
   .home-page {
     margin: 8px;
   }
-
+  .MuiAutocomplete-clearIndicator.css-1nnzn02-JoyAutocomplete-clearIndicator {
+    display: none;
+  }
   .card-viaggio {
     width: 100%;
   }
@@ -99,5 +116,9 @@
     font-size: 12px !important;
     height: 40px !important;
     padding: 3px !important;
+  }
+
+  .input-eta {
+    width: 100% !important;
   }
 }
