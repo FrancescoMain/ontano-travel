@@ -149,6 +149,12 @@ export const ModalPassengers = ({ open, setOpen }) => {
         {Array.from({ length: bambini }).map((_, index) => (
           <Input
             onChange={(e) => {
+              if (e.target.value > 11) {
+                e.target.value = 11;
+              }
+              if (e.target.value < 0) {
+                e.target.value = 0;
+              }
               const newChildrenAge = [...etaBambini];
               newChildrenAge[index] = e.target.value;
               dispatch(setEtaBambini(newChildrenAge));

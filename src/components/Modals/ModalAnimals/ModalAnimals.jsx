@@ -33,7 +33,7 @@ export const ModalAnimals = ({ open, setOpen }) => {
       >
         <ModalClose />
         <Typography color="primary" level="h4" noWrap={false} variant="plain">
-          {t("Seleziona i passeggeri")}
+          {t("Aggiungi animali")}
         </Typography>
         <div className="modal-passengers">
           <div className="modal-passengers__counter">

@@ -4,7 +4,7 @@
 
 .row-cont {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   justify-content: space-between;
   gap: 20px;
 }
@@ -17,9 +17,7 @@
 }
 
 .date-picker {
-  width: 180px;
-  height: 100% !important;
-  background-color: #f0f4f8;
+  width: 100% !important;
 }
 
 .date-picker input {
@@ -59,7 +57,7 @@
 }
 
 .select-viaggio {
-  width: calc((100% / 3) - 20px);
+  width: 100% !important;
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
@@ -94,5 +92,12 @@
 
   .row-cont__detail {
     gap: 20px;
+  }
+
+  .tab-viaggio {
+    font-weight: 800 !important;
+    font-size: 12px !important;
+    height: 40px !important;
+    padding: 3px !important;
   }
 }
