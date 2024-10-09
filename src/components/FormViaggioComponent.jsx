@@ -182,16 +182,29 @@ export const FormViaggioComponent = () => {
   }, []);
 
   useEffect(() => {
+    const allAgesFilled =
+      bambini == 0 ||
+      (etaBambini.length == bambini && etaBambini.every((age) => age !== ""));
+    console.log("allAgesFilled", allAgesFilled);
     // Controlla se tutti i campi di età dei bambini sono compilati
     if (soloAndata) {
-      const soloAndata = trattaAndata && dataAndata;
-      setButtonDisabled(!soloAndata);
+      const soloAndataValid = trattaAndata && dataAndata && allAgesFilled;
+      setButtonDisabled(!soloAndataValid);
     } else {
-      const andata = trattaAndata && dataAndata;
-      const ritorno = trattaRitorno && dataRitorno;
-      setButtonDisabled(!andata || !ritorno);
+      const andataValid = trattaAndata && dataAndata && allAgesFilled;
+      const ritornoValid = trattaRitorno && dataRitorno;
+      setButtonDisabled(!andataValid || !ritornoValid);
     }
-  }, [trattaAndata, dataAndata, trattaRitorno, dataRitorno, soloAndata]);
+  }, [
+    trattaAndata,
+    dataAndata,
+    trattaRitorno,
+    dataRitorno,
+    soloAndata,
+    bambini,
+    etaBambini,
+  ]);
+
   return (
     <Card
       className="card-viaggio"
