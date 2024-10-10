@@ -23,6 +23,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/it";
 import { matchSorter } from "match-sorter";
 import { useNavigate } from "react-router-dom";
+import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
 
 export const FormViaggioComponent = () => {
   const [rotte, setRotte] = useState([]);
@@ -147,6 +148,7 @@ export const FormViaggioComponent = () => {
     navigate("/results");
   };
   useEffect(() => {
+    dispatch(startLoading());
     fetch("https://bookingferries-5cc3853ba728.herokuapp.com/api/booking/route")
       .then((response) => {
         if (!response.ok) {
@@ -166,9 +168,11 @@ export const FormViaggioComponent = () => {
           };
         });
         setFromLocations(locations);
+        dispatch(stopLoading());
       })
       .catch((error) => {
         console.error("Fetch error:", error);
+        dispatch(stopLoading());
       });
   }, []);
 

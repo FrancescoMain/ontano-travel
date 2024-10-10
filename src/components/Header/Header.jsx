@@ -9,16 +9,21 @@ import SearchIcon from "@mui/icons-material/Search";
 import it from "../../assets/flags/it.svg";
 import us from "../../assets/flags/us.svg";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { Spinner } from "../Spinner/Spinner";
+import { useSelector } from "react-redux";
 
 export const Header = () => {
   const handleLanguageChange = (lang) => {
     i18n.changeLanguage(lang);
   };
 
+  const { loading } = useSelector((state) => state.spinner);
+
   const { t } = useTranslation();
 
   return (
     <div className="header">
+      <Spinner active={loading} />
       <nav>
         <ul>
           <li>
