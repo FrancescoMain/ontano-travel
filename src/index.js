@@ -9,11 +9,16 @@ import { HomePage } from "./pages/HomePage";
 import "./index.css";
 import { Header } from "./components/Header/Header";
 import { Footer } from "./components/Footer/Footer";
+import { ResultPage } from "./pages/ResultPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <HomePage />,
+  },
+  {
+    path: "/results",
+    element: <ResultPage />,
   },
 ]);
 

@@ -2,13 +2,11 @@ import { useTranslation } from "react-i18next";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { createFilterOptions } from "@mui/material/Autocomplete";
 
 import { Button, Card, Input, Tab, TabList, Tabs, Typography } from "@mui/joy";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  resetFormViaggio,
   setAdulti,
   setAnimali,
   setBagagli,
@@ -24,6 +22,7 @@ import Autocomplete from "@mui/joy/Autocomplete";
 import dayjs from "dayjs";
 import "dayjs/locale/it";
 import { matchSorter } from "match-sorter";
+import { useNavigate } from "react-router-dom";
 
 export const FormViaggioComponent = () => {
   const [rotte, setRotte] = useState([]);
@@ -33,7 +32,6 @@ export const FormViaggioComponent = () => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [dataAndataForm, setDataAndataForm] = useState(null);
   const [dataRitornoForm, setDataRitornoForm] = useState(null);
-  const [option, setOption] = useState(null);
   const {
     trattaAndata,
     dataAndata,
@@ -48,6 +46,7 @@ export const FormViaggioComponent = () => {
   } = useSelector((state) => state.viaggioForm);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { t } = useTranslation();
   const etaBambinoString = t("Inserire età bambino");
@@ -145,15 +144,7 @@ export const FormViaggioComponent = () => {
   };
 
   const handleClickSearch = () => {
-    console.log("Partenza", trattaAndata);
-    console.log("Ritorno", trattaRitorno);
-    console.log("Data partenza", dataAndata);
-    console.log("Data ritorno", dataRitorno);
-    console.log("Adulti", adulti);
-    console.log("Bambini", bambini);
-    console.log("Età bambini", etaBambini);
-    console.log("Animali", animali);
-    console.log("Bagagli", bagagli);
+    navigate("/results");
   };
   useEffect(() => {
     fetch("https://bookingferries-5cc3853ba728.herokuapp.com/api/booking/route")
@@ -421,8 +412,8 @@ export const FormViaggioComponent = () => {
 
       <Button
         disabled={buttonDisabled}
-        variant="soft"
-        color="neutral"
+        variant="solid"
+        color="primary"
         size="lg"
         onClick={handleClickSearch}
       >
