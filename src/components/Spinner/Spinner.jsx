@@ -2,7 +2,6 @@ import React from "react";
 import "./Spinner.css";
 
 export const Spinner = (active) => {
-  console.log(active.active);
   if (!active.active) {
     return null;
   }

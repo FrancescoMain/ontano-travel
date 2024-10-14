@@ -9,11 +9,40 @@
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  padding: 20px;
+  padding: 5px 20px;
   width: 60%;
 }
 
 .edit-icon {
   cursor: pointer;
   margin-left: 8px;
+}
+
+.to-checkout {
+  background-color: #266e9e;
+  height: 6rem;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.last-component {
+  margin-bottom: 6rem;
+}
+
+.to-checkout-cont {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 30px;
+  gap: 20px;
+}
+.to-checkout-cont__left {
+  color: white;
+  font-weight: 800;
+  font-size: 1.5rem;
 }

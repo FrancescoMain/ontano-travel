@@ -8,8 +8,8 @@
 }
 
 .loader-cont {
-  background-color: #00000015;
-  position: absolute;
+  background-color: rgba(0, 0, 0, 0.15); /* Colore di sfondo semi-trasparente */
+  position: fixed; /* Usa fixed per coprire l'intero schermo */
   top: 0;
   left: 0;
   width: 100vw;
@@ -17,6 +17,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 9999; /* Assicurati che il loader sia sopra tutti gli altri elementi */
 }
 @keyframes l20-1 {
   0% {

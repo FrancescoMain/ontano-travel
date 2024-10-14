@@ -127,7 +127,7 @@ export const FormViaggioComponent = () => {
     const uniqueFromLocations = [
       ...new Set(route.map((route) => route.from + " -> " + route.to)),
     ];
-
+    console.log(route[0]);
     setFormRitorno(uniqueFromLocations[0]);
     dispatch(setTrattaRitorno(route[0]));
   };
@@ -180,7 +180,6 @@ export const FormViaggioComponent = () => {
     const allAgesFilled =
       bambini == 0 ||
       (etaBambini.length == bambini && etaBambini.every((age) => age !== ""));
-    console.log("allAgesFilled", allAgesFilled);
     // Controlla se tutti i campi di età dei bambini sono compilati
     if (soloAndata) {
       const soloAndataValid = trattaAndata && dataAndata && allAgesFilled;
