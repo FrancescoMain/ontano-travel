@@ -226,7 +226,7 @@ export const ResultComponentExternal = () => {
             <div className="to-checkout-cont__left">
               <div>
                 TOTALE VIAGGIO:
-                {" " + totalPrice}€
+                {" " + totalPrice.toFixed(2)}€
               </div>
             </div>
             <div className="to-checkout-cont__center">

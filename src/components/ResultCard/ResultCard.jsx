@@ -10,6 +10,11 @@ import {
   setBigliettoRitorno,
 } from "../../features/viaggio/viaggioFormSlice";
 import { SpinnerOnly } from "../Spinner/SpinnerOnly";
+import travelmar from "../../assets/travelmar.png";
+import snav from "../../assets/snav.png";
+import snavGes from "../../assets/Snav Gescab.jpg";
+import alilauro from "../../assets/Logo-AliLauro.jpg";
+import alilauroGruson from "../../assets/Alislauro Gruson.png";
 
 dayjs.extend(customParseFormat);
 
@@ -117,7 +122,25 @@ export const ResultCard = ({
       </div>
       <div className="card-container__center">
         <Typography color="neutral" level="h4" noWrap={false} variant="plain">
-          {data.company}
+          {data.company === "Travelmar" && (
+            <img className="img-logo" src={travelmar} alt="Travelmar" />
+          )}
+          {data.company === "Snav" && (
+            <img className="img-logo" src={snav} alt="Snav" />
+          )}
+          {data.company === "Snav Gescab" && (
+            <img className="img-logo" src={snavGes} alt="Snav Gescab" />
+          )}
+          {data.company === "Alilauro" && (
+            <img className="img-logo" src={alilauro} alt="Alilauro" />
+          )}
+          {data.company === "Alilauro Gruson" && (
+            <img
+              className="img-logo"
+              src={alilauroGruson}
+              alt="Alilauro Gruson"
+            />
+          )}
         </Typography>
         <Typography
           color="neutral"

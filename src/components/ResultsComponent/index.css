@@ -57,3 +57,70 @@
   max-height: 0 !important;
   overflow: hidden;
 }
+
+@media (max-width: 768px) {
+  .stepper-container {
+    display: none;
+  }
+  .form-viaggio-result {
+    width: 90%;
+
+    padding: 0px;
+    margin: 0 auto;
+    margin-top: 10px;
+  }
+  .row-cont__detail_result {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4px;
+  }
+  .flex-result-cont {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    width: 100%;
+  }
+  .form-viaggio-result-cont {
+    width: 100%;
+  }
+
+  .results-container {
+    width: 100%;
+    margin: 10px;
+    padding: 0;
+  }
+
+  .form-viaggio-result-cont {
+    width: 100%;
+    flex-direction: column;
+  }
+  .card-container__right h2 {
+    font-size: large;
+  }
+
+  .img-logo {
+    height: 50px !important;
+  }
+  .card-container {
+    padding: 5px !important;
+    height: 200px;
+  }
+  .card-container__right h4,
+  .card-container__right p,
+  .card-container__left h4,
+  .card-container__left p {
+    font-size: small;
+  }
+
+  .to-checkout-cont__left div {
+    font-size: 0.7rem;
+  }
+  .to-checkout-cont {
+    margin: 0;
+  }
+  .to-checkout {
+    justify-content: center;
+  }
+}
