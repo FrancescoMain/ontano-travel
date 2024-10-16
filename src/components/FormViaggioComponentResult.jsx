@@ -3,7 +3,16 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-import { Button, Card, Input, Tab, TabList, Tabs, Typography } from "@mui/joy";
+import {
+  Button,
+  Card,
+  IconButton,
+  Input,
+  Tab,
+  TabList,
+  Tabs,
+  Typography,
+} from "@mui/joy";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -24,8 +33,9 @@ import "dayjs/locale/it";
 import { matchSorter } from "match-sorter";
 import { useNavigate } from "react-router-dom";
 import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
+import { GrPowerReset } from "react-icons/gr";
 
-export const FormViaggioComponentResultAndata = () => {
+export const FormViaggioComponentResultAndata = ({ reset }) => {
   const [rotte, setRotte] = useState([]);
   const [fromLocations, setFromLocations] = useState([]);
   const [formAndata, setFormAndata] = useState("");
@@ -231,9 +241,320 @@ export const FormViaggioComponentResultAndata = () => {
               className="date-picker"
             />
           </LocalizationProvider>
+          <IconButton
+            sx={{ borderRadius: 100, height: 20, alignSelf: "center" }}
+            color="primary"
+            onClick={() => reset(-1)}
+          >
+            <GrPowerReset />
+          </IconButton>
         </div>
       </div>
+    </div>
+  );
+};
+export const FormViaggioComponentResultRitorno = ({ reset }) => {
+  const [rotte, setRotte] = useState([]);
+  const [fromLocations, setFromLocations] = useState([]);
+  const [formRitorno, setFormRitorno] = useState("");
 
+  const {
+    trattaAndata,
+    dataAndata,
+    soloAndata,
+    trattaRitorno,
+    dataRitorno,
+    bambini,
+    adulti,
+    etaBambini,
+    animali,
+    bagagli,
+  } = useSelector((state) => state.viaggioForm);
+
+  const dispatch = useDispatch();
+
+  const { t } = useTranslation();
+  const filterOptions = (options, { inputValue }) => {
+    return matchSorter(options, inputValue, { keys: ["value"] });
+  };
+
+  const handleChangeRitorno = (e) => {
+    const value = e?.target?.textContent;
+    const [from, to] = value.split(" -> ");
+    const route = rotte.filter(
+      (route) => route.from === from && route.to === to
+    );
+    const uniqueFromLocations = [
+      ...new Set(route.map((route) => route.from + " -> " + route.to)),
+    ];
+
+    setFormRitorno(uniqueFromLocations[0]);
+    dispatch(setTrattaRitorno(route[0]));
+  };
+
+  const handleChangeDataA = (e) => {
+    const dateString = dayjs(e).format("YYYY-MM-DD"); // Formatta la data nel formato YYYY-MM-DD
+    dispatch(setDataRitorno(dateString));
+  };
+
+  useEffect(() => {
+    dispatch(startLoading());
+    fetch("https://bookingferries-5cc3853ba728.herokuapp.com/api/booking/route")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setRotte(data);
+        const locations = data.map((route) => {
+          const fromNames = route.from.split(" ");
+          const toNames = route.to.split(" ");
+          const allNames = [...fromNames, ...toNames];
+          return {
+            value: allNames.join(" "),
+            label: `${route.from} -> ${route.to}`,
+          };
+        });
+        setFromLocations(locations);
+        dispatch(stopLoading());
+      })
+      .catch((error) => {
+        console.error("Fetch error:", error);
+        dispatch(stopLoading());
+      });
+  }, []);
+
+  useEffect(() => {
+    if (!trattaRitorno) {
+      return;
+    }
+    const location = () => {
+      const fromNames = trattaRitorno.from.split(" ");
+      const toNames = trattaRitorno.to.split(" ");
+      const allNames = [...fromNames, ...toNames];
+      return {
+        value: allNames.join(" "),
+        label: `${trattaRitorno.from} -> ${trattaRitorno.to}`,
+      };
+    };
+    setFormRitorno(location);
+  }, []);
+
+  return (
+    <div className="form-viaggio-result-ritorno" id="result-ritorno">
+      <Typography color="primary" level="h4" noWrap={false} variant="plain">
+        {t("Viaggio di ritorno")}
+      </Typography>
+      <div className="form-viaggio-result-cont">
+        <Autocomplete
+          disableClearable={true}
+          value={formRitorno}
+          className="select-viaggio"
+          placeholder={t("Seleziona una tratta")}
+          options={fromLocations}
+          filterOptions={filterOptions}
+          sx={{ height: 56 }}
+          onChange={handleChangeRitorno}
+        />
+
+        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="it">
+          <DatePicker
+            label={t("Data di partenza")}
+            inputFormat="DD/MM/YYYY"
+            value={dayjs(dataRitorno)}
+            minDate={dayjs()}
+            onChange={handleChangeDataA}
+            sx={{ height: 70 }}
+            className="date-picker"
+          />
+        </LocalizationProvider>
+        <IconButton
+          sx={{ borderRadius: 100, height: 20, alignSelf: "center" }}
+          color="primary"
+          onClick={() => reset(-1)}
+        >
+          <GrPowerReset />
+        </IconButton>
+      </div>
+    </div>
+  );
+};
+
+export const FormViaggioComponentResultDetail = () => {
+  const [rotte, setRotte] = useState([]);
+  const [fromLocations, setFromLocations] = useState([]);
+  const [formAndata, setFormAndata] = useState("");
+  const [formRitorno, setFormRitorno] = useState("");
+  const [buttonDisabled, setButtonDisabled] = useState(true);
+  const [dataAndataForm, setDataAndataForm] = useState(null);
+  const [dataRitornoForm, setDataRitornoForm] = useState(null);
+  const {
+    trattaAndata,
+    dataAndata,
+    soloAndata,
+    trattaRitorno,
+    dataRitorno,
+    bambini,
+    adulti,
+    etaBambini,
+    animali,
+    bagagli,
+  } = useSelector((state) => state.viaggioForm);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { t } = useTranslation();
+  const etaBambinoString = t("Inserire età bambino");
+  const filterOptions = (options, { inputValue }) => {
+    return matchSorter(options, inputValue, { keys: ["value"] });
+  };
+
+  const handleChangeAdulti = (e) => {
+    const value = e.target.value;
+    dispatch(setAdulti(value));
+  };
+
+  const handleChangeBambini = (e) => {
+    const value = e.target.value;
+    dispatch(setBambini(value));
+    // eta bambini viene tagliato dall'index che coincide con value
+    if (value < bambini) {
+      dispatch(setEtaBambini(etaBambini.slice(0, value)));
+
+      return;
+    }
+  };
+  const handleChangeAnimali = (e) => {
+    const value = e.target.value;
+    dispatch(setAnimali(value));
+  };
+
+  const handleChangeBagagli = (e) => {
+    const value = e.target.value;
+    dispatch(setBagagli(value));
+  };
+
+  const handleChangeAndata = (e) => {
+    const value = e?.target?.textContent;
+    const [from, to] = value.split(" -> ");
+    const route = rotte.filter(
+      (route) => route.from === from && route.to === to
+    );
+    const uniqueFromLocations = [
+      ...new Set(route.map((route) => route.from + " -> " + route.to)),
+    ];
+
+    setFormAndata(uniqueFromLocations[0]);
+    dispatch(setTrattaAndata(route[0]));
+    if (!soloAndata) {
+      const routeRitorno = rotte.filter(
+        (route) => route.from === to && route.to === from
+      );
+      const uniqueToLocations = [
+        ...new Set(route.map((route) => route.to + " -> " + route.from)),
+      ];
+      setFormRitorno(uniqueToLocations[0]);
+      dispatch(setTrattaRitorno(routeRitorno[0]));
+    }
+  };
+
+  const handleChangeRitorno = (e) => {
+    const value = e?.target?.textContent;
+    const [from, to] = value.split(" -> ");
+    const route = rotte.filter(
+      (route) => route.from === from && route.to === to
+    );
+    const uniqueFromLocations = [
+      ...new Set(route.map((route) => route.from + " -> " + route.to)),
+    ];
+
+    setFormRitorno(uniqueFromLocations[0]);
+    dispatch(setTrattaRitorno(route[0]));
+  };
+
+  const handleChangeDataA = (e) => {
+    const dateString = e.toISOString(); // Converti l'oggetto Date in una stringa ISO
+    dispatch(setDataAndata(dateString));
+    setDataAndataForm(e);
+  };
+
+  const handleChangeDataB = (e) => {
+    const dateString = e.toISOString(); // Converti l'oggetto Date in una stringa ISO
+    dispatch(setDataRitorno(dateString));
+    setDataRitornoForm(e);
+  };
+
+  useEffect(() => {
+    dispatch(startLoading());
+    fetch("https://bookingferries-5cc3853ba728.herokuapp.com/api/booking/route")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setRotte(data);
+        const locations = data.map((route) => {
+          const fromNames = route.from.split(" ");
+          const toNames = route.to.split(" ");
+          const allNames = [...fromNames, ...toNames];
+          return {
+            value: allNames.join(" "),
+            label: `${route.from} -> ${route.to}`,
+          };
+        });
+        setFromLocations(locations);
+        dispatch(stopLoading());
+      })
+      .catch((error) => {
+        console.error("Fetch error:", error);
+        dispatch(stopLoading());
+      });
+  }, []);
+
+  useEffect(() => {
+    const location = () => {
+      const fromNames = trattaAndata.from.split(" ");
+      const toNames = trattaAndata.to.split(" ");
+      const allNames = [...fromNames, ...toNames];
+      return {
+        value: allNames.join(" "),
+        label: `${trattaAndata.from} -> ${trattaAndata.to}`,
+      };
+    };
+    setFormAndata(location);
+    dispatch(stopLoading());
+  }, []);
+
+  useEffect(() => {
+    const allAgesFilled =
+      bambini == 0 ||
+      (etaBambini.length == bambini && etaBambini.every((age) => age !== ""));
+    // Controlla se tutti i campi di età dei bambini sono compilati
+    if (soloAndata) {
+      const soloAndataValid = trattaAndata && dataAndata && allAgesFilled;
+      setButtonDisabled(!soloAndataValid);
+    } else {
+      const andataValid = trattaAndata && dataAndata && allAgesFilled;
+      const ritornoValid = trattaRitorno && dataRitorno;
+      setButtonDisabled(!andataValid || !ritornoValid);
+    }
+  }, [
+    trattaAndata,
+    dataAndata,
+    trattaRitorno,
+    dataRitorno,
+    soloAndata,
+    bambini,
+    etaBambini,
+  ]);
+
+  return (
+    <div className="form-viaggio-result">
       <div>
         <Typography
           sx={{ marginBottom: 2 }}
@@ -365,127 +686,6 @@ export const FormViaggioComponentResultAndata = () => {
             className="input-eta"
           />
         ))}
-      </div>
-    </div>
-  );
-};
-export const FormViaggioComponentResultRitorno = () => {
-  const [rotte, setRotte] = useState([]);
-  const [fromLocations, setFromLocations] = useState([]);
-  const [formRitorno, setFormRitorno] = useState("");
-
-  const {
-    trattaAndata,
-    dataAndata,
-    soloAndata,
-    trattaRitorno,
-    dataRitorno,
-    bambini,
-    adulti,
-    etaBambini,
-    animali,
-    bagagli,
-  } = useSelector((state) => state.viaggioForm);
-
-  const dispatch = useDispatch();
-
-  const { t } = useTranslation();
-  const filterOptions = (options, { inputValue }) => {
-    return matchSorter(options, inputValue, { keys: ["value"] });
-  };
-
-  const handleChangeRitorno = (e) => {
-    const value = e?.target?.textContent;
-    const [from, to] = value.split(" -> ");
-    const route = rotte.filter(
-      (route) => route.from === from && route.to === to
-    );
-    const uniqueFromLocations = [
-      ...new Set(route.map((route) => route.from + " -> " + route.to)),
-    ];
-
-    setFormRitorno(uniqueFromLocations[0]);
-    dispatch(setTrattaRitorno(route[0]));
-  };
-
-  const handleChangeDataA = (e) => {
-    const dateString = dayjs(e).format("YYYY-MM-DD"); // Formatta la data nel formato YYYY-MM-DD
-    dispatch(setDataRitorno(dateString));
-  };
-
-  useEffect(() => {
-    dispatch(startLoading());
-    fetch("https://bookingferries-5cc3853ba728.herokuapp.com/api/booking/route")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setRotte(data);
-        const locations = data.map((route) => {
-          const fromNames = route.from.split(" ");
-          const toNames = route.to.split(" ");
-          const allNames = [...fromNames, ...toNames];
-          return {
-            value: allNames.join(" "),
-            label: `${route.from} -> ${route.to}`,
-          };
-        });
-        setFromLocations(locations);
-        dispatch(stopLoading());
-      })
-      .catch((error) => {
-        console.error("Fetch error:", error);
-        dispatch(stopLoading());
-      });
-  }, []);
-
-  useEffect(() => {
-    if (!trattaRitorno) {
-      return;
-    }
-    const location = () => {
-      const fromNames = trattaRitorno.from.split(" ");
-      const toNames = trattaRitorno.to.split(" ");
-      const allNames = [...fromNames, ...toNames];
-      return {
-        value: allNames.join(" "),
-        label: `${trattaRitorno.from} -> ${trattaRitorno.to}`,
-      };
-    };
-    setFormRitorno(location);
-  }, []);
-
-  return (
-    <div className="form-viaggio-result-ritorno">
-      <Typography color="primary" level="h4" noWrap={false} variant="plain">
-        {t("Viaggio di ritorno")}
-      </Typography>
-      <div className="form-viaggio-result-cont">
-        <Autocomplete
-          disableClearable={true}
-          value={formRitorno}
-          className="select-viaggio"
-          placeholder={t("Seleziona una tratta")}
-          options={fromLocations}
-          filterOptions={filterOptions}
-          sx={{ height: 56 }}
-          onChange={handleChangeRitorno}
-        />
-
-        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="it">
-          <DatePicker
-            label={t("Data di partenza")}
-            inputFormat="DD/MM/YYYY"
-            value={dayjs(dataRitorno)}
-            minDate={dayjs()}
-            onChange={handleChangeDataA}
-            sx={{ height: 70 }}
-            className="date-picker"
-          />
-        </LocalizationProvider>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ButtonStepper from "./Stepper";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import Typography from "@mui/joy/Typography";
 import { ResultCard } from "../ResultCard/ResultCard"; // Assicurati di importare il componente ResultCard
@@ -13,8 +13,11 @@ import { FormViaggioComponent } from "../FormViaggioComponent";
 import {
   FormViaggioComponentResultAndata,
   FormViaggioComponentResultRitorno,
+  FormViaggioComponentResultDetail,
 } from "../FormViaggioComponentResult";
 import { animateScroll as scroll } from "react-scroll";
+import { Spinner } from "../Spinner/Spinner";
+
 export const ResultComponent = () => {
   const {
     trattaAndata,
@@ -35,8 +38,8 @@ export const ResultComponent = () => {
   const [andata, setAndata] = useState();
   const [ritorno, setRitorno] = useState();
   const [totalPrice, setTotalPrice] = useState(0);
-
-  const [open, setOpen] = useState(false);
+  const { departure_route_id, departure_data, return_route_id, return_data } =
+    useParams();
 
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -47,10 +50,9 @@ export const ResultComponent = () => {
       navigate("/");
       return;
     }
-
+    dispatch(startLoading());
     const fetchData = async () => {
       try {
-        dispatch(startLoading());
         const dataChecK = dataRitorno ? dataRitorno : "";
         const formattedDate = dayjs(dataAndata).format("YYYY-MM-DD");
         const formattedDataReturn = dayjs(dataRitorno).format("YYYY-MM-DD");
@@ -108,21 +110,15 @@ export const ResultComponent = () => {
   return (
     <div>
       <ButtonStepper />
-      <FormViaggioComponentResultAndata />
+      <FormViaggioComponentResultDetail />
+      <FormViaggioComponentResultAndata reset={setSelectedResult} />
+
+      {!searchResults && <Spinner active={true} />}
       {searchResults && (
         <div className="results-container">
           {/* Renderizza i risultati della ricerca qui */}
           {searchResults?.timetableGoing[0] && (
             <div>
-              <Typography
-                color="primary"
-                level="h2"
-                noWrap={true}
-                variant="plain"
-                onClick={() => setOpen(true)}
-              >
-                {t("ANDATA")}
-              </Typography>
               {searchResults.timetableGoing.map((going, index) => (
                 <ResultCard
                   andata={true}
@@ -130,24 +126,15 @@ export const ResultComponent = () => {
                   data={going}
                   onClick={() => handleResultClick(index, going)}
                   selected={selectedResult === index}
+                  hidden={selectedResult !== -1 && selectedResult !== index}
                 />
               ))}
             </div>
           )}
-          <FormViaggioComponentResultRitorno />
+          <FormViaggioComponentResultRitorno reset={setSelectedResultRitorno} />
           {searchResults?.timetableGoing[0] && (
             <>
               <div className="last-component">
-                <Typography
-                  id="result-ritorno"
-                  color="primary"
-                  level="h2"
-                  noWrap={true}
-                  variant="plain"
-                  onClick={() => setOpen(true)}
-                >
-                  {t("RITORNO")}
-                </Typography>
                 {searchResults.timetableReturn.map((going, index) => (
                   <>
                     <ResultCard
@@ -156,6 +143,10 @@ export const ResultComponent = () => {
                       data={going}
                       onClick={() => handleResultClickRitorno(index, going)}
                       selected={selectedResultRitorno === index}
+                      hidden={
+                        selectedResultRitorno !== -1 &&
+                        selectedResultRitorno !== index
+                      }
                     />
                   </>
                 ))}

@@ -6,8 +6,8 @@ export const Spinner = (active) => {
     return null;
   }
   return (
-    <div class="loader-cont">
-      <div class="loader"></div>;
+    <div className="loader-cont">
+      <div className="loader"></div>
     </div>
   );
 };

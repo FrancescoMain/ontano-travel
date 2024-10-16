@@ -9,11 +9,20 @@ import {
   setBigliettoAndata,
   setBigliettoRitorno,
 } from "../../features/viaggio/viaggioFormSlice";
+import { SpinnerOnly } from "../Spinner/SpinnerOnly";
 
 dayjs.extend(customParseFormat);
 
-export const ResultCard = ({ data, selected, onClick, andata, ritorno }) => {
+export const ResultCard = ({
+  data,
+  selected,
+  onClick,
+  andata,
+  ritorno,
+  hidden,
+}) => {
   const [priceData, setPriceData] = useState(null);
+  const [loading, setLoading] = useState(false);
   const {
     animali,
     bagagli,
@@ -26,6 +35,7 @@ export const ResultCard = ({ data, selected, onClick, andata, ritorno }) => {
   } = useSelector((state) => state.viaggioForm);
 
   const dispatch = useDispatch();
+  console.log(hidden);
 
   const departureDate = dayjs(data.departure);
   const dateDep = departureDate.format("DD MMM YYYY");
@@ -42,7 +52,7 @@ export const ResultCard = ({ data, selected, onClick, andata, ritorno }) => {
   useEffect(() => {
     // Esegui la chiamata API
     const fetchPriceData = async () => {
-      dispatch(startLoading());
+      setLoading(true);
 
       // Costruisci la query string per passengers_age
       const passengersAgeParams = [
@@ -61,10 +71,10 @@ export const ResultCard = ({ data, selected, onClick, andata, ritorno }) => {
         }
         const result = await response.json();
         setPriceData(result);
-        dispatch(stopLoading());
+        setLoading(false);
       } catch (error) {
         console.error("Fetch error:", error);
-        dispatch(stopLoading());
+        setLoading(false);
       }
     };
 
@@ -84,7 +94,9 @@ export const ResultCard = ({ data, selected, onClick, andata, ritorno }) => {
 
   return (
     <div
-      className={`card-container ${selected ? "selected" : ""}`}
+      className={`card-container ${selected ? "selected" : ""} ${
+        hidden ? "hidden" : ""
+      }`}
       onClick={onClick}
     >
       <div className="card-container__left">
@@ -142,7 +154,13 @@ export const ResultCard = ({ data, selected, onClick, andata, ritorno }) => {
       </div>
       <div className="card-container__right">
         <Typography color="primary" level="h2" noWrap={false} variant="plain">
-          {priceData?.price ? priceData?.price + "€" : "-"}
+          {loading ? (
+            <SpinnerOnly active={loading} />
+          ) : priceData?.priceFormatted ? (
+            priceData?.priceFormatted
+          ) : (
+            "-"
+          )}
         </Typography>
       </div>
     </div>
