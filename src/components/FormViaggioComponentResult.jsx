@@ -31,7 +31,7 @@ import Autocomplete from "@mui/joy/Autocomplete";
 import dayjs from "dayjs";
 import "dayjs/locale/it";
 import { matchSorter } from "match-sorter";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
 import { GrPowerReset } from "react-icons/gr";
 
@@ -55,6 +55,11 @@ export const FormViaggioComponentResultAndata = ({ reset }) => {
     animali,
     bagagli,
   } = useSelector((state) => state.viaggioForm);
+  const params = useLocation();
+
+  const getQueryParams = (query) => {
+    return new URLSearchParams(query);
+  };
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -170,10 +175,43 @@ export const FormViaggioComponentResultAndata = ({ reset }) => {
   }, []);
 
   useEffect(() => {
+    const queryParams = getQueryParams(params.search);
+    const departure_route_id = queryParams.get("departure_route_id");
+    if (!trattaAndata.from && departure_route_id) {
+      dispatch(startLoading());
+      fetch(
+        "https://bookingferries-5cc3853ba728.herokuapp.com/api/booking/route"
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          data.map((route) => {
+            if (route.route_id == departure_route_id) {
+              dispatch(setTrattaAndata(route));
+            }
+          });
+
+          dispatch(stopLoading());
+        })
+        .catch((error) => {
+          console.error("Fetch error:", error);
+          dispatch(stopLoading());
+        });
+    }
     const location = () => {
-      const fromNames = trattaAndata.from.split(" ");
-      const toNames = trattaAndata.to.split(" ");
+      const fromNames = trattaAndata?.from?.split(" ") || [];
+      const toNames = trattaAndata?.to?.split(" ") || [];
       const allNames = [...fromNames, ...toNames];
+      if (fromNames.length == 0) {
+        return {
+          value: "",
+          label: "",
+        };
+      }
       return {
         value: allNames.join(" "),
         label: `${trattaAndata.from} -> ${trattaAndata.to}`,
@@ -181,7 +219,7 @@ export const FormViaggioComponentResultAndata = ({ reset }) => {
     };
     setFormAndata(location);
     dispatch(stopLoading());
-  }, []);
+  }, [dispatch, trattaAndata]);
 
   useEffect(() => {
     const allAgesFilled =
@@ -257,6 +295,11 @@ export const FormViaggioComponentResultRitorno = ({ reset }) => {
   const [rotte, setRotte] = useState([]);
   const [fromLocations, setFromLocations] = useState([]);
   const [formRitorno, setFormRitorno] = useState("");
+  const params = useLocation();
+
+  const getQueryParams = (query) => {
+    return new URLSearchParams(query);
+  };
 
   const {
     trattaAndata,
@@ -327,19 +370,44 @@ export const FormViaggioComponentResultRitorno = ({ reset }) => {
   }, []);
 
   useEffect(() => {
-    if (!trattaRitorno) {
-      return;
+    const queryParams = getQueryParams(params.search);
+    const departure_route_id = queryParams.get("departure_route_id");
+    if (!trattaAndata.from && departure_route_id) {
+      dispatch(startLoading());
+      fetch(
+        "https://bookingferries-5cc3853ba728.herokuapp.com/api/booking/route"
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          data.map((route) => {
+            if (route.route_id == departure_route_id) {
+              dispatch(setTrattaRitorno(route));
+            }
+          });
+
+          dispatch(stopLoading());
+        })
+        .catch((error) => {
+          console.error("Fetch error:", error);
+          dispatch(stopLoading());
+        });
     }
     const location = () => {
-      const fromNames = trattaRitorno.from.split(" ");
-      const toNames = trattaRitorno.to.split(" ");
+      const fromNames = trattaAndata?.from?.split(" ") || [];
+      const toNames = trattaAndata?.to?.split(" ") || [];
       const allNames = [...fromNames, ...toNames];
       return {
         value: allNames.join(" "),
-        label: `${trattaRitorno.from} -> ${trattaRitorno.to}`,
+        label: `${trattaAndata.from} -> ${trattaAndata.to}`,
       };
     };
     setFormRitorno(location);
+    dispatch(stopLoading());
   }, []);
 
   return (
@@ -363,7 +431,7 @@ export const FormViaggioComponentResultRitorno = ({ reset }) => {
           <DatePicker
             label={t("Data di partenza")}
             inputFormat="DD/MM/YYYY"
-            value={dayjs(dataRitorno)}
+            value={dataRitorno ? dayjs(dataRitorno) : null}
             minDate={dayjs()}
             onChange={handleChangeDataA}
             sx={{ height: 70 }}
@@ -518,12 +586,12 @@ export const FormViaggioComponentResultDetail = () => {
 
   useEffect(() => {
     const location = () => {
-      const fromNames = trattaAndata.from.split(" ");
-      const toNames = trattaAndata.to.split(" ");
+      const fromNames = trattaAndata?.from?.split(" ") || [];
+      const toNames = trattaAndata?.to?.split(" ") || [];
       const allNames = [...fromNames, ...toNames];
       return {
         value: allNames.join(" "),
-        label: `${trattaAndata.from} -> ${trattaAndata.to}`,
+        label: `${trattaAndata?.from} -> ${trattaAndata?.to}`,
       };
     };
     setFormAndata(location);

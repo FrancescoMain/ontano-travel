@@ -10,6 +10,7 @@ import "./index.css";
 import { Header } from "./components/Header/Header";
 import { Footer } from "./components/Footer/Footer";
 import { ResultPage } from "./pages/ResultPage";
+import { ResultPageExternal } from "./pages/ResultPageExternal";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: "/results",
     element: <ResultPage />,
+  },
+  {
+    path: "/results/external",
+    element: <ResultPageExternal />,
   },
 ]);
 
