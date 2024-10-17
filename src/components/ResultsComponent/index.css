@@ -88,8 +88,8 @@
 
   .results-container {
     width: 100%;
-    margin: 10px;
-    padding: 0;
+    align-items: center;
+    padding: 3px;
   }
 
   .form-viaggio-result-cont {
@@ -102,10 +102,10 @@
 
   .img-logo {
     height: 50px !important;
+    width: 50px !important;
   }
   .card-container {
     padding: 5px !important;
-    height: 200px;
   }
   .card-container__right h4,
   .card-container__right p,
@@ -122,5 +122,14 @@
   }
   .to-checkout {
     justify-content: center;
+  }
+  .result-card-container {
+    width: 90%;
+  }
+}
+@media (max-width: 380px) {
+  .img-logo {
+    height: 30px !important;
+    width: 30px !important;
   }
 }

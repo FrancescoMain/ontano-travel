@@ -13,8 +13,8 @@ import { SpinnerOnly } from "../Spinner/SpinnerOnly";
 import travelmar from "../../assets/travelmar.png";
 import snav from "../../assets/snav.png";
 import snavGes from "../../assets/Snav Gescab.jpg";
-import alilauro from "../../assets/Logo-AliLauro.jpg";
-import alilauroGruson from "../../assets/Alislauro Gruson.png";
+import alilauro from "../../assets/Logo-AliLauro.png";
+import alilauroGruson from "../../assets/Alilauro Gruson.png";
 
 dayjs.extend(customParseFormat);
 
@@ -121,40 +121,41 @@ export const ResultCard = ({
         </Typography>
       </div>
       <div className="card-container__center">
-        <Typography color="neutral" level="h4" noWrap={false} variant="plain">
-          {data.company === "Travelmar" && (
-            <img className="img-logo" src={travelmar} alt="Travelmar" />
-          )}
-          {data.company === "Snav" && (
-            <img className="img-logo" src={snav} alt="Snav" />
-          )}
-          {data.company === "Snav Gescab" && (
-            <img className="img-logo" src={snavGes} alt="Snav Gescab" />
-          )}
-          {data.company === "Alilauro" && (
-            <img className="img-logo" src={alilauro} alt="Alilauro" />
-          )}
-          {data.company === "Alilauro Gruson" && (
-            <img
-              className="img-logo"
-              src={alilauroGruson}
-              alt="Alilauro Gruson"
-            />
-          )}
-        </Typography>
+        {data.company === "Travelmar" && (
+          <img className="img-logo" src={travelmar} alt="Travelmar" />
+        )}
+        {data.company === "Snav" && (
+          <img className="img-logo" src={snav} alt="Snav" />
+        )}
+        {data.company === "Snav Gescab" && (
+          <img className="img-logo" src={snav} alt="Snav Gescab" />
+        )}
+        {data.company === "Alilauro" && (
+          <img className="img-logo" src={alilauro} alt="Alilauro" />
+        )}
+        {data.company === "Alilauro Gruson" && (
+          <img
+            className="img-logo"
+            src={alilauroGruson}
+            alt="Alilauro Gruson"
+          />
+        )}
+
         <Typography
           color="neutral"
           level="body-sm"
           noWrap={false}
           variant="plain"
+          className="card-container__center__text"
         >
-          ----------
+          --------
         </Typography>
         <Typography
           color="neutral"
           level="body-md"
           noWrap={false}
           variant="plain"
+          className="card-container__center__text"
         >
           {hours}h {minutes}m
         </Typography>

@@ -42,4 +42,19 @@
 
 .img-logo {
   height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .card-container__center__text {
+    font-size: xx-small !important;
+  }
+}
+
+@media (max-width: 368px) {
+  .card-container {
+    flex-direction: column;
+  }
 }
