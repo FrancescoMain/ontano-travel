@@ -162,4 +162,7 @@
   .input-eta {
     width: 100% !important;
   }
+  .hidden-reset {
+    display: none !important;
+  }
 }
