@@ -279,13 +279,14 @@ export const FormViaggioComponentResultAndata = ({ reset }) => {
               className="date-picker"
             />
           </LocalizationProvider>
-          <IconButton
+          {/* <IconButton
+            className="hidden-reset"
             sx={{ borderRadius: 100, height: 20, alignSelf: "center" }}
             color="primary"
             onClick={() => reset(-1)}
           >
             <GrPowerReset />
-          </IconButton>
+          </IconButton> */}
         </div>
       </div>
     </div>
@@ -368,11 +369,10 @@ export const FormViaggioComponentResultRitorno = ({ reset }) => {
         dispatch(stopLoading());
       });
   }, []);
-
   useEffect(() => {
     const queryParams = getQueryParams(params.search);
-    const departure_route_id = queryParams.get("departure_route_id");
-    if (!trattaAndata.from && departure_route_id) {
+    const return_route_id = queryParams.get("return_route_id");
+    if (!trattaRitorno.from && return_route_id) {
       dispatch(startLoading());
       fetch(
         "https://bookingferries-5cc3853ba728.herokuapp.com/api/booking/route"
@@ -385,7 +385,7 @@ export const FormViaggioComponentResultRitorno = ({ reset }) => {
         })
         .then((data) => {
           data.map((route) => {
-            if (route.route_id == departure_route_id) {
+            if (route.route_id == return_route_id) {
               dispatch(setTrattaRitorno(route));
             }
           });
@@ -398,21 +398,26 @@ export const FormViaggioComponentResultRitorno = ({ reset }) => {
         });
     }
     const location = () => {
-      const fromNames = trattaAndata?.from?.split(" ") || [];
-      const toNames = trattaAndata?.to?.split(" ") || [];
+      const fromNames = trattaRitorno?.from?.split(" ") || [];
+      const toNames = trattaRitorno?.to?.split(" ") || [];
       const allNames = [...fromNames, ...toNames];
+      if (fromNames.length == 0) {
+        return {
+          value: "",
+          label: "",
+        };
+      }
       return {
         value: allNames.join(" "),
-        label: `${trattaAndata.from} -> ${trattaAndata.to}`,
+        label: `${trattaRitorno.from} -> ${trattaRitorno.to}`,
       };
     };
     setFormRitorno(location);
     dispatch(stopLoading());
-  }, []);
-
+  }, [dispatch, trattaRitorno]);
   return (
-    <div className="form-viaggio-result-ritorno" id="result-ritorno">
-      <Typography color="primary" level="h4" noWrap={false} variant="plain">
+    <div className="form-viaggio-result" id="result-ritorno">
+      <Typography color="primary" level="h5" noWrap={false} variant="plain">
         {t("Viaggio di ritorno")}
       </Typography>
       <div className="form-viaggio-result-cont">
@@ -438,13 +443,14 @@ export const FormViaggioComponentResultRitorno = ({ reset }) => {
             className="date-picker"
           />
         </LocalizationProvider>
-        <IconButton
+        {/* <IconButton
+          className="hidden-reset"
           sx={{ borderRadius: 100, height: 20, alignSelf: "center" }}
           color="primary"
           onClick={() => reset(-1)}
         >
           <GrPowerReset />
-        </IconButton>
+        </IconButton> */}
       </div>
     </div>
   );
