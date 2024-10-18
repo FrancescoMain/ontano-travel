@@ -177,20 +177,10 @@ export const ResultComponentExternal = () => {
       <ButtonStepper />
       <FormViaggioComponentResultDetail />
       <FormViaggioComponentResultAndata reset={setSelectedResult} />
-      <FormViaggioComponentResultRitorno reset={setSelectedResultRitorno} />
 
       {!searchResults && <Spinner active={true} />}
       {searchResults && (
         <div className="results-container">
-          <Typography
-            sx={{ marginBottom: 2 }}
-            color="primary"
-            level="h4"
-            noWrap={false}
-            variant="plain"
-          >
-            {t("ANDATA")}
-          </Typography>
           {/* Renderizza i risultati della ricerca qui */}
           {searchResults?.timetableGoing[0] && (
             <div className="result-card-container">
@@ -208,8 +198,9 @@ export const ResultComponentExternal = () => {
           )}
           {searchResults?.timetableGoing[0] && (
             <>
-              <div className="result-card-container">
+              <div className="result-card-container marginPage">
                 <Typography
+                  id={"result-ritorno"}
                   sx={{ marginBottom: 2 }}
                   color="primary"
                   level="h4"
@@ -218,6 +209,9 @@ export const ResultComponentExternal = () => {
                 >
                   {t("RITORNO")}
                 </Typography>
+                <FormViaggioComponentResultRitorno
+                  reset={setSelectedResultRitorno}
+                />
 
                 {searchResults.timetableReturn.map((going, index) => (
                   <>

@@ -417,7 +417,7 @@ export const FormViaggioComponentResultRitorno = ({ reset }) => {
     dispatch(stopLoading());
   }, [dispatch, trattaRitorno]);
   return (
-    <div className="form-viaggio-result-ritorno" id="result-ritorno">
+    <div className="form-viaggio-result-ritorno">
       <div className="form-viaggio-result-cont">
         <Autocomplete
           disableClearable={true}

@@ -86,6 +86,7 @@ export const ResultComponent = () => {
 
   const handleResultClick = (result, biglietto) => {
     setSelectedResult(result);
+    setSelectedResult(result);
     scroll.scrollTo(document.getElementById("result-ritorno").offsetTop, {
       duration: 500,
       smooth: true,
@@ -137,6 +138,7 @@ export const ResultComponent = () => {
             <div>Non ci sono risultati, prova a cambiare rotta o data</div>
           )}
           <Typography
+            id={"result-ritorno"}
             sx={{ marginBottom: 2 }}
             color="primary"
             level="h4"
@@ -148,7 +150,7 @@ export const ResultComponent = () => {
           <FormViaggioComponentResultRitorno reset={setSelectedResultRitorno} />
           {searchResults?.timetableGoing[0] ? (
             <>
-              <div className="result-card-container">
+              <div className="result-card-container marginPage">
                 {searchResults.timetableReturn.map((going, index) => (
                   <>
                     <ResultCard

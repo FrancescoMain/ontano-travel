@@ -56,6 +56,9 @@
   max-height: 0 !important;
   overflow: hidden;
 }
+.marginPage {
+  margin-bottom: 300px;
+}
 
 @media (max-width: 768px) {
   .stepper-container {
