@@ -27,8 +27,10 @@ import {
   setEtaBambini,
   setTrattaAndata,
   setTrattaRitorno,
+  setBigliettoAndata,
+  setBigliettoRitorno,
 } from "../../features/viaggio/viaggioFormSlice";
-import { use } from "i18next";
+import { toast } from "react-toastify";
 
 export const ResultComponentExternal = () => {
   const {
@@ -160,7 +162,27 @@ export const ResultComponentExternal = () => {
     setSelectedResultRitorno(result);
     setRitorno(biglietto);
   };
-
+  const handleSubmit = () => {
+    console.log(bigliettoAndata, bigliettoRitorno);
+    // Se la partenza di biglietto di andata è minore rispetto a biglietto di ritorno
+    if (
+      dayjs(bigliettoRitorno?.departure).isBefore(
+        dayjs(bigliettoAndata?.departure)
+      )
+    ) {
+      toast.error("Seleziona un biglietto di ritorno valido", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+    // navigate("/checkout");
+  };
   useEffect(() => {
     if (bigliettoAndata?.priceData?.price) {
       setTotalPrice(bigliettoAndata?.priceData?.price);
@@ -170,9 +192,15 @@ export const ResultComponentExternal = () => {
         );
       }
     }
+    if (!bigliettoAndata) {
+      setTotalPrice(0);
+    } else if (!bigliettoRitorno) {
+      setTotalPrice(bigliettoAndata?.priceData?.price);
+    }
   }, [bigliettoAndata, bigliettoRitorno]);
-
   useEffect(() => {
+    dispatch(setBigliettoAndata(null));
+    dispatch(setBigliettoRitorno(null));
     setSelectedResult(-1);
     setSelectedResultRitorno(-1);
   }, [trattaAndata, trattaRitorno, dataAndata, dataRitorno]);
@@ -238,7 +266,12 @@ export const ResultComponentExternal = () => {
               </div>
             </div>
             <div className="to-checkout-cont__center">
-              <Button size="lg" color="warning" variant="solid">
+              <Button
+                onClick={() => handleSubmit()}
+                size="lg"
+                color="warning"
+                variant="solid"
+              >
                 Avanti
               </Button>
             </div>
