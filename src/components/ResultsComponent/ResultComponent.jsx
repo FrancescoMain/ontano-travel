@@ -218,6 +218,32 @@ export const ResultComponent = () => {
             viewReset={selectedResultRitorno}
             reset={setSelectedResultRitorno}
           />
+
+          {searchResults?.timetableGoing[0] ? (
+            <>
+              <div className="result-card-container marginPage">
+                {searchResults.timetableReturn.map((going, index) => (
+                  <>
+                    <ResultCard
+                      ritorno={true}
+                      key={going.result_id}
+                      data={going}
+                      onClick={() => handleResultClickRitorno(index, going)}
+                      selected={selectedResultRitorno === index}
+                      hidden={
+                        selectedResultRitorno !== -1 &&
+                        selectedResultRitorno !== index
+                      }
+                    />
+                  </>
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="marginPage">
+              Non ci sono risultati, prova a cambiare rotta o data
+            </div>
+          )}
         </div>
       )}
       {ritorno || andata ? (
