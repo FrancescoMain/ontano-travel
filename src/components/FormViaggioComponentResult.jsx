@@ -250,6 +250,15 @@ export const FormViaggioComponentResultAndata = ({ reset }) => {
         <Typography
           sx={{ marginBottom: 2 }}
           color="primary"
+          level="h4"
+          noWrap={false}
+          variant="plain"
+        >
+          {t("ANDATA")}
+        </Typography>
+        <Typography
+          sx={{ marginBottom: 2 }}
+          color="primary"
           level="h5"
           noWrap={false}
           variant="plain"
@@ -416,7 +425,7 @@ export const FormViaggioComponentResultRitorno = ({ reset }) => {
     dispatch(stopLoading());
   }, [dispatch, trattaRitorno]);
   return (
-    <div className="form-viaggio-result" id="result-ritorno">
+    <div className="form-viaggio-result-ritorno" id="result-ritorno">
       <Typography color="primary" level="h5" noWrap={false} variant="plain">
         {t("Viaggio di ritorno")}
       </Typography>

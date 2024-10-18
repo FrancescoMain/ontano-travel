@@ -8,7 +8,7 @@
 }
 
 .loader-cont {
-  background-color: rgba(0, 0, 0, 0.15); /* Colore di sfondo semi-trasparente */
+  background-color: rgb(255, 255, 255); /* Colore di sfondo semi-trasparente */
   position: fixed; /* Usa fixed per coprire l'intero schermo */
   top: 0;
   left: 0;

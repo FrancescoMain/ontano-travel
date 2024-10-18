@@ -90,12 +90,10 @@ export const Header = () => {
                     className="lang-item"
                     onClick={() => handleLanguageChange("it")}
                   >
-                    <img src={it} alt="Italiano" />
-                    <span></span>
+                    <img className="rounded-circle" src={it} alt="Italiano" />
                   </MenuItem>
                   <MenuItem onClick={() => handleLanguageChange("en")}>
-                    <img src={us} alt="English" />
-                    <span></span>
+                    <img className="rounded-circle" src={us} alt="English" />
                   </MenuItem>
                 </Menu>
               </Dropdown>
@@ -154,12 +152,10 @@ export const Header = () => {
                     className="lang-item"
                     onClick={() => handleLanguageChange("it")}
                   >
-                    <img src={it} alt="Italiano" />
-                    <span></span>
+                    <img className="rounded-circle" src={it} alt="Italiano" />
                   </MenuItem>
                   <MenuItem onClick={() => handleLanguageChange("en")}>
-                    <img src={us} alt="English" />
-                    <span></span>
+                    <img className="rounded-circle" src={us} alt="English" />
                   </MenuItem>
                 </Menu>
               </Dropdown>

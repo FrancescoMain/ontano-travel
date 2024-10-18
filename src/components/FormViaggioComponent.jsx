@@ -293,7 +293,13 @@ export const FormViaggioComponent = () => {
           />
         </LocalizationProvider>
       </div>
-      <Typography color="primary" level="h4" noWrap={false} variant="plain">
+      <Typography
+        sx={{ marginBottom: 2 }}
+        color="primary"
+        level="h4"
+        noWrap={false}
+        variant="plain"
+      >
         {t("Dettagli viaggio")}
       </Typography>
       <div className="row-cont__detail">

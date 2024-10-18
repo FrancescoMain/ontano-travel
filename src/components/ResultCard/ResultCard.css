@@ -1,10 +1,8 @@
 .card-container {
-  display: flex;
-  justify-content: space-around;
   background-color: aliceblue;
   border-radius: 20px;
-  padding: 20px;
-  margin: 20px 0;
+  padding: 2px;
+  margin: 12px 0;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
   opacity: 1;
   visibility: visible;
@@ -41,10 +39,15 @@
 }
 
 .img-logo {
-  height: 80px;
-  width: 100px;
+  width: 50%;
+
   border-radius: 50%;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.prezzo,
+.porto {
+  color: #0b6bcb;
 }
 
 @media (max-width: 768px) {

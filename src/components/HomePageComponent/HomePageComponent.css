@@ -95,8 +95,6 @@
 .form-viaggio-result {
   margin: 0 auto;
   display: flex;
-  gap: 20px;
-  padding: 5px 20px;
   width: 60%;
   flex-direction: column;
 }
@@ -119,6 +117,10 @@
 .container-form {
   display: flex;
   align-items: center;
+}
+.css-1ankj1z-JoyTypography-root,
+.css-onp1ch-JoyTypography-root {
+  margin-bottom: 2px !important;
 }
 @media (max-width: 768px) {
   .home-page {

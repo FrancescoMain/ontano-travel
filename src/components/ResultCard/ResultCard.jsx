@@ -98,94 +98,160 @@ export const ResultCard = ({
   }, [selected, priceData]);
 
   return (
+    // <div
+    //   className={`card-container ${selected ? "selected" : ""} ${
+    //     hidden ? "hidden" : ""
+    //   }`}
+    //   onClick={onClick}
+    // >
+    //   <div className="card-container__left">
+    //     <Typography
+    //       color="neutral"
+    //       level="body-md"
+    //       noWrap={false}
+    //       variant="plain"
+    //     >
+    //       {dateDep}
+    //     </Typography>
+    //     <Typography color="primary" level="h4" noWrap={false} variant="plain">
+    //       {timeDep}
+    //     </Typography>
+    //     <Typography color="neutral" level="h4" noWrap={false} variant="plain">
+    //       {data.fromPort}
+    //     </Typography>
+    //   </div>
+    //   <div className="card-container__center">
+    //     {data.company === "Travelmar" && (
+    //       <img className="img-logo" src={travelmar} alt="Travelmar" />
+    //     )}
+    //     {data.company === "Snav" && (
+    //       <img className="img-logo" src={snav} alt="Snav" />
+    //     )}
+    //     {data.company === "Snav Gescab" && (
+    //       <img className="img-logo" src={snav} alt="Snav Gescab" />
+    //     )}
+    //     {data.company === "Alilauro" && (
+    //       <img className="img-logo" src={alilauro} alt="Alilauro" />
+    //     )}
+    //     {data.company === "Alilauro Gruson" && (
+    //       <img
+    //         className="img-logo"
+    //         src={alilauroGruson}
+    //         alt="Alilauro Gruson"
+    //       />
+    //     )}
+
+    //     <Typography
+    //       color="neutral"
+    //       level="body-sm"
+    //       noWrap={false}
+    //       variant="plain"
+    //       className="card-container__center__text"
+    //     >
+    //       --------
+    //     </Typography>
+    //     <Typography
+    //       color="neutral"
+    //       level="body-md"
+    //       noWrap={false}
+    //       variant="plain"
+    //       className="card-container__center__text"
+    //     >
+    //       {hours}h {minutes}m
+    //     </Typography>
+    //   </div>
+    //   <div className="card-container__right">
+    //     <Typography
+    //       color="neutral"
+    //       level="body-md"
+    //       noWrap={false}
+    //       variant="plain"
+    //     >
+    //       {dateArr}
+    //     </Typography>
+    //     <Typography color="primary" level="h4" noWrap={false} variant="plain">
+    //       {timeArr}
+    //     </Typography>
+    //     <Typography color="neutral" level="h4" noWrap={false} variant="plain">
+    //       {data.fromTo}
+    //     </Typography>
+    //   </div>
+    //   <div className="card-container__right">
+    //     <Typography color="primary" level="h2" noWrap={false} variant="plain">
+    //       {loading ? (
+    //         <SpinnerOnly active={loading} />
+    //       ) : priceData?.priceFormatted ? (
+    //         priceData?.priceFormatted
+    //       ) : (
+    //         "-"
+    //       )}
+    //     </Typography>
+    //   </div>
+    // </div>
     <div
       className={`card-container ${selected ? "selected" : ""} ${
         hidden ? "hidden" : ""
-      }`}
+      } box-result bg-ice-white rounded-2x mt-md-0 my-4 collapsable`}
       onClick={onClick}
     >
-      <div className="card-container__left">
-        <Typography
-          color="neutral"
-          level="body-md"
-          noWrap={false}
-          variant="plain"
-        >
-          {dateDep}
-        </Typography>
-        <Typography color="primary" level="h4" noWrap={false} variant="plain">
-          {timeDep}
-        </Typography>
-        <Typography color="neutral" level="h4" noWrap={false} variant="plain">
-          {data.fromPort}
-        </Typography>
-      </div>
-      <div className="card-container__center">
-        {data.company === "Travelmar" && (
-          <img className="img-logo" src={travelmar} alt="Travelmar" />
-        )}
-        {data.company === "Snav" && (
-          <img className="img-logo" src={snav} alt="Snav" />
-        )}
-        {data.company === "Snav Gescab" && (
-          <img className="img-logo" src={snav} alt="Snav Gescab" />
-        )}
-        {data.company === "Alilauro" && (
-          <img className="img-logo" src={alilauro} alt="Alilauro" />
-        )}
-        {data.company === "Alilauro Gruson" && (
-          <img
-            className="img-logo"
-            src={alilauroGruson}
-            alt="Alilauro Gruson"
-          />
-        )}
+      <div className="row align-items-center grid-result">
+        <div className="col-lg-8">
+          <div className="align-items-center gx-1 gx-lg-3 px-md-3 pt-2 pb-1 row row-cols-3">
+            <div className="col text-start">
+              <div className="giorno text-uppercase fw-light lh-sm small">
+                {dateDep}
+              </div>
+              <div className="ora fs-2 fs-lg-1  lh-sm">{timeDep}</div>
+              <div class="porto h5  lh-sm">{data.fromPort}</div>
+            </div>
+            <div className="col text-center px-0">
+              <div className="linea-logo">
+                {data.company === "Travelmar" && (
+                  <img className="img-logo" src={travelmar} alt="Travelmar" />
+                )}
+                {data.company === "Snav" && (
+                  <img className="img-logo" src={snav} alt="Snav" />
+                )}
+                {data.company === "Snav Gescab" && (
+                  <img className="img-logo" src={snav} alt="Snav Gescab" />
+                )}
+                {data.company === "Alilauro" && (
+                  <img className="img-logo" src={alilauro} alt="Alilauro" />
+                )}
+                {data.company === "Alilauro Gruson" && (
+                  <img
+                    className="img-logo"
+                    src={alilauroGruson}
+                    alt="Alilauro Gruson"
+                  />
+                )}
+              </div>
+              <div className="divider-points">............</div>
+              <div className="durata">
+                {hours}h {minutes}m
+              </div>
+            </div>
 
-        <Typography
-          color="neutral"
-          level="body-sm"
-          noWrap={false}
-          variant="plain"
-          className="card-container__center__text"
-        >
-          --------
-        </Typography>
-        <Typography
-          color="neutral"
-          level="body-md"
-          noWrap={false}
-          variant="plain"
-          className="card-container__center__text"
-        >
-          {hours}h {minutes}m
-        </Typography>
-      </div>
-      <div className="card-container__right">
-        <Typography
-          color="neutral"
-          level="body-md"
-          noWrap={false}
-          variant="plain"
-        >
-          {dateArr}
-        </Typography>
-        <Typography color="primary" level="h4" noWrap={false} variant="plain">
-          {timeArr}
-        </Typography>
-        <Typography color="neutral" level="h4" noWrap={false} variant="plain">
-          {data.fromTo}
-        </Typography>
-      </div>
-      <div className="card-container__right">
-        <Typography color="primary" level="h2" noWrap={false} variant="plain">
-          {loading ? (
-            <SpinnerOnly active={loading} />
-          ) : priceData?.priceFormatted ? (
-            priceData?.priceFormatted
-          ) : (
-            "-"
-          )}
-        </Typography>
+            <div className="col text-end">
+              <div className="giorno text-uppercase fw-light lh-sm small">
+                {dateArr}
+              </div>
+              <div className="ora fs-2 fs-lg-1  lh-sm"> {timeArr}</div>
+              <div className="porto h5  lh-sm"> {data.fromTo}</div>
+            </div>
+          </div>
+        </div>
+        <div className="col-lg-4 no-pet-mode ">
+          <div className="prezzo align-items-center row row-cols-2 row-cols-md-3 p-2 gx-1 gx-lg-3 flex-row-reverse justify-content-center fs-1 fw-bold">
+            {loading ? (
+              <SpinnerOnly active={loading} />
+            ) : priceData?.priceFormatted ? (
+              priceData?.priceFormatted
+            ) : (
+              "-"
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

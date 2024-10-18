@@ -32,6 +32,6 @@ root.render(
   <Provider store={store}>
     <Header />
     <RouterProvider router={router} />
-    <Footer />
+    {/* <Footer /> */}
   </Provider>
 );

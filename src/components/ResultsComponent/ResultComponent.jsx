@@ -113,23 +113,14 @@ export const ResultComponent = () => {
     <div>
       <ButtonStepper />
       <FormViaggioComponentResultDetail />
+
       <FormViaggioComponentResultAndata reset={setSelectedResult} />
-      <FormViaggioComponentResultRitorno reset={setSelectedResultRitorno} />
 
       {!searchResults && <Spinner active={true} />}
       {searchResults && (
         <div className="results-container">
-          <Typography
-            sx={{ marginBottom: 2 }}
-            color="primary"
-            level="h4"
-            noWrap={false}
-            variant="plain"
-          >
-            {t("ANDATA")}
-          </Typography>
           {/* Renderizza i risultati della ricerca qui */}
-          {searchResults?.timetableGoing[0] && (
+          {searchResults?.timetableGoing[0] ? (
             <div className="result-card-container">
               {searchResults.timetableGoing.map((going, index) => (
                 <ResultCard
@@ -142,19 +133,22 @@ export const ResultComponent = () => {
                 />
               ))}
             </div>
+          ) : (
+            <div>Non ci sono risultati, prova a cambiare rotta o data</div>
           )}
-          {searchResults?.timetableGoing[0] && (
+          <Typography
+            sx={{ marginBottom: 2 }}
+            color="primary"
+            level="h4"
+            noWrap={false}
+            variant="plain"
+          >
+            {t("RITORNO")}
+          </Typography>
+          <FormViaggioComponentResultRitorno reset={setSelectedResultRitorno} />
+          {searchResults?.timetableGoing[0] ? (
             <>
               <div className="result-card-container">
-                <Typography
-                  sx={{ marginBottom: 2 }}
-                  color="primary"
-                  level="h4"
-                  noWrap={false}
-                  variant="plain"
-                >
-                  {t("RITORNO")}
-                </Typography>
                 {searchResults.timetableReturn.map((going, index) => (
                   <>
                     <ResultCard
@@ -172,6 +166,8 @@ export const ResultComponent = () => {
                 ))}
               </div>
             </>
+          ) : (
+            <div>Non ci sono risultati, prova a cambiare rotta o data</div>
           )}
         </div>
       )}
