@@ -181,7 +181,7 @@ export const ResultComponentExternal = () => {
         theme: "colored",
       });
     }
-    // navigate("/checkout");
+    navigate("/checkout");
   };
   useEffect(() => {
     if (bigliettoAndata?.priceData?.price) {
@@ -271,7 +271,7 @@ export const ResultComponentExternal = () => {
             <div className="to-checkout-cont__left">
               <div>
                 TOTALE BIGLIETTI:
-                {" " + totalPrice.toFixed(2)}€
+                {" " + totalPrice.toFixed(2) || ""}€
               </div>
             </div>
             <div className="to-checkout-cont__center">

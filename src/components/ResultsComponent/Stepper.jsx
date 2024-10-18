@@ -8,8 +8,8 @@ import "./index.css";
 
 const steps = ["PARTENZE", "DATI E PAGAMENTO"];
 
-export default function ButtonStepper() {
-  const [activeStep, setActiveStep] = React.useState(0);
+export default function ButtonStepper({ step }) {
+  const [activeStep, setActiveStep] = React.useState(step || 0);
   return (
     <div className="stepper-container">
       <Stepper sx={{ width: "60%" }}>
