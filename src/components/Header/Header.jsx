@@ -25,7 +25,7 @@ export const Header = () => {
     <div className="header">
       <Spinner active={loading} />
       <nav>
-        <ul>
+        <ul className="mb-0">
           <li>
             <Link
               color="primary"

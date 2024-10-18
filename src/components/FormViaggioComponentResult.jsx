@@ -256,15 +256,7 @@ export const FormViaggioComponentResultAndata = ({ reset }) => {
         >
           {t("ANDATA")}
         </Typography>
-        <Typography
-          sx={{ marginBottom: 2 }}
-          color="primary"
-          level="h5"
-          noWrap={false}
-          variant="plain"
-        >
-          {t("Viaggio di andata")}
-        </Typography>
+
         <div className="form-viaggio-result-cont">
           <Autocomplete
             disableClearable={true}
@@ -426,9 +418,6 @@ export const FormViaggioComponentResultRitorno = ({ reset }) => {
   }, [dispatch, trattaRitorno]);
   return (
     <div className="form-viaggio-result-ritorno" id="result-ritorno">
-      <Typography color="primary" level="h5" noWrap={false} variant="plain">
-        {t("Viaggio di ritorno")}
-      </Typography>
       <div className="form-viaggio-result-cont">
         <Autocomplete
           disableClearable={true}

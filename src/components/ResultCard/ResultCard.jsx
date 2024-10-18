@@ -196,7 +196,7 @@ export const ResultCard = ({
     >
       <div className="row align-items-center grid-result">
         <div className="col-lg-8">
-          <div className="align-items-center gx-1 gx-lg-3 px-md-3 pt-2 pb-1 row row-cols-3">
+          <div className="align-items-start gx-1 gx-lg-3 px-md-3 pt-2 pb-1 row row-cols-3">
             <div className="col text-start">
               <div className="giorno text-uppercase fw-light lh-sm small">
                 {dateDep}
@@ -242,7 +242,7 @@ export const ResultCard = ({
           </div>
         </div>
         <div className="col-lg-4 no-pet-mode ">
-          <div className="prezzo align-items-center row row-cols-2 row-cols-md-3 p-2 gx-1 gx-lg-3 flex-row-reverse justify-content-center fs-1 fw-bold">
+          <div className="prezzo align-items-center row row-cols-2 row-cols-md-3 p-2 gx-1 gx-lg-3 flex-row-reverse justify-content-center fs-1 fw-bold  ">
             {loading ? (
               <SpinnerOnly active={loading} />
             ) : priceData?.priceFormatted ? (

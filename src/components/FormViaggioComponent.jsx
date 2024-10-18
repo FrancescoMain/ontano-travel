@@ -135,7 +135,9 @@ export const FormViaggioComponent = () => {
   const handleChangeDataA = (e) => {
     const dateString = e.toISOString(); // Converti l'oggetto Date in una stringa ISO
     dispatch(setDataAndata(dateString));
+    dispatch(setDataRitorno(dateString));
     setDataAndataForm(e);
+    setDataRitornoForm(e);
   };
 
   const handleChangeDataB = (e) => {
@@ -204,7 +206,7 @@ export const FormViaggioComponent = () => {
       className="card-viaggio"
       color="white"
       orientation="vertical"
-      size="lg"
+      size="sm"
       variant="soft"
     >
       <Tabs

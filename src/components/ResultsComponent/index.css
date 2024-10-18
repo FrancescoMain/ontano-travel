@@ -99,10 +99,6 @@
     font-size: large;
   }
 
-  .img-logo {
-    height: 50px !important;
-    width: 50px !important;
-  }
   .card-container {
     padding: 5px !important;
   }
@@ -127,8 +123,4 @@
   }
 }
 @media (max-width: 380px) {
-  .img-logo {
-    height: 30px !important;
-    width: 30px !important;
-  }
 }
