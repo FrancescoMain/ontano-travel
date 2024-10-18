@@ -58,7 +58,43 @@ export const Checkout = () => {
                 </div>
               </div>
             </div>
-            <div className="col-4 bg-aliceblue mt-3 ">Resoconto</div>
+            <div className="col-4 bg-aliceblue mt-3 rounded mb-3  ">
+              <h3 className="text-primary text-center">Il tuo viaggio</h3>
+              <div class="bg-aliceblue row g-0 pb-2 pt-3">
+                <div class="text-start col-6">
+                  <p class="h5 fw-bold mb-0">Capri</p>
+                </div>
+                <div class="text-end col-6">
+                  <p class="h5 fw-bold mb-0">Amalfi</p>
+                </div>
+                <div class="text-start col-4">
+                  <p class="mb-0 text-capitalize">sab 19 ott 09:45</p>
+                </div>
+                <div class="text-center col-4">
+                  <img
+                    class="my-2"
+                    src="//cdn.traghettilines.it/new/img/compagnie/results/51.png"
+                  />
+                </div>
+                <div class="text-end col-4">
+                  <p class="mb-0 text-capitalize">sab 19 ott 10:35</p>
+                </div>
+              </div>
+              <div class="list-group list-group-flush bg-aliceblue">
+                <div class="bg-aliceblue d-flex justify-content-between align-items-center border-top border-bottom">
+                  <span>2 Passeggeri (1 Adulto, 1 Bambino) </span>{" "}
+                  <span> 27,24 </span>
+                </div>
+                <div class="bg-aliceblue d-flex justify-content-between align-items-center border-bottom">
+                  <span>Tasse e diritti portuali</span>
+                  <span>11,76</span>
+                </div>
+                <div class="bg-aliceblue d-flex justify-content-between align-items-center subtotal ">
+                  <span class="h5"> Totale andata </span>
+                  <span class="fw-bold">39,00</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
