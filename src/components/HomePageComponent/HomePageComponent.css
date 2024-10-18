@@ -90,6 +90,17 @@
 }
 .select-detail {
 }
+.input-eta.error.css-1aakkx-JoyInput-root:not([data-skip-inverted-colors]) {
+  --_Input-focusedHighlight: var(--joy-palette-primary-500, #cb0b0b);
+  --Input-focusedHighlight: var(
+    --_Input-focusedHighlight,
+    var(--joy-palette-focusVisible, var(--joy-palette-primary-500, #0b6bcb))
+  );
+}
+
+.input-eta.error {
+  border-color: red;
+}
 .form-viaggio-result {
   margin: 0 auto;
   display: flex;

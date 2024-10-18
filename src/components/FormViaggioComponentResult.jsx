@@ -255,6 +255,13 @@ export const FormViaggioComponentResultAndata = ({ reset }) => {
           variant="plain"
         >
           {t("ANDATA")}
+          <IconButton
+            sx={{ borderRadius: 100, height: 20, alignSelf: "center" }}
+            color="primary"
+            onClick={() => reset(-1)}
+          >
+            <GrPowerReset />
+          </IconButton>
         </Typography>
 
         <div className="form-viaggio-result-cont">
@@ -280,14 +287,6 @@ export const FormViaggioComponentResultAndata = ({ reset }) => {
               className="date-picker"
             />
           </LocalizationProvider>
-          {/* <IconButton
-            className="hidden-reset"
-            sx={{ borderRadius: 100, height: 20, alignSelf: "center" }}
-            color="primary"
-            onClick={() => reset(-1)}
-          >
-            <GrPowerReset />
-          </IconButton> */}
         </div>
       </div>
     </div>
@@ -418,6 +417,24 @@ export const FormViaggioComponentResultRitorno = ({ reset }) => {
   }, [dispatch, trattaRitorno]);
   return (
     <div className="form-viaggio-result-ritorno">
+      <Typography
+        // className="md-ms-4"
+        id={"result-ritorno"}
+        sx={{ marginBottom: 2 }}
+        color="primary"
+        level="h4"
+        noWrap={false}
+        variant="plain"
+      >
+        {t("RITORNO")}
+        <IconButton
+          sx={{ borderRadius: 100, height: 20, alignSelf: "center" }}
+          color="primary"
+          onClick={() => reset(-1)}
+        >
+          <GrPowerReset />
+        </IconButton>
+      </Typography>
       <div className="form-viaggio-result-cont">
         <Autocomplete
           disableClearable={true}
@@ -441,14 +458,6 @@ export const FormViaggioComponentResultRitorno = ({ reset }) => {
             className="date-picker"
           />
         </LocalizationProvider>
-        {/* <IconButton
-          className="hidden-reset"
-          sx={{ borderRadius: 100, height: 20, alignSelf: "center" }}
-          color="primary"
-          onClick={() => reset(-1)}
-        >
-          <GrPowerReset />
-        </IconButton> */}
       </div>
     </div>
   );
@@ -755,7 +764,7 @@ export const FormViaggioComponentResultDetail = () => {
             color="neutral"
             placeholder={`${etaBambinoString} ${index + 1}`}
             variant="outlined"
-            className="input-eta"
+            className={`input-eta ${!etaBambini[index] ? "error" : ""}`}
           />
         ))}
       </div>

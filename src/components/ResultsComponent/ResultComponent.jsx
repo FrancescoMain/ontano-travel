@@ -110,6 +110,11 @@ export const ResultComponent = () => {
     }
   }, [bigliettoAndata, bigliettoRitorno]);
 
+  useEffect(() => {
+    setSelectedResult(-1);
+    setSelectedResultRitorno(-1);
+  }, [trattaAndata, trattaRitorno, dataAndata, dataRitorno]);
+
   return (
     <div>
       <ButtonStepper />
@@ -137,16 +142,7 @@ export const ResultComponent = () => {
           ) : (
             <div>Non ci sono risultati, prova a cambiare rotta o data</div>
           )}
-          <Typography
-            id={"result-ritorno"}
-            sx={{ marginBottom: 2 }}
-            color="primary"
-            level="h4"
-            noWrap={false}
-            variant="plain"
-          >
-            {t("RITORNO")}
-          </Typography>
+
           <FormViaggioComponentResultRitorno reset={setSelectedResultRitorno} />
           {searchResults?.timetableGoing[0] ? (
             <>
@@ -178,7 +174,7 @@ export const ResultComponent = () => {
           <div className="to-checkout-cont">
             <div className="to-checkout-cont__left">
               <div>
-                TOTALE VIAGGIO:
+                TOTALE BIGLIETTI:
                 {" " + totalPrice.toFixed(2)}€
               </div>
             </div>

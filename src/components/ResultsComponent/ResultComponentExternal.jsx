@@ -172,6 +172,11 @@ export const ResultComponentExternal = () => {
     }
   }, [bigliettoAndata, bigliettoRitorno]);
 
+  useEffect(() => {
+    setSelectedResult(-1);
+    setSelectedResultRitorno(-1);
+  }, [trattaAndata, trattaRitorno, dataAndata, dataRitorno]);
+
   return (
     <div>
       <ButtonStepper />
@@ -199,16 +204,6 @@ export const ResultComponentExternal = () => {
           {searchResults?.timetableGoing[0] && (
             <>
               <div className="result-card-container marginPage">
-                <Typography
-                  id={"result-ritorno"}
-                  sx={{ marginBottom: 2 }}
-                  color="primary"
-                  level="h4"
-                  noWrap={false}
-                  variant="plain"
-                >
-                  {t("RITORNO")}
-                </Typography>
                 <FormViaggioComponentResultRitorno
                   reset={setSelectedResultRitorno}
                 />
@@ -238,7 +233,7 @@ export const ResultComponentExternal = () => {
           <div className="to-checkout-cont">
             <div className="to-checkout-cont__left">
               <div>
-                TOTALE VIAGGIO:
+                TOTALE BIGLIETTI:
                 {" " + totalPrice.toFixed(2)}€
               </div>
             </div>

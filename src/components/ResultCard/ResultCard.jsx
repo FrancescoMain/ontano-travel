@@ -242,14 +242,19 @@ export const ResultCard = ({
           </div>
         </div>
         <div className="col-lg-4 no-pet-mode ">
-          <div className="prezzo align-items-center row row-cols-2 row-cols-md-3 p-2 gx-1 gx-lg-3 flex-row-reverse justify-content-center fs-1 fw-bold  ">
-            {loading ? (
-              <SpinnerOnly active={loading} />
-            ) : priceData?.priceFormatted ? (
-              priceData?.priceFormatted
-            ) : (
-              "-"
-            )}
+          <div className="prezzo text-center d-flex flex-column align-items-center row  p-2 gx-1 gx-lg-3  justify-content-center fs-1 fw-bold  ">
+            <div className="col">
+              {loading ? (
+                <SpinnerOnly active={loading} />
+              ) : priceData?.priceFormatted ? (
+                priceData?.priceFormatted
+              ) : (
+                "-"
+              )}
+            </div>
+            <div className="fs-6 fw-normal">
+              {parseInt(adulti, 10) + etaBambini.length + " Passeggeri"}
+            </div>
           </div>
         </div>
       </div>

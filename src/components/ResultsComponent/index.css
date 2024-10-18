@@ -64,7 +64,8 @@
   .stepper-container {
     display: none;
   }
-  .form-viaggio-result {
+  .form-viaggio-result,
+  .form-viaggio-result-ritorno {
     width: 90%;
 
     padding: 0px;
@@ -124,6 +125,12 @@
   .result-card-container {
     width: 90%;
   }
+  .md-ms-4 {
+    margin-left: 25px !important;
+  }
 }
 @media (max-width: 380px) {
+  .md-ms-4 {
+    margin-left: 15px !important;
+  }
 }
