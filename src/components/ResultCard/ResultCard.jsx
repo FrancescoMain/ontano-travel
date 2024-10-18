@@ -252,9 +252,15 @@ export const ResultCard = ({
                 "-"
               )}
             </div>
-            <div className="fs-6 fw-normal">
+            <div className="fs-6 fw-light lh-sm">
               {parseInt(adulti, 10) + etaBambini.length + " Passeggeri"}
             </div>
+            {animali > 0 && (
+              <div className="fs-6 fw-light lh-sm">{animali + " Animali"}</div>
+            )}
+            {bagagli > 0 && (
+              <div className="fs-6 fw-light lh-sm">{bagagli + " Bagagli"}</div>
+            )}
           </div>
         </div>
       </div>

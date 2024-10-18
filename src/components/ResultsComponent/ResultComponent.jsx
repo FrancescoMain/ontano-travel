@@ -17,6 +17,11 @@ import {
 } from "../FormViaggioComponentResult";
 import { animateScroll as scroll } from "react-scroll";
 import { Spinner } from "../Spinner/Spinner";
+import {
+  setBigliettoAndata,
+  setBigliettoRitorno,
+} from "../../features/viaggio/viaggioFormSlice";
+import { toast } from "react-toastify";
 
 export const ResultComponent = () => {
   const {
@@ -86,11 +91,17 @@ export const ResultComponent = () => {
 
   const handleResultClick = (result, biglietto) => {
     setSelectedResult(result);
-    setSelectedResult(result);
-    scroll.scrollTo(document.getElementById("result-ritorno").offsetTop, {
-      duration: 500,
-      smooth: true,
-    });
+    const element = document.getElementById("result-ritorno");
+
+    if (element) {
+      // Aggiungi un timeout per ritardare l'esecuzione dello scroll
+      setTimeout(() => {
+        scroll.scrollTo(element.offsetTop, {
+          duration: 500,
+          smooth: true,
+        });
+      }, 500); // Ritarda di 500 millisecondi (puoi regolare questo valore)
+    }
     setAndata(biglietto);
   };
 
@@ -98,7 +109,27 @@ export const ResultComponent = () => {
     setSelectedResultRitorno(result);
     setRitorno(biglietto);
   };
-
+  const handleSubmit = () => {
+    console.log(bigliettoAndata, bigliettoRitorno);
+    // Se la partenza di biglietto di andata è minore rispetto a biglietto di ritorno
+    if (
+      dayjs(bigliettoRitorno?.departure).isBefore(
+        dayjs(bigliettoAndata?.departure)
+      )
+    ) {
+      toast.error("Seleziona un biglietto di ritorno valido", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+    // navigate("/checkout");
+  };
   useEffect(() => {
     if (bigliettoAndata?.priceData?.price) {
       setTotalPrice(bigliettoAndata?.priceData?.price);
@@ -108,9 +139,16 @@ export const ResultComponent = () => {
         );
       }
     }
+    if (!bigliettoAndata) {
+      setTotalPrice(0);
+    } else if (!bigliettoRitorno) {
+      setTotalPrice(bigliettoAndata?.priceData?.price);
+    }
   }, [bigliettoAndata, bigliettoRitorno]);
 
   useEffect(() => {
+    dispatch(setBigliettoAndata(null));
+    dispatch(setBigliettoRitorno(null));
     setSelectedResult(-1);
     setSelectedResultRitorno(-1);
   }, [trattaAndata, trattaRitorno, dataAndata, dataRitorno]);
@@ -179,7 +217,12 @@ export const ResultComponent = () => {
               </div>
             </div>
             <div className="to-checkout-cont__center">
-              <Button size="lg" color="warning" variant="solid">
+              <Button
+                onClick={() => handleSubmit()}
+                size="lg"
+                color="warning"
+                variant="solid"
+              >
                 Avanti
               </Button>
             </div>

@@ -57,7 +57,7 @@
   overflow: hidden;
 }
 .marginPage {
-  margin-bottom: 300px;
+  margin-bottom: 100px;
 }
 
 @media (max-width: 768px) {

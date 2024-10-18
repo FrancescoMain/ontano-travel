@@ -20,6 +20,8 @@ import {
   setAnimali,
   setBagagli,
   setBambini,
+  setBigliettoAndata,
+  setBigliettoRitorno,
   setDataAndata,
   setDataRitorno,
   setEtaBambini,
@@ -93,6 +95,10 @@ export const FormViaggioComponentResultAndata = ({ reset }) => {
   const handleChangeBagagli = (e) => {
     const value = e.target.value;
     dispatch(setBagagli(value));
+  };
+  const resetHandle = () => {
+    reset(-1);
+    dispatch(setBigliettoAndata(null));
   };
 
   const handleChangeAndata = (e) => {
@@ -258,7 +264,7 @@ export const FormViaggioComponentResultAndata = ({ reset }) => {
           <IconButton
             sx={{ borderRadius: 100, height: 20, alignSelf: "center" }}
             color="primary"
-            onClick={() => reset(-1)}
+            onClick={() => resetHandle()}
           >
             <GrPowerReset />
           </IconButton>
@@ -321,7 +327,10 @@ export const FormViaggioComponentResultRitorno = ({ reset }) => {
   const filterOptions = (options, { inputValue }) => {
     return matchSorter(options, inputValue, { keys: ["value"] });
   };
-
+  const resetHandle = () => {
+    reset(-1);
+    dispatch(setBigliettoRitorno(null));
+  };
   const handleChangeRitorno = (e) => {
     const value = e?.target?.textContent;
     const [from, to] = value.split(" -> ");
@@ -415,6 +424,15 @@ export const FormViaggioComponentResultRitorno = ({ reset }) => {
     setFormRitorno(location);
     dispatch(stopLoading());
   }, [dispatch, trattaRitorno]);
+
+  useEffect(() => {
+    // Se seleziono una data di andata maggiore di quella di ritorno, setto la data di ritorno come la data di andata
+    if (dayjs(dataAndata).isAfter(dayjs(dataRitorno))) {
+      dispatch(setDataRitorno(dataAndata));
+    }
+
+    console.log(dataAndata, dataRitorno);
+  }, [dataAndata, dataRitorno, dispatch]);
   return (
     <div className="form-viaggio-result-ritorno">
       <Typography
@@ -430,7 +448,7 @@ export const FormViaggioComponentResultRitorno = ({ reset }) => {
         <IconButton
           sx={{ borderRadius: 100, height: 20, alignSelf: "center" }}
           color="primary"
-          onClick={() => reset(-1)}
+          onClick={() => resetHandle()}
         >
           <GrPowerReset />
         </IconButton>
@@ -452,7 +470,7 @@ export const FormViaggioComponentResultRitorno = ({ reset }) => {
             label={t("Data di partenza")}
             inputFormat="DD/MM/YYYY"
             value={dataRitorno ? dayjs(dataRitorno) : null}
-            minDate={dayjs()}
+            minDate={dayjs(dataAndata)}
             onChange={handleChangeDataA}
             sx={{ height: 70 }}
             className="date-picker"
