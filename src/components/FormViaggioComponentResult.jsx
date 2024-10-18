@@ -37,7 +37,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
 import { GrPowerReset } from "react-icons/gr";
 
-export const FormViaggioComponentResultAndata = ({ reset }) => {
+export const FormViaggioComponentResultAndata = ({ reset, viewReset }) => {
   const [rotte, setRotte] = useState([]);
   const [fromLocations, setFromLocations] = useState([]);
   const [formAndata, setFormAndata] = useState("");
@@ -261,13 +261,14 @@ export const FormViaggioComponentResultAndata = ({ reset }) => {
           variant="plain"
         >
           {t("ANDATA")}
-          <IconButton
-            sx={{ borderRadius: 100, height: 20, alignSelf: "center" }}
-            color="primary"
-            onClick={() => resetHandle()}
-          >
-            <GrPowerReset />
-          </IconButton>
+          {viewReset !== -1 && (
+            <span
+              className="ms-3 fs-6 fst-italic pointer underline text-secondary"
+              onClick={() => resetHandle()}
+            >
+              Seleziona corsa
+            </span>
+          )}
         </Typography>
 
         <div className="form-viaggio-result-cont">
@@ -298,7 +299,7 @@ export const FormViaggioComponentResultAndata = ({ reset }) => {
     </div>
   );
 };
-export const FormViaggioComponentResultRitorno = ({ reset }) => {
+export const FormViaggioComponentResultRitorno = ({ reset, viewReset }) => {
   const [rotte, setRotte] = useState([]);
   const [fromLocations, setFromLocations] = useState([]);
   const [formRitorno, setFormRitorno] = useState("");
@@ -445,13 +446,14 @@ export const FormViaggioComponentResultRitorno = ({ reset }) => {
         variant="plain"
       >
         {t("RITORNO")}
-        <IconButton
-          sx={{ borderRadius: 100, height: 20, alignSelf: "center" }}
-          color="primary"
-          onClick={() => resetHandle()}
-        >
-          <GrPowerReset />
-        </IconButton>
+        {viewReset !== -1 && (
+          <span
+            className="ms-3 fs-6 fst-italic pointer underline text-secondary"
+            onClick={() => resetHandle()}
+          >
+            Seleziona corsa
+          </span>
+        )}
       </Typography>
       <div className="form-viaggio-result-cont">
         <Autocomplete

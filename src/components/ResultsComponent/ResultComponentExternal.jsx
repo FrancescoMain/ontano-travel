@@ -209,13 +209,16 @@ export const ResultComponentExternal = () => {
     <div>
       <ButtonStepper />
       <FormViaggioComponentResultDetail />
-      <FormViaggioComponentResultAndata reset={setSelectedResult} />
+      <FormViaggioComponentResultAndata
+        reset={setSelectedResult}
+        viewReset={selectedResult}
+      />
 
       {!searchResults && <Spinner active={true} />}
       {searchResults && (
         <div className="results-container">
           {/* Renderizza i risultati della ricerca qui */}
-          {searchResults?.timetableGoing[0] && (
+          {searchResults?.timetableGoing[0] ? (
             <div className="result-card-container">
               {searchResults.timetableGoing.map((going, index) => (
                 <ResultCard
@@ -228,14 +231,16 @@ export const ResultComponentExternal = () => {
                 />
               ))}
             </div>
+          ) : (
+            <div>Non ci sono risultati, prova a cambiare rotta o data</div>
           )}
-          {searchResults?.timetableGoing[0] && (
+          <FormViaggioComponentResultRitorno
+            reset={setSelectedResultRitorno}
+            viewReset={selectedResultRitorno}
+          />
+          {searchResults?.timetableGoing[0] ? (
             <>
               <div className="result-card-container marginPage">
-                <FormViaggioComponentResultRitorno
-                  reset={setSelectedResultRitorno}
-                />
-
                 {searchResults.timetableReturn.map((going, index) => (
                   <>
                     <ResultCard
@@ -253,6 +258,10 @@ export const ResultComponentExternal = () => {
                 ))}
               </div>
             </>
+          ) : (
+            <div className="marginPage">
+              Non ci sono risultati, prova a cambiare rotta o data
+            </div>
           )}
         </div>
       )}

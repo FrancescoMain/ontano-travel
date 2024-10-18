@@ -97,7 +97,12 @@
     var(--joy-palette-focusVisible, var(--joy-palette-primary-500, #0b6bcb))
   );
 }
-
+.pointer {
+  cursor: pointer;
+}
+.underline {
+  text-decoration: underline;
+}
 .input-eta.error {
   border-color: red;
 }

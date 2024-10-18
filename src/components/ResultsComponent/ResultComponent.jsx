@@ -111,13 +111,8 @@ export const ResultComponent = () => {
   };
   const handleSubmit = () => {
     console.log(bigliettoAndata, bigliettoRitorno);
-    // Se la partenza di biglietto di andata è minore rispetto a biglietto di ritorno
-    if (
-      dayjs(bigliettoRitorno?.departure).isBefore(
-        dayjs(bigliettoAndata?.departure)
-      )
-    ) {
-      toast.error("Seleziona un biglietto di ritorno valido", {
+    if (selectedResult && !bigliettoAndata) {
+      toast.error("Seleziona un biglietto di ritorno", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -127,6 +122,41 @@ export const ResultComponent = () => {
         progress: undefined,
         theme: "colored",
       });
+      return;
+    }
+    // Se la partenza di biglietto di andata è minore rispetto a biglietto di ritorno
+    if (selectedResultRitorno && !bigliettoRitorno) {
+      toast.error("Seleziona un biglietto di ritorno", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      return;
+    }
+    if (
+      dayjs(bigliettoRitorno?.departure).isBefore(
+        dayjs(bigliettoAndata?.departure)
+      )
+    ) {
+      toast.error(
+        "Viaggio di ritorno deve essere successivo a quello di andata",
+        {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        }
+      );
+      return;
     }
     // navigate("/checkout");
   };
@@ -158,7 +188,10 @@ export const ResultComponent = () => {
       <ButtonStepper />
       <FormViaggioComponentResultDetail />
 
-      <FormViaggioComponentResultAndata reset={setSelectedResult} />
+      <FormViaggioComponentResultAndata
+        reset={setSelectedResult}
+        viewReset={selectedResult}
+      />
 
       {!searchResults && <Spinner active={true} />}
       {searchResults && (
@@ -181,30 +214,10 @@ export const ResultComponent = () => {
             <div>Non ci sono risultati, prova a cambiare rotta o data</div>
           )}
 
-          <FormViaggioComponentResultRitorno reset={setSelectedResultRitorno} />
-          {searchResults?.timetableGoing[0] ? (
-            <>
-              <div className="result-card-container marginPage">
-                {searchResults.timetableReturn.map((going, index) => (
-                  <>
-                    <ResultCard
-                      ritorno={true}
-                      key={going.result_id}
-                      data={going}
-                      onClick={() => handleResultClickRitorno(index, going)}
-                      selected={selectedResultRitorno === index}
-                      hidden={
-                        selectedResultRitorno !== -1 &&
-                        selectedResultRitorno !== index
-                      }
-                    />
-                  </>
-                ))}
-              </div>
-            </>
-          ) : (
-            <div>Non ci sono risultati, prova a cambiare rotta o data</div>
-          )}
+          <FormViaggioComponentResultRitorno
+            viewReset={selectedResultRitorno}
+            reset={setSelectedResultRitorno}
+          />
         </div>
       )}
       {ritorno || andata ? (
