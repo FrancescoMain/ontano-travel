@@ -1,54 +1,64 @@
 import React from "react";
-import ButtonStepper from "../components/ResultsComponent/Stepper";
-import { Input } from "@mui/joy";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import {
+  CheckoutPasseggero,
+  CheckoutPrimoPasseggero,
+} from "../components/Checkouts/CheckoutPassegero";
+import { useReservations } from "../_hooks/useReservations";
 
 export const Checkout = () => {
+  const { passeggeri } = useReservations();
   return (
     <div className="conatiner">
       <div className="row d-flex justify-content-center ">
-        <ButtonStepper step={1} />
         <div className="col-9">
           <div className="row justify-content-between">
-            <div className="col-7 bg-aliceblue rounded">
+            <div className="col-7 bg-aliceblue rounded mt-3 mb-3 p-4">
               <div className="row">
                 <div className="col ">
                   <h2 className="text-primary">Dati Passeggeri</h2>
-                  <h5 className="text-secondary">
-                    1° Passeggero intestatario del biglietto
-                  </h5>
-                  <div class="row justify-content-center align-items-center g-2 mb-2">
-                    <div class="col">
-                      <Input placeholder="Nome*" />
-                    </div>
-                    <div class="col">
-                      <Input placeholder="Cognome*" />
-                    </div>
+                  <CheckoutPrimoPasseggero />
+
+                  {passeggeri.map(
+                    (_, index) =>
+                      index !== 0 && (
+                        <CheckoutPasseggero n={index + 1} key={index} />
+                      )
+                  )}
+                </div>
+                <h2 className="text-primary">Condizioni</h2>
+                <div className="col">
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value=""
+                      id="flexCheckDefault"
+                    />
+                    <label
+                      className="form-check-label"
+                      htmlFor="flexCheckDefault"
+                    >
+                      Ho letto e accettato i termini e le condizioni
+                    </label>
                   </div>
-                  <div class="row justify-content-center align-items-center g-2 mb-2">
-                    <div class="col">
-                      <Input placeholder="Luogo di nascita*" />
-                    </div>
-                    <div class="col">
-                      <LocalizationProvider
-                        dateAdapter={AdapterDayjs}
-                        adapterLocale="it"
-                      >
-                        <DatePicker
-                          sx={{ height: 36 }}
-                          label={"Data di nascita*"}
-                          inputFormat="DD/MM/YYYY"
-                          className="date-picker"
-                        />
-                      </LocalizationProvider>
-                    </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value=""
+                      id="flexCheckDefault"
+                    />
+                    <label
+                      className="form-check-label"
+                      htmlFor="flexCheckDefault"
+                    >
+                      Accetto Informatica sulla privacy
+                    </label>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="col-4 bg-aliceblue">Resoconto</div>
+            <div className="col-4 bg-aliceblue mt-3 ">Resoconto</div>
           </div>
         </div>
       </div>

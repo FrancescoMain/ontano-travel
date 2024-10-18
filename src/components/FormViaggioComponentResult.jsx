@@ -655,7 +655,7 @@ export const FormViaggioComponentResultDetail = () => {
   ]);
 
   return (
-    <div className="form-viaggio-result">
+    <div className="form-viaggio-result mt-3">
       <div>
         <Typography
           sx={{ marginBottom: 2 }}

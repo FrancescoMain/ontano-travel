@@ -185,7 +185,6 @@ export const ResultComponent = () => {
 
   return (
     <div>
-      <ButtonStepper />
       <FormViaggioComponentResultDetail />
 
       <FormViaggioComponentResultAndata
