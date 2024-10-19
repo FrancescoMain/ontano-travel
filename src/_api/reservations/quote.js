@@ -18,14 +18,14 @@ export const postQuote = async ({
 
   // Crea il body della richiesta
   const body = {
-    search_result_id: bigliettoAndata.result_id,
+    search_result_id: bigliettoAndata?.result_id,
     params: {
       passengers,
       animals: parseInt(animali, 10),
       luggages: parseInt(bagagli, 10),
     },
     departure: {
-      search_result_id: bigliettoAndata.result_id,
+      search_result_id: bigliettoAndata?.result_id,
       params: {
         passengers,
         animals: parseInt(animali, 10),
@@ -34,7 +34,7 @@ export const postQuote = async ({
     },
     return: bigliettoRitorno
       ? {
-          search_result_id: bigliettoRitorno.result_id,
+          search_result_id: bigliettoRitorno?.result_id,
           params: {
             passengers,
             animals: parseInt(animali, 10),

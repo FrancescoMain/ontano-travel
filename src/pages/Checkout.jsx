@@ -20,7 +20,7 @@ export const Checkout = () => {
     <div className="conatiner">
       <form
         className="row d-flex justify-content-center needs-validation "
-        novalidate
+        noValidate
       >
         <div className="col-lg-9 col-11">
           <div className="row justify-content-between flex-lg-row flex-column">
@@ -41,6 +41,7 @@ export const Checkout = () => {
                 <div className="col">
                   <div className="form-check">
                     <input
+                      required
                       className="form-check-input"
                       type="checkbox"
                       value=""
@@ -52,23 +53,26 @@ export const Checkout = () => {
                     >
                       Ho letto e accettato i termini e le condizioni
                     </label>
+                    <div className="invalid-feedback">
+                      Devi accettare i termini e le condizioni
+                    </div>
                   </div>
                   <div className="form-check">
                     <input
                       className="form-check-input"
                       type="checkbox"
                       value=""
-                      id="flexCheckDefault"
+                      id="flexCheckDefault2"
                       required
                     />
                     <label
                       className="form-check-label"
-                      htmlFor="flexCheckDefault"
+                      htmlFor="flexCheckDefault2"
                     >
                       Accetto Informatica sulla privacy
                     </label>
-                    <div class="invalid-feedback">
-                      Devi accettare i termini e le condizioni
+                    <div className="invalid-feedback">
+                      Devi accettare l'informativa sulla privacy
                     </div>
                   </div>
                 </div>
@@ -130,10 +134,6 @@ export const Checkout = () => {
                 </div>
                 <div class="mt-3">
                   <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      alert("Prenotazione effettuata con successo");
-                    }}
                     type="submit"
                     class="btn btn-success btn btn-lg w-100 text-white bg-green border-0 ms-auto fw-bold py-3"
                   >
