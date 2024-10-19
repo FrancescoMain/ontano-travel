@@ -1,9 +1,6 @@
 // Funzione per fare la chiamata POST
 export const postQuote = async ({
-  dataAndata,
-  dataRitorno,
   adulti,
-  bambini,
   etaBambini,
   animali,
   bagagli,

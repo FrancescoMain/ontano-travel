@@ -40,7 +40,7 @@ export const ResultComponentExternal = () => {
     dataRitorno,
     adulti,
     bambini,
-    etaBamibi,
+    etaBambini,
     animali,
     bagagli,
     bigliettoAndata,
@@ -181,6 +181,17 @@ export const ResultComponentExternal = () => {
         theme: "colored",
       });
     }
+    const viaggioData = {
+      adulti,
+      etaBambini,
+      animali,
+      bagagli,
+      bigliettoAndata,
+      bigliettoRitorno,
+      dataAndata,
+      dataRitorno,
+    };
+    localStorage.setItem("viaggioData", JSON.stringify(viaggioData));
     navigate("/checkout");
   };
   useEffect(() => {
@@ -271,7 +282,7 @@ export const ResultComponentExternal = () => {
             <div className="to-checkout-cont__left">
               <div>
                 TOTALE BIGLIETTI:
-                {" " + totalPrice.toFixed(2) || ""}€
+                {" " + totalPrice?.toFixed(2) || ""}€
               </div>
             </div>
             <div className="to-checkout-cont__center">
