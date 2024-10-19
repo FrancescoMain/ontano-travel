@@ -15,7 +15,7 @@ import alilauro from "../assets/Logo-AliLauro.png";
 import alilauroGruson from "../assets/Alilauro Gruson.png";
 
 export const Checkout = () => {
-  const { passeggeri, prenotazione } = useReservations();
+  const { passeggeri, prenotazione, etaBambini } = useReservations();
   return (
     <div className="conatiner">
       <form
@@ -23,8 +23,8 @@ export const Checkout = () => {
         noValidate
       >
         <div className="col-lg-9 col-11">
-          <div className="row justify-content-between flex-lg-row flex-column">
-            <div className="col-lg-7 col bg-aliceblue rounded mt-3 mb-3 p-4">
+          <div className="row justify-content-between flex-lg-row flex-column flex-column-reverse">
+            <div className="col-lg-7 col bg-passeggeri rounded mt-3 mb-3 p-4">
               <div className="row">
                 <div className="col ">
                   <h2 className="text-primary">Dati Passeggeri</h2>
@@ -36,6 +36,9 @@ export const Checkout = () => {
                         <CheckoutPasseggero n={index + 1} key={index} />
                       )
                   )}
+                  {etaBambini.map((eta, index) => (
+                    <CheckoutPasseggero n={index + 1} key={index} eta={eta} />
+                  ))}
                 </div>
                 <h2 className="text-primary">Condizioni</h2>
                 <div className="col">
@@ -73,6 +76,14 @@ export const Checkout = () => {
                     </label>
                     <div className="invalid-feedback">
                       Devi accettare l'informativa sulla privacy
+                    </div>
+                    <div class="mt-3 d-block d-lg-none ">
+                      <button
+                        type="submit"
+                        class="btn btn-success btn btn-lg w-100 text-white bg-green border-0 ms-auto fw-bold py-3"
+                      >
+                        CONFERMA
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -132,7 +143,7 @@ export const Checkout = () => {
                     {prenotazione?.priceToPay + " €"}
                   </span>
                 </div>
-                <div class="mt-3">
+                <div class="mt-3 d-none d-lg-block ">
                   <button
                     type="submit"
                     class="btn btn-success btn btn-lg w-100 text-white bg-green border-0 ms-auto fw-bold py-3"
@@ -164,27 +175,7 @@ export const CheckoutTratta = ({ route }) => {
         <div class="text-start col-4">
           <p class="mb-0 text-capitalize">{formattedDeparture}</p>
         </div>
-        <div class="text-center col-4">
-          {route.company === "Travelmar" && (
-            <img className="img-logo" src={travelmar} alt="Travelmar" />
-          )}
-          {route.company === "Snav" && (
-            <img className="img-logo" src={snav} alt="Snav" />
-          )}
-          {route.company === "Snav Gescab" && (
-            <img className="img-logo" src={snav} alt="Snav Gescab" />
-          )}
-          {route.company === "Alilauro" && (
-            <img className="img-logo" src={alilauro} alt="Alilauro" />
-          )}
-          {route.company === "Alilauro Gruson" && (
-            <img
-              className="img-logo"
-              src={alilauroGruson}
-              alt="Alilauro Gruson"
-            />
-          )}
-        </div>
+        <div class="text-center col-4"></div>
         <div class="text-end col-4">
           <p class="mb-0 text-capitalize">{formattedArrival}</p>
         </div>
@@ -194,11 +185,7 @@ export const CheckoutTratta = ({ route }) => {
           <CheckoutTariffe tariffa={tariffa} />
         ))}
 
-        <div class="bg-aliceblue d-flex justify-content-between align-items-center border-bottom">
-          <span>Tasse e diritti portuali</span>
-          <span>{route.tax + " €"}</span>
-        </div>
-        <div class="bg-aliceblue d-flex justify-content-between align-items-center subtotal ">
+        <div class="bg-aliceblue d-flex justify-content-between align-items-center subtotal mb-3 ">
           <span class="h5"> Totale tratta </span>
           <span class="fw-bold">{route.priceFinal + " €"}</span>
         </div>

@@ -6,7 +6,7 @@ export const CheckoutPrimoPasseggero = () => {
       <h5 className="text-secondary">
         1° Passeggero intestatario del biglietto
       </h5>
-      <div class="nomeCognome row justify-content-center align-items-center g-2 mb-2">
+      <div class="nomeCognome row justify-content-center align-items-center g-2 mb-2 flex-column flex-lg-row">
         <div class="col ">
           <label for="validationCustom01" class="form-label">
             Nome*
@@ -18,7 +18,7 @@ export const CheckoutPrimoPasseggero = () => {
             required
           />
           <div class="valid-feedback">Nome inserito correttamente!</div>
-          <div className="invalid-feedback">Devi inserire un nome</div>
+          <div className="invalid-feedback">Inserire Nome</div>
         </div>
         <div class="col ">
           <label for="validationCustom02" class="form-label">
@@ -31,50 +31,28 @@ export const CheckoutPrimoPasseggero = () => {
             required
           />
           <div class="valid-feedback">Cognome inserito correttamente!</div>
-          <div className="invalid-feedback">Devi inserire un cognome</div>
+          <div className="invalid-feedback">Inserire Cognome</div>
         </div>
-      </div>
-      <div class="nascita row justify-content-center align-items-center g-2 mb-2">
-        <div class="col ">
-          <label for="validationCustom03" class="form-label">
-            Luogo di nascita
-          </label>
-          <input type="text" class="form-control" id="validationCustom03" />
-          <div class="valid-feedback">Ok!</div>
-          <div className="invalid-feedback">
-            Devi inserire un Luogo di nascita
-          </div>
-        </div>
-        <div class="col ">
+
+        <div class="col col-lg-2 ">
           <label for="validationCustom04" class="form-label">
             Età*
           </label>
           <input
-            type="number"
+            type="text"
             class="form-control"
             id="validationCustom04"
+            value={"13+"}
             required
           />
-          <div class="valid-feedback">Età inserita correttamente!</div>
-          <div className="invalid-feedback">Devi inserire un Età</div>
+          <div class="valid-feedback">Ok!</div>
+          <div className="invalid-feedback">Inserire Età</div>
         </div>
       </div>
+
       <h6 className="text-secondary">Informazioni di contatto</h6>
-      <div class="contatto row justify-content-center align-items-center g-2 mb-2">
-        <div class="col ">
-          <label for="validationCustom05" class="form-label">
-            Email*
-          </label>
-          <input
-            type="email"
-            class="form-control"
-            id="validationCustom05"
-            required
-          />
-          <div class="valid-feedback">Email inserita correttamente!</div>
-          <div className="invalid-feedback">Devi inserire un Email</div>
-        </div>
-        <div class="col ">
+      <div class="contatto row justify-content-center align-items-center g-2 mb-2 flex-column flex-lg-row ">
+        <div class="col col-lg-5 ">
           <label for="validationCustom06" class="form-label">
             Cellulare*
           </label>
@@ -88,15 +66,30 @@ export const CheckoutPrimoPasseggero = () => {
           <div class="valid-feedback">Cellulare inserito correttamente!</div>
           <div className="invalid-feedback">Devi inserire un Cellulare</div>
         </div>
+        <div class="col ">
+          <label for="validationCustom05" class="form-label">
+            Email*
+          </label>
+          <input
+            type="email"
+            class="form-control"
+            id="validationCustom05"
+            required
+          />
+          <div class="valid-feedback">Email inserita correttamente!</div>
+          <div className="invalid-feedback">Devi inserire un Email</div>
+        </div>
       </div>
     </>
   );
 };
-export const CheckoutPasseggero = ({ n }) => {
+export const CheckoutPasseggero = ({ n, eta }) => {
   return (
     <>
-      <h5 className="text-secondary">{n}° Passeggero</h5>
-      <div class="nomeCognome row justify-content-center align-items-center g-2 mb-2">
+      <h5 className="text-secondary">
+        {n}° {eta ? "Bambino" : "Passeggero"}
+      </h5>
+      <div class="nomeCognome row justify-content-center align-items-center g-2 mb-2 flex-column flex-lg-row">
         <div class="col ">
           <label for={n + "Nome"} class="form-label">
             Nome*
@@ -113,24 +106,17 @@ export const CheckoutPasseggero = ({ n }) => {
           <div class="valid-feedback">Cognome inserito correttamente!</div>
           <div className="invalid-feedback">Devi inserire un Cognome</div>
         </div>
-      </div>
-      <div class="nascita row justify-content-center align-items-center g-2 mb-2">
-        <div class="col ">
-          <label for={n + "Luogo di nascita"} class="form-label">
-            Luogo di nascita
-          </label>
-          <input type="text" class="form-control" id={n + "Luogo di nascita"} />
-          <div class="valid-feedback">Ok!</div>
-          <div className="invalid-feedback">
-            Devi inserire un Luogo di nascita
-          </div>
-        </div>
-        <div class="col ">
+        <div class="col col-lg-2">
           <label for={n + "Eta"} class="form-label">
             Eta*
           </label>
-          <input type="text" class="form-control" id={n + "Eta"} required />
-          <div class="valid-feedback">Eta inserito correttamente!</div>
+          <input
+            type="text"
+            class="form-control"
+            id={n + "Eta"}
+            value={eta || "13+"}
+          />
+          <div class="valid-feedback">ok!</div>
           <div className="invalid-feedback">Devi inserire un Eta</div>
         </div>
       </div>

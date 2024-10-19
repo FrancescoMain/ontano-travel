@@ -116,5 +116,5 @@ export const useReservations = () => {
     })();
   }, []);
 
-  return { passeggeri, prenotazione };
+  return { passeggeri, prenotazione, etaBambini };
 };
