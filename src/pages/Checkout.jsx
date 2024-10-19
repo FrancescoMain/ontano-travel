@@ -23,7 +23,7 @@ export const Checkout = () => {
         noValidate
       >
         <div className="col-lg-9 col-11">
-          <div className="row justify-content-between flex-lg-row flex-column flex-column-reverse">
+          <div className="row justify-content-between flex-lg-row flex-column flex-column-reverse align-items-start">
             <div className="col-lg-7 col bg-passeggeri rounded mt-3 mb-3 p-4">
               <div className="row">
                 <div className="col ">
@@ -89,7 +89,7 @@ export const Checkout = () => {
                 </div>
               </div>
             </div>
-            <div className="col-lg-4 col bg-aliceblue mt-3 rounded mb-3  ">
+            <div className="col-lg-4 col bg-aliceblue mt-3 rounded mb-3 sticky-lg-top d-flex flex-column flex-basis-0 flex-grow-0">
               <div>
                 <h3 className="text-primary text-center">Il tuo viaggio</h3>
               </div>
