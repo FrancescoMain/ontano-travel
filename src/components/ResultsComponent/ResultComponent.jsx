@@ -110,34 +110,6 @@ export const ResultComponent = () => {
     setRitorno(biglietto);
   };
   const handleSubmit = () => {
-    console.log(bigliettoAndata, bigliettoRitorno);
-    if (selectedResult && !bigliettoAndata) {
-      toast.error("Seleziona un biglietto di ritorno", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-      return;
-    }
-    // Se la partenza di biglietto di andata è minore rispetto a biglietto di ritorno
-    if (selectedResultRitorno && !bigliettoRitorno) {
-      toast.error("Seleziona un biglietto di ritorno", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-      return;
-    }
     if (
       dayjs(bigliettoRitorno?.departure).isBefore(
         dayjs(bigliettoAndata?.departure)

@@ -16,10 +16,12 @@ import alilauroGruson from "../assets/Alilauro Gruson.png";
 
 export const Checkout = () => {
   const { passeggeri, prenotazione } = useReservations();
-  console.log(prenotazione?.reservationRoutes);
   return (
     <div className="conatiner">
-      <div className="row d-flex justify-content-center ">
+      <form
+        className="row d-flex justify-content-center needs-validation "
+        novalidate
+      >
         <div className="col-lg-9 col-11">
           <div className="row justify-content-between flex-lg-row flex-column">
             <div className="col-lg-7 col bg-aliceblue rounded mt-3 mb-3 p-4">
@@ -57,6 +59,7 @@ export const Checkout = () => {
                       type="checkbox"
                       value=""
                       id="flexCheckDefault"
+                      required
                     />
                     <label
                       className="form-check-label"
@@ -64,6 +67,9 @@ export const Checkout = () => {
                     >
                       Accetto Informatica sulla privacy
                     </label>
+                    <div class="invalid-feedback">
+                      Devi accettare i termini e le condizioni
+                    </div>
                   </div>
                 </div>
               </div>
@@ -92,7 +98,7 @@ export const Checkout = () => {
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                   <span>Diritti di prenotazione</span>
-                  <span>{prenotazione.taxPreview + " €"}</span>
+                  <span>{prenotazione?.taxPreview + " €"}</span>
                 </div>
                 <div class="spacer my-3 sconto d-none"></div>
                 <div
@@ -119,12 +125,16 @@ export const Checkout = () => {
                     class="h4 total-price"
                     data-total-price-in-cents="11150"
                   >
-                    {prenotazione.priceToPay + " €"}
+                    {prenotazione?.priceToPay + " €"}
                   </span>
                 </div>
                 <div class="mt-3">
                   <button
-                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      alert("Prenotazione effettuata con successo");
+                    }}
+                    type="submit"
                     class="btn btn-success btn btn-lg w-100 text-white bg-green border-0 ms-auto fw-bold py-3"
                   >
                     CONFERMA
@@ -134,7 +144,7 @@ export const Checkout = () => {
             </div>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
