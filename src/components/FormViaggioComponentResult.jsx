@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 
 import {
   Button,
@@ -36,6 +37,7 @@ import { matchSorter } from "match-sorter";
 import { useLocation, useNavigate } from "react-router-dom";
 import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
 import { GrPowerReset } from "react-icons/gr";
+dayjs.extend(isSameOrAfter);
 
 export const FormViaggioComponentResultAndata = ({ reset, viewReset }) => {
   const [rotte, setRotte] = useState([]);
@@ -52,10 +54,8 @@ export const FormViaggioComponentResultAndata = ({ reset, viewReset }) => {
     trattaRitorno,
     dataRitorno,
     bambini,
-    adulti,
+
     etaBambini,
-    animali,
-    bagagli,
   } = useSelector((state) => state.viaggioForm);
   const params = useLocation();
 
@@ -64,38 +64,12 @@ export const FormViaggioComponentResultAndata = ({ reset, viewReset }) => {
   };
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const { t } = useTranslation();
-  const etaBambinoString = t("Inserire età bambino");
   const filterOptions = (options, { inputValue }) => {
     return matchSorter(options, inputValue, { keys: ["value"] });
   };
 
-  const handleChangeAdulti = (e) => {
-    const value = e.target.value;
-    dispatch(setAdulti(value));
-  };
-
-  const handleChangeBambini = (e) => {
-    const value = e.target.value;
-    dispatch(setBambini(value));
-    // eta bambini viene tagliato dall'index che coincide con value
-    if (value < bambini) {
-      dispatch(setEtaBambini(etaBambini.slice(0, value)));
-
-      return;
-    }
-  };
-  const handleChangeAnimali = (e) => {
-    const value = e.target.value;
-    dispatch(setAnimali(value));
-  };
-
-  const handleChangeBagagli = (e) => {
-    const value = e.target.value;
-    dispatch(setBagagli(value));
-  };
   const resetHandle = () => {
     reset(-1);
     dispatch(setBigliettoAndata(null));
@@ -140,9 +114,17 @@ export const FormViaggioComponentResultAndata = ({ reset, viewReset }) => {
   };
 
   const handleChangeDataA = (e) => {
-    const dateString = e.toISOString(); // Converti l'oggetto Date in una stringa ISO
-    dispatch(setDataAndata(dateString));
-    setDataAndataForm(e);
+    const date = dayjs(e);
+    const today = dayjs();
+
+    if (date.isValid() && date.isSameOrAfter(today, "day")) {
+      const dateString = date.toISOString(); // Converti l'oggetto Date in una stringa ISO
+
+      dispatch(setDataAndata(dateString));
+      dispatch(setDataRitorno(dateString));
+
+      setDataAndataForm(e);
+    }
   };
 
   const handleChangeDataB = (e) => {
@@ -347,8 +329,13 @@ export const FormViaggioComponentResultRitorno = ({ reset, viewReset }) => {
   };
 
   const handleChangeDataA = (e) => {
-    const dateString = dayjs(e).format("YYYY-MM-DD"); // Formatta la data nel formato YYYY-MM-DD
-    dispatch(setDataRitorno(dateString));
+    const date = dayjs(e);
+    const today = dayjs();
+
+    if (date.isValid() && date.isSameOrAfter(today, "day")) {
+      const dateString = date.toISOString(); // Converti l'oggetto Date in una stringa ISO
+      dispatch(setDataRitorno(dateString));
+    }
   };
 
   useEffect(() => {

@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 
 import { Button, Card, Input, Tab, TabList, Tabs, Typography } from "@mui/joy";
 import React, { useState, useEffect } from "react";
@@ -24,6 +25,7 @@ import "dayjs/locale/it";
 import { matchSorter } from "match-sorter";
 import { useNavigate } from "react-router-dom";
 import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
+dayjs.extend(isSameOrAfter);
 
 export const FormViaggioComponent = () => {
   const [rotte, setRotte] = useState([]);
@@ -131,19 +133,34 @@ export const FormViaggioComponent = () => {
     setFormRitorno(uniqueFromLocations[0]);
     dispatch(setTrattaRitorno(route[0]));
   };
-
   const handleChangeDataA = (e) => {
-    const dateString = e.toISOString(); // Converti l'oggetto Date in una stringa ISO
-    dispatch(setDataAndata(dateString));
-    dispatch(setDataRitorno(dateString));
-    setDataAndataForm(e);
-    setDataRitornoForm(e);
+    const date = dayjs(e);
+    const today = dayjs();
+
+    if (date.isValid() && date.isSameOrAfter(today, "day")) {
+      const dateString = date.toISOString(); // Converti l'oggetto Date in una stringa ISO
+      dispatch(setDataAndata(dateString));
+      dispatch(setDataRitorno(dateString));
+      setDataAndataForm(date);
+      setDataRitornoForm(date);
+    } else {
+      // Gestisci il caso in cui la data non è valida
+      console.error("Invalid date");
+    }
   };
 
   const handleChangeDataB = (e) => {
-    const dateString = e.toISOString(); // Converti l'oggetto Date in una stringa ISO
-    dispatch(setDataRitorno(dateString));
-    setDataRitornoForm(e);
+    const date = dayjs(e);
+    const today = dayjs();
+
+    if (date.isValid() && date.isSameOrAfter(today, "day")) {
+      const dateString = date.toISOString(); // Converti l'oggetto Date in una stringa ISO
+      dispatch(setDataRitorno(dateString));
+      setDataRitornoForm(date);
+    } else {
+      // Gestisci il caso in cui la data non è valida
+      console.error("Invalid date");
+    }
   };
 
   const handleClickSearch = () => {
