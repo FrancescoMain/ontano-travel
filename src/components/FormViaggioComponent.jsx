@@ -26,6 +26,7 @@ export const FormViaggioComponent = () => {
     selectedOption,
     handleOptionChange,
   } = useFormViaggioComponent();
+  const nameTab = "Collegamento" || "Tour";
 
   return (
     <Card
@@ -98,7 +99,7 @@ export const FormViaggioComponent = () => {
                   onChange={handleOptionChange}
                 />
                 <label class="form-check-label" for="flexRadioDefault2">
-                  {t("Andata e ritorno")}
+                  {t("Andata e Ritorno")}
                 </label>
               </div>
               <div class="form-check">
