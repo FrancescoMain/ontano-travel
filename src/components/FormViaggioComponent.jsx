@@ -1,222 +1,31 @@
-import { useTranslation } from "react-i18next";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
-
 import { Button, Card, Input, Tab, TabList, Tabs, Typography } from "@mui/joy";
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  setAdulti,
-  setAnimali,
-  setBagagli,
-  setBambini,
-  setDataAndata,
-  setDataRitorno,
-  setEtaBambini,
-  setSoloAndata,
-  setTrattaAndata,
-  setTrattaRitorno,
-} from "../features/viaggio/viaggioFormSlice";
+import React, { useState } from "react";
+import { setEtaBambini } from "../features/viaggio/viaggioFormSlice";
 import Autocomplete from "@mui/joy/Autocomplete";
 import dayjs from "dayjs";
 import "dayjs/locale/it";
-import { matchSorter } from "match-sorter";
-import { useNavigate } from "react-router-dom";
-import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
+import { useFormViaggioComponent } from "../_hooks/useFormViaggioComponent";
+import { FormattedMessage } from "./FormattedMessage";
+import { upsertDettagli } from "../features/viaggio/findTratta";
+
 dayjs.extend(isSameOrAfter);
 
 export const FormViaggioComponent = () => {
-  const [rotte, setRotte] = useState([]);
-  const [fromLocations, setFromLocations] = useState([]);
-  const [formAndata, setFormAndata] = useState("");
-  const [formRitorno, setFormRitorno] = useState("");
-  const [buttonDisabled, setButtonDisabled] = useState(true);
-  const [dataAndataForm, setDataAndataForm] = useState(null);
-  const [dataRitornoForm, setDataRitornoForm] = useState(null);
   const {
-    trattaAndata,
-    dataAndata,
-    soloAndata,
-    trattaRitorno,
-    dataRitorno,
-    bambini,
-    adulti,
-    etaBambini,
-    animali,
-    bagagli,
-  } = useSelector((state) => state.viaggioForm);
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const { t } = useTranslation();
-  const etaBambinoString = t("Inserire età bambino");
-  const filterOptions = (options, { inputValue }) => {
-    return matchSorter(options, inputValue, { keys: ["value"] });
-  };
-
-  const handleClickTab = (e) => {
-    const value = e.target.textContent;
-
-    if (value === "Solo andata") {
-      dispatch(setSoloAndata(true));
-      dispatch(setTrattaRitorno(""));
-      dispatch(setDataRitorno(""));
-      setDataRitornoForm(null);
-      setFormRitorno("");
-    } else {
-      dispatch(setSoloAndata(false));
-    }
-  };
-
-  const handleChangeAdulti = (e) => {
-    const value = e.target.value;
-    dispatch(setAdulti(value));
-  };
-
-  const handleChangeBambini = (e) => {
-    const value = e.target.value;
-    dispatch(setBambini(value));
-    // eta bambini viene tagliato dall'index che coincide con value
-    if (value < bambini) {
-      dispatch(setEtaBambini(etaBambini.slice(0, value)));
-
-      return;
-    }
-  };
-  const handleChangeAnimali = (e) => {
-    const value = e.target.value;
-    dispatch(setAnimali(value));
-  };
-
-  const handleChangeBagagli = (e) => {
-    const value = e.target.value;
-    dispatch(setBagagli(value));
-  };
-
-  const handleChangeAndata = (e) => {
-    const value = e?.target?.textContent;
-    const [from, to] = value.split(" -> ");
-    const route = rotte.filter(
-      (route) => route.from === from && route.to === to
-    );
-    const uniqueFromLocations = [
-      ...new Set(route.map((route) => route.from + " -> " + route.to)),
-    ];
-
-    setFormAndata(uniqueFromLocations[0]);
-    dispatch(setTrattaAndata(route[0]));
-    if (!soloAndata) {
-      const routeRitorno = rotte.filter(
-        (route) => route.from === to && route.to === from
-      );
-      const uniqueToLocations = [
-        ...new Set(route.map((route) => route.to + " -> " + route.from)),
-      ];
-      setFormRitorno(uniqueToLocations[0]);
-      dispatch(setTrattaRitorno(routeRitorno[0]));
-    }
-  };
-
-  const handleChangeRitorno = (e) => {
-    const value = e?.target?.textContent;
-    const [from, to] = value.split(" -> ");
-    const route = rotte.filter(
-      (route) => route.from === from && route.to === to
-    );
-    const uniqueFromLocations = [
-      ...new Set(route.map((route) => route.from + " -> " + route.to)),
-    ];
-    console.log(route[0]);
-    setFormRitorno(uniqueFromLocations[0]);
-    dispatch(setTrattaRitorno(route[0]));
-  };
-  const handleChangeDataA = (e) => {
-    const date = dayjs(e);
-    const today = dayjs();
-
-    if (date.isValid() && date.isSameOrAfter(today, "day")) {
-      const dateString = date.toISOString(); // Converti l'oggetto Date in una stringa ISO
-      dispatch(setDataAndata(dateString));
-      dispatch(setDataRitorno(dateString));
-      setDataAndataForm(date);
-      setDataRitornoForm(date);
-    } else {
-      // Gestisci il caso in cui la data non è valida
-      console.error("Invalid date");
-    }
-  };
-
-  const handleChangeDataB = (e) => {
-    const date = dayjs(e);
-    const today = dayjs();
-
-    if (date.isValid() && date.isSameOrAfter(today, "day")) {
-      const dateString = date.toISOString(); // Converti l'oggetto Date in una stringa ISO
-      dispatch(setDataRitorno(dateString));
-      setDataRitornoForm(date);
-    } else {
-      // Gestisci il caso in cui la data non è valida
-      console.error("Invalid date");
-    }
-  };
-
-  const handleClickSearch = () => {
-    navigate("/results");
-  };
-  useEffect(() => {
-    dispatch(startLoading());
-    fetch("https://bookingferries-5cc3853ba728.herokuapp.com/api/booking/route")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setRotte(data);
-        const locations = data.map((route) => {
-          const fromNames = route.from.split(" ");
-          const toNames = route.to.split(" ");
-          const allNames = [...fromNames, ...toNames];
-          return {
-            value: allNames.join(" "),
-            label: `${route.from} -> ${route.to}`,
-          };
-        });
-        setFromLocations(locations);
-        dispatch(stopLoading());
-      })
-      .catch((error) => {
-        console.error("Fetch error:", error);
-        dispatch(stopLoading());
-      });
-  }, []);
-
-  useEffect(() => {
-    const allAgesFilled =
-      bambini == 0 ||
-      (etaBambini.length == bambini && etaBambini.every((age) => age !== ""));
-    // Controlla se tutti i campi di età dei bambini sono compilati
-    if (soloAndata) {
-      const soloAndataValid = trattaAndata && dataAndata && allAgesFilled;
-      setButtonDisabled(!soloAndataValid);
-    } else {
-      const andataValid = trattaAndata && dataAndata && allAgesFilled;
-      const ritornoValid = trattaRitorno && dataRitorno;
-      setButtonDisabled(!andataValid || !ritornoValid);
-    }
-  }, [
-    trattaAndata,
-    dataAndata,
-    trattaRitorno,
-    dataRitorno,
-    soloAndata,
-    bambini,
-    etaBambini,
-  ]);
+    handleClickTab,
+    t,
+    buttonDisabled,
+    handleClickSearch,
+    tab,
+    tratte,
+    date,
+    selectedOption,
+    handleOptionChange,
+  } = useFormViaggioComponent();
 
   return (
     <Card
@@ -227,7 +36,7 @@ export const FormViaggioComponent = () => {
       variant="soft"
     >
       <Tabs
-        defaultValue={"andata-ritorno"}
+        defaultValue={"collegamento"}
         orientation="horizontal"
         onChange={handleClickTab}
       >
@@ -237,49 +46,157 @@ export const FormViaggioComponent = () => {
             sx={{ width: 320 }}
             variant="outlined"
             color="neutral"
-            value={"andata-ritorno"}
+            value={0}
             disableIndicator
           >
-            {t("Andata e ritorno")}
+            {FormattedMessage("Collegamento")}
           </Tab>
           <Tab
             className="tab-viaggio"
             sx={{ width: 320 }}
             variant="outlined"
             color="neutral"
-            value={"solo-andata"}
+            value={1}
             disableIndicator
           >
-            {t("Solo andata")}
+            {FormattedMessage("Tour")}
           </Tab>
         </TabList>
       </Tabs>
+
+      {tab === "Collegamento" && (
+        <>
+          <ViaggioDiAndataForm id={0} />
+          {/* {tratte.map(
+            (tratta) =>
+              tratta.id !== 0 && (
+                <ViaggioDiAndataForm key={tratta.id} id={tratta.id} />
+              )
+          )} */}
+          <div className="row">
+            <div className="col d-flex flex-row gap-4">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="soloAndata"
+                  id="flexRadioDefault1"
+                  checked={selectedOption === "soloAndata"}
+                  onChange={handleOptionChange}
+                />
+                <label class="form-check-label" for="flexRadioDefault1">
+                  {t("Solo andata")}
+                </label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="andataRitorno"
+                  id="flexRadioDefault2"
+                  checked={selectedOption === "andataRitorno"}
+                  onChange={handleOptionChange}
+                />
+                <label class="form-check-label" for="flexRadioDefault2">
+                  {t("Andata e ritorno")}
+                </label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="multitratta"
+                  id="flexRadioDefault3"
+                  checked={selectedOption === "multitratta"}
+                  onChange={handleOptionChange}
+                />
+                <label class="form-check-label" for="flexRadioDefault3">
+                  {t("Multitratta")}
+                </label>
+              </div>
+            </div>
+          </div>
+          {selectedOption === "andataRitorno" && (
+            <ViaggoiDiRitornoForm id={1} />
+          )}
+          <Button
+            disabled={buttonDisabled}
+            variant="solid"
+            color="primary"
+            size="lg"
+            onClick={handleClickSearch}
+          >
+            {t("Cerca")}
+          </Button>
+        </>
+      )}
+      {tab === "Tour" && <div>Work in progress</div>}
+    </Card>
+  );
+};
+
+export const ViaggioDiAndataForm = ({ id }) => {
+  const {
+    t,
+    fromLocations,
+    filterOptions,
+    handleChangeAndata,
+    handleChangeDataA,
+    tratte,
+    date,
+  } = useFormViaggioComponent();
+
+  return (
+    <>
       <Typography color="primary" level="h4" noWrap={false} variant="plain">
         {t("Viaggio di andata")}
       </Typography>
       <div className="row-cont">
         <Autocomplete
-          value={formAndata}
+          value={tratte[id]?.trattaFormatted}
           className="select-viaggio"
           placeholder={t("Seleziona una tratta")}
           options={fromLocations}
           filterOptions={filterOptions}
           sx={{ height: 56 }}
-          onChange={handleChangeAndata}
+          onChange={(e) => handleChangeAndata(e, id)}
         />
 
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="it">
           <DatePicker
             label={t("Data di partenza")}
             inputFormat="DD/MM/YYYY"
-            value={dataAndataForm}
+            value={date[id]?.date || null}
             minDate={dayjs()}
-            onChange={handleChangeDataA}
+            onChange={(e) => handleChangeDataA(e, id)}
             sx={{ height: 70 }}
             className="date-picker"
           />
         </LocalizationProvider>
+        <DettagliViaggio id={id} />
       </div>
+    </>
+  );
+};
+
+export const ViaggoiDiRitornoForm = ({ id }) => {
+  const {
+    t,
+    fromLocations,
+    filterOptions,
+    formRitorno,
+    handleChangeRitorno,
+    dataRitornoForm,
+    handleChangeDataB,
+    soloAndata,
+    dataAndataForm,
+    tratte,
+    date,
+  } = useFormViaggioComponent();
+
+  console.log(fromLocations);
+  return (
+    <>
       <Typography color="primary" level="h4" noWrap={false} variant="plain">
         {t("Viaggio di ritorno")}
       </Typography>
@@ -288,11 +205,10 @@ export const FormViaggioComponent = () => {
           className="select-viaggio"
           placeholder={t("Seleziona una tratta")}
           options={fromLocations}
-          disabled={soloAndata}
-          value={formRitorno}
+          value={tratte[id]?.trattaFormatted}
           filterOptions={filterOptions}
           sx={{ height: 56 }}
-          onChange={handleChangeRitorno}
+          onChange={(e) => handleChangeRitorno(e, id)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               e.preventDefault();
@@ -303,31 +219,54 @@ export const FormViaggioComponent = () => {
           <DatePicker
             label={t("Data di ritorno")}
             inputFormat="DD/MM/YYYY"
-            onChange={handleChangeDataB}
-            value={dataRitornoForm || null}
-            disabled={soloAndata}
-            minDate={dataAndataForm || dayjs()}
+            onChange={(e) => handleChangeDataB(e, id)}
+            value={date[id]?.date || null}
+            minDate={date[0]?.date || dayjs()}
             sx={{ height: 70, backgroundColor: soloAndata ? "white" : "" }}
             className="date-picker"
           />
         </LocalizationProvider>
       </div>
+      {/* <DettagliViaggio id={1} /> */}
+    </>
+  );
+};
+
+const DettagliViaggio = ({ id }) => {
+  const {
+    etaBambinoString,
+    t,
+    adulti,
+    bambini,
+    animali,
+    bagagli,
+    etaBambini,
+    dispatch,
+    handleChangeAdulti,
+    handleChangeBambini,
+    handleChangeAnimali,
+    handleChangeBagagli,
+    dettagli,
+  } = useFormViaggioComponent();
+
+  return (
+    <>
       <Typography
         sx={{ marginBottom: 2 }}
         color="primary"
-        level="h4"
+        level="h5"
         noWrap={false}
         variant="plain"
       >
         {t("Dettagli viaggio")}
       </Typography>
-      <div className="row-cont__detail">
-        <div className="select-detail-cont">
+      <div className="row flex-column flex-lg-row">
+        <div className="col col-lg-3 d-flex flex-column">
           <label htmlFor="adults">{t("Adulti")}</label>
 
           <select
-            value={adulti}
-            onChange={handleChangeAdulti}
+            value={dettagli[id]?.adulti}
+            onChange={(e) => handleChangeAdulti(e, id)}
             id="adults"
             className="select-detail"
           >
@@ -346,12 +285,12 @@ export const FormViaggioComponent = () => {
             {t("Oltre i 12 anni")}
           </Typography>
         </div>
-        <div className="select-detail-cont">
+        <div className="col col-lg-3 d-flex flex-column">
           <label htmlFor="children">{t("Bambini")}</label>
 
           <select
-            value={bambini}
-            onChange={handleChangeBambini}
+            value={dettagli[id]?.bambini}
+            onChange={(e) => handleChangeBambini(e, id)}
             id="children"
             className="select-detail"
           >
@@ -370,12 +309,12 @@ export const FormViaggioComponent = () => {
             {t("Fino agli 11 anni")}
           </Typography>
         </div>
-        <div className="select-detail-cont">
+        <div className="col col-lg-3 d-flex flex-column">
           <label htmlFor="animals">{t("Animali Domestici")}</label>
 
           <select
-            value={animali}
-            onChange={handleChangeAnimali}
+            value={dettagli[id]?.animali}
+            onChange={(e) => handleChangeAnimali(e, id)}
             id="animals"
             className="select-detail"
           >
@@ -387,12 +326,12 @@ export const FormViaggioComponent = () => {
           </select>
         </div>
 
-        <div className="select-detail-cont">
+        <div className="col col-lg-3 d-flex flex-column">
           <label htmlFor="bagagli">{t("Bagagli")}</label>
 
           <select
-            value={bagagli}
-            onChange={handleChangeBagagli}
+            value={dettagli[id]?.bagagli}
+            onChange={(e) => handleChangeBagagli(e, id)}
             id="bagagli"
             className="select-detail"
           >
@@ -404,8 +343,7 @@ export const FormViaggioComponent = () => {
           </select>
         </div>
       </div>
-
-      {bambini > 0 && (
+      {dettagli[id]?.bambini > 0 && (
         <Typography
           color="primary"
           level="body-md"
@@ -415,38 +353,29 @@ export const FormViaggioComponent = () => {
           {t("Inserire età bambini")}
         </Typography>
       )}
-      {Array.from({ length: bambini }).map((_, index) => (
-        <Input
-          onChange={(e) => {
-            if (e.target.value > 11) {
-              e.target.value = 11;
-            }
-            if (e.target.value < 0) {
-              e.target.value = 0;
-            }
-            const newChildrenAge = [...etaBambini];
-            newChildrenAge[index] = e.target.value;
-            dispatch(setEtaBambini(newChildrenAge));
-          }}
-          value={etaBambini[index] || ""}
-          type="number"
-          key={index}
-          color="neutral"
-          placeholder={`${etaBambinoString} ${index + 1}`}
-          variant="outlined"
-          className="input-eta"
-        />
+      {Array.from({ length: dettagli[id]?.bambini }).map((_, index) => (
+        <div className="col">
+          <Input
+            onChange={(e) => {
+              if (e.target.value > 11) {
+                e.target.value = 11;
+              }
+              if (e.target.value < 0) {
+                e.target.value = 0;
+              }
+              const newChildrenAge = [...dettagli[id]?.etaBambini];
+              newChildrenAge[index] = e.target.value;
+              dispatch(upsertDettagli({ id, etaBambini: newChildrenAge }));
+            }}
+            value={dettagli[id]?.etaBambini[index] || ""}
+            type="number"
+            key={index}
+            color="neutral"
+            placeholder={`${etaBambinoString} ${index + 1}`}
+            variant="outlined"
+          />
+        </div>
       ))}
-
-      <Button
-        disabled={buttonDisabled}
-        variant="solid"
-        color="primary"
-        size="lg"
-        onClick={handleClickSearch}
-      >
-        {t("Cerca")}
-      </Button>
-    </Card>
+    </>
   );
 };

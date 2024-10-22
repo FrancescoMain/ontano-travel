@@ -39,6 +39,10 @@ const resources = {
       "Inserire età bambino": "Enter child age",
       "Oltre i 12 anni": "Over 12 years old",
       "Fino agli 11 anni": "Up to 11 years old",
+      Collegamento: "Link",
+      Tour: "Tour",
+      "Inserire età bambini": "Enter child age",
+      Multitratta: "Multi-route",
     },
   },
   it: {
@@ -75,6 +79,8 @@ const resources = {
       "Inserire età bambino": "Inserire età bambino",
       "Oltre i 12 anni": "Oltre i 12 anni",
       "Fino agli 11 anni": "Fino agli 11 anni",
+      Collegamento: "Collegamento",
+      Tour: "Tour",
     },
   },
 };

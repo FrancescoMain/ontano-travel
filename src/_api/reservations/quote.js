@@ -25,8 +25,8 @@ export const postQuote = async ({
       search_result_id: bigliettoAndata?.result_id,
       params: {
         passengers,
-        animals: parseInt(animali, 10),
-        luggages: parseInt(bagagli, 10),
+        animals: parseInt(animali, 10) || 0,
+        luggages: parseInt(bagagli, 10) || 0,
       },
     },
     return: bigliettoRitorno
@@ -34,8 +34,8 @@ export const postQuote = async ({
           search_result_id: bigliettoRitorno?.result_id,
           params: {
             passengers,
-            animals: parseInt(animali, 10),
-            luggages: parseInt(bagagli, 10),
+            animals: parseInt(animali, 10) || 0,
+            luggages: parseInt(bagagli, 10) || 0,
           },
         }
       : null,

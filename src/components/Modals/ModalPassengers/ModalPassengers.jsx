@@ -143,7 +143,7 @@ export const ModalPassengers = ({ open, setOpen }) => {
             noWrap={false}
             variant="plain"
           >
-            Inserire età bambini
+            t{"Inserire età bambini"}
           </Typography>
         )}
         {Array.from({ length: bambini }).map((_, index) => (

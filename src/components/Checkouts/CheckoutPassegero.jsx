@@ -3,9 +3,7 @@ import { Input } from "@mui/joy";
 export const CheckoutPrimoPasseggero = () => {
   return (
     <>
-      <h5 className="text-secondary">
-        1° Passeggero intestatario del biglietto
-      </h5>
+      <h5 className="text-secondary">Intestatario del biglietto</h5>
       <div class="nomeCognome row justify-content-center align-items-center g-2 mb-2 flex-column flex-lg-row">
         <div class="col ">
           <label for="validationCustom01" class="form-label">
@@ -32,21 +30,6 @@ export const CheckoutPrimoPasseggero = () => {
           />
           <div class="valid-feedback">Cognome inserito correttamente!</div>
           <div className="invalid-feedback">Inserire Cognome</div>
-        </div>
-
-        <div class="col col-lg-2 ">
-          <label for="validationCustom04" class="form-label">
-            Età*
-          </label>
-          <input
-            type="text"
-            class="form-control"
-            id="validationCustom04"
-            value={"13+"}
-            required
-          />
-          <div class="valid-feedback">Ok!</div>
-          <div className="invalid-feedback">Inserire Età</div>
         </div>
       </div>
 

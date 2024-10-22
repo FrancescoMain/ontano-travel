@@ -51,10 +51,10 @@ export const ResultComponent = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!trattaAndata) {
-      navigate("/");
-      return;
-    }
+    // if (!trattaAndata) {
+    //   navigate("/");
+    //   return;
+    // }
     dispatch(startLoading());
     const fetchData = async () => {
       try {
