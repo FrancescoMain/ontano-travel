@@ -90,7 +90,12 @@ export const FormViaggioComponent = () => {
   );
 };
 
-export const ViaggioDiAndataForm = ({ id, optionsChange, optionState }) => {
+export const ViaggioDiAndataForm = ({
+  id,
+  optionsChange,
+  optionState,
+  resultMode,
+}) => {
   const {
     t,
     fromLocations,
@@ -127,39 +132,41 @@ export const ViaggioDiAndataForm = ({ id, optionsChange, optionState }) => {
             className="date-picker"
           />
         </LocalizationProvider>
-        <ul className="nav nav-pills gap-3">
-          <li className="nav-item" onClick={optionsChange}>
-            <a
-              className={`nav-link ${
-                optionState === "Solo andata" && "active"
-              }  ${optionState === "One way" && "active"}`}
-              aria-current="page"
-              href="#"
-            >
-              {t("Solo andata")}
-            </a>
-          </li>
-          <li className="nav-item" onClick={optionsChange}>
-            <a
-              className={`nav-link ${
-                optionState === "Andata e ritorno" && "active"
-              }  ${optionState === "Round trip" && "active"}`}
-              href="#"
-            >
-              {t("Andata e ritorno")}
-            </a>
-          </li>
-          <li className="nav-item" onClick={optionsChange}>
-            <a
-              className={`nav-link ${
-                optionState === "Multitratta" && "active"
-              } ${optionState === "Multi-route" && "active"}`}
-              href="#"
-            >
-              {t("Multitratta")}
-            </a>
-          </li>
-        </ul>
+        {!resultMode && (
+          <ul className="nav nav-pills gap-3">
+            <li className="nav-item" onClick={optionsChange}>
+              <a
+                className={`nav-link ${
+                  optionState === "Solo andata" && "active"
+                }  ${optionState === "One way" && "active"}`}
+                aria-current="page"
+                href="#"
+              >
+                {t("Solo andata")}
+              </a>
+            </li>
+            <li className="nav-item" onClick={optionsChange}>
+              <a
+                className={`nav-link ${
+                  optionState === "Andata e ritorno" && "active"
+                }  ${optionState === "Round trip" && "active"}`}
+                href="#"
+              >
+                {t("Andata e ritorno")}
+              </a>
+            </li>
+            <li className="nav-item" onClick={optionsChange}>
+              <a
+                className={`nav-link ${
+                  optionState === "Multitratta" && "active"
+                } ${optionState === "Multi-route" && "active"}`}
+                href="#"
+              >
+                {t("Multitratta")}
+              </a>
+            </li>
+          </ul>
+        )}
         <DettagliViaggio id={id} />
       </div>
     </>

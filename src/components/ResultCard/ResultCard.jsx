@@ -189,7 +189,7 @@ export const ResultCard = ({
     //   </div>
     // </div>
     <div
-      className={`card-container ${selected ? "selected" : ""} ${
+      className={` m-3 card-container ${selected ? "selected" : ""} ${
         hidden ? "hidden" : ""
       } box-result bg-ice-white rounded-2x mt-md-0 my-4 collapsable`}
       onClick={onClick}

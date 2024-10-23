@@ -136,6 +136,10 @@
 .css-onp1ch-JoyTypography-root {
   margin-bottom: 2px !important;
 }
+
+.marginDiv {
+  margin-bottom: 100px;
+}
 @media (max-width: 768px) {
   .home-page {
     margin: 8px;

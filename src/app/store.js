@@ -4,6 +4,7 @@ import viaggioFormReducer from "../features/viaggio/viaggioFormSlice";
 import spinnerReducer from "../features/spinner/spinnerSlice";
 import viaggioReducer from "../features/viaggio/findTratta";
 import routesReducer from "../features/routes/routesSlice";
+import resultTrattaReducer from "../features/viaggio/resultTratta";
 
 export const store = configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
     spinner: spinnerReducer,
     tratte: viaggioReducer,
     routes: routesReducer,
+    resultsTratta: resultTrattaReducer,
   },
 });
