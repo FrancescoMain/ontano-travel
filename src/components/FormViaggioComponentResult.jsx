@@ -4,16 +4,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 
-import {
-  Button,
-  Card,
-  IconButton,
-  Input,
-  Tab,
-  TabList,
-  Tabs,
-  Typography,
-} from "@mui/joy";
+import { Input, Typography } from "@mui/joy";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -26,7 +17,6 @@ import {
   setDataAndata,
   setDataRitorno,
   setEtaBambini,
-  setSoloAndata,
   setTrattaAndata,
   setTrattaRitorno,
 } from "../features/viaggio/viaggioFormSlice";
@@ -36,7 +26,6 @@ import "dayjs/locale/it";
 import { matchSorter } from "match-sorter";
 import { useLocation, useNavigate } from "react-router-dom";
 import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
-import { GrPowerReset } from "react-icons/gr";
 dayjs.extend(isSameOrAfter);
 
 export const FormViaggioComponentResultAndata = ({ reset, viewReset }) => {

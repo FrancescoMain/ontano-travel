@@ -34,17 +34,19 @@ export const useFormViaggioComponent = () => {
   const [tab, setTab] = useState("Collegamento");
   const [rotte, setRotte] = useState([]);
   const [fromLocations, setFromLocations] = useState([]);
-  const [selectedOption, setSelectedOption] = useState("soloAndata");
+  const [selectedOption, setSelectedOption] = useState("Solo andata");
 
   const { tratte, date, dettagli, multitratta } = useSelector(
     (state) => state.tratte
   );
 
   const handleOptionChange = (event) => {
-    setSelectedOption(event.target.name);
+    setSelectedOption(event.target.text);
     if (
-      event.target.name === "soloAndata" ||
-      event.target.name === "multitratta"
+      event.target.text === "Solo andata" ||
+      event.target.text === "One way" ||
+      event.target.text === "Multitratta" ||
+      event.target.text === "Multi-route"
     ) {
       dispatch(setMultitratta(true));
       dispatch(removeTratta(1));
@@ -163,8 +165,6 @@ export const useFormViaggioComponent = () => {
         trattaFormatted: uniqueFromLocations,
       })
     );
-    if (!multitratta) {
-    }
 
     const routeRitorno = rotte.filter(
       (route) => route.from === to && route.to === from
@@ -174,6 +174,7 @@ export const useFormViaggioComponent = () => {
     ];
     // setFormRitorno(uniqueToLocations[0]);
     // dispatch(setTrattaRitorno(routeRitorno[0]));
+
     dispatch(
       upsertTratta({
         id: 1,
@@ -317,11 +318,6 @@ export const useFormViaggioComponent = () => {
     tratte,
     date,
   ]);
-
-  const handleChangeRadio = (e) => {
-    const value = e.target.value;
-    dispatch(setSoloAndata(value === "soloAndata"));
-  };
 
   return {
     t,

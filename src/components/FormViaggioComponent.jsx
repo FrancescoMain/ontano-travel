@@ -21,12 +21,9 @@ export const FormViaggioComponent = () => {
     buttonDisabled,
     handleClickSearch,
     tab,
-    tratte,
-    date,
     selectedOption,
     handleOptionChange,
   } = useFormViaggioComponent();
-  const nameTab = "Collegamento" || "Tour";
 
   return (
     <Card
@@ -67,59 +64,16 @@ export const FormViaggioComponent = () => {
 
       {tab === "Collegamento" && (
         <>
-          <ViaggioDiAndataForm id={0} />
-          {/* {tratte.map(
-            (tratta) =>
-              tratta.id !== 0 && (
-                <ViaggioDiAndataForm key={tratta.id} id={tratta.id} />
-              )
-          )} */}
-          <div className="row">
-            <div className="col d-flex flex-row gap-4">
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="soloAndata"
-                  id="flexRadioDefault1"
-                  checked={selectedOption === "soloAndata"}
-                  onChange={handleOptionChange}
-                />
-                <label class="form-check-label" for="flexRadioDefault1">
-                  {t("Solo andata")}
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="andataRitorno"
-                  id="flexRadioDefault2"
-                  checked={selectedOption === "andataRitorno"}
-                  onChange={handleOptionChange}
-                />
-                <label class="form-check-label" for="flexRadioDefault2">
-                  {t("Andata e Ritorno")}
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="multitratta"
-                  id="flexRadioDefault3"
-                  checked={selectedOption === "multitratta"}
-                  onChange={handleOptionChange}
-                />
-                <label class="form-check-label" for="flexRadioDefault3">
-                  {t("Multitratta")}
-                </label>
-              </div>
-            </div>
-          </div>
-          {selectedOption === "andataRitorno" && (
+          <ViaggioDiAndataForm
+            optionsChange={handleOptionChange}
+            optionState={selectedOption}
+            id={0}
+          />
+
+          {selectedOption === "Andata e ritorno" && (
             <ViaggoiDiRitornoForm id={1} />
           )}
+          {selectedOption === "Round trip" && <ViaggoiDiRitornoForm id={1} />}
           <Button
             disabled={buttonDisabled}
             variant="solid"
@@ -136,7 +90,7 @@ export const FormViaggioComponent = () => {
   );
 };
 
-export const ViaggioDiAndataForm = ({ id }) => {
+export const ViaggioDiAndataForm = ({ id, optionsChange, optionState }) => {
   const {
     t,
     fromLocations,
@@ -146,7 +100,6 @@ export const ViaggioDiAndataForm = ({ id }) => {
     tratte,
     date,
   } = useFormViaggioComponent();
-
   return (
     <>
       <Typography color="primary" level="h4" noWrap={false} variant="plain">
@@ -174,6 +127,39 @@ export const ViaggioDiAndataForm = ({ id }) => {
             className="date-picker"
           />
         </LocalizationProvider>
+        <ul className="nav nav-pills gap-3">
+          <li className="nav-item" onClick={optionsChange}>
+            <a
+              className={`nav-link ${
+                optionState === "Solo andata" && "active"
+              }  ${optionState === "One way" && "active"}`}
+              aria-current="page"
+              href="#"
+            >
+              {t("Solo andata")}
+            </a>
+          </li>
+          <li className="nav-item" onClick={optionsChange}>
+            <a
+              className={`nav-link ${
+                optionState === "Andata e ritorno" && "active"
+              }  ${optionState === "Round trip" && "active"}`}
+              href="#"
+            >
+              {t("Andata e ritorno")}
+            </a>
+          </li>
+          <li className="nav-item" onClick={optionsChange}>
+            <a
+              className={`nav-link ${
+                optionState === "Multitratta" && "active"
+              } ${optionState === "Multi-route" && "active"}`}
+              href="#"
+            >
+              {t("Multitratta")}
+            </a>
+          </li>
+        </ul>
         <DettagliViaggio id={id} />
       </div>
     </>
@@ -185,17 +171,13 @@ export const ViaggoiDiRitornoForm = ({ id }) => {
     t,
     fromLocations,
     filterOptions,
-    formRitorno,
     handleChangeRitorno,
-    dataRitornoForm,
     handleChangeDataB,
     soloAndata,
-    dataAndataForm,
     tratte,
     date,
   } = useFormViaggioComponent();
 
-  console.log(fromLocations);
   return (
     <>
       <Typography color="primary" level="h4" noWrap={false} variant="plain">
@@ -203,10 +185,10 @@ export const ViaggoiDiRitornoForm = ({ id }) => {
       </Typography>
       <div className="row-cont">
         <Autocomplete
+          value={tratte[id]?.trattaFormatted}
           className="select-viaggio"
           placeholder={t("Seleziona una tratta")}
           options={fromLocations}
-          value={tratte[id]?.trattaFormatted}
           filterOptions={filterOptions}
           sx={{ height: 56 }}
           onChange={(e) => handleChangeRitorno(e, id)}
@@ -237,11 +219,6 @@ const DettagliViaggio = ({ id }) => {
   const {
     etaBambinoString,
     t,
-    adulti,
-    bambini,
-    animali,
-    bagagli,
-    etaBambini,
     dispatch,
     handleChangeAdulti,
     handleChangeBambini,
