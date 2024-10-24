@@ -33,6 +33,7 @@ export const useResult = () => {
         );
         const data = await response.json();
         dispatch(upsertResult({ id, data: data.timetableGoing }));
+        dispatch(setLoadingId(null));
       } catch (error) {
         console.error(error);
       } finally {

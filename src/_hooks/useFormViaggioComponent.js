@@ -204,15 +204,13 @@ export const useFormViaggioComponent = () => {
     ];
     // setFormRitorno(uniqueToLocations[0]);
     // dispatch(setTrattaRitorno(routeRitorno[0]));
-    if (!multitratta) {
-      dispatch(
-        upsertTratta({
-          id: 1,
-          tratta: routeRitorno[0],
-          trattaFormatted: uniqueToLocations,
-        })
-      );
-    }
+    dispatch(
+      upsertTratta({
+        id: id + 1,
+        tratta: routeRitorno[0],
+        trattaFormatted: uniqueToLocations,
+      })
+    );
   };
 
   const handleChangeRitorno = (e, id) => {
@@ -249,6 +247,9 @@ export const useFormViaggioComponent = () => {
         dispatch(upsertDate({ id: 1, date: date, dateFormatted: dateString }));
       } else {
         dispatch(upsertDate({ id, date: date, dateFormatted: dateString }));
+        dispatch(
+          upsertDate({ id: id + 1, date: date, dateFormatted: dateString })
+        );
       }
     } else {
       // Gestisci il caso in cui la data non è valida
@@ -389,5 +390,6 @@ export const useFormViaggioComponent = () => {
     selectedOption,
     handleOptionChange,
     selected,
+    multitratta,
   };
 };

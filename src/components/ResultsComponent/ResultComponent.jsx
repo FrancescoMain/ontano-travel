@@ -56,7 +56,7 @@ export const ResultComponent = () => {
         )}
         {!multitratta && <ViaggoiDiRitornoForm resultMode={true} id={1} />}
         <div className="mb-3"></div>
-        {loadingId === 1 ? (
+        {!multitratta && loadingId === 1 ? (
           <div className="row d-flex justify-content-center">
             <div
               className="spinner-border text-primary align-items-center"

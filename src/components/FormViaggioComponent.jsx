@@ -110,6 +110,7 @@ export const ViaggioDiAndataForm = ({
     date,
     dispatch,
     selected,
+    multitratta,
   } = useFormViaggioComponent();
 
   const resetHandle = (id) => {
@@ -118,8 +119,11 @@ export const ViaggioDiAndataForm = ({
   return (
     <>
       <Typography color="primary" level="h4" noWrap={false} variant="plain">
-        {t("Viaggio di andata")}
+        {!multitratta || !resultMode
+          ? t("Viaggio di andata")
+          : t("Viaggio ") + (id + 1)}
       </Typography>
+
       <div className="row-cont">
         <Autocomplete
           value={tratte[id]?.trattaFormatted}
