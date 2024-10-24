@@ -40,6 +40,8 @@ export const useFormViaggioComponent = () => {
     (state) => state.tratte
   );
 
+  const { selected } = useSelector((state) => state.resultsTratta);
+
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.text);
     if (
@@ -53,29 +55,37 @@ export const useFormViaggioComponent = () => {
       dispatch(removeDate(1));
       dispatch(removeDettagli(1));
     } else {
+      const findRoute = rotte.filter(
+        (route) =>
+          route.from === tratte[0]?.tratta?.to &&
+          route.to === tratte[0]?.tratta?.from
+      );
+      const findeeFormatted = [
+        ...new Set(findRoute.map((route) => route.from + " -> " + route.to)),
+      ];
       dispatch(setMultitratta(false));
       dispatch(
         upsertTratta({
           id: 1,
-          tratta: tratte[0].tratta,
-          trattaFormatted: tratte[0].trattaFormatted,
+          tratta: findRoute[0],
+          trattaFormatted: findeeFormatted,
         })
       );
       dispatch(
         upsertDate({
           id: 1,
-          date: date[0].date,
-          dateFormatted: date[0].dateFormatted,
+          date: date[0]?.date,
+          dateFormatted: date[0]?.dateFormatted,
         })
       );
       dispatch(
         upsertDettagli({
           id: 1,
-          adulti: dettagli[0].adulti,
-          bambini: dettagli[0].bambini,
-          etaBambini: dettagli[0].etaBambini,
-          animali: dettagli[0].animali,
-          bagagli: dettagli[0].bagagli,
+          adulti: dettagli[0]?.adulti,
+          bambini: dettagli[0]?.bambini,
+          etaBambini: dettagli[0]?.etaBambini,
+          animali: dettagli[0]?.animali,
+          bagagli: dettagli[0]?.bagagli,
         })
       );
     }
@@ -118,32 +128,52 @@ export const useFormViaggioComponent = () => {
   const handleChangeAdulti = (e, id) => {
     const value = e.target.value;
     dispatch(upsertDettagli({ id, adulti: value }));
+    if (!multitratta && id === 0) {
+      dispatch(upsertDettagli({ id: 1, adulti: value }));
+    }
   };
 
   const handleChangeBambini = (e, id) => {
     const value = e.target.value;
     // dispatch(setBambini(value));
     dispatch(upsertDettagli({ id, bambini: value }));
-    // eta bambini viene tagliato dall'index che coincide con value
-    if (value < dettagli[id].etaBambini.length) {
-      dispatch(
-        upsertDettagli({
-          id,
-          etaBambini: dettagli[id].etaBambini.slice(0, value),
-        })
-      );
+    if (!multitratta && id === 0) {
+      dispatch(upsertDettagli({ id: 1, bambini: value }));
+      if (value < dettagli[1].etaBambini.length) {
+        dispatch(
+          upsertDettagli({
+            id,
+            etaBambini: dettagli[1].etaBambini.slice(0, value),
+          })
+        );
+      }
+      // eta bambini viene tagliato dall'index che coincide con value
+      if (value < dettagli[id].etaBambini.length) {
+        dispatch(
+          upsertDettagli({
+            id,
+            etaBambini: dettagli[id].etaBambini.slice(0, value),
+          })
+        );
 
-      return;
+        return;
+      }
     }
   };
   const handleChangeAnimali = (e, id) => {
     const value = e.target.value;
     dispatch(upsertDettagli({ id, animali: value }));
+    if (!multitratta && id === 0) {
+      dispatch(upsertDettagli({ id: 1, animali: value }));
+    }
   };
 
   const handleChangeBagagli = (e, id) => {
     const value = e.target.value;
     dispatch(upsertDettagli({ id, bagagli: value }));
+    if (!multitratta && id === 0) {
+      dispatch(upsertDettagli({ id: 1, bagagli: value }));
+    }
   };
 
   const handleChangeAndata = (e, id) => {
@@ -174,14 +204,15 @@ export const useFormViaggioComponent = () => {
     ];
     // setFormRitorno(uniqueToLocations[0]);
     // dispatch(setTrattaRitorno(routeRitorno[0]));
-
-    dispatch(
-      upsertTratta({
-        id: 1,
-        tratta: routeRitorno[0],
-        trattaFormatted: uniqueToLocations,
-      })
-    );
+    if (!multitratta) {
+      dispatch(
+        upsertTratta({
+          id: 1,
+          tratta: routeRitorno[0],
+          trattaFormatted: uniqueToLocations,
+        })
+      );
+    }
   };
 
   const handleChangeRitorno = (e, id) => {
@@ -213,8 +244,12 @@ export const useFormViaggioComponent = () => {
       // dispatch(setDataRitorno(dateString));
       // setDataAndataForm(date);
       // setDataRitornoForm(date);
-      dispatch(upsertDate({ id: 0, date: date, dateFormatted: dateString }));
-      dispatch(upsertDate({ id: 1, date: date, dateFormatted: dateString }));
+      if (!multitratta) {
+        dispatch(upsertDate({ id: 0, date: date, dateFormatted: dateString }));
+        dispatch(upsertDate({ id: 1, date: date, dateFormatted: dateString }));
+      } else {
+        dispatch(upsertDate({ id, date: date, dateFormatted: dateString }));
+      }
     } else {
       // Gestisci il caso in cui la data non è valida
       console.error("Invalid date");
@@ -353,5 +388,6 @@ export const useFormViaggioComponent = () => {
     dettagli,
     selectedOption,
     handleOptionChange,
+    selected,
   };
 };

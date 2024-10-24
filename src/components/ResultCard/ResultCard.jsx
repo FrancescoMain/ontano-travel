@@ -2,45 +2,22 @@ import React, { useEffect, useState } from "react";
 import "./ResultCard.css";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import { Typography } from "@mui/joy";
 import { useDispatch, useSelector } from "react-redux";
-import { startLoading, stopLoading } from "../../features/spinner/spinnerSlice";
-import {
-  setBigliettoAndata,
-  setBigliettoRitorno,
-} from "../../features/viaggio/viaggioFormSlice";
 import { SpinnerOnly } from "../Spinner/SpinnerOnly";
 import travelmar from "../../assets/travelmar.png";
 import snav from "../../assets/snav.png";
-import snavGes from "../../assets/Snav Gescab.jpg";
 import alilauro from "../../assets/Logo-AliLauro.png";
 import alilauroGruson from "../../assets/Alilauro Gruson.png";
+import { upsertSelected } from "../../features/viaggio/resultTratta";
+import { animateScroll as scroll } from "react-scroll";
 
 dayjs.extend(customParseFormat);
 
-export const ResultCard = ({
-  data,
-  selected,
-  onClick,
-  andata,
-  ritorno,
-  hidden,
-}) => {
-  const [priceData, setPriceData] = useState(null);
+export const ResultCard = ({ data, selected, hidden, id, index }) => {
   const [loading, setLoading] = useState(false);
-  const {
-    animali,
-    bagagli,
-    adulti,
-    etaBambini,
-    trattaAndata,
-    trattaRitorno,
-    dataAndata,
-    dataRitorno,
-  } = useSelector((state) => state.viaggioForm);
 
+  const [priceData, setPriceData] = useState(null);
   const dispatch = useDispatch();
-  console.log(hidden);
 
   const departureDate = dayjs(data.departure);
   const dateDep = departureDate.format("DD MMM YYYY");
@@ -54,6 +31,34 @@ export const ResultCard = ({
   const diffInMinutes = Math.floor(diffInMilliseconds / 60000);
   const hours = Math.floor(diffInMinutes / 60);
   const minutes = diffInMinutes % 60;
+
+  const { adulti, bambini, etaBambini, animali, bagagli } = useSelector(
+    (state) => state.tratte.dettagli[id]
+  );
+
+  const selectedExt = useSelector((state) => state.resultsTratta.selected);
+
+  const onClick = () => {
+    const dataToDispatch = {
+      id: id,
+      prezzo: priceData.price,
+      idSelected: index,
+      data: data,
+    };
+    dispatch(upsertSelected(dataToDispatch));
+    const element = document.getElementById("result-ritorno");
+
+    if (element) {
+      // Aggiungi un timeout per ritardare l'esecuzione dello scroll
+      setTimeout(() => {
+        scroll.scrollTo(element.offsetTop, {
+          duration: 500,
+          smooth: true,
+        });
+      }, 500); // Ritarda di 500 millisecondi (puoi regolare questo valore)
+    }
+  };
+
   useEffect(() => {
     // Esegui la chiamata API
     const fetchPriceData = async () => {
@@ -87,110 +92,22 @@ export const ResultCard = ({
   }, [data, adulti, etaBambini, animali, bagagli]);
 
   useEffect(() => {
-    const combinedData = { ...data, priceData };
-
-    if (selected && andata) {
-      dispatch(setBigliettoAndata(combinedData));
+    if (selectedExt[id]?.idSelected === index) {
+      dispatch(
+        upsertSelected({
+          id,
+          prezzo: priceData?.price,
+          idSelected: index,
+          data,
+        })
+      );
     }
-    if (selected && ritorno) {
-      dispatch(setBigliettoRitorno(combinedData));
-    }
-  }, [selected, priceData]);
+  }, [priceData]);
 
   return (
-    // <div
-    //   className={`card-container ${selected ? "selected" : ""} ${
-    //     hidden ? "hidden" : ""
-    //   }`}
-    //   onClick={onClick}
-    // >
-    //   <div className="card-container__left">
-    //     <Typography
-    //       color="neutral"
-    //       level="body-md"
-    //       noWrap={false}
-    //       variant="plain"
-    //     >
-    //       {dateDep}
-    //     </Typography>
-    //     <Typography color="primary" level="h4" noWrap={false} variant="plain">
-    //       {timeDep}
-    //     </Typography>
-    //     <Typography color="neutral" level="h4" noWrap={false} variant="plain">
-    //       {data.fromPort}
-    //     </Typography>
-    //   </div>
-    //   <div className="card-container__center">
-    //     {data.company === "Travelmar" && (
-    //       <img className="img-logo" src={travelmar} alt="Travelmar" />
-    //     )}
-    //     {data.company === "Snav" && (
-    //       <img className="img-logo" src={snav} alt="Snav" />
-    //     )}
-    //     {data.company === "Snav Gescab" && (
-    //       <img className="img-logo" src={snav} alt="Snav Gescab" />
-    //     )}
-    //     {data.company === "Alilauro" && (
-    //       <img className="img-logo" src={alilauro} alt="Alilauro" />
-    //     )}
-    //     {data.company === "Alilauro Gruson" && (
-    //       <img
-    //         className="img-logo"
-    //         src={alilauroGruson}
-    //         alt="Alilauro Gruson"
-    //       />
-    //     )}
-
-    //     <Typography
-    //       color="neutral"
-    //       level="body-sm"
-    //       noWrap={false}
-    //       variant="plain"
-    //       className="card-container__center__text"
-    //     >
-    //       --------
-    //     </Typography>
-    //     <Typography
-    //       color="neutral"
-    //       level="body-md"
-    //       noWrap={false}
-    //       variant="plain"
-    //       className="card-container__center__text"
-    //     >
-    //       {hours}h {minutes}m
-    //     </Typography>
-    //   </div>
-    //   <div className="card-container__right">
-    //     <Typography
-    //       color="neutral"
-    //       level="body-md"
-    //       noWrap={false}
-    //       variant="plain"
-    //     >
-    //       {dateArr}
-    //     </Typography>
-    //     <Typography color="primary" level="h4" noWrap={false} variant="plain">
-    //       {timeArr}
-    //     </Typography>
-    //     <Typography color="neutral" level="h4" noWrap={false} variant="plain">
-    //       {data.fromTo}
-    //     </Typography>
-    //   </div>
-    //   <div className="card-container__right">
-    //     <Typography color="primary" level="h2" noWrap={false} variant="plain">
-    //       {loading ? (
-    //         <SpinnerOnly active={loading} />
-    //       ) : priceData?.priceFormatted ? (
-    //         priceData?.priceFormatted
-    //       ) : (
-    //         "-"
-    //       )}
-    //     </Typography>
-    //   </div>
-    // </div>
     <div
       className={` m-3 card-container ${selected ? "selected" : ""} ${
-        hidden ? "hidden" : ""
+        !hidden ? "" : "hidden"
       } box-result bg-ice-white rounded-2x mt-md-0 my-4 collapsable`}
       onClick={onClick}
     >

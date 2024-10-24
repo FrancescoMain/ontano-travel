@@ -11,6 +11,10 @@ import "dayjs/locale/it";
 import { useFormViaggioComponent } from "../_hooks/useFormViaggioComponent";
 import { FormattedMessage } from "./FormattedMessage";
 import { upsertDettagli } from "../features/viaggio/findTratta";
+import {
+  removeSelected,
+  resetSelected,
+} from "../features/viaggio/resultTratta";
 
 dayjs.extend(isSameOrAfter);
 
@@ -104,7 +108,13 @@ export const ViaggioDiAndataForm = ({
     handleChangeDataA,
     tratte,
     date,
+    dispatch,
+    selected,
   } = useFormViaggioComponent();
+
+  const resetHandle = (id) => {
+    dispatch(resetSelected({ id }));
+  };
   return (
     <>
       <Typography color="primary" level="h4" noWrap={false} variant="plain">
@@ -167,13 +177,21 @@ export const ViaggioDiAndataForm = ({
             </li>
           </ul>
         )}
+        {resultMode && selected[id]?.data?.result_id && (
+          <span
+            className=" fs-6 fst-italic pointer underline text-secondary"
+            onClick={() => resetHandle(id)}
+          >
+            Seleziona corsa
+          </span>
+        )}
         <DettagliViaggio id={id} />
       </div>
     </>
   );
 };
 
-export const ViaggoiDiRitornoForm = ({ id }) => {
+export const ViaggoiDiRitornoForm = ({ id, resultMode }) => {
   const {
     t,
     fromLocations,
@@ -183,11 +201,24 @@ export const ViaggoiDiRitornoForm = ({ id }) => {
     soloAndata,
     tratte,
     date,
+    selected,
+    dispatch,
   } = useFormViaggioComponent();
 
+  const resetHandle = (id) => {
+    dispatch(resetSelected({ id }));
+  };
+
+  console.log();
   return (
     <>
-      <Typography color="primary" level="h4" noWrap={false} variant="plain">
+      <Typography
+        id={"result-ritorno"}
+        color="primary"
+        level="h4"
+        noWrap={false}
+        variant="plain"
+      >
         {t("Viaggio di ritorno")}
       </Typography>
       <div className="row-cont">
@@ -217,6 +248,14 @@ export const ViaggoiDiRitornoForm = ({ id }) => {
           />
         </LocalizationProvider>
       </div>
+      {resultMode && selected[id]?.data?.result_id && (
+        <span
+          className=" fs-6 fst-italic pointer underline text-secondary"
+          onClick={() => resetHandle(id)}
+        >
+          Seleziona corsa
+        </span>
+      )}
       {/* <DettagliViaggio id={1} /> */}
     </>
   );
@@ -232,6 +271,7 @@ const DettagliViaggio = ({ id }) => {
     handleChangeAnimali,
     handleChangeBagagli,
     dettagli,
+    multitratta,
   } = useFormViaggioComponent();
 
   return (
@@ -351,6 +391,9 @@ const DettagliViaggio = ({ id }) => {
               const newChildrenAge = [...dettagli[id]?.etaBambini];
               newChildrenAge[index] = e.target.value;
               dispatch(upsertDettagli({ id, etaBambini: newChildrenAge }));
+              if (!multitratta && id === 0) {
+                dispatch(upsertDettagli({ id: 1, etaBambini: newChildrenAge }));
+              }
             }}
             value={dettagli[id]?.etaBambini[index] || ""}
             type="number"
@@ -358,6 +401,9 @@ const DettagliViaggio = ({ id }) => {
             color="neutral"
             placeholder={`${etaBambinoString} ${index + 1}`}
             variant="outlined"
+            className={`input-eta ${
+              !dettagli[id].etaBambini[index] ? "error" : ""
+            }`}
           />
         </div>
       ))}

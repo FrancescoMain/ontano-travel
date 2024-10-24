@@ -1,7 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  results: [],
+  results: [
+    { id: 0, data: [] },
+    { id: 1, data: [] },
+  ],
+  selected: [
+    { id: 0, data: [] },
+    { id: 1, data: [] },
+  ],
 };
 
 export const resultTrattaSlice = createSlice({
@@ -33,10 +40,53 @@ export const resultTrattaSlice = createSlice({
         state.results.push(action.payload);
       }
     },
+    addSelected: (state, action) => {
+      state.selected.push(action.payload);
+    },
+    removeSelected: (state, action) => {
+      state.selected = state.selected.filter(
+        (selected) => selected.id !== action.payload
+      );
+    },
+    updateSelected: (state, action) => {
+      state.selected = state.selected.map((selected) =>
+        selected.id === action.payload.id ? action.payload : selected
+      );
+    },
+    upsertSelected: (state, action) => {
+      const index = state.selected.findIndex(
+        (selected) => selected.id === action.payload.id
+      );
+      if (index !== -1) {
+        // Se l'id è presente, aggiorna il valore
+        state.selected[index] = action.payload;
+      } else {
+        // Se l'id non è presente, aggiungi un nuovo elemento
+        state.selected.push(action.payload);
+      }
+    },
+    resetSelected: (state, action) => {
+      const index = state.selected.findIndex(
+        (selected) => selected.id === action.payload.id
+      );
+      if (index !== -1) {
+        // Se l'id è presente, resetta il valore
+        state.selected[index] = { id: action.payload.id, data: [] };
+      }
+    },
   },
 });
 
-export const { addResult, removeResult, updateResult, upsertResult } =
-  resultTrattaSlice.actions;
+export const {
+  addResult,
+  removeResult,
+  updateResult,
+  upsertResult,
+  addSelected,
+  removeSelected,
+  updateSelected,
+  upsertSelected,
+  resetSelected,
+} = resultTrattaSlice.actions;
 
 export default resultTrattaSlice.reducer;
