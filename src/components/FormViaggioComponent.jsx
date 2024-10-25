@@ -29,6 +29,8 @@ export const FormViaggioComponent = () => {
     handleOptionChange,
   } = useFormViaggioComponent();
 
+  const showCollegamento = tab === "Collegamento" || tab === "Link";
+
   return (
     <Card
       className="card-viaggio"
@@ -37,36 +39,29 @@ export const FormViaggioComponent = () => {
       size="sm"
       variant="soft"
     >
-      <Tabs
-        defaultValue={"collegamento"}
-        orientation="horizontal"
-        onChange={handleClickTab}
-      >
-        <TabList className="tablist-viaggio" disableUnderline>
-          <Tab
-            className="tab-viaggio"
-            sx={{ width: 320 }}
-            variant="outlined"
-            color="neutral"
-            value={0}
-            disableIndicator
+      <ul class="nav nav-tabs">
+        <li class="nav-item" onClick={handleClickTab}>
+          <a
+            className={`nav-link text-primary ${
+              tab === "Collegamento" && "active"
+            }`}
+            aria-current="page"
+            href="#"
           >
             {FormattedMessage("Collegamento")}
-          </Tab>
-          <Tab
-            className="tab-viaggio"
-            sx={{ width: 320 }}
-            variant="outlined"
-            color="neutral"
-            value={1}
-            disableIndicator
+          </a>
+        </li>
+        <li class="nav-item" onClick={handleClickTab}>
+          <a
+            className={`nav-link text-primary ${tab === "Tour" && "active"}`}
+            href="#"
           >
             {FormattedMessage("Tour")}
-          </Tab>
-        </TabList>
-      </Tabs>
+          </a>
+        </li>
+      </ul>
 
-      {tab === "Collegamento" && (
+      {showCollegamento && (
         <>
           <ViaggioDiAndataForm
             optionsChange={handleOptionChange}
@@ -118,12 +113,11 @@ export const ViaggioDiAndataForm = ({
   };
   return (
     <>
-      <Typography color="primary" level="h4" noWrap={false} variant="plain">
+      <h4 className="text-primary">
         {!multitratta || !resultMode
           ? t("Viaggio di andata")
           : t("Viaggio ") + (id + 1)}
-      </Typography>
-
+      </h4>
       <div className="row-cont">
         <Autocomplete
           value={tratte[id]?.trattaFormatted}
@@ -147,46 +141,41 @@ export const ViaggioDiAndataForm = ({
           />
         </LocalizationProvider>
         {!resultMode && (
-          <ul className="nav nav-pills gap-3">
-            <li className="nav-item" onClick={optionsChange}>
-              <a
-                className={`nav-link ${
-                  optionState === "Solo andata" && "active"
-                }  ${optionState === "One way" && "active"}`}
-                aria-current="page"
-                href="#"
-              >
-                {t("Solo andata")}
-              </a>
-            </li>
-            <li className="nav-item" onClick={optionsChange}>
-              <a
-                className={`nav-link ${
-                  optionState === "Andata e ritorno" && "active"
-                }  ${optionState === "Round trip" && "active"}`}
-                href="#"
-              >
+          <div className="d-flex gap-3">
+            <div class="form-check">
+              <input
+                onClick={optionsChange}
+                class="form-check-input"
+                type="checkbox"
+                value="Andata e ritorno"
+                id="flexCheckDefault"
+                checked={!multitratta}
+              />
+              <label class="form-check-label" for="flexCheckDefault">
                 {t("Andata e ritorno")}
-              </a>
-            </li>
-            <li className="nav-item" onClick={optionsChange}>
-              <a
-                className={`nav-link ${
-                  optionState === "Multitratta" && "active"
-                } ${optionState === "Multi-route" && "active"}`}
-                href="#"
-              >
-                {t("Multitratta")}
-              </a>
-            </li>
-          </ul>
+              </label>
+            </div>
+            <div class="form-check">
+              <input
+                onClick={optionsChange}
+                class="form-check-input"
+                type="checkbox"
+                value="Multitratta"
+                id="flexCheckChecked"
+                checked={multitratta}
+              />
+              <label class="form-check-label" for="flexCheckChecked">
+                {t("Multitratta")} / {t("Solo andata")}
+              </label>
+            </div>
+          </div>
         )}
         {resultMode && selected[id]?.data?.result_id && (
           <span
             className=" fs-6 fst-italic pointer underline text-secondary"
             onClick={() => resetHandle(id)}
           >
-            Seleziona corsa
+            {t("Seleziona corsa")}
           </span>
         )}
         <DettagliViaggio id={id} />
@@ -216,15 +205,7 @@ export const ViaggoiDiRitornoForm = ({ id, resultMode }) => {
   console.log();
   return (
     <>
-      <Typography
-        id={"result-ritorno"}
-        color="primary"
-        level="h4"
-        noWrap={false}
-        variant="plain"
-      >
-        {t("Viaggio di ritorno")}
-      </Typography>
+      <h4 className="text-primary">{t("Viaggio di ritorno")}</h4>
       <div className="row-cont">
         <Autocomplete
           value={tratte[id]?.trattaFormatted}
@@ -280,15 +261,6 @@ const DettagliViaggio = ({ id }) => {
 
   return (
     <>
-      <Typography
-        sx={{ marginBottom: 2 }}
-        color="primary"
-        level="h5"
-        noWrap={false}
-        variant="plain"
-      >
-        {t("Dettagli viaggio")}
-      </Typography>
       <div className="row flex-column flex-lg-row">
         <div className="col col-lg-3 d-flex flex-column">
           <label htmlFor="adults">{t("Adulti")}</label>

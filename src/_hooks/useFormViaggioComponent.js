@@ -30,8 +30,10 @@ import {
 } from "../features/viaggio/findTratta";
 
 export const useFormViaggioComponent = () => {
-  //REFACORING MULTITRATTA
-  const [tab, setTab] = useState("Collegamento");
+  //REFACORING MULTITRATTAù
+  const { t } = useTranslation();
+
+  const [tab, setTab] = useState(t("Collegamento"));
   const [rotte, setRotte] = useState([]);
   const [fromLocations, setFromLocations] = useState([]);
   const [selectedOption, setSelectedOption] = useState("Solo andata");
@@ -43,12 +45,13 @@ export const useFormViaggioComponent = () => {
   const { selected } = useSelector((state) => state.resultsTratta);
 
   const handleOptionChange = (event) => {
-    setSelectedOption(event.target.text);
+    console.log(event.target.value);
+    setSelectedOption(event.target.value);
     if (
-      event.target.text === "Solo andata" ||
-      event.target.text === "One way" ||
-      event.target.text === "Multitratta" ||
-      event.target.text === "Multi-route"
+      event.target.value === "Solo andata" ||
+      event.target.value === "One way" ||
+      event.target.value === "Multitratta" ||
+      event.target.value === "Multi-route"
     ) {
       dispatch(setMultitratta(true));
       dispatch(removeTratta(1));
@@ -114,13 +117,13 @@ export const useFormViaggioComponent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { t } = useTranslation();
   const etaBambinoString = t("Inserire età bambino");
   const filterOptions = (options, { inputValue }) => {
     return matchSorter(options, inputValue, { keys: ["value"] });
   };
 
   const handleClickTab = (e) => {
+    console.log(e.target.textContent);
     const value = e.target.textContent;
     setTab(value);
   };

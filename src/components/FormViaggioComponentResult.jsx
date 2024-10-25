@@ -124,7 +124,9 @@ export const FormViaggioComponentResultAndata = ({ reset, viewReset }) => {
 
   useEffect(() => {
     dispatch(startLoading());
-    fetch("https://bookingferries-5cc3853ba728.herokuapp.com/api/booking/route")
+    fetch(
+      "http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/route"
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -157,7 +159,7 @@ export const FormViaggioComponentResultAndata = ({ reset, viewReset }) => {
     if (!trattaAndata.from && departure_route_id) {
       dispatch(startLoading());
       fetch(
-        "https://bookingferries-5cc3853ba728.herokuapp.com/api/booking/route"
+        "http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/route"
       )
         .then((response) => {
           if (!response.ok) {
@@ -329,7 +331,9 @@ export const FormViaggioComponentResultRitorno = ({ reset, viewReset }) => {
 
   useEffect(() => {
     dispatch(startLoading());
-    fetch("https://bookingferries-5cc3853ba728.herokuapp.com/api/booking/route")
+    fetch(
+      "http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/route"
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -361,7 +365,7 @@ export const FormViaggioComponentResultRitorno = ({ reset, viewReset }) => {
     if (!trattaRitorno.from && return_route_id) {
       dispatch(startLoading());
       fetch(
-        "https://bookingferries-5cc3853ba728.herokuapp.com/api/booking/route"
+        "http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/route"
       )
         .then((response) => {
           if (!response.ok) {
@@ -566,7 +570,9 @@ export const FormViaggioComponentResultDetail = () => {
 
   useEffect(() => {
     dispatch(startLoading());
-    fetch("https://bookingferries-5cc3853ba728.herokuapp.com/api/booking/route")
+    fetch(
+      "http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/route"
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

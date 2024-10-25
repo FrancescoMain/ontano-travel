@@ -2,7 +2,7 @@ export const getRoute = async () => {
   try {
     // Fai la chiamata GET
     const response = await fetch(
-      `https://bookingferries-5cc3853ba728.herokuapp.com/api/booking/route`,
+      `http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/route`,
       {
         method: "GET",
         headers: {

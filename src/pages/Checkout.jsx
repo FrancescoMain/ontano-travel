@@ -9,13 +9,10 @@ import { MdLuggage } from "react-icons/md";
 import { FaChild } from "react-icons/fa";
 import { FaDog } from "react-icons/fa";
 import dayjs from "dayjs";
-import travelmar from "../assets/travelmar.png";
-import snav from "../assets/snav.png";
-import alilauro from "../assets/Logo-AliLauro.png";
-import alilauroGruson from "../assets/Alilauro Gruson.png";
 
 export const Checkout = () => {
-  const { passeggeri, prenotazione, etaBambini } = useReservations();
+  const { passeggeri, prenotazione } = useReservations();
+  useReservations();
   return (
     <div className="conatiner">
       <form
@@ -29,12 +26,27 @@ export const Checkout = () => {
                 <div className="row">
                   <div className="col ">
                     <h2 className="text-primary">Dati Passeggeri</h2>
-
-                    {passeggeri.map((_, index) => (
-                      <CheckoutPasseggero n={index + 1} key={index} />
-                    ))}
-                    {etaBambini.map((eta, index) => (
-                      <CheckoutPasseggero n={index + 1} key={index} eta={eta} />
+                    {passeggeri.map((tratta, trattaIndex) => (
+                      <>
+                        <h3 className="text-primary">
+                          Tratta {trattaIndex + 1}
+                        </h3>
+                        {Array.from({ length: tratta.adulti }).map(
+                          (_, index) => (
+                            <CheckoutPasseggero
+                              n={index + 1}
+                              key={`adulto-${trattaIndex}-${index}`}
+                            />
+                          )
+                        )}
+                        {tratta.etaBambini.map((eta, index) => (
+                          <CheckoutPasseggero
+                            n={tratta.adulti + index + 1}
+                            key={`bambino-${trattaIndex}-${index}`}
+                            eta={eta}
+                          />
+                        ))}
+                      </>
                     ))}
                   </div>
                 </div>
@@ -42,7 +54,7 @@ export const Checkout = () => {
               <Condizioni />
             </div>
 
-            <div className="col-lg-4 col bg-aliceblue mt-3 rounded mb-3 sticky-lg-top d-flex flex-column flex-basis-0 flex-grow-0">
+            <div className="col-lg-4 col bg-aliceblue mte-3 rounded mb-3 sticky-lg-top d-flex flex-column flex-basis-0 flex-grow-0">
               <div>
                 <h3 className="text-primary text-center">Il tuo viaggio</h3>
               </div>

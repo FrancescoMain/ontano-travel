@@ -1,50 +1,31 @@
 // Funzione per fare la chiamata POST
-export const postQuote = async ({
-  adulti,
-  etaBambini,
-  animali,
-  bagagli,
-  bigliettoAndata,
-  bigliettoRitorno,
-}) => {
-  // Crea l'array dei passeggeri
-  const passengers = [
-    ...Array.from({ length: parseInt(adulti, 10) }, () => ({ age: 18 })), // Aggiungi 18 per ogni adulto
-    ...etaBambini.map((age) => ({ age: parseInt(age, 10) })), // Aggiungi l'età di ogni bambino
-  ];
+export const postQuote = async ({ tratte, etaBambini }) => {
+  console.log(tratte);
+  let body = tratte.map((tratta) => {
+    // Crea l'array dei passeggeri
+    const passengers = [
+      ...Array.from({ length: parseInt(tratta.adulti, 10) }, () => ({
+        age: 18,
+      })), // Aggiungi 18 per ogni adulto
+      ...tratta.etaBambini.map((age) => ({ age: parseInt(age, 10) })), // Aggiungi l'età di ogni bambino
+    ];
 
-  // Crea il body della richiesta
-  const body = {
-    search_result_id: bigliettoAndata?.result_id,
-    params: {
-      passengers,
-      animals: parseInt(animali, 10),
-      luggages: parseInt(bagagli, 10),
-    },
-    departure: {
-      search_result_id: bigliettoAndata?.result_id,
+    // Crea l'oggetto per ogni tratta
+    return {
+      search_result_id: tratta.data.result_id,
       params: {
         passengers,
-        animals: parseInt(animali, 10) || 0,
-        luggages: parseInt(bagagli, 10) || 0,
+        animals: parseInt(tratta.animali, 10) || 0,
+        luggages: parseInt(tratta.bagagli, 10) || 0,
       },
-    },
-    return: bigliettoRitorno
-      ? {
-          search_result_id: bigliettoRitorno?.result_id,
-          params: {
-            passengers,
-            animals: parseInt(animali, 10) || 0,
-            luggages: parseInt(bagagli, 10) || 0,
-          },
-        }
-      : null,
-  };
+    };
+  });
 
   try {
+    console.log(JSON.stringify(body));
     // Fai la chiamata POST
     const response = await fetch(
-      "https://bookingferries-5cc3853ba728.herokuapp.com/api/booking/reservation/quote",
+      "http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/reservation/multi/quote",
       {
         method: "POST",
         headers: {

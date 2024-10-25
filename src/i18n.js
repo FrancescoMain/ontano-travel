@@ -43,6 +43,8 @@ const resources = {
       Tour: "Tour",
       "Inserire età bambini": "Enter child age",
       Multitratta: "Multi-route",
+      "Viaggio ": "Travel ",
+      "+ Aggiungi Rotta": "+ Add Route",
     },
   },
   it: {

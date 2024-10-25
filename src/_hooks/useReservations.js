@@ -9,69 +9,58 @@ export const useReservations = () => {
   const [passeggeri, setPasseggeri] = useState([]);
   const [quote, setQuote] = useState(null);
   const [prenotazione, setPrenotazione] = useState(null);
-  const [adulti, setAdulti] = useState(null);
-  const [bambini, setBambini] = useState(null);
-  const [etaBambini, setEtaBambini] = useState([]);
-  const [animali, setAnimali] = useState(null);
-  const [bagagli, setBagagli] = useState(null);
-  const [bigliettoAndata, setBigliettoAndata] = useState(null);
-  const [bigliettoRitorno, setBigliettoRitorno] = useState(null);
-  const [dataAndata, setDataAndata] = useState(null);
-  const [dataRitorno, setDataRitorno] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [tratte, setTratte] = useState([]);
+  const viaggioData = localStorage.getItem("viaggioData");
 
   useEffect(() => {
-    const viaggioData = localStorage.getItem("viaggioData");
-    console.log("viaggioData", viaggioData);
+    console.log(viaggioData);
     if (viaggioData) {
-      const {
-        adulti,
-        etaBambini,
-        animali,
-        bagagli,
-        bigliettoAndata,
-        bigliettoRitorno,
-        dataAndata,
-        dataRitorno,
-      } = JSON.parse(viaggioData);
-
-      setAdulti(adulti);
-      setEtaBambini(etaBambini);
-      setAnimali(animali);
-      setBagagli(bagagli);
-      setBigliettoAndata(bigliettoAndata);
-      setBigliettoRitorno(bigliettoRitorno);
-      setDataAndata(dataAndata);
-      setDataRitorno(dataRitorno);
+      const parsedData = JSON.parse(viaggioData);
+      const selected2 = parsedData.selected;
+      selected2.forEach((element) => {
+        if (element.prezzo) {
+          setTratte((prev) => [...prev, element]);
+        }
+      });
     } else {
       navigate("/"); // Reindirizza alla home se i dati non sono presenti
     }
-  }, []);
+  }, [navigate, viaggioData]);
+
   useEffect(() => {
-    const fetchQuote = async () => {
-      const result = await postQuote({
-        dataAndata,
-        dataRitorno,
-        adulti,
-        bambini,
-        etaBambini,
-        animali,
-        bagagli,
-        bigliettoAndata,
-        bigliettoRitorno,
-      });
-      setQuote(result);
-    };
+    if (tratte.length > 0) {
+      const fetchQuote = async () => {
+        const result = await postQuote({ tratte });
+        setQuote(result);
+      };
+      fetchQuote();
+    }
+  }, [tratte]);
 
-    fetchQuote();
+  useEffect(() => {
+    let passeggeri = [];
+    tratte.forEach((tratta) => {
+      const { id, adulti, bambini, etaBambini } = tratta;
 
-    setPasseggeri(Array.from({ length: parseInt(adulti, 10) }));
-    setPasseggeri((prev) => [
-      ...prev,
-      ...Array.from({ length: parseInt(bambini, 10) }),
-    ]);
-  }, [adulti]);
+      // Crea un oggetto per ogni tratta con le informazioni richieste
+      const trattaInfo = {
+        id,
+        adulti: parseInt(adulti, 10),
+        bambini: parseInt(bambini, 10),
+        tot: parseInt(adulti, 10) + parseInt(bambini, 10),
+        etaBambini: etaBambini.map((eta) => parseInt(eta, 10)),
+      };
+
+      // Aggiungi l'oggetto all'array dei passeggeri
+      passeggeri.push(trattaInfo);
+    });
+
+    // Imposta l'array dei passeggeri nello stato
+    setPasseggeri(passeggeri);
+    console.log(passeggeri);
+  }, [tratte]);
 
   useEffect(() => {
     const fetchReservation = async () => {
@@ -80,7 +69,6 @@ export const useReservations = () => {
         setPrenotazione(reservation);
       }
     };
-
     fetchReservation();
   }, [quote]);
 
@@ -89,15 +77,14 @@ export const useReservations = () => {
     if (prenotazione) {
       dispatch(stopLoading());
     }
-  }, [prenotazione]);
+  }, [prenotazione, dispatch]);
+
   useEffect(() => {
     // Example starter JavaScript for disabling form submissions if there are invalid fields
     (() => {
       "use strict";
-
       // Fetch all the forms we want to apply custom Bootstrap validation styles to
       const forms = document.querySelectorAll(".needs-validation");
-
       // Loop over them and prevent submission
       Array.from(forms).forEach((form) => {
         form.addEventListener(
@@ -107,7 +94,6 @@ export const useReservations = () => {
               event.preventDefault();
               event.stopPropagation();
             }
-
             form.classList.add("was-validated");
           },
           false
@@ -116,5 +102,5 @@ export const useReservations = () => {
     })();
   }, []);
 
-  return { passeggeri, prenotazione, etaBambini };
+  return { passeggeri, prenotazione };
 };

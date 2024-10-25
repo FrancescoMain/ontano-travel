@@ -44,6 +44,11 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
       prezzo: priceData.price,
       idSelected: index,
       data: data,
+      animali: animali,
+      bagagli: bagagli,
+      adulti: adulti,
+      bambini: bambini,
+      etaBambini: etaBambini,
     };
     dispatch(upsertSelected(dataToDispatch));
     const element = document.getElementById("result-ritorno");
@@ -74,7 +79,7 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
 
       try {
         const response = await fetch(
-          `https://bookingferries-5cc3853ba728.herokuapp.com/api/booking/price/searchresult?search_result_id=${data.result_id}&animals=${animali}&luggages=${bagagli}&${passengersAgeParams}`
+          `http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/price/searchresult?search_result_id=${data.result_id}&animals=${animali}&luggages=${bagagli}&${passengersAgeParams}`
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -93,8 +98,10 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
 
   useEffect(() => {
     if (selectedExt[id]?.idSelected === index) {
+      const existingData = selectedExt[id] || {};
       dispatch(
         upsertSelected({
+          ...existingData,
           id,
           prezzo: priceData?.price,
           idSelected: index,

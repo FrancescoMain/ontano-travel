@@ -7,7 +7,9 @@ import { useResult } from "../../_hooks/useResult";
 import { ResultCard } from "../ResultCard/ResultCard";
 import { Button } from "@mui/joy";
 import { useTranslation } from "react-i18next";
-
+import dayjs from "dayjs";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 export const ResultComponent = () => {
   const {
     results,
@@ -25,9 +27,41 @@ export const ResultComponent = () => {
     if (selected[groupIndex]?.idSelected === undefined) return false;
     return selected[groupIndex]?.idSelected !== index;
   };
+  const navigate = useNavigate(); // Se la partenza di biglietto di andata è minore rispetto a biglietto di ritorno
+
+  const handleSubmit = () => {
+    for (let i = 1; i < selected.length; i++) {
+      if (
+        dayjs(selected[i - 1]?.data.departure).isAfter(
+          dayjs(selected[i]?.data.departure)
+        )
+      ) {
+        toast.error(
+          `Il viaggio ${i + 1} non può avvenire prima del viaggio ${i}`,
+          {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          }
+        );
+        return;
+      }
+    }
+
+    const viaggioData = {
+      selected,
+    };
+    localStorage.setItem("viaggioData", JSON.stringify(viaggioData));
+    navigate("/checkout");
+  };
   return (
     <div className="row justify-content-center">
-      <div className="col col-lg-8">
+      <div className="col col-lg-6">
         <ViaggioDiAndataForm resultMode={true} id={0} />
         <div className="mb-3"></div>
         {loadingId === 0 ? (
@@ -144,7 +178,7 @@ export const ResultComponent = () => {
             </div>
             <div className="to-checkout-cont__center">
               <Button
-                // onClick={() => handleSubmit()}
+                onClick={() => handleSubmit()}
                 size="lg"
                 color="warning"
                 variant="solid"

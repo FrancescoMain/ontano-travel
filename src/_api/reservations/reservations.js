@@ -4,7 +4,7 @@ export const getReservation = async (quoteId) => {
   try {
     // Fai la chiamata GET
     const response = await fetch(
-      `https://bookingferries-5cc3853ba728.herokuapp.com/api/booking/reservation/${quoteId}`,
+      `http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/reservation/${quoteId}`,
       {
         method: "GET",
         headers: {
