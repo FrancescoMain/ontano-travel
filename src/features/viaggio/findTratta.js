@@ -126,6 +126,19 @@ export const viaggioSlice = createSlice({
       }
     },
 
+    resetTratta: (state, action) => {
+      const index = state.tratte.findIndex(
+        (tratta) => tratta.id === action.payload.id
+      );
+      if (index !== -1) {
+        // Se l'id è presente, resetta il valore
+        state.tratte[index] = {
+          id: action.payload.id,
+          tratta: {},
+          trattaFormatted: [],
+        };
+      }
+    },
     addDate: (state, action) => {
       state.date.push(action.payload);
     },
@@ -149,7 +162,19 @@ export const viaggioSlice = createSlice({
         state.date.push(action.payload);
       }
     },
-
+    resetDate: (state, action) => {
+      const index = state.date.findIndex(
+        (date) => date.id === action.payload.id
+      );
+      if (index !== -1) {
+        // Se l'id è presente, resetta il valore
+        state.date[index] = {
+          id: action.payload.id,
+          date: "",
+          dateFormatted: "",
+        };
+      }
+    },
     addDettagli: (state, action) => {
       state.dettagli.push(action.payload);
     },
@@ -175,6 +200,22 @@ export const viaggioSlice = createSlice({
         state.dettagli.push(action.payload);
       }
     },
+    resetDettagli: (state, action) => {
+      const index = state.dettagli.findIndex(
+        (dettagli) => dettagli.id === action.payload.id
+      );
+      if (index !== -1) {
+        // Se l'id è presente, resetta il valore
+        state.dettagli[index] = {
+          id: action.payload.id,
+          adulti: 1,
+          etaBambini: [],
+          bambini: 0,
+          animali: 0,
+          bagagli: 0,
+        };
+      }
+    },
     setMultitratta: (state, action) => {
       state.multitratta = action.payload;
     },
@@ -194,6 +235,9 @@ export const {
   removeDettagli,
   upsertDettagli,
   setMultitratta,
+  resetDate,
+  resetDettagli,
+  resetTratta,
 } = viaggioSlice.actions;
 
 export default viaggioSlice.reducer;

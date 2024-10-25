@@ -10,7 +10,12 @@ import dayjs from "dayjs";
 import "dayjs/locale/it";
 import { useFormViaggioComponent } from "../_hooks/useFormViaggioComponent";
 import { FormattedMessage } from "./FormattedMessage";
-import { upsertDettagli } from "../features/viaggio/findTratta";
+import {
+  resetDate,
+  resetDettagli,
+  resetTratta,
+  upsertDettagli,
+} from "../features/viaggio/findTratta";
 import {
   removeSelected,
   resetSelected,
@@ -42,7 +47,7 @@ export const FormViaggioComponent = () => {
       <ul class="nav nav-tabs">
         <li class="nav-item" onClick={handleClickTab}>
           <a
-            className={`nav-link text-primary ${
+            className={`nav-link tab text-primary ${
               tab === "Collegamento" && "active"
             }`}
             aria-current="page"
@@ -53,7 +58,9 @@ export const FormViaggioComponent = () => {
         </li>
         <li class="nav-item" onClick={handleClickTab}>
           <a
-            className={`nav-link text-primary ${tab === "Tour" && "active"}`}
+            className={`nav-link tab text-primary ${
+              tab === "Tour" && "active"
+            }`}
             href="#"
           >
             {FormattedMessage("Tour")}
@@ -95,6 +102,8 @@ export const ViaggioDiAndataForm = ({
   optionsChange,
   optionState,
   resultMode,
+  setNTratte,
+  nTratte,
 }) => {
   const {
     t,
@@ -108,18 +117,33 @@ export const ViaggioDiAndataForm = ({
     selected,
     multitratta,
   } = useFormViaggioComponent();
+  const resetRoute = (id) => {
+    setNTratte(nTratte - 1);
+    dispatch(resetTratta({ id }));
+    dispatch(resetDate({ id }));
+    dispatch(resetDettagli({ id }));
+  };
 
   const resetHandle = (id) => {
     dispatch(resetSelected({ id }));
   };
-  console.log(optionState);
   return (
     <>
-      <h4 className="text-primary">
-        {!multitratta || !resultMode
-          ? t("Viaggio di andata")
-          : t("Viaggio ") + (id + 1)}
-      </h4>
+      <div className="d-flex gap-3 ">
+        <h4 className="text-primary">
+          {!multitratta || !resultMode
+            ? t("Viaggio di andata")
+            : t("Viaggio ") + (id + 1)}
+        </h4>{" "}
+        {resultMode && id !== 0 && (
+          <span
+            onClick={() => resetRoute(id)}
+            className="text-secondary link-underline-secondary pointer"
+          >
+            {t("Rimuovi tratta")}
+          </span>
+        )}
+      </div>
       <div className="row-cont">
         <Autocomplete
           value={tratte[id]?.trattaFormatted}
@@ -204,7 +228,6 @@ export const ViaggoiDiRitornoForm = ({ id, resultMode }) => {
     dispatch(resetSelected({ id }));
   };
 
-  console.log();
   return (
     <>
       <h4 className="text-primary">{t("Viaggio di ritorno")}</h4>
@@ -288,7 +311,7 @@ const DettagliViaggio = ({ id }) => {
             {t("Oltre i 12 anni")}
           </Typography>
         </div>
-        <div className="col col-lg-3 d-flex flex-column">
+        <div className="col col-lg-3 d-flex flex-column order-5 order-lg-0">
           <label htmlFor="children">{t("Bambini")}</label>
 
           <select
@@ -369,6 +392,9 @@ const DettagliViaggio = ({ id }) => {
               const newChildrenAge = [...dettagli[id]?.etaBambini];
               newChildrenAge[index] = e.target.value;
               dispatch(upsertDettagli({ id, etaBambini: newChildrenAge }));
+              dispatch(
+                upsertDettagli({ id: id + 1, etaBambini: newChildrenAge })
+              );
               if (!multitratta && id === 0) {
                 dispatch(upsertDettagli({ id: 1, etaBambini: newChildrenAge }));
               }

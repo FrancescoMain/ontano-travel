@@ -60,8 +60,8 @@ export const ResultComponent = () => {
     navigate("/checkout");
   };
   return (
-    <div className="row justify-content-center p-2">
-      <div className="col col-lg-6">
+    <div className="row justify-content-center">
+      <div className="col col-lg-6 p-4">
         <ViaggioDiAndataForm resultMode={true} id={0} />
         <div className="mb-3"></div>
         {loadingId === 0 ? (
@@ -123,7 +123,12 @@ export const ResultComponent = () => {
               (_, id) =>
                 id !== 0 && (
                   <div>
-                    <ViaggioDiAndataForm resultMode={true} id={id} />
+                    <ViaggioDiAndataForm
+                      resultMode={true}
+                      id={id}
+                      nTratte={nTratte}
+                      setNTratte={setNTratte}
+                    />
                     <div className="mb-3"></div>
                     {loadingId === id ? (
                       <div className="row d-flex justify-content-center">

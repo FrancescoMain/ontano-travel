@@ -45,18 +45,22 @@ export const useFormViaggioComponent = () => {
   const { selected } = useSelector((state) => state.resultsTratta);
 
   const handleOptionChange = (event) => {
-    console.log(event.target.value);
+    let dueTratte = true;
+    console.log("event.target.value", event.target.value);
     if (event.target.value === selectedOption) {
-      setSelectedOption("");
+      setSelectedOption("Solo andata");
+      dueTratte = true;
     } else {
-      setSelectedOption(event.target.value);
+      if (event.target.value === "Andata e ritorno") {
+        dueTratte = false;
+        setSelectedOption("Andata e ritorno");
+      } else if (event.target.value === "Multitratta") {
+        dueTratte = true;
+        setSelectedOption("Multitratta");
+      }
     }
-    if (
-      selectedOption === "Solo andata" ||
-      selectedOption === "One way" ||
-      selectedOption === "Multitratta" ||
-      selectedOption === "Multi-route"
-    ) {
+
+    if (dueTratte) {
       dispatch(setMultitratta(true));
       dispatch(removeTratta(1));
       dispatch(removeDate(1));
@@ -127,7 +131,6 @@ export const useFormViaggioComponent = () => {
   };
 
   const handleClickTab = (e) => {
-    console.log(e.target.textContent);
     const value = e.target.textContent;
     setTab(value);
   };
@@ -135,6 +138,7 @@ export const useFormViaggioComponent = () => {
   const handleChangeAdulti = (e, id) => {
     const value = e.target.value;
     dispatch(upsertDettagli({ id, adulti: value }));
+    dispatch(upsertDettagli({ id: id + 1, adulti: value }));
     if (!multitratta && id === 0) {
       dispatch(upsertDettagli({ id: 1, adulti: value }));
     }
@@ -144,6 +148,8 @@ export const useFormViaggioComponent = () => {
     const value = e.target.value;
     // dispatch(setBambini(value));
     dispatch(upsertDettagli({ id, bambini: value }));
+    dispatch(upsertDettagli({ id: id + 1, bambini: value }));
+
     if (!multitratta && id === 0) {
       dispatch(upsertDettagli({ id: 1, bambini: value }));
       if (value < dettagli[1].etaBambini.length) {
@@ -170,6 +176,8 @@ export const useFormViaggioComponent = () => {
   const handleChangeAnimali = (e, id) => {
     const value = e.target.value;
     dispatch(upsertDettagli({ id, animali: value }));
+    dispatch(upsertDettagli({ id: id + 1, animali: value }));
+
     if (!multitratta && id === 0) {
       dispatch(upsertDettagli({ id: 1, animali: value }));
     }
@@ -178,6 +186,7 @@ export const useFormViaggioComponent = () => {
   const handleChangeBagagli = (e, id) => {
     const value = e.target.value;
     dispatch(upsertDettagli({ id, bagagli: value }));
+    dispatch(upsertDettagli({ id: id + 1, bagagli: value }));
     if (!multitratta && id === 0) {
       dispatch(upsertDettagli({ id: 1, bagagli: value }));
     }
