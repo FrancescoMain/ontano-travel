@@ -73,6 +73,7 @@ export const FormViaggioComponent = () => {
             <ViaggoiDiRitornoForm id={1} />
           )}
           {selectedOption === "Round trip" && <ViaggoiDiRitornoForm id={1} />}
+          <DettagliViaggio id={0} />
           <Button
             disabled={buttonDisabled}
             variant="solid"
@@ -111,6 +112,7 @@ export const ViaggioDiAndataForm = ({
   const resetHandle = (id) => {
     dispatch(resetSelected({ id }));
   };
+  console.log(optionState);
   return (
     <>
       <h4 className="text-primary">
@@ -149,7 +151,7 @@ export const ViaggioDiAndataForm = ({
                 type="checkbox"
                 value="Andata e ritorno"
                 id="flexCheckDefault"
-                checked={!multitratta}
+                checked={optionState === "Andata e ritorno"}
               />
               <label class="form-check-label" for="flexCheckDefault">
                 {t("Andata e ritorno")}
@@ -162,10 +164,10 @@ export const ViaggioDiAndataForm = ({
                 type="checkbox"
                 value="Multitratta"
                 id="flexCheckChecked"
-                checked={multitratta}
+                checked={optionState === "Multitratta"}
               />
               <label class="form-check-label" for="flexCheckChecked">
-                {t("Multitratta")} / {t("Solo andata")}
+                {t("Più tratte")}
               </label>
             </div>
           </div>
@@ -178,7 +180,7 @@ export const ViaggioDiAndataForm = ({
             {t("Seleziona corsa")}
           </span>
         )}
-        <DettagliViaggio id={id} />
+        {resultMode && <DettagliViaggio id={id} />}
       </div>
     </>
   );

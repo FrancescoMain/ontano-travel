@@ -46,12 +46,16 @@ export const useFormViaggioComponent = () => {
 
   const handleOptionChange = (event) => {
     console.log(event.target.value);
-    setSelectedOption(event.target.value);
+    if (event.target.value === selectedOption) {
+      setSelectedOption("");
+    } else {
+      setSelectedOption(event.target.value);
+    }
     if (
-      event.target.value === "Solo andata" ||
-      event.target.value === "One way" ||
-      event.target.value === "Multitratta" ||
-      event.target.value === "Multi-route"
+      selectedOption === "Solo andata" ||
+      selectedOption === "One way" ||
+      selectedOption === "Multitratta" ||
+      selectedOption === "Multi-route"
     ) {
       dispatch(setMultitratta(true));
       dispatch(removeTratta(1));

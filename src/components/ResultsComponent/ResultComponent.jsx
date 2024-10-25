@@ -60,7 +60,7 @@ export const ResultComponent = () => {
     navigate("/checkout");
   };
   return (
-    <div className="row justify-content-center">
+    <div className="row justify-content-center p-2">
       <div className="col col-lg-6">
         <ViaggioDiAndataForm resultMode={true} id={0} />
         <div className="mb-3"></div>
