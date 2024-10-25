@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { postQuote } from "../_api/reservations/quote";
 import { getReservation } from "../_api/reservations/reservations";
-import { useNavigate } from "react-router-dom";
 import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
 
 export const useReservations = () => {
   const [passeggeri, setPasseggeri] = useState([]);
   const [quote, setQuote] = useState(null);
   const [prenotazione, setPrenotazione] = useState(null);
+  const [tratte, setTratte] = useState([]);
+  const [isQuoteFetched, setIsQuoteFetched] = useState(false); // Nuovo stato per tracciare se la chiamata è stata effettuata
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [tratte, setTratte] = useState([]);
   const viaggioData = localStorage.getItem("viaggioData");
 
   useEffect(() => {
-    console.log(viaggioData);
     if (viaggioData) {
       const parsedData = JSON.parse(viaggioData);
       const selected2 = parsedData.selected;
@@ -30,14 +30,15 @@ export const useReservations = () => {
   }, [navigate, viaggioData]);
 
   useEffect(() => {
-    if (tratte.length > 0) {
+    if (tratte.length > 0 && !isQuoteFetched) {
       const fetchQuote = async () => {
         const result = await postQuote({ tratte });
         setQuote(result);
+        setIsQuoteFetched(true); // Imposta lo stato per indicare che la chiamata è stata effettuata
       };
       fetchQuote();
     }
-  }, [tratte]);
+  }, [tratte, isQuoteFetched]);
 
   useEffect(() => {
     let passeggeri = [];

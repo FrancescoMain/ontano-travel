@@ -12,7 +12,9 @@ import dayjs from "dayjs";
 
 export const Checkout = () => {
   const { passeggeri, prenotazione } = useReservations();
-  useReservations();
+  const [nomi, setNomi] = React.useState([]);
+  const [cognomi, setCognomi] = React.useState([]);
+  const [datiFatturazione, setDatiFatturazione] = React.useState({});
   return (
     <div className="conatiner">
       <form
@@ -28,23 +30,48 @@ export const Checkout = () => {
                     <h2 className="text-primary">Dati Passeggeri</h2>
                     {passeggeri.map((tratta, trattaIndex) => (
                       <>
-                        <h3 className="text-primary">
+                        <h3
+                          className="text-primary"
+                          data-bs-toggle="collapse"
+                          href={"#collapseExample" + trattaIndex}
+                          role="button"
+                          aria-expanded={"true"}
+                          aria-controls="collapseExample"
+                        >
                           Tratta {trattaIndex + 1}
                         </h3>
+
                         {Array.from({ length: tratta.adulti }).map(
                           (_, index) => (
-                            <CheckoutPasseggero
-                              n={index + 1}
-                              key={`adulto-${trattaIndex}-${index}`}
-                            />
+                            <div
+                              class={
+                                trattaIndex !== 0 ? "collapse" : "collapse show"
+                              }
+                              id={"collapseExample" + trattaIndex}
+                            >
+                              <CheckoutPasseggero
+                                onChangeNomi={setNomi}
+                                onChangeCognomi={setCognomi}
+                                n={index + 1}
+                                key={`adulto-${trattaIndex}-${index}`}
+                                lenght={tratta.adulti}
+                                numeroCampo={trattaIndex}
+                                nomi={nomi}
+                              />
+                            </div>
                           )
                         )}
                         {tratta.etaBambini.map((eta, index) => (
-                          <CheckoutPasseggero
-                            n={tratta.adulti + index + 1}
-                            key={`bambino-${trattaIndex}-${index}`}
-                            eta={eta}
-                          />
+                          <div
+                            class="collapse"
+                            id={"collapseExample" + trattaIndex}
+                          >
+                            <CheckoutPasseggero
+                              n={tratta.adulti + index + 1}
+                              key={`bambino-${trattaIndex}-${index}`}
+                              eta={eta}
+                            />
+                          </div>
                         ))}
                       </>
                     ))}
