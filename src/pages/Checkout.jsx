@@ -12,9 +12,74 @@ import dayjs from "dayjs";
 
 export const Checkout = () => {
   const { passeggeri, prenotazione } = useReservations();
-  const [nomi, setNomi] = React.useState([]);
-  const [cognomi, setCognomi] = React.useState([]);
+  const [nomi, setNomi] = React.useState([
+    [{ value: "" }],
+    [{ value: "" }],
+    [{ value: "" }],
+    [{ value: "" }],
+    [{ value: "" }],
+    [{ value: "" }],
+    [{ value: "" }],
+    [{ value: "" }],
+    [{ value: "" }],
+    [{ value: "" }],
+  ]); // Inizializzato come array
+  const [cognomi, setCognomi] = React.useState([
+    [{ value: "" }],
+    [{ value: "" }],
+    [{ value: "" }],
+    [{ value: "" }],
+    [{ value: "" }],
+    [{ value: "" }],
+    [{ value: "" }],
+    [{ value: "" }],
+    [{ value: "" }],
+    [{ value: "" }],
+  ]);
   const [datiFatturazione, setDatiFatturazione] = React.useState({});
+  const handleNomiChange = (numeroCampo, n, newValue) => {
+    setNomi((prevNomi) => {
+      // Copia il vecchio array `prevNomi` per creare `updatedNomi`
+      const updatedNomi = [...prevNomi];
+
+      // Itera dalla tratta corrente fino all'ultima
+      for (
+        let i = numeroCampo;
+        i < updatedNomi.length || i < numeroCampo + 1;
+        i++
+      ) {
+        // Inizializza `updatedNomi[i]` come array vuoto se non esiste
+        if (!updatedNomi[i]) updatedNomi[i] = [];
+
+        // Inizializza `updatedNomi[i][n]` come oggetto vuoto se non esiste
+        updatedNomi[i][n] = { ...updatedNomi[i][n], value: newValue };
+      }
+      console.log(updatedNomi);
+      return updatedNomi;
+    });
+  };
+  const handleCognomiChange = (numeroCampo, n, newValue) => {
+    setCognomi((prevNomi) => {
+      // Copia il vecchio array `prevNomi` per creare `updatedNomi`
+      const updatedNomi = [...prevNomi];
+
+      // Itera dalla tratta corrente fino all'ultima
+      for (
+        let i = numeroCampo;
+        i < updatedNomi.length || i < numeroCampo + 1;
+        i++
+      ) {
+        // Inizializza `updatedNomi[i]` come array vuoto se non esiste
+        if (!updatedNomi[i]) updatedNomi[i] = [];
+
+        // Inizializza `updatedNomi[i][n]` come oggetto vuoto se non esiste
+        updatedNomi[i][n] = { ...updatedNomi[i][n], value: newValue };
+      }
+      console.log(updatedNomi);
+      return updatedNomi;
+    });
+  };
+
   return (
     <div className="conatiner">
       <form
@@ -50,13 +115,14 @@ export const Checkout = () => {
                               id={"collapseExample" + trattaIndex}
                             >
                               <CheckoutPasseggero
-                                onChangeNomi={setNomi}
-                                onChangeCognomi={setCognomi}
+                                onChangeNomi={handleNomiChange} // Passa la funzione per gestire il cambio nome
                                 n={index + 1}
                                 key={`adulto-${trattaIndex}-${index}`}
                                 lenght={tratta.adulti}
                                 numeroCampo={trattaIndex}
                                 nomi={nomi}
+                                cognomi={cognomi}
+                                onChangeCognomi={handleCognomiChange}
                               />
                             </div>
                           )
@@ -67,9 +133,15 @@ export const Checkout = () => {
                             id={"collapseExample" + trattaIndex}
                           >
                             <CheckoutPasseggero
+                              onChangeNomi={handleNomiChange} // Passa la funzione per gestire il cambio nome
                               n={tratta.adulti + index + 1}
                               key={`bambino-${trattaIndex}-${index}`}
                               eta={eta}
+                              nomi={nomi}
+                              cognomi={cognomi}
+                              onChangeCognomi={handleCognomiChange}
+                              lenght={tratta.adulti}
+                              numeroCampo={trattaIndex}
                             />
                           </div>
                         ))}

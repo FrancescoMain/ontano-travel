@@ -74,19 +74,20 @@ export const CheckoutPasseggero = ({
   onChangeCognomi,
   lenght,
   nomi,
+  numeroCampo,
+  cognomi,
 }) => {
+  console.log(nomi);
+
   const handleChange = (e) => {
     const newValue = e.target.value;
-    const updatedNomi = [...nomi];
-
-    // Aggiorna il valore del campo corrente e dei campi successivi
-    for (let i = n - 1; i < lenght; i++) {
-      updatedNomi[i] = newValue;
-    }
-
-    onChangeNomi(updatedNomi);
+    onChangeNomi(numeroCampo, n, newValue); // Passa la tratta, il passeggero e il nuovo valore
   };
 
+  const handleChangeCognome = (e) => {
+    const newValue = e.target.value;
+    onChangeCognomi(numeroCampo, n, newValue); // Passa la tratta, il passeggero e il nuovo valore
+  };
   return (
     <>
       <h5 className="text-secondary">
@@ -95,27 +96,47 @@ export const CheckoutPasseggero = ({
       <div className="nomeCognome row justify-content-center align-items-center g-2 mb-2 flex-column flex-lg-row">
         <div className="col">
           <input
-            onChange={handleChange}
+            onChange={(e) => handleChange(e)}
             type="text"
             className="form-control"
             id={n + "Nome"}
             required
             placeholder="Nome*"
-            value={nomi[n - 1] || ""}
+            value={
+              Array.isArray(nomi) && nomi[numeroCampo]?.[n]?.value
+                ? nomi[numeroCampo][n].value
+                : ""
+            }
           />
           <div className="valid-feedback">Nome inserito correttamente!</div>
           <div className="invalid-feedback">Devi inserire un Nome</div>
         </div>
         <div className="col">
           <input
+            onChange={(e) => handleChangeCognome(e)}
             type="text"
             className="form-control"
             id={n + "Cognome"}
             required
             placeholder="Cognome*"
+            value={
+              Array.isArray(cognomi) && cognomi[numeroCampo]?.[n]?.value
+                ? cognomi[numeroCampo][n].value
+                : ""
+            }
           />
           <div className="valid-feedback">Cognome inserito correttamente!</div>
           <div className="invalid-feedback">Devi inserire un Cognome</div>
+        </div>
+        <div class="col col-lg-2">
+          <input
+            type="text"
+            class="form-control"
+            id={n + "Eta"}
+            value={eta || "13+"}
+          />
+          <div class="valid-feedback">ok!</div>
+          <div className="invalid-feedback">Devi inserire un Eta</div>
         </div>
       </div>
     </>
