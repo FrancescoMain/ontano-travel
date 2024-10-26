@@ -160,7 +160,7 @@ export const Checkout = () => {
               {prenotazione?.reservationRoutes.map((route, index) => (
                 <CheckoutTratta route={route} key={index} />
               ))}
-              <div class="card-footer bg-ice-white py-lg-3 px-3 rounded-bottom-left-4x rounded-bottom-right-4x border-top border-primary">
+              <div class="card-footer bg-ice-white py-lg-3  rounded-bottom-left-4x rounded-bottom-right-4x border-top border-primary">
                 <div
                   id="div_DonazioneRiepilogo"
                   class="d-flex justify-content-between align-items-center mb-2 d-none"

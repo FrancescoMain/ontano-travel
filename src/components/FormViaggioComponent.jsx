@@ -32,10 +32,14 @@ export const FormViaggioComponent = () => {
     tab,
     selectedOption,
     handleOptionChange,
+    selected,
+    dispatch,
   } = useFormViaggioComponent();
 
   const showCollegamento = tab === "Collegamento" || tab === "Link";
-
+  const resetHandle = (id) => {
+    dispatch(resetSelected({ id }));
+  };
   return (
     <Card
       className="card-viaggio"
@@ -80,7 +84,11 @@ export const FormViaggioComponent = () => {
             <ViaggoiDiRitornoForm id={1} />
           )}
           {selectedOption === "Round trip" && <ViaggoiDiRitornoForm id={1} />}
-          <DettagliViaggio id={0} />
+          <DettagliViaggio
+            selected={selected}
+            id={0}
+            resetHandle={resetHandle}
+          />
           <Button
             disabled={buttonDisabled}
             variant="solid"
@@ -196,15 +204,15 @@ export const ViaggioDiAndataForm = ({
             </div>
           </div>
         )}
-        {resultMode && selected[id]?.data?.result_id && (
-          <span
-            className=" fs-6 fst-italic pointer underline text-secondary"
-            onClick={() => resetHandle(id)}
-          >
-            {t("Seleziona corsa")}
-          </span>
+
+        {resultMode && (
+          <DettagliViaggio
+            selected={selected}
+            condition={resultMode && selected[id]?.data?.result_id}
+            resetHandle={resetHandle}
+            id={id}
+          />
         )}
-        {resultMode && <DettagliViaggio id={id} />}
       </div>
     </>
   );
@@ -271,7 +279,7 @@ export const ViaggoiDiRitornoForm = ({ id, resultMode }) => {
   );
 };
 
-const DettagliViaggio = ({ id }) => {
+const DettagliViaggio = ({ id, selected, resetHandle }) => {
   const {
     etaBambinoString,
     t,
@@ -411,6 +419,14 @@ const DettagliViaggio = ({ id }) => {
           />
         </div>
       ))}
+      {selected[id]?.data?.result_id && (
+        <span
+          className=" fs-6 fst-italic pointer underline text-secondary"
+          onClick={() => resetHandle(id)}
+        >
+          {t("Seleziona corsa")}
+        </span>
+      )}
     </>
   );
 };

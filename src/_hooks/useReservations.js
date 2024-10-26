@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { postQuote } from "../_api/reservations/quote";
 import { getReservation } from "../_api/reservations/reservations";
 import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
+import { Collapse } from "bootstrap";
 
 export const useReservations = () => {
   const [passeggeri, setPasseggeri] = useState([]);
@@ -79,14 +80,11 @@ export const useReservations = () => {
       dispatch(stopLoading());
     }
   }, [prenotazione, dispatch]);
-
   useEffect(() => {
-    // Example starter JavaScript for disabling form submissions if there are invalid fields
     (() => {
       "use strict";
-      // Fetch all the forms we want to apply custom Bootstrap validation styles to
       const forms = document.querySelectorAll(".needs-validation");
-      // Loop over them and prevent submission
+
       Array.from(forms).forEach((form) => {
         form.addEventListener(
           "submit",
@@ -94,6 +92,19 @@ export const useReservations = () => {
             if (!form.checkValidity()) {
               event.preventDefault();
               event.stopPropagation();
+
+              const collapses = form.querySelectorAll(".collapse");
+
+              Array.from(collapses).forEach((collapse) => {
+                const invalidFields = collapse.querySelectorAll(":invalid");
+
+                if (invalidFields.length > 0) {
+                  const bsCollapse = new Collapse(collapse, {
+                    toggle: false,
+                  });
+                  bsCollapse.show();
+                }
+              });
             }
             form.classList.add("was-validated");
           },
