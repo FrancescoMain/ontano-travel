@@ -1,6 +1,6 @@
 import { Input } from "@mui/joy";
 
-export const CheckoutPrimoPasseggero = () => {
+export const CheckoutPrimoPasseggero = ({ value, onChange }) => {
   return (
     <>
       <h5 className="text-secondary">Intestatario del biglietto</h5>
@@ -10,6 +10,10 @@ export const CheckoutPrimoPasseggero = () => {
             Nome*
           </label>
           <input
+            onChange={(e) =>
+              onChange((prev) => ({ ...prev, nome: e.target.value }))
+            }
+            value={value.nome}
             type="text"
             class="form-control"
             id="validationCustom01"
@@ -23,6 +27,10 @@ export const CheckoutPrimoPasseggero = () => {
             Cognome*
           </label>
           <input
+            onChange={(e) =>
+              onChange((prev) => ({ ...prev, cognome: e.target.value }))
+            }
+            value={value.cognome}
             type="text"
             class="form-control"
             id="validationCustom02"
@@ -40,6 +48,10 @@ export const CheckoutPrimoPasseggero = () => {
             Cellulare*
           </label>
           <input
+            value={value.cellulare}
+            onChange={(e) =>
+              onChange((prev) => ({ ...prev, cellulare: e.target.value }))
+            }
             type="text"
             class="form-control"
             id="validationCustom06"
@@ -54,6 +66,10 @@ export const CheckoutPrimoPasseggero = () => {
             Email*
           </label>
           <input
+            value={value.email}
+            onChange={(e) =>
+              onChange((prev) => ({ ...prev, email: e.target.value }))
+            }
             type="email"
             class="form-control"
             id="validationCustom05"
@@ -84,9 +100,9 @@ export const CheckoutPasseggero = ({
     onChangeNomi(numeroCampo, n, newValue); // Passa la tratta, il passeggero e il nuovo valore
   };
 
-  const handleChangeCognome = (e) => {
+  const handleChangeCognome = (e, eta) => {
     const newValue = e.target.value;
-    onChangeCognomi(numeroCampo, n, newValue); // Passa la tratta, il passeggero e il nuovo valore
+    onChangeCognomi(numeroCampo, n, newValue, eta); // Passa la tratta, il passeggero e il nuovo valore
   };
   return (
     <>
@@ -113,7 +129,7 @@ export const CheckoutPasseggero = ({
         </div>
         <div className="col">
           <input
-            onChange={(e) => handleChangeCognome(e)}
+            onChange={(e) => handleChangeCognome(e, eta || 13)}
             type="text"
             className="form-control"
             id={n + "Cognome"}

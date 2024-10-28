@@ -5,6 +5,7 @@ import { postQuote } from "../_api/reservations/quote";
 import { getReservation } from "../_api/reservations/reservations";
 import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
 import { Collapse } from "bootstrap";
+import { paymentsMode } from "../_api/reservations/paymentsMode";
 
 export const useReservations = () => {
   const [passeggeri, setPasseggeri] = useState([]);
@@ -12,6 +13,7 @@ export const useReservations = () => {
   const [prenotazione, setPrenotazione] = useState(null);
   const [tratte, setTratte] = useState([]);
   const [isQuoteFetched, setIsQuoteFetched] = useState(false); // Nuovo stato per tracciare se la chiamata è stata effettuata
+  const [paymentsMethod, setPaymentsMethod] = useState([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const viaggioData = localStorage.getItem("viaggioData");
@@ -72,6 +74,13 @@ export const useReservations = () => {
       }
     };
     fetchReservation();
+
+    const fetchPaymentsMethod = async () => {
+      const payments = await paymentsMode();
+      setPaymentsMethod(payments);
+    };
+
+    fetchPaymentsMethod();
   }, [quote]);
 
   useEffect(() => {
@@ -114,5 +123,5 @@ export const useReservations = () => {
     })();
   }, []);
 
-  return { passeggeri, prenotazione };
+  return { passeggeri, prenotazione, paymentsMethod, quote };
 };

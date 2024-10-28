@@ -32,6 +32,7 @@ export const ResultComponent = () => {
   const handleSubmit = () => {
     for (let i = 1; i < selected.length; i++) {
       if (
+        selected[i]?.data.departure &&
         dayjs(selected[i - 1]?.data.departure).isAfter(
           dayjs(selected[i]?.data.departure)
         )

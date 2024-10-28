@@ -9,9 +9,10 @@ import { MdLuggage } from "react-icons/md";
 import { FaChild } from "react-icons/fa";
 import { FaDog } from "react-icons/fa";
 import dayjs from "dayjs";
+import { reserve } from "../_api/reservations/reserve";
 
 export const Checkout = () => {
-  const { passeggeri, prenotazione } = useReservations();
+  const { passeggeri, prenotazione, paymentsMethod, quote } = useReservations();
   const [nomi, setNomi] = React.useState([
     [{ value: "" }],
     [{ value: "" }],
@@ -36,7 +37,14 @@ export const Checkout = () => {
     [{ value: "" }],
     [{ value: "" }],
   ]);
-  const [datiFatturazione, setDatiFatturazione] = React.useState({});
+  const [dto, setDto] = React.useState({
+    nome: "",
+    cognome: "",
+    cellulare: "",
+    email: "",
+  });
+  const [paymentMethodCheck, setPyamentMethodCheck] =
+    React.useState("CREDIT_CARD");
   const handleNomiChange = (numeroCampo, n, newValue) => {
     setNomi((prevNomi) => {
       // Copia il vecchio array `prevNomi` per creare `updatedNomi`
@@ -58,7 +66,7 @@ export const Checkout = () => {
       return updatedNomi;
     });
   };
-  const handleCognomiChange = (numeroCampo, n, newValue) => {
+  const handleCognomiChange = (numeroCampo, n, newValue, eta) => {
     setCognomi((prevNomi) => {
       // Copia il vecchio array `prevNomi` per creare `updatedNomi`
       const updatedNomi = [...prevNomi];
@@ -73,11 +81,19 @@ export const Checkout = () => {
         if (!updatedNomi[i]) updatedNomi[i] = [];
 
         // Inizializza `updatedNomi[i][n]` come oggetto vuoto se non esiste
-        updatedNomi[i][n] = { ...updatedNomi[i][n], value: newValue };
+        updatedNomi[i][n] = { ...updatedNomi[i][n], value: newValue, eta: eta };
       }
       console.log(updatedNomi);
       return updatedNomi;
     });
+  };
+  const handleSubmit = async (e) => {
+    console.log("passeggeri", passeggeri);
+    e.preventDefault();
+    const fetchReservation = async () => {
+      reserve(nomi, cognomi, dto, paymentMethodCheck, passeggeri.length, quote);
+    };
+    await fetchReservation();
   };
 
   return (
@@ -85,9 +101,12 @@ export const Checkout = () => {
       <form
         className="row d-flex justify-content-center needs-validation "
         noValidate
+        onSubmit={(e) => {
+          handleSubmit(e);
+        }}
       >
         <div className="col-lg-9 col-11">
-          <div className="row justify-content-between flex-lg-row flex-column flex-column-reverse align-items-start">
+          <div className="row justify-content-between flex-lg-row flex-column  align-items-start">
             <div className="col-lg-7 col  rounded  mb-3">
               <div className="col-lg-12 col bg-passeggeri rounded mt-3 mb-3 p-4">
                 <div className="row">
@@ -150,7 +169,11 @@ export const Checkout = () => {
                   </div>
                 </div>
               </div>
-              <Condizioni />
+              <Condizioni value={dto} onChange={setDto} />
+              <Pagamento
+                methods={paymentsMethod}
+                checked={paymentMethodCheck}
+              />
             </div>
 
             <div className="col-lg-4 col bg-aliceblue mte-3 rounded mb-3 sticky-lg-top d-flex flex-column flex-basis-0 flex-grow-0">
@@ -207,7 +230,7 @@ export const Checkout = () => {
                     {prenotazione?.priceToPay.priceFormatted}
                   </span>
                 </div>
-                <div class="mt-3 d-none d-lg-block ">
+                <div class="mt-3  ">
                   <button
                     type="submit"
                     class="btn btn-success btn btn-lg w-100 text-white bg-green border-0 ms-auto fw-bold py-3"
@@ -282,11 +305,11 @@ export const CheckoutTariffe = ({ tariffa }) => {
   );
 };
 
-export const Condizioni = () => {
+export const Condizioni = ({ value, onChange }) => {
   return (
     <div className="col-lg-12  col bg-passeggeri rounded mt-3 mb-3 p-4">
       <h2 className="text-primary">Condizioni e Contatti</h2>
-      <CheckoutPrimoPasseggero />
+      <CheckoutPrimoPasseggero value={value} onChange={onChange} />
 
       <div className="col">
         <div className="form-check">
@@ -318,16 +341,32 @@ export const Condizioni = () => {
           <div className="invalid-feedback">
             Devi accettare l'informativa sulla privacy
           </div>
-          <div class="mt-3 d-block d-lg-none ">
-            <button
-              type="submit"
-              class="btn btn-success btn btn-lg w-100 text-white bg-green border-0 ms-auto fw-bold py-3"
-            >
-              CONFERMA
-            </button>
-          </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+export const Pagamento = ({ methods, checked }) => {
+  return (
+    <div className="col-lg-12  col bg-passeggeri rounded mt-3 mb-3 p-4">
+      <h2 className="text-primary">Metodo di pagamento</h2>
+
+      {methods.map((method) => (
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="flexRadioDefault"
+            id="flexRadioDefault1"
+            checked={checked === "CREDIT_CARD"}
+          />
+          <label class="form-check-label" for="flexRadioDefault1">
+            {method === "CREDIT_CARD" && "Carta di Credito"}
+            {method !== "CREDIT_CARD" && method}
+          </label>
+        </div>
+      ))}
     </div>
   );
 };
