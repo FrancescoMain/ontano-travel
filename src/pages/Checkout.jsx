@@ -14,6 +14,8 @@ import { lightboxReserve } from "../_api/reservations/lightboxReserve";
 import { useDispatch } from "react-redux";
 import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
 import { getStore } from "../_api/reservations/getStore";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export const Checkout = () => {
   const { passeggeri, prenotazione, paymentsMethod, quote } = useReservations();
@@ -49,6 +51,7 @@ export const Checkout = () => {
     cellulare: "",
     email: "",
   });
+  const navigate = useNavigate();
   const loadAxerveScript = () => {
     return new Promise((resolve, reject) => {
       if (document.getElementById("axerve-script")) {
@@ -76,11 +79,11 @@ export const Checkout = () => {
     };
 
     fetchStore();
-    loadAxerveScript()
-      .then(() => {})
-      .catch((err) => {
-        console.error(err);
-      });
+    // loadAxerveScript()
+    //   .then(() => {})
+    //   .catch((err) => {
+    //     console.error(err);
+    //   });
   }, []);
   const [paymentMethodCheck, setPyamentMethodCheck] =
     React.useState("CREDIT_CARD");
@@ -159,9 +162,12 @@ export const Checkout = () => {
               if (response.status === "OK") {
                 // Pagamento riuscito
                 // Reindirizza l'utente o mostra un messaggio di successo
+                toast.success("Pagamento completato con successo");
+                navigate("/success");
               } else {
                 // Gestione dell'errore
                 // Mostra un messaggio di errore all'utente
+                toast.error("Errore durante il pagamento");
               }
             }
           );
