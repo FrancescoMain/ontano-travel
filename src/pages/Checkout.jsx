@@ -74,7 +74,7 @@ export const Checkout = () => {
   React.useEffect(() => {
     // Carica lo script di Axerve al montaggio del componente
     const fetchStore = async () => {
-      const storeF = getStore();
+      const storeF = await getStore();
       setStore(storeF);
     };
 
@@ -151,17 +151,17 @@ export const Checkout = () => {
           reserveLightbox.PaymentToken &&
           reserveLightbox.PaymentID
         ) {
-          // Inizializza lo shopLogin
+          // Inizializza lo
+          console.log("SHOP LOGIN", store.shoplogin);
           window.axerve.lightBox.shop = store.shoplogin; // Sostituisci con il tuo shopLogin
 
           // Apri la Lightbox
           window.axerve.lightBox.open(
             reserveLightbox.PaymentID,
             reserveLightbox.PaymentToken,
-            function (response) {
+            function callback(response) {
+              console.log(response);
               if (response.status === "OK") {
-                // Pagamento riuscito
-                // Reindirizza l'utente o mostra un messaggio di successo
                 toast.success("Pagamento completato con successo");
                 navigate("/success");
               } else {
