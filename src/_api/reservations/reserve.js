@@ -57,12 +57,14 @@ export const reserve = async (nomi, cognomi, dto, payment, nTratte, quote) => {
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
-
+    if (response.ok) {
+      console.log("Success:", response.status);
+      return true;
+    } else {
+      throw new Error("Network response was not ok");
+    }
     const contentType = response.headers.get("content-type");
     if (contentType && contentType.includes("application/json")) {
-      const result = await response.json();
-      console.log("Success:", result);
-      return result;
     } else {
       const text = await response.text();
       console.log("Success:", text);

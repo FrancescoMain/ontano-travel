@@ -10,9 +10,15 @@ import { FaChild } from "react-icons/fa";
 import { FaDog } from "react-icons/fa";
 import dayjs from "dayjs";
 import { reserve } from "../_api/reservations/reserve";
+import { lightboxReserve } from "../_api/reservations/lightboxReserve";
+import { useDispatch } from "react-redux";
+import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
+import { getStore } from "../_api/reservations/getStore";
 
 export const Checkout = () => {
   const { passeggeri, prenotazione, paymentsMethod, quote } = useReservations();
+  const [store, setStore] = React.useState();
+  const dispatch = useDispatch();
   const [nomi, setNomi] = React.useState([
     [{ value: "" }],
     [{ value: "" }],
@@ -43,6 +49,39 @@ export const Checkout = () => {
     cellulare: "",
     email: "",
   });
+  const loadAxerveScript = () => {
+    return new Promise((resolve, reject) => {
+      if (document.getElementById("axerve-script")) {
+        resolve();
+        return;
+      }
+      const script = document.createElement("script");
+      script.id = "axerve-script";
+      script.src = "https://sandbox.gestpay.net/pagam/javascript/axerve.js";
+      script.onload = () => {
+        resolve();
+      };
+      script.onerror = () => {
+        reject("Errore nel caricamento dello script Axerve");
+      };
+      document.body.appendChild(script);
+    });
+  };
+
+  React.useEffect(() => {
+    // Carica lo script di Axerve al montaggio del componente
+    const fetchStore = async () => {
+      const storeF = getStore();
+      setStore(storeF);
+    };
+
+    fetchStore();
+    loadAxerveScript()
+      .then(() => {})
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
   const [paymentMethodCheck, setPyamentMethodCheck] =
     React.useState("CREDIT_CARD");
   const handleNomiChange = (numeroCampo, n, newValue) => {
@@ -62,7 +101,6 @@ export const Checkout = () => {
         // Inizializza `updatedNomi[i][n]` come oggetto vuoto se non esiste
         updatedNomi[i][n] = { ...updatedNomi[i][n], value: newValue };
       }
-      console.log(updatedNomi);
       return updatedNomi;
     });
   };
@@ -83,17 +121,59 @@ export const Checkout = () => {
         // Inizializza `updatedNomi[i][n]` come oggetto vuoto se non esiste
         updatedNomi[i][n] = { ...updatedNomi[i][n], value: newValue, eta: eta };
       }
-      console.log(updatedNomi);
       return updatedNomi;
     });
   };
   const handleSubmit = async (e) => {
-    console.log("passeggeri", passeggeri);
     e.preventDefault();
-    const fetchReservation = async () => {
-      reserve(nomi, cognomi, dto, paymentMethodCheck, passeggeri.length, quote);
-    };
-    await fetchReservation();
+    dispatch(startLoading());
+
+    // Aspetta il completamento di 'reserve' e ottieni il risultato
+    const resultReserve = await reserve(
+      nomi,
+      cognomi,
+      dto,
+      paymentMethodCheck,
+      passeggeri.length,
+      quote
+    );
+    console.log("reserve", resultReserve);
+    if (resultReserve) {
+      if (paymentMethodCheck === "CREDIT_CARD") {
+        // Aspetta il completamento di 'lightboxReserve' e ottieni il risultato
+        const reserveLightbox = await lightboxReserve(quote);
+
+        if (
+          reserveLightbox &&
+          reserveLightbox.PaymentToken &&
+          reserveLightbox.PaymentID
+        ) {
+          // Inizializza lo shopLogin
+          window.axerve.lightBox.shop = store.shoplogin; // Sostituisci con il tuo shopLogin
+
+          // Apri la Lightbox
+          window.axerve.lightBox.open(
+            reserveLightbox.PaymentID,
+            reserveLightbox.PaymentToken,
+            function (response) {
+              if (response.status === "OK") {
+                // Pagamento riuscito
+                // Reindirizza l'utente o mostra un messaggio di successo
+              } else {
+                // Gestione dell'errore
+                // Mostra un messaggio di errore all'utente
+              }
+            }
+          );
+        } else {
+          console.error("Errore: PaymentToken o PaymentID mancanti");
+        }
+      } else {
+        // Gestisci altri metodi di pagamento se necessario
+      }
+    }
+
+    dispatch(stopLoading());
   };
 
   return (

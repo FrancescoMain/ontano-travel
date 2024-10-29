@@ -29,3 +29,7 @@ img {
   background-color: #0d6efd !important;
   color: #fbfcfe !important;
 }
+
+.overlay {
+  z-index: 9999 !important;
+}
