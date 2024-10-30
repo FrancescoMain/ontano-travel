@@ -13,6 +13,8 @@ import {
   upsertDettagli,
   upsertTratta,
 } from "../features/viaggio/findTratta";
+import i18n from "../i18n"; // Import i18n to access the current language
+
 export const useResult = () => {
   const dispatch = useDispatch();
   const { tratte, date, dettagli, multitratta } = useSelector(
@@ -35,9 +37,12 @@ export const useResult = () => {
       dispatch(startLoading());
       const formattedDate = dayjs(date[id]?.dateFormatted).format("YYYY-MM-DD");
 
+      // Get the current language or default to 'it'
+      const language = i18n.language || "it";
+
       try {
         const response = await fetch(
-          `http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/route/search?departure_route_id=${
+          `http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/route/search?language=${language}&departure_route_id=${
             tratte[id]?.tratta.route_id
           }&departure_data=${encodeURIComponent(formattedDate)}`
         );

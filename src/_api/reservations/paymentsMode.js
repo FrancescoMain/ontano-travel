@@ -1,9 +1,12 @@
+import i18n from "../../i18n"; // Import i18n to access the current language
+
 // Funzione per fare la chiamata POST
 export const paymentsMode = async () => {
   try {
+    const language = i18n.language || "it"; // Get current language or default to 'it'
     // Fai la chiamata POST
     const response = await fetch(
-      "http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/payment/mode",
+      `http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/payment/mode?language=${language}`,
       {
         method: "GET",
         headers: {

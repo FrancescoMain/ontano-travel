@@ -1,10 +1,15 @@
+import i18n from "../../i18n"; // Import i18n to access the current language
+
 export const getReservation = async (quoteId) => {
   console.log("getReservation", quoteId);
+
+  // Get the current language or default to 'it'
+  const language = i18n.language || "it";
 
   try {
     // Fai la chiamata GET
     const response = await fetch(
-      `http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/reservation/${quoteId}`,
+      `http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/reservation/${quoteId}?language=${language}`,
       {
         method: "GET",
         headers: {

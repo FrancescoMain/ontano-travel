@@ -53,6 +53,7 @@ export const Checkout = () => {
     email: "",
   });
   console.log("prenotazione", prenotazione);
+  console.log("passeggeri", passeggeri); // Add this line to inspect passeggeri data
   const navigate = useNavigate();
   const loadAxerveScript = () => {
     return new Promise((resolve, reject) => {
@@ -182,7 +183,7 @@ export const Checkout = () => {
 
     dispatch(stopLoading());
   };
-
+  console.log("eta", passeggeri);
   return (
     <div className="conatiner">
       <form
@@ -201,30 +202,33 @@ export const Checkout = () => {
                     <h2 className="text-primary">Dati Passeggeri</h2>
                     {passeggeri.map((tratta, trattaIndex) => (
                       <>
-                        <h3
-                          className="text-primary"
-                          data-bs-toggle="collapse"
-                          href={"#collapseExample" + trattaIndex}
-                          role="button"
-                          aria-expanded={"true"}
-                          aria-controls="collapseExample"
+                        <div className="d-flex flex-column">
+                          <div
+                            className="text-primary fs-4"
+                            data-bs-toggle="collapse"
+                            href={"#collapseExample" + trattaIndex}
+                            role="button"
+                            aria-expanded={trattaIndex === 0 ? "true" : "false"}
+                            aria-controls={"collapseExample" + trattaIndex}
+                          >
+                            {prenotazione?.reservationRoutes[trattaIndex]?.from}{" "}
+                            - {prenotazione?.reservationRoutes[trattaIndex]?.to}
+                          </div>
+                          <div className="text-secondary small fst-italic">
+                            {dayjs(
+                              prenotazione?.reservationRoutes[trattaIndex]
+                                ?.departure
+                            ).format("DD/MMM/YYYY HH:mm")}
+                          </div>
+                        </div>
+                        <div
+                          className={
+                            trattaIndex !== 0 ? "collapse" : "collapse show"
+                          }
+                          id={"collapseExample" + trattaIndex}
                         >
-                          {dayjs(
-                            prenotazione?.reservationRoutes[trattaIndex]
-                              ?.departure
-                          ).format("DD/MMM/YYYY HH:mm")}{" "}
-                          - {prenotazione?.reservationRoutes[trattaIndex]?.from}{" "}
-                          - {prenotazione?.reservationRoutes[trattaIndex]?.to}
-                        </h3>
-
-                        {Array.from({ length: tratta.adulti }).map(
-                          (_, index) => (
-                            <div
-                              class={
-                                trattaIndex !== 0 ? "collapse" : "collapse show"
-                              }
-                              id={"collapseExample" + trattaIndex}
-                            >
+                          {Array.from({ length: tratta.adulti }).map(
+                            (_, index) => (
                               <CheckoutPasseggero
                                 onChangeNomi={handleNomiChange} // Passa la funzione per gestire il cambio nome
                                 n={index + 1}
@@ -235,16 +239,9 @@ export const Checkout = () => {
                                 cognomi={cognomi}
                                 onChangeCognomi={handleCognomiChange}
                               />
-                            </div>
-                          )
-                        )}
-                        {tratta.etaBambini.map((eta, index) => (
-                          <div
-                            class={
-                              trattaIndex !== 0 ? "collapse" : "collapse show"
-                            }
-                            id={"collapseExample" + trattaIndex}
-                          >
+                            )
+                          )}
+                          {tratta.etaBambini.map((eta, index) => (
                             <CheckoutPasseggero
                               onChangeNomi={handleNomiChange} // Passa la funzione per gestire il cambio nome
                               n={tratta.adulti + index + 1}
@@ -256,8 +253,8 @@ export const Checkout = () => {
                               lenght={tratta.adulti}
                               numeroCampo={trattaIndex}
                             />
-                          </div>
-                        ))}
+                          ))}
+                        </div>
                       </>
                     ))}
                   </div>

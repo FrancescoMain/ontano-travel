@@ -1,3 +1,5 @@
+import i18n from "../../i18n"; // Import i18n to access the current language
+
 // Funzione per fare la chiamata POST
 export const reserve = async (nomi, cognomi, dto, payment, nTratte, quote) => {
   console.log(nomi);
@@ -39,11 +41,14 @@ export const reserve = async (nomi, cognomi, dto, payment, nTratte, quote) => {
 
   console.log(body);
 
+  // Get the current language or default to 'it'
+  const language = i18n.language || "it";
+
   try {
     console.log(JSON.stringify(body));
     // Fai la chiamata POST
     const response = await fetch(
-      `http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/reservation/${quote}/reserve`,
+      `http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/reservation/${quote}/reserve?language=${language}`,
       {
         method: "POST",
         headers: {

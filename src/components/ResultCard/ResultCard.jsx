@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import i18n from "../../i18n"; // Import i18n to access the current language
 import "./ResultCard.css";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -69,6 +70,9 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
     const fetchPriceData = async () => {
       setLoading(true);
 
+      // Get the current language or default to 'it'
+      const language = i18n.language || "it";
+
       // Costruisci la query string per passengers_age
       const passengersAgeParams = [
         ...Array.from({ length: adulti }, () => 18), // Aggiungi 18 per ogni adulto
@@ -79,7 +83,7 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
 
       try {
         const response = await fetch(
-          `http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/price/searchresult?search_result_id=${data.result_id}&animals=${animali}&luggages=${bagagli}&${passengersAgeParams}`
+          `http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/price/searchresult?language=${language}&search_result_id=${data.result_id}&animals=${animali}&luggages=${bagagli}&${passengersAgeParams}`
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -114,8 +118,8 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
   return (
     <div
       className={` card-container ${selected ? "selected" : ""} ${
-        !hidden ? "" : "hidden"
-      } box-result bg-ice-white rounded-2x mt-md-0 my-4 collapsable`}
+        !hidden ? "my-4 " : "hidden"
+      } box-result bg-ice-white rounded-2x mt-md-0 collapsable`}
       onClick={onClick}
     >
       <div className="row align-items-center grid-result">

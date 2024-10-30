@@ -2,7 +2,16 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
-import { Button, Card, Input, Tab, TabList, Tabs, Typography } from "@mui/joy";
+import {
+  Button,
+  Card,
+  Input,
+  Tab,
+  TabList,
+  Tabs,
+  Typography,
+  Tooltip,
+} from "@mui/joy";
 import React, { useState } from "react";
 import { setEtaBambini } from "../features/viaggio/viaggioFormSlice";
 import Autocomplete from "@mui/joy/Autocomplete";
@@ -344,7 +353,9 @@ const DettagliViaggio = ({ id, selected, resetHandle }) => {
           </Typography>
         </div>
         <div className="col col-lg-3 d-flex flex-column">
-          <label htmlFor="animals">{t("Animali Domestici")}</label>
+          <Tooltip title="lorem ipsum">
+            <label htmlFor="animals">{t("Animali Domestici")}</label>
+          </Tooltip>
 
           <select
             value={dettagli[id]?.animali}
@@ -361,7 +372,9 @@ const DettagliViaggio = ({ id, selected, resetHandle }) => {
         </div>
 
         <div className="col col-lg-3 d-flex flex-column">
-          <label htmlFor="bagagli">{t("Bagagli")}</label>
+          <Tooltip title="lorem ipsum">
+            <label htmlFor="bagagli">{t("Bagagli")}</label>
+          </Tooltip>
 
           <select
             value={dettagli[id]?.bagagli}
