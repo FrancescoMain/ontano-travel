@@ -63,7 +63,7 @@ export const useReservations = () => {
 
     // Imposta l'array dei passeggeri nello stato
     setPasseggeri(passeggeri);
-    console.log(passeggeri);
+    console.log("passeggeri", passeggeri);
   }, [tratte]);
 
   useEffect(() => {

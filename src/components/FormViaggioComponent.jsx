@@ -424,7 +424,7 @@ const DettagliViaggio = ({ id, selected, resetHandle }) => {
           className=" fs-6 fst-italic pointer underline text-secondary"
           onClick={() => resetHandle(id)}
         >
-          {t("Seleziona corsa")}
+          {t("Cambia corsa")}
         </span>
       )}
     </>

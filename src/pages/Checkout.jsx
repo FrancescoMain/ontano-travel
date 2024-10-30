@@ -16,6 +16,7 @@ import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
 import { getStore } from "../_api/reservations/getStore";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { FaBaby } from "react-icons/fa6";
 
 export const Checkout = () => {
   const { passeggeri, prenotazione, paymentsMethod, quote } = useReservations();
@@ -51,6 +52,7 @@ export const Checkout = () => {
     cellulare: "",
     email: "",
   });
+  console.log("prenotazione", prenotazione);
   const navigate = useNavigate();
   const loadAxerveScript = () => {
     return new Promise((resolve, reject) => {
@@ -152,7 +154,6 @@ export const Checkout = () => {
           reserveLightbox.PaymentID
         ) {
           // Inizializza lo
-          console.log("SHOP LOGIN", store.shoplogin);
           window.axerve.lightBox.shop = store.shoplogin; // Sostituisci con il tuo shopLogin
 
           // Apri la Lightbox
@@ -208,7 +209,12 @@ export const Checkout = () => {
                           aria-expanded={"true"}
                           aria-controls="collapseExample"
                         >
-                          Tratta {trattaIndex + 1}
+                          {dayjs(
+                            prenotazione?.reservationRoutes[trattaIndex]
+                              ?.departure
+                          ).format("DD/MMM/YYYY HH:mm")}{" "}
+                          - {prenotazione?.reservationRoutes[trattaIndex]?.from}{" "}
+                          - {prenotazione?.reservationRoutes[trattaIndex]?.to}
                         </h3>
 
                         {Array.from({ length: tratta.adulti }).map(
@@ -234,7 +240,9 @@ export const Checkout = () => {
                         )}
                         {tratta.etaBambini.map((eta, index) => (
                           <div
-                            class="collapse"
+                            class={
+                              trattaIndex !== 0 ? "collapse" : "collapse show"
+                            }
                             id={"collapseExample" + trattaIndex}
                           >
                             <CheckoutPasseggero
@@ -262,7 +270,7 @@ export const Checkout = () => {
               />
             </div>
 
-            <div className="col-lg-4 col bg-aliceblue mte-3 rounded mb-3 sticky-lg-top d-flex flex-column flex-basis-0 flex-grow-0">
+            <div className="col-lg-4 col bg-aliceblue mte-3 rounded mb-3 sticky-lg-top d-flex flex-column flex-basis-0 flex-grow-0 mt-3">
               <div>
                 <h3 className="text-primary text-center">Il tuo viaggio</h3>
               </div>
@@ -355,7 +363,7 @@ export const CheckoutTratta = ({ route }) => {
       </div>
       <div class="list-group list-group-flush bg-aliceblue">
         {route.tariffs.map((tariffa, index) => (
-          <CheckoutTariffe tariffa={tariffa} />
+          <CheckoutTariffe tariffa={tariffa} company={route.company} />
         ))}
 
         <div class="bg-aliceblue d-flex justify-content-between align-items-center subtotal mb-3 ">
@@ -367,7 +375,7 @@ export const CheckoutTratta = ({ route }) => {
   );
 };
 
-export const CheckoutTariffe = ({ tariffa }) => {
+export const CheckoutTariffe = ({ tariffa, company }) => {
   return (
     <div>
       <div class="row bg-aliceblue d-flex justify-content-between align-items-center border-top border-bottom">
@@ -377,12 +385,14 @@ export const CheckoutTariffe = ({ tariffa }) => {
             {tariffa.category_code === "CHD" && <FaChild />}
             {tariffa.category_code === "ANI" && <FaDog />}
             {tariffa.category_code === "LUG" && <MdLuggage />}
+            {tariffa.category_code === "INF" && <FaBaby />}
           </span>
           <span>
             {tariffa.qty} {tariffa.category_code === "ADU" && "Adulti"}
             {tariffa.category_code === "CHD" && "Bambini"}
             {tariffa.category_code === "ANI" && "Animali"}
             {tariffa.category_code === "LUG" && "Bagagli"}
+            {tariffa.category_code === "INF" && "Neonati"}
           </span>
         </div>
         <span className="col-4 text-end">{tariffa.price.priceFormatted} </span>
@@ -409,9 +419,6 @@ export const Condizioni = ({ value, onChange }) => {
           <label className="form-check-label" htmlFor="flexCheckDefault">
             Ho letto e accettato i termini e le condizioni
           </label>
-          <div className="invalid-feedback">
-            Devi accettare i termini e le condizioni
-          </div>
         </div>
         <div className="form-check">
           <input
@@ -424,9 +431,6 @@ export const Condizioni = ({ value, onChange }) => {
           <label className="form-check-label" htmlFor="flexCheckDefault2">
             Accetto Informatica sulla privacy
           </label>
-          <div className="invalid-feedback">
-            Devi accettare l'informativa sulla privacy
-          </div>
         </div>
       </div>
     </div>

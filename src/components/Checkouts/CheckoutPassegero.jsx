@@ -1,15 +1,15 @@
 import { Input } from "@mui/joy";
+import { useTranslation } from "react-i18next";
 
 export const CheckoutPrimoPasseggero = ({ value, onChange }) => {
+  const { t } = useTranslation();
   return (
     <>
       <h5 className="text-secondary">Intestatario del biglietto</h5>
       <div class="nomeCognome row justify-content-center align-items-center g-2 mb-2 flex-column flex-lg-row">
         <div class="col ">
-          <label for="validationCustom01" class="form-label">
-            Nome*
-          </label>
           <input
+            placeholder={t("Nome")}
             onChange={(e) =>
               onChange((prev) => ({ ...prev, nome: e.target.value }))
             }
@@ -19,14 +19,10 @@ export const CheckoutPrimoPasseggero = ({ value, onChange }) => {
             id="validationCustom01"
             required
           />
-          <div class="valid-feedback">Nome inserito correttamente!</div>
-          <div className="invalid-feedback">Inserire Nome</div>
         </div>
         <div class="col ">
-          <label for="validationCustom02" class="form-label">
-            Cognome*
-          </label>
           <input
+            placeholder={t("Cognome")}
             onChange={(e) =>
               onChange((prev) => ({ ...prev, cognome: e.target.value }))
             }
@@ -36,18 +32,14 @@ export const CheckoutPrimoPasseggero = ({ value, onChange }) => {
             id="validationCustom02"
             required
           />
-          <div class="valid-feedback">Cognome inserito correttamente!</div>
-          <div className="invalid-feedback">Inserire Cognome</div>
         </div>
       </div>
 
       <h6 className="text-secondary">Informazioni di contatto</h6>
       <div class="contatto row justify-content-center align-items-center g-2 mb-2 flex-column flex-lg-row ">
         <div class="col col-lg-5 ">
-          <label for="validationCustom06" class="form-label">
-            Cellulare*
-          </label>
           <input
+            placeholder={t("Telefono")}
             value={value.cellulare}
             onChange={(e) =>
               onChange((prev) => ({ ...prev, cellulare: e.target.value }))
@@ -58,14 +50,10 @@ export const CheckoutPrimoPasseggero = ({ value, onChange }) => {
             required
             minLength={9}
           />
-          <div class="valid-feedback">Cellulare inserito correttamente!</div>
-          <div className="invalid-feedback">Devi inserire un Cellulare</div>
         </div>
         <div class="col ">
-          <label for="validationCustom05" class="form-label">
-            Email*
-          </label>
           <input
+            placeholder={t("Email")}
             value={value.email}
             onChange={(e) =>
               onChange((prev) => ({ ...prev, email: e.target.value }))
@@ -75,8 +63,6 @@ export const CheckoutPrimoPasseggero = ({ value, onChange }) => {
             id="validationCustom05"
             required
           />
-          <div class="valid-feedback">Email inserita correttamente!</div>
-          <div className="invalid-feedback">Devi inserire un Email</div>
         </div>
       </div>
     </>
@@ -104,10 +90,12 @@ export const CheckoutPasseggero = ({
     const newValue = e.target.value;
     onChangeCognomi(numeroCampo, n, newValue, eta); // Passa la tratta, il passeggero e il nuovo valore
   };
+
+  console.log("eta", eta);
   return (
     <>
       <h5 className="text-secondary">
-        {n}° {eta ? "Bambino" : "Passeggero"}
+        {n}° {eta != null ? "Bambino" : "Passeggero"}
       </h5>
       <div className="nomeCognome row justify-content-center align-items-center g-2 mb-2 flex-column flex-lg-row">
         <div className="col">
@@ -124,8 +112,6 @@ export const CheckoutPasseggero = ({
                 : ""
             }
           />
-          <div className="valid-feedback">Nome inserito correttamente!</div>
-          <div className="invalid-feedback">Devi inserire un Nome</div>
         </div>
         <div className="col">
           <input
@@ -141,18 +127,14 @@ export const CheckoutPasseggero = ({
                 : ""
             }
           />
-          <div className="valid-feedback">Cognome inserito correttamente!</div>
-          <div className="invalid-feedback">Devi inserire un Cognome</div>
         </div>
         <div class="col col-lg-2">
           <input
             type="text"
             class="form-control"
             id={n + "Eta"}
-            value={eta || "13+"}
+            value={eta != null ? eta : "12+"}
           />
-          <div class="valid-feedback">ok!</div>
-          <div className="invalid-feedback">Devi inserire un Eta</div>
         </div>
       </div>
     </>

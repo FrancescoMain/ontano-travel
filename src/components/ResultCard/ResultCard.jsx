@@ -167,7 +167,7 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
         </div>
         <div className="col-lg-4 no-pet-mode ">
           <div className="prezzo text-center d-flex flex-column align-items-center row  p-2 gx-1 gx-lg-3  justify-content-center fs-1 fw-bold  ">
-            <div className="col">
+            <div className="col fs-2">
               {loading ? (
                 <SpinnerOnly active={loading} />
               ) : priceData?.priceFormatted ? (

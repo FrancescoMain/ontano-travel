@@ -33,3 +33,7 @@ img {
 .overlay {
   z-index: 9999 !important;
 }
+
+.top-2 {
+  top: -20px !important;
+}

@@ -14,6 +14,7 @@ import { ResultPageExternal } from "./pages/ResultPageExternal";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Checkout } from "./pages/Checkout";
+import { Success } from "./pages/Success";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
   {
     path: "/checkout",
     element: <Checkout />,
+  },
+  {
+    path: "/success",
+    element: <Success />,
   },
 ]);
 
