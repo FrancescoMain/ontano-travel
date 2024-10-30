@@ -15,6 +15,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Checkout } from "./pages/Checkout";
 import { Success } from "./pages/Success";
+import { Login } from "./pages/Login";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
   {
     path: "/success",
     element: <Success />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
   },
 ]);
 
