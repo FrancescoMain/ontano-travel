@@ -145,34 +145,31 @@ export const useFormViaggioComponent = () => {
   };
 
   const handleChangeBambini = (e, id) => {
-    const value = e.target.value;
-    // dispatch(setBambini(value));
+    const value = Number(e.target.value);
     dispatch(upsertDettagli({ id, bambini: value }));
-    dispatch(upsertDettagli({ id: id + 1, bambini: value }));
 
-    if (!multitratta && id === 0) {
-      dispatch(upsertDettagli({ id: 1, bambini: value }));
-      if (value < dettagli[1].etaBambini.length) {
-        dispatch(
-          upsertDettagli({
-            id,
-            etaBambini: dettagli[1].etaBambini.slice(0, value),
-          })
-        );
+    if (dettagli[id]?.etaBambini?.length > value) {
+      const newEtaBambini = dettagli[id].etaBambini.slice(0, value);
+      dispatch(upsertDettagli({ id, etaBambini: newEtaBambini }));
+    }
+
+    if (multitratta) {
+      dispatch(upsertDettagli({ id: id + 1, bambini: value }));
+
+      if (dettagli[id + 1]?.etaBambini?.length > value) {
+        const newEtaBambini = dettagli[id + 1].etaBambini.slice(0, value);
+        dispatch(upsertDettagli({ id: id + 1, etaBambini: newEtaBambini }));
       }
-      // eta bambini viene tagliato dall'index che coincide con value
-      if (value < dettagli[id].etaBambini.length) {
-        dispatch(
-          upsertDettagli({
-            id,
-            etaBambini: dettagli[id].etaBambini.slice(0, value),
-          })
-        );
+    } else if (id === 0) {
+      dispatch(upsertDettagli({ id: 1, bambini: value }));
 
-        return;
+      if (dettagli[1]?.etaBambini?.length > value) {
+        const newEtaBambini = dettagli[1].etaBambini.slice(0, value);
+        dispatch(upsertDettagli({ id: 1, etaBambini: newEtaBambini }));
       }
     }
   };
+
   const handleChangeAnimali = (e, id) => {
     const value = e.target.value;
     dispatch(upsertDettagli({ id, animali: value }));
