@@ -35,7 +35,6 @@ export const CheckoutPrimoPasseggero = ({ value, onChange }) => {
         </div>
       </div>
 
-      <h6 className="text-secondary">Informazioni di contatto</h6>
       <div class="contatto row justify-content-center align-items-center g-2 mb-2 flex-column flex-lg-row ">
         <div class="col col-lg-5 ">
           <input
