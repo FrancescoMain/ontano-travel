@@ -15,26 +15,24 @@ export const Login = () => {
             </div>
             <div className="card-body">
               <form>
-                <div className="form-group">
-                  <label htmlFor="username">{t("Username")}</label>
+                <div className="form-group mb-2">
                   <input
+                    placeholder={t("Username")}
                     type="text"
                     className="form-control"
                     id="username"
-                    placeholder={t("Enter username")}
                     required
                   />
                   <div className="invalid-feedback">
                     {t("Please enter your username.")}
                   </div>
                 </div>
-                <div className="form-group">
-                  <label htmlFor="password">{t("Password")}</label>
+                <div className="form-group mb-2">
                   <input
                     type="password"
                     className="form-control"
                     id="password"
-                    placeholder={t("Enter password")}
+                    placeholder={t("Password")}
                     required
                   />
                   <div className="invalid-feedback">
