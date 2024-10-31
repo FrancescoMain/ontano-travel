@@ -17,6 +17,7 @@ import { getStore } from "../_api/reservations/getStore";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { FaBaby } from "react-icons/fa6";
+import { useTranslation } from "react-i18next";
 
 export const Checkout = () => {
   const { passeggeri, prenotazione, paymentsMethod, quote } = useReservations();
@@ -399,9 +400,10 @@ export const CheckoutTariffe = ({ tariffa, company }) => {
 };
 
 export const Condizioni = ({ value, onChange }) => {
+  const { t } = useTranslation();
   return (
     <div className="col-lg-12  col bg-passeggeri rounded mt-3 mb-3 p-4">
-      <h2 className="text-primary">Condizioni e Contatti</h2>
+      <h2 className="text-primary">{t("Condizioni e Contatti")}</h2>
       <CheckoutPrimoPasseggero value={value} onChange={onChange} />
 
       <div className="col">
@@ -414,7 +416,14 @@ export const Condizioni = ({ value, onChange }) => {
             id="flexCheckDefault"
           />
           <label className="form-check-label" htmlFor="flexCheckDefault">
-            Ho letto e accettato i termini e le condizioni
+            {t("Ho letto e accettato i")}{" "}
+            <a
+              href="https://www.quickferries.com/it/condizioni-generali-di-prenotazioni/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {t("termini e condizioni")}
+            </a>
           </label>
         </div>
         <div className="form-check">
@@ -426,7 +435,14 @@ export const Condizioni = ({ value, onChange }) => {
             required
           />
           <label className="form-check-label" htmlFor="flexCheckDefault2">
-            Accetto Informatica sulla privacy
+            {t("Accetto")}{" "}
+            <a
+              href="https://www.quickferries.com/it/privacy-policy/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {t("Informatica sulla privacy")}
+            </a>
           </label>
         </div>
       </div>

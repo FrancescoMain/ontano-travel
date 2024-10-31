@@ -58,6 +58,11 @@ const resources = {
       Email: "Email",
       "Please enter your email.": "Please enter your email.",
       "Recover Password": "Recover Password",
+      "Condizioni e Contatti": "Terms and Contacts",
+      "Ho letto e accettato i": "I have read and accepted the",
+      "termini e condizioni": "terms and conditions",
+      Accetto: "I accept",
+      "Informatica sulla privacy": "Privacy Policy",
     },
   },
   it: {
@@ -109,6 +114,11 @@ const resources = {
       Email: "Email",
       "Please enter your email.": "Per favore inserisci la tua email.",
       "Recover Password": "Recupera Password",
+      "Condizioni e Contatti": "Condizioni e Contatti",
+      "Ho letto e accettato i": "Ho letto e accettato i",
+      "termini e condizioni": "termini e condizioni",
+      Accetto: "Accetto",
+      "Informatica sulla privacy": "Informatica sulla privacy",
     },
   },
 };
