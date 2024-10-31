@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
@@ -6,6 +6,36 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate
 export const Login = () => {
   const { t } = useTranslation();
   const navigate = useNavigate(); // Initialize navigate
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(
+        "http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/authenticate",
+        {
+          method: "POST",
+          headers: {
+            accept: "/",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username, password }),
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        // Handle successful login, e.g., save token, redirect, etc.
+        navigate("/dashboard"); // Example redirection after successful login
+      } else {
+        setError(t("Invalid username or password."));
+      }
+    } catch (error) {
+      setError(t("An error occurred. Please try again."));
+    }
+  };
 
   return (
     <div className="container mt-5">
@@ -16,13 +46,15 @@ export const Login = () => {
               <h3 className="text-primary">{t("Login")}</h3>
             </div>
             <div className="card-body">
-              <form>
+              <form onSubmit={handleLogin}>
                 <div className="form-group mb-2">
                   <input
                     placeholder={t("Username")}
                     type="text"
                     className="form-control"
                     id="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     required
                   />
                   <div className="invalid-feedback">
@@ -35,6 +67,8 @@ export const Login = () => {
                     className="form-control"
                     id="password"
                     placeholder={t("Password")}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     required
                   />
                   <div className="invalid-feedback">
@@ -54,7 +88,7 @@ export const Login = () => {
                 <button type="submit" className="btn btn-primary mt-3">
                   {t("Login")}
                 </button>
-                {/* Forgot Password link */}
+                {error && <p className="text-danger mt-3">{error}</p>}
                 <p className="mt-3">
                   <a href="#" onClick={() => navigate("/recovery")}>
                     {t("Forgot Password?")}
