@@ -63,6 +63,9 @@ const resources = {
       "termini e condizioni": "terms and conditions",
       Accetto: "I accept",
       "Informatica sulla privacy": "Privacy Policy",
+      Prenotazioni: "Reservations",
+      Dashboard: "Dashboard",
+      Logout: "Logout",
     },
   },
   it: {
@@ -119,6 +122,9 @@ const resources = {
       "termini e condizioni": "termini e condizioni",
       Accetto: "Accetto",
       "Informatica sulla privacy": "Informatica sulla privacy",
+      Prenotazioni: "Prenotazioni",
+      Dashboard: "Dashboard",
+      Logout: "Logout",
     },
   },
 };

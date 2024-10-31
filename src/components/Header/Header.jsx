@@ -21,6 +21,15 @@ export const Header = () => {
 
   const { t } = useTranslation();
 
+  const token =
+    localStorage.getItem("id_token") || sessionStorage.getItem("id_token");
+
+  const handleLogout = () => {
+    localStorage.removeItem("id_token");
+    sessionStorage.removeItem("id_token");
+    window.location.href = "/";
+  };
+
   return (
     <div className="header">
       <Spinner active={loading} />
@@ -43,34 +52,80 @@ export const Header = () => {
             </Link>
           </li>
           <div className="header-side">
-            <li>
-              <Link
-                className="Link"
-                color="primary"
-                disabled={false}
-                level="body-md"
-                underline="none"
-                variant="plain"
-                href="/login"
-              >
-                Login
-                <LoginIcon />
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="Link"
-                color="primary"
-                disabled={false}
-                level="body-md"
-                underline="none"
-                variant="plain"
-                href="/cerca-prenotazione"
-              >
-                {t("Cerca prenotazione")}
-                <SearchIcon />
-              </Link>
-            </li>
+            {token ? (
+              <>
+                <li>
+                  <Link
+                    className="Link"
+                    color="primary"
+                    disabled={false}
+                    level="body-md"
+                    underline="none"
+                    variant="plain"
+                    href="/prenotazioni"
+                  >
+                    {t("Prenotazioni")}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="Link"
+                    color="primary"
+                    disabled={false}
+                    level="body-md"
+                    underline="none"
+                    variant="plain"
+                    href="/dashboard"
+                  >
+                    {t("Dashboard")}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="Link"
+                    color="primary"
+                    disabled={false}
+                    level="body-md"
+                    underline="none"
+                    variant="plain"
+                    onClick={handleLogout}
+                  >
+                    {t("Logout")}
+                  </Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link
+                    className="Link"
+                    color="primary"
+                    disabled={false}
+                    level="body-md"
+                    underline="none"
+                    variant="plain"
+                    href="/login"
+                  >
+                    {t("Login")}
+                    <LoginIcon />
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="Link"
+                    color="primary"
+                    disabled={false}
+                    level="body-md"
+                    underline="none"
+                    variant="plain"
+                    href="/cerca-prenotazione"
+                  >
+                    {t("Cerca prenotazione")}
+                    <SearchIcon />
+                  </Link>
+                </li>
+              </>
+            )}
             <li className="lang">
               <Dropdown>
                 <MenuButton
@@ -106,31 +161,73 @@ export const Header = () => {
                 <MenuIcon />
               </MenuButton>
               <Menu variant="plain" color="primary" size="sm">
-                <MenuItem>
-                  <Link
-                    color="primary"
-                    disabled={false}
-                    level="body-md"
-                    underline="none"
-                    variant="plain"
-                    href="/login"
-                  >
-                    Login
-                  </Link>
-                </MenuItem>
-
-                <MenuItem>
-                  <Link
-                    color="primary"
-                    disabled={false}
-                    level="body-md"
-                    underline="none"
-                    variant="plain"
-                    href="/cerca-prenotazione"
-                  >
-                    {t("Cerca prenotazione")}
-                  </Link>
-                </MenuItem>
+                {token ? (
+                  <>
+                    <MenuItem>
+                      <Link
+                        color="primary"
+                        disabled={false}
+                        level="body-md"
+                        underline="none"
+                        variant="plain"
+                        href="/prenotazioni"
+                      >
+                        {t("Prenotazioni")}
+                      </Link>
+                    </MenuItem>
+                    <MenuItem>
+                      <Link
+                        color="primary"
+                        disabled={false}
+                        level="body-md"
+                        underline="none"
+                        variant="plain"
+                        href="/dashboard"
+                      >
+                        {t("Dashboard")}
+                      </Link>
+                    </MenuItem>
+                    <MenuItem>
+                      <Link
+                        color="primary"
+                        disabled={false}
+                        level="body-md"
+                        underline="none"
+                        variant="plain"
+                        onClick={handleLogout}
+                      >
+                        {t("Logout")}
+                      </Link>
+                    </MenuItem>
+                  </>
+                ) : (
+                  <>
+                    <MenuItem>
+                      <Link
+                        color="primary"
+                        disabled={false}
+                        level="body-md"
+                        underline="none"
+                        variant="plain"
+                        href="/login"
+                      >
+                        {t("Login")}
+                      </Link>
+                    </MenuItem>
+                    <MenuItem>
+                      <Link
+                        color="primary"
+                        disabled={false}
+                        level="body-md"
+                        underline="none"
+                        variant="plain"
+                        href="/cerca-prenotazione"
+                      >
+                        {t("Cerca prenotazione")}
+                      </Link>
+                    </MenuItem>
+                  </>
+                )}
               </Menu>
             </Dropdown>
             <li className="lang">
