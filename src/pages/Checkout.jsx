@@ -342,6 +342,74 @@ export const Checkout = () => {
 export const CheckoutTratta = ({ route }) => {
   const formattedDeparture = dayjs(route.departure).format("DD/MMM/YYYY HH:mm");
   const formattedArrival = dayjs(route.arrive).format("DD/MMM/YYYY HH:mm");
+
+  // Process tariffs
+  let processedTariffs = [];
+
+  if (route.company === "Snav") {
+    // Group ADU, CHD, INF into 'Passeggeri'
+    let passengerTariffs = route.tariffs.filter((t) =>
+      ["ADU", "CHD", "INF"].includes(t.category_code)
+    );
+    let otherTariffs = route.tariffs.filter(
+      (t) => !["ADU", "CHD", "INF"].includes(t.category_code)
+    );
+
+    // Count total passengers and breakdown
+    let totalPassengers = 0;
+    let adultCount = 0;
+    let childCount = 0;
+    let infantCount = 0;
+
+    passengerTariffs.forEach((t) => {
+      totalPassengers += t.qty;
+      if (t.category_code === "ADU") {
+        adultCount += t.qty;
+      } else if (t.category_code === "CHD") {
+        childCount += t.qty;
+      } else if (t.category_code === "INF") {
+        infantCount += t.qty;
+      }
+    });
+
+    // Create the description string
+    let passengerDescription = `${totalPassengers} Passeggeri (`;
+    let descriptions = [];
+    if (adultCount > 0)
+      descriptions.push(`${adultCount} Adult${adultCount > 1 ? "i" : "o"}`);
+    if (childCount > 0)
+      descriptions.push(`${childCount} Bambin${childCount > 1 ? "i" : "o"}`);
+    if (infantCount > 0)
+      descriptions.push(`${infantCount} Infant${infantCount > 1 ? "i" : "e"}`);
+    passengerDescription += descriptions.join(", ") + ")";
+
+    // Calculate price for passengers
+    let totalRoutePrice = route.priceFinal.price;
+    let otherTariffsTotalPrice = otherTariffs.reduce(
+      (sum, t) => sum + t.price.price,
+      0
+    );
+    let passengerPrice = totalRoutePrice - otherTariffsTotalPrice;
+
+    let passengerTariff = {
+      category_code: "PSG",
+      qty: totalPassengers,
+      description: passengerDescription,
+      price: {
+        priceFormatted: passengerPrice.toLocaleString("it-IT", {
+          style: "currency",
+          currency: "EUR",
+        }),
+        price: passengerPrice,
+      },
+    };
+
+    processedTariffs = [passengerTariff, ...otherTariffs];
+  } else {
+    // For other companies, keep tariffs as is
+    processedTariffs = route.tariffs;
+  }
+
   return (
     <div>
       <div class="bg-aliceblue row g-0 pb-2 pt-3">
@@ -360,8 +428,12 @@ export const CheckoutTratta = ({ route }) => {
         </div>
       </div>
       <div class="list-group list-group-flush bg-aliceblue">
-        {route.tariffs.map((tariffa, index) => (
-          <CheckoutTariffe tariffa={tariffa} company={route.company} />
+        {processedTariffs.map((tariffa, index) => (
+          <CheckoutTariffe
+            tariffa={tariffa}
+            company={route.company}
+            key={index}
+          />
         ))}
 
         <div class="bg-aliceblue d-flex justify-content-between align-items-center subtotal mb-3 ">
@@ -374,29 +446,47 @@ export const CheckoutTratta = ({ route }) => {
 };
 
 export const CheckoutTariffe = ({ tariffa, company }) => {
-  return (
-    <div>
-      <div class="row bg-aliceblue d-flex justify-content-between align-items-center border-top border-bottom">
-        <div className="col-8 d-flex align-items-center gap-2">
-          <span>
-            {tariffa.category_code === "ADU" && <IoMdPeople />}
-            {tariffa.category_code === "CHD" && <FaChild />}
-            {tariffa.category_code === "ANI" && <FaDog />}
-            {tariffa.category_code === "LUG" && <MdLuggage />}
-            {tariffa.category_code === "INF" && <FaBaby />}
-          </span>
-          <span>
-            {tariffa.qty} {tariffa.category_code === "ADU" && "Adulti"}
-            {tariffa.category_code === "CHD" && "Bambini"}
-            {tariffa.category_code === "ANI" && "Animali"}
-            {tariffa.category_code === "LUG" && "Bagagli"}
-            {tariffa.category_code === "INF" && "Neonati"}
-          </span>
+  if (tariffa.category_code === "PSG") {
+    // Display the grouped passengers
+    return (
+      <div>
+        <div className="row bg-aliceblue d-flex justify-content-between align-items-center border-top border-bottom">
+          <div className="col-8 d-flex align-items-center gap-2">
+            <span>
+              {" "}
+              <IoMdPeople />
+            </span>
+            <span>{tariffa.description}</span>
+          </div>
+          <span className="col-4 text-end">{tariffa.price.priceFormatted}</span>
         </div>
-        <span className="col-4 text-end">{tariffa.price.priceFormatted} </span>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div>
+        <div className="row bg-aliceblue d-flex justify-content-between align-items-center border-top border-bottom">
+          <div className="col-8 d-flex align-items-center gap-2">
+            <span>
+              {tariffa.category_code === "ADU" && <IoMdPeople />}
+              {tariffa.category_code === "CHD" && <FaChild />}
+              {tariffa.category_code === "ANI" && <FaDog />}
+              {tariffa.category_code === "LUG" && <MdLuggage />}
+              {tariffa.category_code === "INF" && <FaBaby />}
+            </span>
+            <span>
+              {tariffa.qty} {tariffa.category_code === "ADU" && "Adulti"}
+              {tariffa.category_code === "CHD" && "Bambini"}
+              {tariffa.category_code === "ANI" && "Animali"}
+              {tariffa.category_code === "LUG" && "Bagagli"}
+              {tariffa.category_code === "INF" && "Neonati"}
+            </span>
+          </div>
+          <span className="col-4 text-end">{tariffa.price.priceFormatted}</span>
+        </div>
+      </div>
+    );
+  }
 };
 
 export const Condizioni = ({ value, onChange }) => {
