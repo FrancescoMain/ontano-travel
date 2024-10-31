@@ -1,9 +1,11 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 export const Login = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate(); // Initialize navigate
 
   return (
     <div className="container mt-5">
@@ -52,6 +54,12 @@ export const Login = () => {
                 <button type="submit" className="btn btn-primary mt-3">
                   {t("Login")}
                 </button>
+                {/* Forgot Password link */}
+                <p className="mt-3">
+                  <a href="#" onClick={() => navigate("/recovery")}>
+                    {t("Forgot Password?")}
+                  </a>
+                </p>
               </form>
             </div>
           </div>

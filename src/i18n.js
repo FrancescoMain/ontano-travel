@@ -53,6 +53,11 @@ const resources = {
       "Enter password": "Enter password",
       "Please enter your password.": "Please enter your password.",
       "Remember me": "Remember me",
+      "Forgot Password?": "Forgot Password?",
+      "Recovery Password": "Recovery Password",
+      Email: "Email",
+      "Please enter your email.": "Please enter your email.",
+      "Recover Password": "Recover Password",
     },
   },
   it: {
@@ -99,6 +104,11 @@ const resources = {
       "Enter password": "Inserisci password",
       "Please enter your password.": "Per favore inserisci la tua password.",
       "Remember me": "Ricordami",
+      "Forgot Password?": "Password dimenticata?",
+      "Recovery Password": "Recupero Password",
+      Email: "Email",
+      "Please enter your email.": "Per favore inserisci la tua email.",
+      "Recover Password": "Recupera Password",
     },
   },
 };

@@ -16,6 +16,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Checkout } from "./pages/Checkout";
 import { Success } from "./pages/Success";
 import { Login } from "./pages/Login";
+import { RecoveryPassword } from "./pages/RecoveryPassword"; // Import RecoveryPassword
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/recovery",
+    element: <RecoveryPassword />, // Add RecoveryPassword route
   },
 ]);
 
