@@ -29,6 +29,7 @@ import {
   removeSelected,
   resetSelected,
 } from "../features/viaggio/resultTratta";
+import { CiCircleInfo } from "react-icons/ci";
 
 dayjs.extend(isSameOrAfter);
 
@@ -353,10 +354,20 @@ const DettagliViaggio = ({ id, selected, resetHandle }) => {
           </Typography>
         </div>
         <div className="col col-lg-3 d-flex flex-column">
-          <Tooltip title="lorem ipsum">
-            <label htmlFor="animals">{t("Animali Domestici")}</label>
-          </Tooltip>
-
+          <label htmlFor="animals" className="d-flex align-items-center">
+            {t("Animali Domestici")}
+            <Tooltip title="lorem ipsum">
+              <span
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginLeft: "5px",
+                }}
+              >
+                <CiCircleInfo />
+              </span>
+            </Tooltip>
+          </label>
           <select
             value={dettagli[id]?.animali}
             onChange={(e) => handleChangeAnimali(e, id)}
@@ -372,10 +383,20 @@ const DettagliViaggio = ({ id, selected, resetHandle }) => {
         </div>
 
         <div className="col col-lg-3 d-flex flex-column">
-          <Tooltip title="lorem ipsum">
-            <label htmlFor="bagagli">{t("Bagagli")}</label>
-          </Tooltip>
-
+          <label htmlFor="bagagli" className="d-flex align-items-center">
+            {t("Bagagli")}
+            <Tooltip title="lorem ipsum">
+              <span
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginLeft: "5px",
+                }}
+              >
+                <CiCircleInfo />
+              </span>
+            </Tooltip>
+          </label>
           <select
             value={dettagli[id]?.bagagli}
             onChange={(e) => handleChangeBagagli(e, id)}
