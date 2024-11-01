@@ -13,7 +13,7 @@ export const HomePage = () => {
         : sessionStorage;
       axios
         .get(
-          `http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/account?language=${i18n.language}`, // Add language as query parameter
+          `http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/account?language=${i18n.language}`, // Add language as query parameter
           {
             headers: {
               Authorization: `Bearer ${token}`,
