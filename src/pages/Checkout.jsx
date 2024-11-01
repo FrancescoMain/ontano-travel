@@ -11,7 +11,7 @@ import { FaDog } from "react-icons/fa";
 import dayjs from "dayjs";
 import { reserve } from "../_api/reservations/reserve";
 import { lightboxReserve } from "../_api/reservations/lightboxReserve";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux"; // Import useSelector
 import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
 import { getStore } from "../_api/reservations/getStore";
 import { toast } from "react-toastify";
@@ -23,6 +23,7 @@ export const Checkout = () => {
   const { passeggeri, prenotazione, paymentsMethod, quote } = useReservations();
   const [store, setStore] = React.useState();
   const dispatch = useDispatch();
+  const { data: accountData } = useSelector((state) => state.account); // Get account data from Redux
   const [nomi, setNomi] = React.useState([
     [{ value: "" }],
     [{ value: "" }],
@@ -47,16 +48,11 @@ export const Checkout = () => {
     [{ value: "" }],
     [{ value: "" }],
   ]);
-  const accountData = JSON.parse(
-    localStorage.getItem("account_data") ||
-      sessionStorage.getItem("account_data") ||
-      "{}"
-  );
   const [dto, setDto] = React.useState({
     nome: "",
     cognome: "",
     cellulare: "",
-    email: accountData.email || "",
+    email: accountData?.email || "", // Use email from account data
   });
   console.log("prenotazione", prenotazione);
   console.log("passeggeri", passeggeri); // Add this line to inspect passeggeri data
@@ -536,7 +532,7 @@ export const Condizioni = ({ value, onChange }) => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              {t("Informatica sulla privacy")}
+              {t("Informativa sulla privacy")}
             </a>
           </label>
         </div>
@@ -561,7 +557,8 @@ export const Pagamento = ({ methods, checked }) => {
           />
           <label class="form-check-label" for="flexRadioDefault1">
             {method === "CREDIT_CARD" && "Carta di Credito"}
-            {method !== "CREDIT_CARD" && method}
+            {method === "PAY_BY_LINK" && "PaybyLink"}
+            {method === "EXTERNAL_PAYMENT" && "Estratto Conto"}
           </label>
         </div>
       ))}

@@ -17,6 +17,8 @@ import { Checkout } from "./pages/Checkout";
 import { Success } from "./pages/Success";
 import { Login } from "./pages/Login";
 import { RecoveryPassword } from "./pages/RecoveryPassword"; // Import RecoveryPassword
+import { fetchAccountData } from "./utils/auth"; // Import fetchAccountData
+import { setAccountData } from "./features/account/accountSlice"; // Import setAccountData
 
 const router = createBrowserRouter([
   {
@@ -48,6 +50,16 @@ const router = createBrowserRouter([
     element: <RecoveryPassword />, // Add RecoveryPassword route
   },
 ]);
+
+store.subscribe(() => {
+  const token =
+    localStorage.getItem("id_token") || sessionStorage.getItem("id_token");
+  if (token) {
+    fetchAccountData();
+  }
+});
+
+fetchAccountData(); // Fetch account data on app initialization
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
