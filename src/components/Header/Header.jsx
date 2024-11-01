@@ -1,7 +1,6 @@
 import React from "react";
 import "./Header.css";
 import { Dropdown, Link, Menu, MenuButton, MenuItem } from "@mui/joy";
-import i18n from "../../i18n";
 import { useTranslation } from "react-i18next";
 import MenuIcon from "@mui/icons-material/Menu";
 import LoginIcon from "@mui/icons-material/Login";
@@ -10,25 +9,95 @@ import it from "../../assets/flags/it.svg";
 import us from "../../assets/flags/us.svg";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { Spinner } from "../Spinner/Spinner";
-import { useSelector } from "react-redux";
+import { changeLanguage } from "../../utils/language";
+import { handleLogout } from "../../utils/auth";
+import { useAuth } from "../../_hooks/useAuth";
+import i18n from "../../i18n";
+
+// Component for authenticated user links
+const AuthenticatedLinks = ({ t, handleLogout, isWebUser }) => (
+  <>
+    <li>
+      <Link
+        className="Link"
+        color="primary"
+        disabled={false}
+        level="body-md"
+        underline="none"
+        variant="plain"
+        href="/prenotazioni"
+      >
+        {t("Prenotazioni")}
+      </Link>
+    </li>
+    <li>
+      <Link
+        className="Link"
+        color="primary"
+        disabled={false}
+        level="body-md"
+        underline="none"
+        variant="plain"
+        href="/dashboard"
+      >
+        {t("Dashboard")}
+      </Link>
+    </li>
+    {!isWebUser && (
+      <li>
+        <Link
+          className="Link"
+          color="primary"
+          disabled={false}
+          level="body-md"
+          underline="none"
+          variant="plain"
+          onClick={handleLogout}
+        >
+          {t("Logout")}
+        </Link>
+      </li>
+    )}
+  </>
+);
+
+// Component for unauthenticated user links
+const UnauthenticatedLinks = ({ t }) => (
+  <>
+    <li>
+      <Link
+        className="Link"
+        color="primary"
+        disabled={false}
+        level="body-md"
+        underline="none"
+        variant="plain"
+        href="/login"
+      >
+        {t("Login")}
+        <LoginIcon />
+      </Link>
+    </li>
+    <li>
+      <Link
+        className="Link"
+        color="primary"
+        disabled={false}
+        level="body-md"
+        underline="none"
+        variant="plain"
+        href="/cerca-prenotazione"
+      >
+        {t("Cerca prenotazione")}
+        <SearchIcon />
+      </Link>
+    </li>
+  </>
+);
 
 export const Header = () => {
-  const handleLanguageChange = (lang) => {
-    i18n.changeLanguage(lang);
-  };
-
-  const { loading } = useSelector((state) => state.spinner);
-
+  const { loading, token, isWebUser } = useAuth();
   const { t } = useTranslation();
-
-  const token =
-    localStorage.getItem("id_token") || sessionStorage.getItem("id_token");
-
-  const handleLogout = () => {
-    localStorage.removeItem("id_token");
-    sessionStorage.removeItem("id_token");
-    window.location.href = "/";
-  };
 
   return (
     <div className="header">
@@ -53,78 +122,13 @@ export const Header = () => {
           </li>
           <div className="header-side">
             {token ? (
-              <>
-                <li>
-                  <Link
-                    className="Link"
-                    color="primary"
-                    disabled={false}
-                    level="body-md"
-                    underline="none"
-                    variant="plain"
-                    href="/prenotazioni"
-                  >
-                    {t("Prenotazioni")}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="Link"
-                    color="primary"
-                    disabled={false}
-                    level="body-md"
-                    underline="none"
-                    variant="plain"
-                    href="/dashboard"
-                  >
-                    {t("Dashboard")}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="Link"
-                    color="primary"
-                    disabled={false}
-                    level="body-md"
-                    underline="none"
-                    variant="plain"
-                    onClick={handleLogout}
-                  >
-                    {t("Logout")}
-                  </Link>
-                </li>
-              </>
+              <AuthenticatedLinks
+                t={t}
+                handleLogout={handleLogout}
+                isWebUser={isWebUser}
+              />
             ) : (
-              <>
-                <li>
-                  <Link
-                    className="Link"
-                    color="primary"
-                    disabled={false}
-                    level="body-md"
-                    underline="none"
-                    variant="plain"
-                    href="/login"
-                  >
-                    {t("Login")}
-                    <LoginIcon />
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="Link"
-                    color="primary"
-                    disabled={false}
-                    level="body-md"
-                    underline="none"
-                    variant="plain"
-                    href="/cerca-prenotazione"
-                  >
-                    {t("Cerca prenotazione")}
-                    <SearchIcon />
-                  </Link>
-                </li>
-              </>
+              <UnauthenticatedLinks t={t} />
             )}
             <li className="lang">
               <Dropdown>
@@ -143,11 +147,11 @@ export const Header = () => {
                 <Menu variant="plain" color="primary" size="sm">
                   <MenuItem
                     className="lang-item"
-                    onClick={() => handleLanguageChange("it")}
+                    onClick={() => changeLanguage("it")}
                   >
                     <img className="rounded-circle" src={it} alt="Italiano" />
                   </MenuItem>
-                  <MenuItem onClick={() => handleLanguageChange("en")}>
+                  <MenuItem onClick={() => changeLanguage("en")}>
                     <img className="rounded-circle" src={us} alt="English" />
                   </MenuItem>
                 </Menu>
@@ -162,71 +166,13 @@ export const Header = () => {
               </MenuButton>
               <Menu variant="plain" color="primary" size="sm">
                 {token ? (
-                  <>
-                    <MenuItem>
-                      <Link
-                        color="primary"
-                        disabled={false}
-                        level="body-md"
-                        underline="none"
-                        variant="plain"
-                        href="/prenotazioni"
-                      >
-                        {t("Prenotazioni")}
-                      </Link>
-                    </MenuItem>
-                    <MenuItem>
-                      <Link
-                        color="primary"
-                        disabled={false}
-                        level="body-md"
-                        underline="none"
-                        variant="plain"
-                        href="/dashboard"
-                      >
-                        {t("Dashboard")}
-                      </Link>
-                    </MenuItem>
-                    <MenuItem>
-                      <Link
-                        color="primary"
-                        disabled={false}
-                        level="body-md"
-                        underline="none"
-                        variant="plain"
-                        onClick={handleLogout}
-                      >
-                        {t("Logout")}
-                      </Link>
-                    </MenuItem>
-                  </>
+                  <AuthenticatedLinks
+                    t={t}
+                    handleLogout={handleLogout}
+                    isWebUser={isWebUser}
+                  />
                 ) : (
-                  <>
-                    <MenuItem>
-                      <Link
-                        color="primary"
-                        disabled={false}
-                        level="body-md"
-                        underline="none"
-                        variant="plain"
-                        href="/login"
-                      >
-                        {t("Login")}
-                      </Link>
-                    </MenuItem>
-                    <MenuItem>
-                      <Link
-                        color="primary"
-                        disabled={false}
-                        level="body-md"
-                        underline="none"
-                        variant="plain"
-                        href="/cerca-prenotazione"
-                      >
-                        {t("Cerca prenotazione")}
-                      </Link>
-                    </MenuItem>
-                  </>
+                  <UnauthenticatedLinks t={t} />
                 )}
               </Menu>
             </Dropdown>
@@ -247,11 +193,11 @@ export const Header = () => {
                 <Menu variant="plain" color="primary" size="sm">
                   <MenuItem
                     className="lang-item"
-                    onClick={() => handleLanguageChange("it")}
+                    onClick={() => changeLanguage("it")}
                   >
                     <img className="rounded-circle" src={it} alt="Italiano" />
                   </MenuItem>
-                  <MenuItem onClick={() => handleLanguageChange("en")}>
+                  <MenuItem onClick={() => changeLanguage("en")}>
                     <img className="rounded-circle" src={us} alt="English" />
                   </MenuItem>
                 </Menu>

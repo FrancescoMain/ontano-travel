@@ -1,4 +1,5 @@
 import i18n from "../../i18n"; // Import i18n to access the current language
+import { getAuthHeader } from "../../utils/auth"; // Import getAuthHeader
 
 export const getReservation = async (quoteId) => {
   console.log("getReservation", quoteId);
@@ -14,6 +15,7 @@ export const getReservation = async (quoteId) => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          ...getAuthHeader(), // Add authorization header
         },
       }
     );

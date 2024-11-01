@@ -47,11 +47,16 @@ export const Checkout = () => {
     [{ value: "" }],
     [{ value: "" }],
   ]);
+  const accountData = JSON.parse(
+    localStorage.getItem("account_data") ||
+      sessionStorage.getItem("account_data") ||
+      "{}"
+  );
   const [dto, setDto] = React.useState({
     nome: "",
     cognome: "",
     cellulare: "",
-    email: "",
+    email: accountData.email || "",
   });
   console.log("prenotazione", prenotazione);
   console.log("passeggeri", passeggeri); // Add this line to inspect passeggeri data

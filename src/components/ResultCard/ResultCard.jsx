@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import i18n from "../../i18n"; // Import i18n to access the current language
+import i18n from "../../i18n";
 import "./ResultCard.css";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -11,27 +11,28 @@ import alilauro from "../../assets/Logo-AliLauro.png";
 import alilauroGruson from "../../assets/Alilauro Gruson.png";
 import { upsertSelected } from "../../features/viaggio/resultTratta";
 import { animateScroll as scroll } from "react-scroll";
+import { useFetchPriceData } from "../../_hooks/useFetchPriceData";
+import {
+  formatDate,
+  formatTime,
+  calculateDuration,
+} from "../../utils/dateUtils";
 
 dayjs.extend(customParseFormat);
 
 export const ResultCard = ({ data, selected, hidden, id, index }) => {
   const [loading, setLoading] = useState(false);
-
   const [priceData, setPriceData] = useState(null);
   const dispatch = useDispatch();
 
   const departureDate = dayjs(data.departure);
-  const dateDep = departureDate.format("DD MMM YYYY");
-  const timeDep = departureDate.format("HH:mm");
+  const language = i18n.language;
+  const dateDep = formatDate(departureDate, language);
+  const timeDep = formatTime(departureDate);
   const arrivalDate = dayjs(data.arrive);
-  const dateArr = arrivalDate.format("DD MMM YYYY");
-  const timeArr = arrivalDate.format("HH:mm");
-  const diffInMilliseconds = arrivalDate.diff(departureDate);
-
-  // Converti la differenza in ore e minuti
-  const diffInMinutes = Math.floor(diffInMilliseconds / 60000);
-  const hours = Math.floor(diffInMinutes / 60);
-  const minutes = diffInMinutes % 60;
+  const dateArr = formatDate(arrivalDate, language);
+  const timeArr = formatTime(arrivalDate);
+  const { hours, minutes } = calculateDuration(departureDate, arrivalDate);
 
   const { adulti, bambini, etaBambini, animali, bagagli } = useSelector(
     (state) => state.tratte.dettagli[id]
@@ -55,50 +56,24 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
     const element = document.getElementById("result-ritorno");
 
     if (element) {
-      // Aggiungi un timeout per ritardare l'esecuzione dello scroll
       setTimeout(() => {
         scroll.scrollTo(element.offsetTop, {
           duration: 500,
           smooth: true,
         });
-      }, 500); // Ritarda di 500 millisecondi (puoi regolare questo valore)
+      }, 500);
     }
   };
 
-  useEffect(() => {
-    // Esegui la chiamata API
-    const fetchPriceData = async () => {
-      setLoading(true);
-
-      // Get the current language or default to 'it'
-      const language = i18n.language || "it";
-
-      // Costruisci la query string per passengers_age
-      const passengersAgeParams = [
-        ...Array.from({ length: adulti }, () => 18), // Aggiungi 18 per ogni adulto
-        ...etaBambini, // Aggiungi l'età di ogni bambino
-      ]
-        .map((age) => `passengers_age=${age}`)
-        .join("&");
-
-      try {
-        const response = await fetch(
-          `http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/price/searchresult?language=${language}&search_result_id=${data.result_id}&animals=${animali}&luggages=${bagagli}&${passengersAgeParams}`
-        );
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const result = await response.json();
-        setPriceData(result);
-        setLoading(false);
-      } catch (error) {
-        console.error("Fetch error:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchPriceData();
-  }, [data, adulti, etaBambini, animali, bagagli]);
+  useFetchPriceData({
+    data,
+    adulti,
+    etaBambini,
+    animali,
+    bagagli,
+    setLoading,
+    setPriceData,
+  });
 
   useEffect(() => {
     if (selectedExt[id]?.idSelected === index) {

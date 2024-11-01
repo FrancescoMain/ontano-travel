@@ -1,4 +1,5 @@
 import i18n from "../../i18n"; // Import i18n to access the current language
+import { getAuthHeader } from "../../utils/auth"; // Import getAuthHeader
 
 // Funzione per fare la chiamata POST
 export const reserve = async (nomi, cognomi, dto, payment, nTratte, quote) => {
@@ -53,6 +54,7 @@ export const reserve = async (nomi, cognomi, dto, payment, nTratte, quote) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          ...getAuthHeader(), // Add authorization header
         },
         body: JSON.stringify(body),
       }

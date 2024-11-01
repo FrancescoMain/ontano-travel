@@ -1,4 +1,5 @@
 import i18n from "../../i18n"; // Import i18n to access the current language
+import { getAuthHeader } from "../../utils/auth"; // Import getAuthHeader
 
 // Funzione per fare la chiamata POST
 export const paymentsMode = async () => {
@@ -11,6 +12,7 @@ export const paymentsMode = async () => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          ...getAuthHeader(), // Add authorization header
         },
       }
     );
