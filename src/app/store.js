@@ -6,6 +6,7 @@ import viaggioReducer from "../features/viaggio/findTratta";
 import routesReducer from "../features/routes/routesSlice";
 import resultTrattaReducer from "../features/viaggio/resultTratta";
 import accountReducer from "../features/account/accountSlice"; // Import accountReducer
+import payByLinkReducer from "../features/payByLink/payByLinkSlice"; // Import payByLinkReducer
 
 export const store = configureStore({
   reducer: {
@@ -16,5 +17,6 @@ export const store = configureStore({
     routes: routesReducer,
     resultsTratta: resultTrattaReducer,
     account: accountReducer, // Add account reducer
+    payByLink: payByLinkReducer, // Add payByLink reducer
   },
 });

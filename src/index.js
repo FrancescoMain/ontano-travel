@@ -19,6 +19,7 @@ import { Login } from "./pages/Login";
 import { RecoveryPassword } from "./pages/RecoveryPassword"; // Import RecoveryPassword
 import { fetchAccountData } from "./utils/auth"; // Import fetchAccountData
 import { setAccountData } from "./features/account/accountSlice"; // Import setAccountData
+import { PayByLinkSuccess } from "./pages/PayByLinkSuccess"; // Import PayByLinkSuccess
 
 const router = createBrowserRouter([
   {
@@ -49,17 +50,22 @@ const router = createBrowserRouter([
     path: "/recovery",
     element: <RecoveryPassword />, // Add RecoveryPassword route
   },
+  {
+    path: "/pay-by-link-success",
+    element: <PayByLinkSuccess />, // Add PayByLinkSuccess route
+  },
 ]);
+
+let accountDataFetched = false; // Add a flag to track if account data has been fetched
 
 store.subscribe(() => {
   const token =
     localStorage.getItem("id_token") || sessionStorage.getItem("id_token");
-  if (token) {
+  if (token && !accountDataFetched) {
     fetchAccountData();
+    accountDataFetched = true; // Set the flag to true after fetching account data
   }
 });
-
-fetchAccountData(); // Fetch account data on app initialization
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

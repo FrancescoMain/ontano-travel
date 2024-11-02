@@ -66,6 +66,11 @@ const resources = {
       Prenotazioni: "Reservations",
       Dashboard: "Dashboard",
       Logout: "Logout",
+      "Link inviato con successo": "Link sent successfully",
+      "Completa il pagamento": "Complete the payment",
+      "Il link scade tra": "The link expires in",
+      "ID della prenotazione": "Reservation ID",
+      "Tutti i diritti riservati": "All rights reserved",
     },
   },
   it: {
@@ -125,6 +130,11 @@ const resources = {
       Prenotazioni: "Prenotazioni",
       Dashboard: "Dashboard",
       Logout: "Logout",
+      "Link inviato con successo": "Link inviato con successo",
+      "Completa il pagamento": "Completa il pagamento",
+      "Il link scade tra": "Il link scade tra",
+      "ID della prenotazione": "ID della prenotazione",
+      "Tutti i diritti riservati": "Tutti i diritti riservati",
     },
   },
 };

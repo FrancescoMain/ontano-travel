@@ -1,23 +1,24 @@
 import React from "react";
-import {
-  CheckoutPasseggero,
-  CheckoutPrimoPasseggero,
-} from "../components/Checkouts/CheckoutPassegero";
 import { useReservations } from "../_hooks/useReservations";
 import { IoMdPeople } from "react-icons/io";
 import { MdLuggage } from "react-icons/md";
-import { FaChild } from "react-icons/fa";
-import { FaDog } from "react-icons/fa";
+import { FaChild, FaDog, FaBaby } from "react-icons/fa";
 import dayjs from "dayjs";
 import { reserve } from "../_api/reservations/reserve";
 import { lightboxReserve } from "../_api/reservations/lightboxReserve";
-import { useDispatch, useSelector } from "react-redux"; // Import useSelector
+import { payByLinkReserve } from "../_api/reservations/payByLinkReserve"; // Import payByLinkReserve
+import { useDispatch, useSelector } from "react-redux";
 import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
 import { getStore } from "../_api/reservations/getStore";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { FaBaby } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
+import { CheckoutTratta } from "../components/CheckoutTratta";
+import { CheckoutTariffe } from "../components/CheckoutTariffe";
+import { Condizioni } from "../components/Condizioni";
+import { Pagamento } from "../components/Pagamento";
+import { CheckoutPasseggero } from "../components/Checkouts/CheckoutPassegero";
+import { setPayByLink } from "../features/payByLink/payByLinkSlice"; // Import setPayByLink
 
 export const Checkout = () => {
   const { passeggeri, prenotazione, paymentsMethod, quote } = useReservations();
@@ -54,6 +55,8 @@ export const Checkout = () => {
     cellulare: "",
     email: accountData?.email || "", // Use email from account data
   });
+  const [payByLinkEmail, setPayByLinkEmail] = React.useState(""); // State for PayByLink email
+
   console.log("prenotazione", prenotazione);
   console.log("passeggeri", passeggeri); // Add this line to inspect passeggeri data
   const navigate = useNavigate();
@@ -178,6 +181,32 @@ export const Checkout = () => {
         } else {
           console.error("Errore: PaymentToken o PaymentID mancanti");
         }
+      } else if (paymentMethodCheck === "PAY_BY_LINK") {
+        // Handle PaybyLink payment method
+        try {
+          const payByLinkResponse = await payByLinkReserve(
+            quote,
+            payByLinkEmail
+          );
+          dispatch(
+            setPayByLink({
+              link: payByLinkResponse.link,
+              expiration: payByLinkResponse.expiration,
+              reservationId: prenotazione.code,
+            })
+          );
+          toast.success("Link inviato con successo");
+          navigate("/pay-by-link-success"); // Navigate to the new component
+        } catch (error) {
+          console.error("Error:", error);
+          toast.error("Errore durante il pagamento tramite PaybyLink");
+        }
+      } else if (paymentMethodCheck === "EXTERNAL_PAYMENT") {
+        // Handle External Payment method
+        toast.success(
+          "Pagamento tramite Estratto Conto completato con successo"
+        );
+        navigate("/success");
       } else {
         // Gestisci altri metodi di pagamento se necessario
       }
@@ -266,6 +295,9 @@ export const Checkout = () => {
               <Pagamento
                 methods={paymentsMethod}
                 checked={paymentMethodCheck}
+                onChange={setPyamentMethodCheck}
+                email={payByLinkEmail}
+                setEmail={setPayByLinkEmail}
               />
             </div>
 
@@ -336,232 +368,6 @@ export const Checkout = () => {
           </div>
         </div>
       </form>
-    </div>
-  );
-};
-
-export const CheckoutTratta = ({ route }) => {
-  const formattedDeparture = dayjs(route.departure).format("DD/MMM/YYYY HH:mm");
-  const formattedArrival = dayjs(route.arrive).format("DD/MMM/YYYY HH:mm");
-
-  // Process tariffs
-  let processedTariffs = [];
-
-  if (route.company === "Snav") {
-    // Group ADU, CHD, INF into 'Passeggeri'
-    let passengerTariffs = route.tariffs.filter((t) =>
-      ["ADU", "CHD", "INF"].includes(t.category_code)
-    );
-    let otherTariffs = route.tariffs.filter(
-      (t) => !["ADU", "CHD", "INF"].includes(t.category_code)
-    );
-
-    // Count total passengers and breakdown
-    let totalPassengers = 0;
-    let adultCount = 0;
-    let childCount = 0;
-    let infantCount = 0;
-
-    passengerTariffs.forEach((t) => {
-      totalPassengers += t.qty;
-      if (t.category_code === "ADU") {
-        adultCount += t.qty;
-      } else if (t.category_code === "CHD") {
-        childCount += t.qty;
-      } else if (t.category_code === "INF") {
-        infantCount += t.qty;
-      }
-    });
-
-    // Create the description string
-    let passengerDescription = `${totalPassengers} Passeggeri (`;
-    let descriptions = [];
-    if (adultCount > 0)
-      descriptions.push(`${adultCount} Adult${adultCount > 1 ? "i" : "o"}`);
-    if (childCount > 0)
-      descriptions.push(`${childCount} Bambin${childCount > 1 ? "i" : "o"}`);
-    if (infantCount > 0)
-      descriptions.push(`${infantCount} Infant${infantCount > 1 ? "i" : "e"}`);
-    passengerDescription += descriptions.join(", ") + ")";
-
-    // Calculate price for passengers
-    let totalRoutePrice = route.priceFinal.price;
-    let otherTariffsTotalPrice = otherTariffs.reduce(
-      (sum, t) => sum + t.price.price,
-      0
-    );
-    let passengerPrice = totalRoutePrice - otherTariffsTotalPrice;
-
-    let passengerTariff = {
-      category_code: "PSG",
-      qty: totalPassengers,
-      description: passengerDescription,
-      price: {
-        priceFormatted: passengerPrice.toLocaleString("it-IT", {
-          style: "currency",
-          currency: "EUR",
-        }),
-        price: passengerPrice,
-      },
-    };
-
-    processedTariffs = [passengerTariff, ...otherTariffs];
-  } else {
-    // For other companies, keep tariffs as is
-    processedTariffs = route.tariffs;
-  }
-
-  return (
-    <div>
-      <div class="bg-aliceblue row g-0 pb-2 pt-3">
-        <div class="text-start col-6">
-          <p class="h5 fw-bold mb-0">{route.from}</p>
-        </div>
-        <div class="text-end col-6">
-          <p class="h5 fw-bold mb-0">{route.to}</p>
-        </div>
-        <div class="text-start col-4">
-          <p class="mb-0 text-capitalize">{formattedDeparture}</p>
-        </div>
-        <div class="text-center col-4"></div>
-        <div class="text-end col-4">
-          <p class="mb-0 text-capitalize">{formattedArrival}</p>
-        </div>
-      </div>
-      <div class="list-group list-group-flush bg-aliceblue">
-        {processedTariffs.map((tariffa, index) => (
-          <CheckoutTariffe
-            tariffa={tariffa}
-            company={route.company}
-            key={index}
-          />
-        ))}
-
-        <div class="bg-aliceblue d-flex justify-content-between align-items-center subtotal mb-3 ">
-          <span class="h5"> Totale tratta </span>
-          <span class="fw-bold">{route.priceFinal.priceFormatted}</span>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export const CheckoutTariffe = ({ tariffa, company }) => {
-  if (tariffa.category_code === "PSG") {
-    // Display the grouped passengers
-    return (
-      <div>
-        <div className="row bg-aliceblue d-flex justify-content-between align-items-center border-top border-bottom">
-          <div className="col-8 d-flex align-items-center gap-2">
-            <span>
-              {" "}
-              <IoMdPeople />
-            </span>
-            <span>{tariffa.description}</span>
-          </div>
-          <span className="col-4 text-end">{tariffa.price.priceFormatted}</span>
-        </div>
-      </div>
-    );
-  } else {
-    return (
-      <div>
-        <div className="row bg-aliceblue d-flex justify-content-between align-items-center border-top border-bottom">
-          <div className="col-8 d-flex align-items-center gap-2">
-            <span>
-              {tariffa.category_code === "ADU" && <IoMdPeople />}
-              {tariffa.category_code === "CHD" && <FaChild />}
-              {tariffa.category_code === "ANI" && <FaDog />}
-              {tariffa.category_code === "LUG" && <MdLuggage />}
-              {tariffa.category_code === "INF" && <FaBaby />}
-            </span>
-            <span>
-              {tariffa.qty} {tariffa.category_code === "ADU" && "Adulti"}
-              {tariffa.category_code === "CHD" && "Bambini"}
-              {tariffa.category_code === "ANI" && "Animali"}
-              {tariffa.category_code === "LUG" && "Bagagli"}
-              {tariffa.category_code === "INF" && "Neonati"}
-            </span>
-          </div>
-          <span className="col-4 text-end">{tariffa.price.priceFormatted}</span>
-        </div>
-      </div>
-    );
-  }
-};
-
-export const Condizioni = ({ value, onChange }) => {
-  const { t } = useTranslation();
-  return (
-    <div className="col-lg-12  col bg-passeggeri rounded mt-3 mb-3 p-4">
-      <h2 className="text-primary">{t("Condizioni e Contatti")}</h2>
-      <CheckoutPrimoPasseggero value={value} onChange={onChange} />
-
-      <div className="col">
-        <div className="form-check">
-          <input
-            required
-            className="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-          />
-          <label className="form-check-label" htmlFor="flexCheckDefault">
-            {t("Ho letto e accettato i")}{" "}
-            <a
-              href="https://www.quickferries.com/it/condizioni-generali-di-prenotazioni/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {t("termini e condizioni")}
-            </a>
-          </label>
-        </div>
-        <div className="form-check">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault2"
-            required
-          />
-          <label className="form-check-label" htmlFor="flexCheckDefault2">
-            {t("Accetto")}{" "}
-            <a
-              href="https://www.quickferries.com/it/privacy-policy/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {t("Informativa sulla privacy")}
-            </a>
-          </label>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export const Pagamento = ({ methods, checked }) => {
-  return (
-    <div className="col-lg-12  col bg-passeggeri rounded mt-3 mb-3 p-4">
-      <h2 className="text-primary">Metodo di pagamento</h2>
-
-      {methods.map((method) => (
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="radio"
-            name="flexRadioDefault"
-            id="flexRadioDefault1"
-            checked={checked === "CREDIT_CARD"}
-          />
-          <label class="form-check-label" for="flexRadioDefault1">
-            {method === "CREDIT_CARD" && "Carta di Credito"}
-            {method === "PAY_BY_LINK" && "PaybyLink"}
-            {method === "EXTERNAL_PAYMENT" && "Estratto Conto"}
-          </label>
-        </div>
-      ))}
     </div>
   );
 };

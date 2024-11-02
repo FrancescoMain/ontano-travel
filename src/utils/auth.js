@@ -27,9 +27,7 @@ export const fetchAccountData = async () => {
         const response = await axios.get(
           `http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/account?language=${i18n.language}`,
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: getAuthHeader(),
           }
         );
         store.dispatch(setAccountData(response.data));

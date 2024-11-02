@@ -9,6 +9,7 @@ import travelmar from "../../assets/travelmar.png";
 import snav from "../../assets/snav.png";
 import alilauro from "../../assets/Logo-AliLauro.png";
 import alilauroGruson from "../../assets/Alilauro Gruson.png";
+import Nlg from "../../assets/nlg.png";
 import { upsertSelected } from "../../features/viaggio/resultTratta";
 import { animateScroll as scroll } from "react-scroll";
 import { useFetchPriceData } from "../../_hooks/useFetchPriceData";
@@ -120,6 +121,9 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
                 )}
                 {data.company === "Alilauro" && (
                   <img className="img-logo" src={alilauro} alt="Alilauro" />
+                )}
+                {data.company === "Nlg" && (
+                  <img className="img-logo" src={Nlg} alt="Nlg" />
                 )}
                 {data.company === "Alilauro Gruson" && (
                   <img
