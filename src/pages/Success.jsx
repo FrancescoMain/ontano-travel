@@ -5,13 +5,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 export const Success = () => {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      navigate("/");
-    }, 5000);
-    return () => clearTimeout(timer);
-  }, [navigate]);
-
   return (
     <>
       <div className="container mt-5 d-flex justify-content-center">
