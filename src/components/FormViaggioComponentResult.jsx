@@ -411,8 +411,6 @@ export const FormViaggioComponentResultRitorno = ({ reset, viewReset }) => {
     if (dayjs(dataAndata).isAfter(dayjs(dataRitorno))) {
       dispatch(setDataRitorno(dataAndata));
     }
-
-    console.log(dataAndata, dataRitorno);
   }, [dataAndata, dataRitorno, dispatch]);
   return (
     <div className="form-viaggio-result-ritorno">

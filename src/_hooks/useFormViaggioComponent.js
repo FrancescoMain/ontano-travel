@@ -46,7 +46,6 @@ export const useFormViaggioComponent = () => {
 
   const handleOptionChange = (event) => {
     let dueTratte = true;
-    console.log("event.target.value", event.target.value);
     if (event.target.value === selectedOption) {
       setSelectedOption("Solo andata");
       dueTratte = true;

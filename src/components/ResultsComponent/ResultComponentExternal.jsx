@@ -74,9 +74,6 @@ export const ResultComponentExternal = () => {
     const animali = queryParams.get("animali");
     const bagagli = queryParams.get("bagagli");
 
-    console.log("return_route_id", return_route_id);
-    console.log("return_data", return_data);
-
     if (departure_route_id && departure_data) {
       dispatch(
         setTrattaAndata({
@@ -163,7 +160,6 @@ export const ResultComponentExternal = () => {
     setRitorno(biglietto);
   };
   const handleSubmit = () => {
-    console.log(bigliettoAndata, bigliettoRitorno);
     // Se la partenza di biglietto di andata è minore rispetto a biglietto di ritorno
     if (
       dayjs(bigliettoRitorno?.departure).isBefore(

@@ -2,8 +2,6 @@ import i18n from "../../i18n"; // Import i18n to access the current language
 import { getAuthHeader } from "../../utils/auth"; // Import getAuthHeader
 
 export const getReservation = async (quoteId) => {
-  console.log("getReservation", quoteId);
-
   // Get the current language or default to 'it'
   const language = i18n.language || "it";
 
@@ -27,7 +25,6 @@ export const getReservation = async (quoteId) => {
 
     // Ottieni il risultato
     const result = await response.json();
-    console.log("Success:", result);
     return result;
   } catch (error) {
     console.error("Error:", error);

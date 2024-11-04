@@ -78,8 +78,6 @@ export const CheckoutPasseggero = ({
   numeroCampo,
   cognomi,
 }) => {
-  console.log(nomi);
-
   const handleChange = (e) => {
     const newValue = e.target.value;
     onChangeNomi(numeroCampo, n, newValue); // Passa la tratta, il passeggero e il nuovo valore
@@ -90,7 +88,6 @@ export const CheckoutPasseggero = ({
     onChangeCognomi(numeroCampo, n, newValue, eta); // Passa la tratta, il passeggero e il nuovo valore
   };
 
-  console.log("eta", eta);
   return (
     <>
       <h5 className="text-secondary">

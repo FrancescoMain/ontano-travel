@@ -33,7 +33,6 @@ export const useResult = () => {
   useEffect(() => {
     // Esegui la chiamata API
     const fetchPriceData = async (id) => {
-      console.log(id);
       dispatch(startLoading());
       const formattedDate = dayjs(date[id]?.dateFormatted).format("YYYY-MM-DD");
 
@@ -68,7 +67,6 @@ export const useResult = () => {
     selected
       .filter((item) => item.prezzo !== undefined && item.prezzo !== null)
       .forEach((item) => {
-        console.log(item);
         setTotalPrice((prev) => prev + item.prezzo);
       });
   }, [selected, tratte, date, dettagli]);

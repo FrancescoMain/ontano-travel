@@ -25,11 +25,9 @@ export const paymentsMode = async () => {
     const contentType = response.headers.get("content-type");
     if (contentType && contentType.includes("application/json")) {
       const result = await response.json();
-      console.log("Success:", result);
       return result;
     } else {
       const text = await response.text();
-      console.log("Success:", text);
       return text;
     }
   } catch (error) {

@@ -2,8 +2,6 @@ import i18n from "../../i18n"; // Import i18n to access the current language
 import { getAuthHeader } from "../../utils/auth"; // Import getAuthHeader
 
 export const lightboxReserve = async (quoteId) => {
-  console.log("getReservation", quoteId);
-
   try {
     const language = i18n.language || "it"; // Get current language or default to 'it'
     // Fai la chiamata GET
@@ -25,7 +23,6 @@ export const lightboxReserve = async (quoteId) => {
 
     // Ottieni il risultato
     const result = await response.json();
-    console.log("Success:", result);
     return result;
   } catch (error) {
     console.error("Error:", error);
