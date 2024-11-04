@@ -78,8 +78,9 @@ export const useReservations = () => {
       const payments = await paymentsMode();
       setPaymentsMethod(payments);
     };
-
-    fetchPaymentsMethod();
+    if (paymentsMethod.length === 0) {
+      fetchPaymentsMethod();
+    }
   }, [quote]);
 
   useEffect(() => {
