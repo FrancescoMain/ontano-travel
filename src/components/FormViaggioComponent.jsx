@@ -30,6 +30,7 @@ import {
   resetSelected,
 } from "../features/viaggio/resultTratta";
 import { CiCircleInfo } from "react-icons/ci";
+import { Tooltip as MuiTooltip } from "@mui/material";
 
 dayjs.extend(isSameOrAfter);
 
@@ -134,7 +135,7 @@ export const ViaggioDiAndataForm = ({
     dispatch,
     selected,
     multitratta,
-  } = useFormViaggioComponent(true);
+  } = useFormViaggioComponent();
   const resetRoute = (id) => {
     setNTratte(nTratte - 1);
     dispatch(resetTratta({ id }));
@@ -356,17 +357,21 @@ const DettagliViaggio = ({ id, selected, resetHandle }) => {
         <div className="col col-lg-3 d-flex flex-column">
           <label htmlFor="animals" className="d-flex align-items-center">
             {t("Animali Domestici")}
-            <Tooltip title="lorem ipsum">
+            <MuiTooltip
+              title="Informazioni sugli animali domestici"
+              enterTouchDelay={0}
+            >
               <span
                 style={{
                   display: "flex",
                   alignItems: "center",
                   marginLeft: "5px",
                 }}
+                onClick={(e) => e.stopPropagation()}
               >
                 <CiCircleInfo />
               </span>
-            </Tooltip>
+            </MuiTooltip>
           </label>
           <select
             value={dettagli[id]?.animali}
@@ -385,17 +390,18 @@ const DettagliViaggio = ({ id, selected, resetHandle }) => {
         <div className="col col-lg-3 d-flex flex-column">
           <label htmlFor="bagagli" className="d-flex align-items-center">
             {t("Bagagli")}
-            <Tooltip title="lorem ipsum">
+            <MuiTooltip title="Informazioni sui bagagli" enterTouchDelay={0}>
               <span
                 style={{
                   display: "flex",
                   alignItems: "center",
                   marginLeft: "5px",
                 }}
+                onClick={(e) => e.stopPropagation()}
               >
                 <CiCircleInfo />
               </span>
-            </Tooltip>
+            </MuiTooltip>
           </label>
           <select
             value={dettagli[id]?.bagagli}
