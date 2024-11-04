@@ -54,6 +54,10 @@ const router = createBrowserRouter([
     path: "/pay-by-link-success",
     element: <PayByLinkSuccess />, // Add PayByLinkSuccess route
   },
+  {
+    path: "*",
+    element: <HomePage />, // Fallback to HomePage for undefined routes
+  },
 ]);
 
 let accountDataFetched = false; // Add a flag to track if account data has been fetched
