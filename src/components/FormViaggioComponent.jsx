@@ -45,7 +45,7 @@ export const FormViaggioComponent = () => {
     handleOptionChange,
     selected,
     dispatch,
-  } = useFormViaggioComponent();
+  } = useFormViaggioComponent(true);
 
   const showCollegamento = tab === "Collegamento" || tab === "Link";
   const resetHandle = (id) => {
@@ -135,7 +135,7 @@ export const ViaggioDiAndataForm = ({
     dispatch,
     selected,
     multitratta,
-  } = useFormViaggioComponent();
+  } = useFormViaggioComponent(false);
   const resetRoute = (id) => {
     setNTratte(nTratte - 1);
     dispatch(resetTratta({ id }));
@@ -241,7 +241,7 @@ export const ViaggoiDiRitornoForm = ({ id, resultMode }) => {
     date,
     selected,
     dispatch,
-  } = useFormViaggioComponent();
+  } = useFormViaggioComponent(false);
 
   const resetHandle = (id) => {
     dispatch(resetSelected({ id }));
@@ -301,7 +301,7 @@ const DettagliViaggio = ({ id, selected, resetHandle }) => {
     handleChangeBagagli,
     dettagli,
     multitratta,
-  } = useFormViaggioComponent();
+  } = useFormViaggioComponent(false);
 
   return (
     <>
