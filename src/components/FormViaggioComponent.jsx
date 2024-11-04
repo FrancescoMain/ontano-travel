@@ -164,7 +164,7 @@ export const ViaggioDiAndataForm = ({
       </div>
       <div className="row-cont">
         <Autocomplete
-          value={tratte[id]?.trattaFormatted}
+          value={tratte[id]?.trattaFormatted || ""}
           className="select-viaggio"
           placeholder={t("Seleziona una tratta")}
           options={fromLocations}

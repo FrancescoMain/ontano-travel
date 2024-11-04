@@ -80,6 +80,8 @@ export const useResult = () => {
     const adulti = queryParams.get("adulti");
     const bambini = queryParams.get("bambini");
     const etaBambini = queryParams.get("etaBambini");
+    // Parse 'etaBambini' as an array
+    const etaBambiniArray = JSON.parse(etaBambini);
     const animali = queryParams.get("animali");
     const bagagli = queryParams.get("bagagli");
 
@@ -93,6 +95,7 @@ export const useResult = () => {
         const date = dayjs(departure_data);
 
         const dateString = date.toISOString();
+
         dispatch(
           upsertTratta({
             id: 0,
@@ -104,6 +107,7 @@ export const useResult = () => {
           upsertDate({
             id: 0,
             dateFormatted: dateString,
+            date: date, /// 2024-10-17T22:00:00.000Z
           })
         );
       }
@@ -111,7 +115,7 @@ export const useResult = () => {
     if (return_route_id && return_data) {
       const tratta = routes.find((route) => route.route_id == return_route_id);
       setNTratte(1);
-
+      console.log("tratta", tratta);
       if (tratta) {
         const trattaFormatted = [`${tratta.from} -> ${tratta.to}`];
         const date = dayjs(return_data);
@@ -124,10 +128,12 @@ export const useResult = () => {
             trattaFormatted,
           })
         );
+
         dispatch(
           upsertDate({
             id: 1,
             dateFormatted: dateString,
+            date: date, /// 2024-10-17T22:00:00.000Z
           })
         );
       }
@@ -140,7 +146,7 @@ export const useResult = () => {
           id: 0,
           adulti,
           bambini,
-          etaBambini: etaBambini.split(","),
+          etaBambini: etaBambiniArray,
           animali,
           bagagli,
         })
@@ -150,7 +156,7 @@ export const useResult = () => {
           id: 1,
           adulti,
           bambini,
-          etaBambini: etaBambini.split(","),
+          etaBambini: etaBambiniArray,
           animali,
           bagagli,
         })
