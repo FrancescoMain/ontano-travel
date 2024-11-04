@@ -54,13 +54,13 @@ export const useResult = () => {
       }
     };
     if (tratte.length > 0 && date.length > 0) {
-      tratte.forEach((_, index) => {
+      for (let index = 0; index <= nTratte; index++) {
         if (tratte[index]?.tratta && date[index]?.dateFormatted) {
           fetchPriceData(index);
         }
-      });
+      }
     }
-  }, [tratte, date, dispatch]);
+  }, [tratte, date, dispatch, nTratte]);
 
   useEffect(() => {
     setTotalPrice(0);
