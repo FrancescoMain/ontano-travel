@@ -21,6 +21,7 @@ import { CheckoutPasseggero } from "../components/Checkouts/CheckoutPassegero";
 import { setPayByLink } from "../features/payByLink/payByLinkSlice";
 import { useCheckoutForm } from "../_hooks/useCheckoutForm"; // Import custom hook
 import { submitExternalPayment } from "../_api/reservations/submitExternalPayment"; // Import the new API function
+import { resetSelected, resetResults } from "../features/viaggio/resultTratta"; // Import reset actions
 
 export const Checkout = () => {
   const { passeggeri, prenotazione, paymentsMethod, quote } = useReservations();
@@ -77,6 +78,9 @@ export const Checkout = () => {
             function callback(response) {
               if (response.status === "OK") {
                 toast.success("Pagamento completato con successo");
+                dispatch(resetSelected({ id: 0 }));
+                dispatch(resetResults());
+                localStorage.removeItem("viaggioData");
                 navigate("/success");
               } else {
                 toast.error("Errore durante il pagamento");
@@ -100,6 +104,9 @@ export const Checkout = () => {
             })
           );
           toast.success("Link inviato con successo");
+          dispatch(resetSelected({ id: 0 }));
+          dispatch(resetResults());
+          localStorage.removeItem("viaggioData");
           navigate("/pay-by-link-success");
         } catch (error) {
           console.error("Error:", error);
@@ -112,6 +119,9 @@ export const Checkout = () => {
             toast.success(
               "Pagamento tramite Estratto Conto completato con successo"
             );
+            dispatch(resetSelected({ id: 0 }));
+            dispatch(resetResults());
+            localStorage.removeItem("viaggioData");
             navigate("/success");
           } else {
             toast.error("Errore durante il pagamento tramite Estratto Conto");
