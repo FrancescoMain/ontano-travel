@@ -13,9 +13,10 @@ import { changeLanguage } from "../../utils/language";
 import { handleLogout } from "../../utils/auth";
 import { useAuth } from "../../_hooks/useAuth";
 import i18n from "../../i18n";
+import { useNavigate } from "react-router-dom";
 
 // Component for authenticated user links
-const AuthenticatedLinks = ({ t, handleLogout, isWebUser }) => (
+const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate }) => (
   <>
     <li>
       <Link
@@ -25,7 +26,7 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser }) => (
         level="body-md"
         underline="none"
         variant="plain"
-        href="/prenotazioni"
+        onClick={() => navigate("/prenotazioni")}
       >
         {t("Prenotazioni")}
       </Link>
@@ -38,7 +39,7 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser }) => (
         level="body-md"
         underline="none"
         variant="plain"
-        href="/dashboard"
+        onClick={() => navigate("/dashboard")}
       >
         {t("Dashboard")}
       </Link>
@@ -62,7 +63,7 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser }) => (
 );
 
 // Component for unauthenticated user links
-const UnauthenticatedLinks = ({ t }) => (
+const UnauthenticatedLinks = ({ t, navigate }) => (
   <>
     <li>
       <Link
@@ -72,7 +73,7 @@ const UnauthenticatedLinks = ({ t }) => (
         level="body-md"
         underline="none"
         variant="plain"
-        href="/login"
+        onClick={() => navigate("/login")}
       >
         {t("Login")}
         <LoginIcon />
@@ -86,7 +87,7 @@ const UnauthenticatedLinks = ({ t }) => (
         level="body-md"
         underline="none"
         variant="plain"
-        href="/cerca-prenotazione"
+        onClick={() => navigate("/cerca-prenotazione")}
       >
         {t("Cerca prenotazione")}
         <SearchIcon />
@@ -98,6 +99,7 @@ const UnauthenticatedLinks = ({ t }) => (
 export const Header = () => {
   const { loading, token, isWebUser } = useAuth();
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   return (
     <div className="header">
@@ -111,7 +113,7 @@ export const Header = () => {
               level="body-md"
               underline="none"
               variant="plain"
-              href="/"
+              onClick={() => navigate("/")}
             >
               <img
                 className="logo"
@@ -126,9 +128,10 @@ export const Header = () => {
                 t={t}
                 handleLogout={handleLogout}
                 isWebUser={isWebUser}
+                navigate={navigate}
               />
             ) : (
-              <UnauthenticatedLinks t={t} />
+              <UnauthenticatedLinks t={t} navigate={navigate} />
             )}
             <li className="lang">
               <Dropdown>
@@ -170,9 +173,10 @@ export const Header = () => {
                     t={t}
                     handleLogout={handleLogout}
                     isWebUser={isWebUser}
+                    navigate={navigate}
                   />
                 ) : (
-                  <UnauthenticatedLinks t={t} />
+                  <UnauthenticatedLinks t={t} navigate={navigate} />
                 )}
               </Menu>
             </Dropdown>
@@ -188,7 +192,6 @@ export const Header = () => {
                     src={i18n.language === "it" ? it : us}
                     alt="language"
                   />
-                  {/* <ArrowDropDownIcon /> */}
                 </MenuButton>
                 <Menu variant="plain" color="primary" size="sm">
                   <MenuItem

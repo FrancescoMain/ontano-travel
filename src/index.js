@@ -2,7 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+} from "react-router-dom";
 import "@fontsource/inter";
 import "./i18n";
 import { HomePage } from "./pages/HomePage";
@@ -16,79 +21,58 @@ import "react-toastify/dist/ReactToastify.css";
 import { Checkout } from "./pages/Checkout";
 import { Success } from "./pages/Success";
 import { Login } from "./pages/Login";
-import { RecoveryPassword } from "./pages/RecoveryPassword"; // Import RecoveryPassword
-import { fetchAccountData } from "./utils/auth"; // Import fetchAccountData
-import { setAccountData } from "./features/account/accountSlice"; // Import setAccountData
-import { PayByLinkSuccess } from "./pages/PayByLinkSuccess"; // Import PayByLinkSuccess
+import { RecoveryPassword } from "./pages/RecoveryPassword";
+import { fetchAccountData } from "./utils/auth";
+import { setAccountData } from "./features/account/accountSlice";
+import { PayByLinkSuccess } from "./pages/PayByLinkSuccess";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <HomePage />,
-  },
-  {
-    path: "/results",
-    element: <ResultPage />,
-  },
-  {
-    path: "/results/external",
-    element: <ResultPageExternal />,
-  },
-  {
-    path: "/checkout",
-    element: <Checkout />,
-  },
-  {
-    path: "/success",
-    element: <Success />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/recovery",
-    element: <RecoveryPassword />, // Add RecoveryPassword route
-  },
-  {
-    path: "/pay-by-link-success",
-    element: <PayByLinkSuccess />, // Add PayByLinkSuccess route
-  },
-  {
-    path: "*",
-    element: <HomePage />, // Fallback to HomePage for undefined routes
-  },
-]);
+const App = () => {
+  const navigate = useNavigate();
+  let accountDataFetched = false;
 
-let accountDataFetched = false; // Add a flag to track if account data has been fetched
+  store.subscribe(() => {
+    const token =
+      localStorage.getItem("id_token") || sessionStorage.getItem("id_token");
+    if (token && !accountDataFetched) {
+      fetchAccountData();
+      accountDataFetched = true;
+    }
+  });
 
-store.subscribe(() => {
-  const token =
-    localStorage.getItem("id_token") || sessionStorage.getItem("id_token");
-  if (token && !accountDataFetched) {
-    fetchAccountData();
-    accountDataFetched = true; // Set the flag to true after fetching account data
-  }
-});
+  return (
+    <Provider store={store}>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+      <Header navigate={navigate} />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/results" element={<ResultPage />} />
+        <Route path="/results/external" element={<ResultPageExternal />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/success" element={<Success />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/recovery" element={<RecoveryPassword />} />
+        <Route path="/pay-by-link-success" element={<PayByLinkSuccess />} />
+        <Route path="*" element={<HomePage />} />
+      </Routes>
+      {/* <Footer /> */}
+    </Provider>
+  );
+};
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <Provider store={store}>
-    <ToastContainer
-      position="top-center"
-      autoClose={5000}
-      hideProgressBar={false}
-      newestOnTop={false}
-      closeOnClick
-      rtl={false}
-      pauseOnFocusLoss
-      draggable
-      pauseOnHover
-      theme="colored"
-    />
-
-    <Header />
-    <RouterProvider router={router} />
-    {/* <Footer /> */}
-  </Provider>
+  <Router>
+    <App />
+  </Router>
 );
