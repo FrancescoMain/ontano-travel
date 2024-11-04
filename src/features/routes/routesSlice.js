@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   routes: [],
+  fetch: false,
 };
 
 const routesSlice = createSlice({
@@ -11,9 +12,12 @@ const routesSlice = createSlice({
     setRoutes: (state, action) => {
       state.routes = action.payload;
     },
+    setFetch: (state, action) => {
+      state.fetch = action.payload;
+    },
   },
 });
 
-export const { setRoutes } = routesSlice.actions;
+export const { setRoutes, setFetch } = routesSlice.actions;
 
 export default routesSlice.reducer;

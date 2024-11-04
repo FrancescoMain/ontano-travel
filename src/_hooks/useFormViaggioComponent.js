@@ -18,7 +18,7 @@ import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { getRoute } from "../_api/colllegamenti/getRoute";
-import { setRoutes } from "../features/routes/routesSlice";
+import { setFetch, setRoutes } from "../features/routes/routesSlice";
 import {
   removeDate,
   removeDettagli,
@@ -29,7 +29,7 @@ import {
   upsertTratta,
 } from "../features/viaggio/findTratta";
 
-export const useFormViaggioComponent = () => {
+export const useFormViaggioComponent = (disableFetch) => {
   //REFACORING MULTITRATTAù
   const { t } = useTranslation();
 
@@ -37,6 +37,7 @@ export const useFormViaggioComponent = () => {
   const [rotte, setRotte] = useState([]);
   const [fromLocations, setFromLocations] = useState([]);
   const [selectedOption, setSelectedOption] = useState("Solo andata");
+  const [fetching, setFetching] = useState(false);
 
   const { tratte, date, dettagli, multitratta } = useSelector(
     (state) => state.tratte
@@ -119,7 +120,7 @@ export const useFormViaggioComponent = () => {
     bagagli,
   } = useSelector((state) => state.viaggioForm);
 
-  const { routes } = useSelector((state) => state.routes);
+  const { routes, fetch } = useSelector((state) => state.routes);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -305,26 +306,27 @@ export const useFormViaggioComponent = () => {
         setFromLocations(locations);
         return;
       }
-
-      dispatch(startLoading());
-      try {
-        const route = await getRoute();
-        dispatch(setRoutes(route));
-        setRotte(route);
-        const locations = route.map((route) => {
-          const fromNames = route.from.split(" ");
-          const toNames = route.to.split(" ");
-          const allNames = [...fromNames, ...toNames];
-          return {
-            value: allNames.join(" "),
-            label: `${route.from} -> ${route.to}`,
-          };
-        });
-        setFromLocations(locations);
-      } catch (error) {
-        console.error("Error fetching routes:", error);
-      } finally {
-        dispatch(stopLoading());
+      if (disableFetch) {
+        dispatch(startLoading());
+        try {
+          const route = await getRoute();
+          dispatch(setRoutes(route));
+          setRotte(route);
+          const locations = route.map((route) => {
+            const fromNames = route.from.split(" ");
+            const toNames = route.to.split(" ");
+            const allNames = [...fromNames, ...toNames];
+            return {
+              value: allNames.join(" "),
+              label: `${route.from} -> ${route.to}`,
+            };
+          });
+          setFromLocations(locations);
+        } catch (error) {
+          console.error("Error fetching routes:", error);
+        } finally {
+          dispatch(stopLoading());
+        }
       }
     };
 

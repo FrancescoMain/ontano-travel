@@ -134,7 +134,7 @@ export const ViaggioDiAndataForm = ({
     dispatch,
     selected,
     multitratta,
-  } = useFormViaggioComponent();
+  } = useFormViaggioComponent(true);
   const resetRoute = (id) => {
     setNTratte(nTratte - 1);
     dispatch(resetTratta({ id }));
