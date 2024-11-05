@@ -51,7 +51,6 @@ export const Checkout = () => {
 
     fetchStore();
   }, []);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(startLoading());
@@ -61,7 +60,7 @@ export const Checkout = () => {
       cognomi,
       dto,
       paymentMethodCheck,
-      passeggeri.length,
+      isTour ? passeggeri.length : prenotazione.reservationRoutes.length,
       quote
     );
     if (resultReserve) {
