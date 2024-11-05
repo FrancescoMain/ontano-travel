@@ -14,6 +14,8 @@ import {
   upsertTratta,
 } from "../features/viaggio/findTratta";
 import i18n from "../i18n"; // Import i18n to access the current language
+import { setRoutes } from "../features/routes/routesSlice";
+import { getRoute } from "../_api/colllegamenti/getRoute";
 
 export const useResult = () => {
   const dispatch = useDispatch();
@@ -87,10 +89,18 @@ export const useResult = () => {
     const bagagli = queryParams.get("bagagli");
 
     if (departure_route_id && departure_data) {
+      if (routes.length === 0) {
+        const fetchRoutes = async () => {
+          const route = await getRoute();
+          dispatch(setRoutes(route));
+        };
+        fetchRoutes();
+      }
       const tratta = routes.find(
         (route) => route.route_id == departure_route_id
       );
 
+      console.log(tratta);
       if (tratta) {
         const trattaFormatted = [`${tratta.from} -> ${tratta.to}`];
         const date = dayjs(departure_data);
@@ -116,7 +126,6 @@ export const useResult = () => {
     if (return_route_id && return_data) {
       const tratta = routes.find((route) => route.route_id == return_route_id);
       setNTratte(1);
-      console.log("tratta", tratta);
       if (tratta) {
         const trattaFormatted = [`${tratta.from} -> ${tratta.to}`];
         const date = dayjs(return_data);
