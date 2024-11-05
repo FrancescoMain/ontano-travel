@@ -291,7 +291,7 @@ export const ViaggoiDiRitornoForm = ({ id, resultMode }) => {
   );
 };
 
-const DettagliViaggio = ({ id, selected, resetHandle }) => {
+export const DettagliViaggio = ({ id, selected, resetHandle }) => {
   const {
     etaBambinoString,
     t,
