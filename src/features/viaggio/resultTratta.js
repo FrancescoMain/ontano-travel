@@ -74,6 +74,9 @@ export const resultTrattaSlice = createSlice({
         state.selected[index] = { id: action.payload.id, data: [] };
       }
     },
+    resetSelectedAll: (state) => {
+      state.selected = initialState.selected;
+    },
     resetResults: (state) => {
       state.results = initialState.results;
     },
@@ -90,6 +93,7 @@ export const {
   updateSelected,
   upsertSelected,
   resetSelected,
+  resetSelectedAll,
   resetResults, // Export the new action
 } = resultTrattaSlice.actions;
 

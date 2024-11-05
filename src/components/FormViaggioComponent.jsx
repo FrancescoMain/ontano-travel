@@ -31,6 +31,7 @@ import {
 } from "../features/viaggio/resultTratta";
 import { CiCircleInfo } from "react-icons/ci";
 import { Tooltip as MuiTooltip } from "@mui/material";
+import { TourComponent } from "./TourComponent";
 
 dayjs.extend(isSameOrAfter);
 
@@ -111,7 +112,7 @@ export const FormViaggioComponent = () => {
           </Button>
         </>
       )}
-      {tab === "Tour" && <div>Work in progress</div>}
+      {tab === "Tour" && <TourComponent />}
     </Card>
   );
 };

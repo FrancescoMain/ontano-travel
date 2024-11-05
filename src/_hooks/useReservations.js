@@ -6,6 +6,11 @@ import { getReservation } from "../_api/reservations/reservations";
 import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
 import { Collapse } from "bootstrap";
 import { paymentsMode } from "../_api/reservations/paymentsMode";
+import {
+  resetResults,
+  resetSelected,
+  resetSelectedAll,
+} from "../features/viaggio/resultTratta";
 
 export const useReservations = () => {
   const [passeggeri, setPasseggeri] = useState([]);
@@ -29,7 +34,9 @@ export const useReservations = () => {
       });
     } else {
       dispatch(stopLoading());
-      navigate("/results"); // Reindirizza alla home se i dati non sono presenti
+      dispatch(resetResults());
+      dispatch(resetSelectedAll());
+      navigate("/"); // Reindirizza alla home se i dati non sono presenti
     }
   }, [navigate, viaggioData]);
 
