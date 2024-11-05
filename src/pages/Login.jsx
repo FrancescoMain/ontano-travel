@@ -14,12 +14,14 @@ export const Login = () => {
       const result = await authenticateUser(username, password, rememberMe);
       if (result.success) {
         navigate("/"); // Redirect to home page after successful login
+      } else {
+        result.message = t(result.message); // Translate error message
       }
       return result;
     } catch (error) {
       return {
         success: false,
-        message: "An error occurred. Please try again.",
+        message: t("An error occurred. Please try again."), // Use translation for error message
       };
     }
   };

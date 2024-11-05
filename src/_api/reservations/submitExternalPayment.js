@@ -4,8 +4,9 @@ import i18n from "../../i18n"; // Import the i18n instance
 
 export const submitExternalPayment = async (quote) => {
   try {
-    const response = await apiClient.get(
+    const response = await apiClient.post(
       `/api/booking/reservation/${quote}/submit?language=${i18n.language}`,
+      {},
       {
         headers: getAuthHeader(),
       }

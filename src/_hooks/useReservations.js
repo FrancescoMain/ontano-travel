@@ -28,7 +28,8 @@ export const useReservations = () => {
         }
       });
     } else {
-      navigate("/"); // Reindirizza alla home se i dati non sono presenti
+      dispatch(stopLoading());
+      navigate("/results"); // Reindirizza alla home se i dati non sono presenti
     }
   }, [navigate, viaggioData]);
 

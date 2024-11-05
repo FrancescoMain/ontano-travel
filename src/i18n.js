@@ -71,6 +71,9 @@ const resources = {
       "Il link scade tra": "The link expires in",
       "ID della prenotazione": "Reservation ID",
       "Tutti i diritti riservati": "All rights reserved",
+      "An error occurred. Please try again.":
+        "An error occurred. Please try again.",
+      "Invalid username or password.": "Invalid username or password.",
     },
   },
   it: {
@@ -135,6 +138,9 @@ const resources = {
       "Il link scade tra": "Il link scade tra",
       "ID della prenotazione": "ID della prenotazione",
       "Tutti i diritti riservati": "Tutti i diritti riservati",
+      "An error occurred. Please try again.":
+        "Si è verificato un errore. Per favore riprova.",
+      "Invalid username or password.": "Nome utente o password non validi.",
     },
   },
 };

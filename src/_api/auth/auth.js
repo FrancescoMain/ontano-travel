@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 export const authenticateUser = async (username, password, rememberMe) => {
   const response = await fetch(
     "http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/authenticate",
@@ -24,6 +26,6 @@ export const authenticateUser = async (username, password, rememberMe) => {
     storage.setItem("id_token", data.id_token);
     return { success: true };
   } else {
-    return { success: false, message: "Invalid username or password." };
+    return { success: false, message: "Invalid username or password." }; // Remove translation logic
   }
 };

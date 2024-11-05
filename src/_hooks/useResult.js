@@ -49,6 +49,7 @@ export const useResult = () => {
         dispatch(upsertResult({ id, data: data.timetableGoing }));
       } catch (error) {
         console.error(error);
+        dispatch(stopLoading(null));
       } finally {
         dispatch(stopLoading(null));
       }
