@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { useTourForm } from "../_hooks/useTourForm";
 import { DettagliViaggioTour } from "./DettagliViaggioTour";
+import { postTourQuote } from "../_api/tourApi";
 
 export const TourComponent = () => {
   const { t } = useTranslation();
@@ -21,10 +22,11 @@ export const TourComponent = () => {
     handleDateChange,
     handleTourChange,
     resetHandle,
+    handleSubmit,
   } = useTourForm();
 
   const isButtonDisabled =
-    !port ||
+    !port.code ||
     !date ||
     !tour ||
     dettagli[0]?.bambini !== dettagli[0]?.etaBambini?.length ||
@@ -42,17 +44,7 @@ export const TourComponent = () => {
           sx={{ height: 56 }}
           onChange={handlePortChange}
         />
-        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="it">
-          <DatePicker
-            label={t("Data di partenza")}
-            inputFormat="DD/MM/YYYY"
-            value={date}
-            minDate={dayjs()}
-            onChange={handleDateChange}
-            sx={{ height: 70 }}
-            className="date-picker mb--2"
-          />
-        </LocalizationProvider>
+
         <Autocomplete
           value={tour}
           className="select-viaggio mb-2"
@@ -61,6 +53,17 @@ export const TourComponent = () => {
           sx={{ height: 56 }}
           onChange={handleTourChange}
         />
+        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="it">
+          <DatePicker
+            label={t("Data di partenza")}
+            inputFormat="DD/MM/YYYY"
+            value={date}
+            minDate={dayjs()}
+            onChange={handleDateChange}
+            sx={{ height: 70 }}
+            className="date-picker "
+          />
+        </LocalizationProvider>
       </div>
       <DettagliViaggioTour id={0} />
       <div className="row">
@@ -71,7 +74,7 @@ export const TourComponent = () => {
             color="primary"
             size="lg"
             fullWidth
-            // onClick={handleClickSearch}
+            onClick={handleSubmit}
           >
             {t("Cerca")}
           </Button>

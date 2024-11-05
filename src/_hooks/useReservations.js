@@ -22,6 +22,8 @@ export const useReservations = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const viaggioData = localStorage.getItem("viaggioData");
+  const tourQuote = localStorage.getItem("tourQuote");
+  const [isTour, setIsTour] = useState(false);
 
   useEffect(() => {
     if (viaggioData) {
@@ -32,16 +34,22 @@ export const useReservations = () => {
           setTratte((prev) => [...prev, element]);
         }
       });
-    } else {
+    } else if (!tourQuote) {
       dispatch(stopLoading());
       dispatch(resetResults());
       dispatch(resetSelectedAll());
       navigate("/"); // Reindirizza alla home se i dati non sono presenti
+    } else if (tourQuote) {
+      setIsTour(true);
+      const parsedData = JSON.parse(tourQuote);
+      console.log("parsedData", parsedData);
+      setQuote(parsedData.reservationCode);
+      setIsQuoteFetched(true);
     }
-  }, [navigate, viaggioData]);
+  }, [navigate, viaggioData, tourQuote]);
 
   useEffect(() => {
-    if (tratte.length > 0 && !isQuoteFetched) {
+    if (tratte.length > 0 && !isQuoteFetched && !tourQuote) {
       const fetchQuote = async () => {
         const result = await postQuote({ tratte });
         setQuote(result);
@@ -53,28 +61,60 @@ export const useReservations = () => {
 
   useEffect(() => {
     let passeggeri = [];
-    tratte.forEach((tratta) => {
-      const { id, adulti, bambini, etaBambini } = tratta;
+    if (tratte.length > 0) {
+      tratte.forEach((tratta) => {
+        const { id, adulti, bambini, etaBambini } = tratta;
 
-      // Crea un oggetto per ogni tratta con le informazioni richieste
-      const trattaInfo = {
-        id,
-        adulti: parseInt(adulti, 10),
-        bambini: parseInt(bambini, 10),
-        tot: parseInt(adulti, 10) + parseInt(bambini, 10),
-        etaBambini: etaBambini.map((eta) => parseInt(eta, 10)),
+        // Crea un oggetto per ogni tratta con le informazioni richieste
+        const trattaInfo = {
+          id,
+          adulti: parseInt(adulti, 10),
+          bambini: parseInt(bambini, 10),
+          tot: parseInt(adulti, 10) + parseInt(bambini, 10),
+          etaBambini: etaBambini.map((eta) => parseInt(eta, 10)),
+        };
+
+        // Aggiungi l'oggetto all'array dei passeggeri
+        passeggeri.push(trattaInfo);
+      });
+    } else if (prenotazione) {
+      const data = prenotazione.reservationRoutes[0].tariffs;
+      console.log(data);
+
+      let adulti = 0;
+      let bambini = 0;
+      const parsedData = JSON.parse(tourQuote);
+
+      data.forEach((item) => {
+        const { qty, category_code } = item;
+
+        if (category_code === "ADU") {
+          adulti = adulti + 1;
+        } else if (category_code === "CHD" || category_code === "INF") {
+          bambini = bambini + 1;
+        }
+      });
+
+      const prenotazioneInfo = {
+        id: 0,
+        adulti,
+        bambini,
+        tot: adulti + bambini,
+        etaBambini: parsedData.etaBambini, // Assuming etaBambini is not available in this context
       };
 
       // Aggiungi l'oggetto all'array dei passeggeri
-      passeggeri.push(trattaInfo);
-    });
+      passeggeri.push(prenotazioneInfo);
+      console.log(prenotazioneInfo);
+    }
 
     // Imposta l'array dei passeggeri nello stato
     setPasseggeri(passeggeri);
-  }, [tratte]);
+  }, [tratte, prenotazione]);
 
   useEffect(() => {
     const fetchReservation = async () => {
+      console.log(quote);
       if (quote) {
         const reservation = await getReservation(quote);
         setPrenotazione(reservation);
@@ -131,5 +171,5 @@ export const useReservations = () => {
     })();
   }, []);
 
-  return { passeggeri, prenotazione, paymentsMethod, quote };
+  return { passeggeri, prenotazione, paymentsMethod, quote, isTour };
 };

@@ -58,6 +58,7 @@ export const ResultComponent = () => {
       selected,
     };
     localStorage.setItem("viaggioData", JSON.stringify(viaggioData));
+    localStorage.removeItem("tourQuote");
     navigate("/checkout");
   };
   return (

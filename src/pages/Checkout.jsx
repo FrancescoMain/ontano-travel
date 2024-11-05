@@ -34,6 +34,7 @@ export const Checkout = () => {
     handleCognomiChange,
     handleDtoChange,
     handlePayByLinkEmailChange,
+    isTour,
   } = useCheckoutForm();
   const [store, setStore] = React.useState();
   const dispatch = useDispatch();
@@ -153,23 +154,49 @@ export const Checkout = () => {
                     {passeggeri.map((tratta, trattaIndex) => (
                       <>
                         <div className="d-flex flex-column">
-                          <div
-                            className="text-primary fs-4"
-                            data-bs-toggle="collapse"
-                            href={"#collapseExample" + trattaIndex}
-                            role="button"
-                            aria-expanded={trattaIndex === 0 ? "true" : "false"}
-                            aria-controls={"collapseExample" + trattaIndex}
-                          >
-                            {prenotazione?.reservationRoutes[trattaIndex]?.from}{" "}
-                            - {prenotazione?.reservationRoutes[trattaIndex]?.to}
-                          </div>
-                          <div className="text-secondary small fst-italic">
-                            {dayjs(
-                              prenotazione?.reservationRoutes[trattaIndex]
-                                ?.departure
-                            ).format("DD/MMM/YYYY HH:mm")}
-                          </div>
+                          {!isTour ? (
+                            <div
+                              className="text-primary fs-4"
+                              data-bs-toggle="collapse"
+                              href={"#collapseExample" + trattaIndex}
+                              role="button"
+                              aria-expanded={
+                                trattaIndex === 0 ? "true" : "false"
+                              }
+                              aria-controls={"collapseExample" + trattaIndex}
+                            >
+                              Tour
+                            </div>
+                          ) : (
+                            <>
+                              <div
+                                className="text-primary fs-4"
+                                data-bs-toggle="collapse"
+                                href={"#collapseExample" + trattaIndex}
+                                role="button"
+                                aria-expanded={
+                                  trattaIndex === 0 ? "true" : "false"
+                                }
+                                aria-controls={"collapseExample" + trattaIndex}
+                              >
+                                {
+                                  prenotazione?.reservationRoutes[trattaIndex]
+                                    ?.from
+                                }{" "}
+                                -{" "}
+                                {
+                                  prenotazione?.reservationRoutes[trattaIndex]
+                                    ?.to
+                                }
+                              </div>
+                              <div className="text-secondary small fst-italic">
+                                {dayjs(
+                                  prenotazione?.reservationRoutes[trattaIndex]
+                                    ?.departure
+                                ).format("DD/MMM/YYYY HH:mm")}
+                              </div>
+                            </>
+                          )}
                         </div>
                         <div
                           className={

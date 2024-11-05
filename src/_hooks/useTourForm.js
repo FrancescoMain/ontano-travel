@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPorts, fetchTours } from "../_api/tourApi";
+import { fetchPorts, fetchTours, postTourQuote } from "../_api/tourApi";
 import {
   setPort,
   setDate,
@@ -8,10 +8,14 @@ import {
   setTours,
   resetTour,
 } from "../features/tour/tourSlice";
+import dayjs from "dayjs";
+import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
+import { useNavigate } from "react-router-dom";
 
 export const useTourForm = () => {
   const [ports, setPorts] = useState([]);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { port, date, tour, tours, dettagli } = useSelector(
     (state) => state.tour
   );
@@ -57,6 +61,40 @@ export const useTourForm = () => {
     dispatch(resetTour());
   };
 
+  const handleSubmit = async () => {
+    dispatch(startLoading());
+    const selectedTour = tours.find((t) => t.name === tour).id;
+    const animali = dettagli[0]?.animali || 0;
+    const bagagli = dettagli[0]?.bagagli || 0;
+    const passengers = [
+      ...Array(dettagli[0]?.adulti || 0).fill({ age: 18 }),
+      ...(dettagli[0]?.etaBambini || []).map((eta) => ({ age: eta })),
+    ];
+
+    const logObject = {
+      tour_id: selectedTour,
+      data_departure: dayjs(date).format("YYYY-MM-DD"),
+      animals: animali,
+      luggages: bagagli,
+      passengersAge: passengers,
+      etaBambini: dettagli[0]?.etaBambini || [], // Add this line
+    };
+
+    try {
+      const response = await postTourQuote(logObject);
+      const tourQuote = {
+        ...response,
+        etaBambini: dettagli[0]?.etaBambini || [], // Add this line
+      };
+      localStorage.setItem("tourQuote", JSON.stringify(tourQuote));
+      localStorage.removeItem("viaggioData");
+      navigate("/checkout");
+    } catch (error) {
+      console.error("Error posting tour quote:", error);
+    }
+    dispatch(stopLoading());
+  };
+
   return {
     ports,
     port,
@@ -68,5 +106,6 @@ export const useTourForm = () => {
     handleDateChange,
     handleTourChange,
     resetHandle,
+    handleSubmit,
   };
 };
