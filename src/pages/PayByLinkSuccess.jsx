@@ -42,16 +42,7 @@ export const PayByLinkSuccess = () => {
       <div className="container mt-5 d-flex justify-content-center">
         <div className="alert alert-success text-center" role="alert">
           <h1>{t("Link inviato con successo")}</h1>
-          <p>
-            <a
-              href={link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-primary"
-            >
-              {t("Completa il pagamento")}
-            </a>
-          </p>
+
           <p>
             {t("Il link scade tra")}: <strong>{formatTime(countdown)}</strong>
           </p>
