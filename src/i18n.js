@@ -8,6 +8,7 @@ const resources = {
   en: {
     translation: {
       "Cerca prenotazione": "Search reservation",
+      "Codice Prenotazione": "Booking Code",
       "Solo andata": "One way",
       "Andata e ritorno": "Round trip",
       "Viaggio di andata": "Outbound trip",
@@ -21,7 +22,7 @@ const resources = {
       "Tratta di ritorno": "Return route",
       Passeggeri: "Passengers",
       "Aggiungi passeggeri": "Add passengers",
-      Cerca: "SEARCH",
+      Cerca: "Search",
       "Seleziona i passeggeri": "Select passengers",
       "Adulti oltre i 12 anni": "Adults over 12 years old",
       "Bambini fino agli 11 anni": "Children up to 11 years old",
@@ -74,11 +75,13 @@ const resources = {
       "An error occurred. Please try again.":
         "An error occurred. Please try again.",
       "Invalid username or password.": "Invalid username or password.",
+      "Prenotazione non trovata": "Reservation not found",
     },
   },
   it: {
     translation: {
       "Cerca prenotazione": "Cerca prenotazione",
+      "Codice Prenotazione": "Codice Prenotazione",
       "Solo andata": "Solo andata",
       "Andata e ritorno": "Andata e ritorno",
       "Viaggio di andata": "Viaggio di andata",
@@ -92,7 +95,7 @@ const resources = {
       "Tratta di ritorno": "Tratta di ritorno",
       Passeggeri: "Passeggeri",
       "Aggiungi passeggeri": "Aggiungi passeggeri",
-      Cerca: "CERCA",
+      Cerca: "Cerca",
       "Seleziona i passeggeri": "Seleziona i passeggeri",
       "Adulti oltre i 12 anni": "Adulti oltre i 12 anni",
       "Bambini fino agli 11 anni": "Bambini fino agli 11 anni",
@@ -141,6 +144,7 @@ const resources = {
       "An error occurred. Please try again.":
         "Si è verificato un errore. Per favore riprova.",
       "Invalid username or password.": "Nome utente o password non validi.",
+      "Prenotazione non trovata": "Prenotazione non trovata",
     },
   },
 };

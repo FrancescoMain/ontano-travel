@@ -17,5 +17,9 @@ export const config = {
   payByLinkReserve: { route: "/api/booking/payment", method: "GET" },
   lightboxReserve: { route: "/api/booking/payment", method: "GET" },
   getStore: { route: "/api/booking/store/info", method: "GET" },
-  fetchAccountData: { route: "/api/booking/account", method: "GET" }, // Add this line
+  fetchAccountData: { route: "/api/booking/account", method: "GET" },
+  fetchReservation: {
+    route: "/api/booking/reservation/:bookingCode/guest",
+    method: "GET",
+  },
 };
