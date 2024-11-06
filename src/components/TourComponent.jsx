@@ -26,7 +26,6 @@ export const TourComponent = () => {
   } = useTourForm();
 
   const isButtonDisabled =
-    !port.code ||
     !date ||
     !tour ||
     dettagli[0]?.bambini !== dettagli[0]?.etaBambini?.length ||
