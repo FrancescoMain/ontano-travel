@@ -30,9 +30,22 @@ const tourSlice = createSlice({
       state.dettagli[action.payload.id] = action.payload.dettagli;
     },
     resetTour: () => initialState,
+    resetTourDetails: (state) => {
+      state.port = initialState.port;
+      state.date = initialState.date;
+      state.tour = initialState.tour;
+      state.dettagli = initialState.dettagli;
+    },
   },
 });
 
-export const { setPort, setDate, setTour, setTours, setDettagli, resetTour } =
-  tourSlice.actions;
+export const {
+  setPort,
+  setDate,
+  setTour,
+  setTours,
+  setDettagli,
+  resetTour,
+  resetTourDetails,
+} = tourSlice.actions;
 export default tourSlice.reducer;

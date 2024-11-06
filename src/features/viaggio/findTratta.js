@@ -219,6 +219,7 @@ export const viaggioSlice = createSlice({
     setMultitratta: (state, action) => {
       state.multitratta = action.payload;
     },
+    resetAll: () => initialState,
   },
 });
 
@@ -238,6 +239,7 @@ export const {
   resetDate,
   resetDettagli,
   resetTratta,
+  resetAll,
 } = viaggioSlice.actions;
 
 export default viaggioSlice.reducer;

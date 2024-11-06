@@ -22,9 +22,12 @@ import { setPayByLink } from "../features/payByLink/payByLinkSlice";
 import { useCheckoutForm } from "../_hooks/useCheckoutForm"; // Import custom hook
 import { submitExternalPayment } from "../_api/reservations/submitExternalPayment"; // Import the new API function
 import { resetSelected, resetResults } from "../features/viaggio/resultTratta"; // Import reset actions
+import { resetAll as resetViaggio } from "../features/viaggio/findTratta"; // Import resetAll action for viaggio
+import { resetTourDetails } from "../features/tour/tourSlice"; // Import resetTourDetails action for tour
 
 export const Checkout = () => {
-  const { passeggeri, prenotazione, paymentsMethod, quote } = useReservations();
+  const { passeggeri, prenotazione, paymentsMethod, quote, isTour } =
+    useReservations();
   const {
     nomi,
     cognomi,
@@ -34,7 +37,6 @@ export const Checkout = () => {
     handleCognomiChange,
     handleDtoChange,
     handlePayByLinkEmailChange,
-    isTour,
   } = useCheckoutForm();
   const [store, setStore] = React.useState();
   const dispatch = useDispatch();
@@ -79,6 +81,8 @@ export const Checkout = () => {
               if (response.status === "OK") {
                 dispatch(resetSelected({ id: 0 }));
                 dispatch(resetResults());
+                dispatch(resetViaggio());
+                dispatch(resetTourDetails());
                 localStorage.removeItem("viaggioData");
                 navigate("/success");
               } else {
@@ -104,6 +108,8 @@ export const Checkout = () => {
           );
           dispatch(resetSelected({ id: 0 }));
           dispatch(resetResults());
+          dispatch(resetViaggio());
+          dispatch(resetTourDetails());
           localStorage.removeItem("viaggioData");
           navigate("/pay-by-link-success");
         } catch (error) {
@@ -116,6 +122,8 @@ export const Checkout = () => {
           if (response.ok) {
             dispatch(resetSelected({ id: 0 }));
             dispatch(resetResults());
+            dispatch(resetViaggio());
+            dispatch(resetTourDetails());
             localStorage.removeItem("viaggioData");
             navigate("/success");
           } else {
@@ -130,6 +138,8 @@ export const Checkout = () => {
 
     dispatch(stopLoading());
   };
+
+  console.log(isTour);
 
   return (
     <div className="conatiner">
@@ -148,7 +158,7 @@ export const Checkout = () => {
                     {passeggeri.map((tratta, trattaIndex) => (
                       <>
                         <div className="d-flex flex-column">
-                          {!isTour ? (
+                          {isTour ? (
                             <div
                               className="text-primary fs-4"
                               data-bs-toggle="collapse"
