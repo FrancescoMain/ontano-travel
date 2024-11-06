@@ -26,6 +26,7 @@ import { fetchAccountData } from "./utils/auth";
 import { setAccountData } from "./features/account/accountSlice";
 import { PayByLinkSuccess } from "./pages/PayByLinkSuccess";
 import { CercaPrenotazione } from "./pages/CercaPrenotazione";
+import SearchGuest from "./pages/SearchGuest"; // Import SearchGuest
 
 const App = () => {
   const navigate = useNavigate();
@@ -65,6 +66,8 @@ const App = () => {
         <Route path="/recovery" element={<RecoveryPassword />} />
         <Route path="/pay-by-link-success" element={<PayByLinkSuccess />} />
         <Route path="/cerca-prenotazione" element={<CercaPrenotazione />} />
+        <Route path="/result-guest" element={<SearchGuest />} />{" "}
+        {/* Add route */}
         <Route path="*" element={<HomePage />} />
       </Routes>
       {/* <Footer /> */}

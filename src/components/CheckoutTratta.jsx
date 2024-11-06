@@ -2,8 +2,13 @@ import React from "react";
 import dayjs from "dayjs";
 import { IoMdPeople } from "react-icons/io";
 import { CheckoutTariffe } from "./CheckoutTariffe";
+import travelmar from "../assets/travelmar.png";
+import snav from "../assets/snav.png";
+import alilauro from "../assets/Logo-AliLauro.png";
+import alilauroGruson from "../assets/Alilauro Gruson.png";
+import Nlg from "../assets/nlg.png";
 
-export const CheckoutTratta = ({ route }) => {
+export const CheckoutTratta = ({ route, post }) => {
   const formattedDeparture = dayjs(route.departure).format("DD/MMM/YYYY HH:mm");
   const formattedArrival = dayjs(route.arrive).format("DD/MMM/YYYY HH:mm");
 
@@ -77,10 +82,34 @@ export const CheckoutTratta = ({ route }) => {
   return (
     <div>
       <div class="bg-aliceblue row g-0 pb-2 pt-3">
-        <div class="text-start col-6">
+        <div class="text-start col-5">
           <p class="h5 fw-bold mb-0">{route.from}</p>
         </div>
-        <div class="text-end col-6">
+        <div class="text-center col-2">
+          {route.company === "Travelmar" && (
+            <img className="img-logo" src={travelmar} alt="Travelmar" />
+          )}
+          {route.company === "Snav" && (
+            <img className="img-logo" src={snav} alt="Snav" />
+          )}
+          {route.company === "Snav Gescab" && (
+            <img className="img-logo" src={snav} alt="Snav Gescab" />
+          )}
+          {route.company === "Alilauro" && (
+            <img className="img-logo" src={alilauro} alt="Alilauro" />
+          )}
+          {route.company === "Nlg" && (
+            <img className="img-logo" src={Nlg} alt="Nlg" />
+          )}
+          {route.company === "Alilauro Gruson" && (
+            <img
+              className="img-logo"
+              src={alilauroGruson}
+              alt="Alilauro Gruson"
+            />
+          )}
+        </div>
+        <div class="text-end col-5">
           <p class="h5 fw-bold mb-0">{route.to}</p>
         </div>
         <div class="text-start col-4">
@@ -99,7 +128,15 @@ export const CheckoutTratta = ({ route }) => {
             key={index}
           />
         ))}
-
+        {post && (
+          <div class="bg-aliceblue d-flex justify-content-between align-items-center subtotal mt-2 ">
+            <span className="h6">Stato</span>
+            <span className="h6 ">
+              {route?.status === "SUBMITTED" && "Sottomesso"}
+              {route?.status === "CANCELLED" && "Cancellato"}
+            </span>
+          </div>
+        )}
         <div class="bg-aliceblue d-flex justify-content-between align-items-center subtotal mb-3 ">
           <span class="h5"> Totale tratta </span>
           <span class="fw-bold">{route.priceFinal.priceFormatted}</span>

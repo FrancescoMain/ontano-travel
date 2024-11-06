@@ -7,7 +7,6 @@ import "react-toastify/dist/ReactToastify.css";
 import useSearchReservation from "../_hooks/useSearchReservation"; // Import the custom hook
 
 export const CercaPrenotazione = () => {
-  const navigate = useNavigate();
   const { t } = useTranslation();
   const { bookingCode, setBookingCode, email, setEmail, handleSearch } =
     useSearchReservation(); // Use the custom hook

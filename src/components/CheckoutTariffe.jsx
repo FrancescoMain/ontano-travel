@@ -23,7 +23,7 @@ export const CheckoutTariffe = ({ tariffa, company }) => {
   } else {
     return (
       <div>
-        <div className="row bg-aliceblue d-flex justify-content-between align-items-center border-top border-bottom">
+        <div className=" bg-aliceblue d-flex justify-content-between align-items-center border-top border-bottom">
           <div className="col-8 d-flex align-items-center gap-2">
             <span>
               {tariffa.category_code === "ADU" && <IoMdPeople />}

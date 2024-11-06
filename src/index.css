@@ -10,7 +10,7 @@ img {
 }
 
 .bg-aliceblue {
-  background-color: aliceblue;
+  background-color: aliceblue !important;
 }
 .bg-passeggeri {
   background-color: aliceblue;
