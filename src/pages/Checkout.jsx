@@ -131,7 +131,6 @@ export const Checkout = () => {
           }
         } catch (error) {
           console.error("Error:", error);
-          toast.error("Errore durante il pagamento tramite Estratto Conto");
         }
       }
     }
