@@ -2,6 +2,7 @@ import axios from "axios";
 import { store } from "../app/store";
 import { setAccountData } from "../features/account/accountSlice";
 import i18n from "../i18n";
+import { config } from "../config/config"; // Import config
 
 export const getToken = () => {
   return localStorage.getItem("id_token") || sessionStorage.getItem("id_token");
@@ -25,7 +26,7 @@ export const fetchAccountData = async () => {
     if (!state.account.data) {
       try {
         const response = await axios.get(
-          `http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/account?language=${i18n.language}`,
+          `${config.basePath}/api/booking/account?language=${i18n.language}`,
           {
             headers: getAuthHeader(),
           }

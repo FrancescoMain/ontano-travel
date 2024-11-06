@@ -16,6 +16,7 @@ import {
 import i18n from "../i18n"; // Import i18n to access the current language
 import { setRoutes } from "../features/routes/routesSlice";
 import { getRoute } from "../_api/colllegamenti/getRoute";
+import { config } from "../config/config";
 
 export const useResult = () => {
   const dispatch = useDispatch();
@@ -43,9 +44,12 @@ export const useResult = () => {
 
       try {
         const response = await fetch(
-          `http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/route/search?language=${language}&departure_route_id=${
+          `${config.basePath}${
+            config.fetchPriceData.route
+          }?language=${language}&departure_route_id=${
             tratte[id]?.tratta.route_id
-          }&departure_data=${encodeURIComponent(formattedDate)}`
+          }&departure_data=${encodeURIComponent(formattedDate)}`,
+          { method: config.fetchPriceData.method }
         );
         const data = await response.json();
         dispatch(upsertResult({ id, data: data.timetableGoing }));

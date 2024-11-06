@@ -1,5 +1,6 @@
 import i18n from "../../i18n"; // Import i18n to access the current language
 import { getAuthHeader } from "../../utils/auth"; // Import getAuthHeader
+import { config } from "../../config/config"; // Import config
 
 // Funzione per fare la chiamata POST
 export const postQuote = async ({ tratte, etaBambini }) => {
@@ -29,9 +30,9 @@ export const postQuote = async ({ tratte, etaBambini }) => {
   try {
     // Fai la chiamata POST
     const response = await fetch(
-      `http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/reservation/multi/quote?language=${language}`,
+      `${config.basePath}${config.postQuote.route}?language=${language}`,
       {
-        method: "POST",
+        method: config.postQuote.method,
         headers: {
           "Content-Type": "application/json",
           ...getAuthHeader(), // Add authorization header

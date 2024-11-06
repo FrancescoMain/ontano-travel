@@ -1,5 +1,6 @@
 import i18n from "../../i18n"; // Import i18n to access the current language
 import { getAuthHeader } from "../../utils/auth"; // Import getAuthHeader
+import { config } from "../../config/config";
 
 // Funzione per fare la chiamata POST
 export const paymentsMode = async () => {
@@ -7,9 +8,9 @@ export const paymentsMode = async () => {
     const language = i18n.language || "it"; // Get current language or default to 'it'
     // Fai la chiamata POST
     const response = await fetch(
-      `http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/payment/mode?language=${language}`,
+      `${config.basePath}${config.paymentsMode.route}?language=${language}`,
       {
-        method: "GET",
+        method: config.paymentsMode.method,
         headers: {
           "Content-Type": "application/json",
           ...getAuthHeader(), // Add authorization header

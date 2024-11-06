@@ -1,5 +1,6 @@
 import i18n from "../../i18n"; // Import i18n to access the current language
 import { getAuthHeader } from "../../utils/auth"; // Import getAuthHeader
+import { config } from "../../config/config";
 
 export const getStore = async () => {
   // Get the current language or default to 'it'
@@ -8,9 +9,9 @@ export const getStore = async () => {
   try {
     // Fai la chiamata GET
     const response = await fetch(
-      `http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/store/info?language=${language}`,
+      `${config.basePath}${config.getStore.route}?language=${language}`,
       {
-        method: "GET",
+        method: config.getStore.method,
         headers: {
           "Content-Type": "application/json",
           ...getAuthHeader(), // Add authorization header

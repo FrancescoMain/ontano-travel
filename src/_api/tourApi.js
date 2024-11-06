@@ -1,11 +1,10 @@
 import i18n from "../i18n";
 import { getAuthHeader } from "../utils/auth"; // Import getAuthHeader
+import { config } from "../config/config"; // Import config
 
 export const fetchPorts = async () => {
   try {
-    const response = await fetch(
-      "http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/tour/port"
-    );
+    const response = await fetch(`${config.basePath}/api/booking/tour/port`);
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
@@ -21,7 +20,7 @@ export const fetchTours = async () => {
 
   try {
     const response = await fetch(
-      `http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/tour?language=${language}`,
+      `${config.basePath}/api/booking/tour?language=${language}`,
       {
         headers: getAuthHeader(), // Add authorization header
       }
@@ -41,7 +40,7 @@ export const postTourQuote = async (quoteData) => {
 
   try {
     const response = await fetch(
-      `http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/tour/quote?language=${language}`,
+      `${config.basePath}/api/booking/tour/quote?language=${language}`,
       {
         method: "POST",
         headers: {

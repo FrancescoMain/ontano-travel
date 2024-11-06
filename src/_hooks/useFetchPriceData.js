@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import i18n from "../i18n";
+import { config } from "../config/config";
 
 export const useFetchPriceData = ({
   data,
@@ -24,7 +25,8 @@ export const useFetchPriceData = ({
 
       try {
         const response = await fetch(
-          `http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/price/searchresult?language=${language}&search_result_id=${data.result_id}&animals=${animali}&luggages=${bagagli}&${passengersAgeParams}`
+          `${config.basePath}${config.fetchPriceSearchResult.route}?language=${language}&search_result_id=${data.result_id}&animals=${animali}&luggages=${bagagli}&${passengersAgeParams}`,
+          { method: config.fetchPriceSearchResult.method }
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
