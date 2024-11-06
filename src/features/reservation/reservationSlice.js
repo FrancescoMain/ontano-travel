@@ -20,7 +20,13 @@ const reservationSlice = createSlice({
     status: "idle",
     error: null,
   },
-  reducers: {},
+  reducers: {
+    resetReservation: (state) => {
+      state.data = null;
+      state.status = "idle";
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchReservationThunk.pending, (state) => {
@@ -37,4 +43,5 @@ const reservationSlice = createSlice({
   },
 });
 
+export const { resetReservation } = reservationSlice.actions; // Export the reset action
 export default reservationSlice.reducer;

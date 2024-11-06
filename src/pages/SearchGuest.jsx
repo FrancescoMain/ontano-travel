@@ -1,12 +1,26 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import useSearchReservation from "../_hooks/useSearchReservation";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
 import { CheckoutTratta } from "../components/CheckoutTratta";
+import { resetReservation } from "../features/reservation/reservationSlice"; // Import the reset action
 
 const SearchGuest = () => {
   const reservation = useSelector((state) => state.reservation.data);
+  const dispatch = useDispatch();
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  useEffect(() => {
+    if (!reservation) {
+      navigate("/cerca-prenotazione"); // Navigate to /cerca-prenotazione if no reservation data
+    }
+
+    return () => {
+      dispatch(resetReservation()); // Reset reservation data on unmount
+    };
+  }, [dispatch, navigate, reservation]);
 
   return (
     <div className="container">
@@ -36,30 +50,26 @@ const SearchGuest = () => {
               <span>0,00</span>
             </div>
 
-            <div className="d-flex justify-content-between align-items-center">
-              <span>Diritti di prenotazione</span>
-              <span>{reservation?.taxPreview.priceFormatted}</span>
-            </div>
+            <div className="d-flex justify-content-between align-items-center"></div>
+            <span>Diritti di prenotazione</span>
+            <span>{reservation?.taxPreview.priceFormatted}</span>
+          </div>
 
-            <div className="spacer my-3 sconto d-none"></div>
+          <div className="spacer my-3 sconto d-none"></div>
 
-            <div className="d-flex justify-content-between align-items-center sconto d-none">
-              <span>Sconto</span>
-              <span id="span_ImportoSonto">- 0,00</span>
-            </div>
-            <div className="spacer my-3"></div>
-            <div
-              id="total"
-              className="d-flex justify-content-between align-items-center"
-            >
-              <span className="h4">Totale</span>
-              <span
-                className="h4 total-price"
-                data-total-price-in-cents="11150"
-              >
-                {reservation?.priceToPay.priceFormatted}
-              </span>
-            </div>
+          <div className="d-flex justify-content-between align-items-center sconto d-none">
+            <span>Sconto</span>
+            <span id="span_ImportoSonto">- 0,00</span>
+          </div>
+          <div className="spacer my-3"></div>
+          <div
+            id="total"
+            className="d-flex justify-content-between align-items-center"
+          >
+            <span className="h4">Totale</span>
+            <span className="h4 total-price" data-total-price-in-cents="11150">
+              {reservation?.priceToPay.priceFormatted}
+            </span>
           </div>
         </div>
       </div>
