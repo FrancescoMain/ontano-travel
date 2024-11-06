@@ -77,7 +77,6 @@ export const Checkout = () => {
             reserveLightbox.PaymentToken,
             function callback(response) {
               if (response.status === "OK") {
-                toast.success("Pagamento completato con successo");
                 dispatch(resetSelected({ id: 0 }));
                 dispatch(resetResults());
                 localStorage.removeItem("viaggioData");
@@ -103,7 +102,6 @@ export const Checkout = () => {
               reservationId: prenotazione.code,
             })
           );
-          toast.success("Link inviato con successo");
           dispatch(resetSelected({ id: 0 }));
           dispatch(resetResults());
           localStorage.removeItem("viaggioData");
@@ -116,9 +114,6 @@ export const Checkout = () => {
         try {
           const response = await submitExternalPayment(quote);
           if (response.ok) {
-            toast.success(
-              "Pagamento tramite Estratto Conto completato con successo"
-            );
             dispatch(resetSelected({ id: 0 }));
             dispatch(resetResults());
             localStorage.removeItem("viaggioData");
