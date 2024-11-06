@@ -62,7 +62,7 @@ export const Checkout = () => {
       cognomi,
       dto,
       paymentMethodCheck,
-      isTour ? passeggeri.length : prenotazione.reservationRoutes.length,
+      prenotazione.reservationRoutes.length,
       quote
     );
     if (resultReserve) {
