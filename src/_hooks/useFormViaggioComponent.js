@@ -345,7 +345,7 @@ export const useFormViaggioComponent = (disableFetch) => {
     });
     const allAgesFilled = allAgesFilledArray.every((age) => age);
 
-    const allTratteFlled = tratte.every((tratta) => tratta.tratta);
+    const allTratteFlled = tratte.every((tratta) => tratta.trattaFormatted[0]);
     const allDateFilled = date.every((date) => date.date);
 
     // Controlla se tutti i campi di età dei bambini sono compilati
