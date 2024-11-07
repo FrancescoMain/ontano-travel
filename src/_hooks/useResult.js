@@ -61,11 +61,11 @@ export const useResult = () => {
       }
     };
     if (tratte.length > 0 && date.length > 0) {
-      for (let index = 0; index <= nTratte; index++) {
+      tratte.forEach((_, index) => {
         if (tratte[index]?.tratta && date[index]?.dateFormatted) {
           fetchPriceData(index);
         }
-      }
+      });
     }
   }, [tratte, date, dispatch, nTratte]);
 
