@@ -91,7 +91,7 @@ export const CheckoutPasseggero = ({
   return (
     <>
       <h5 className="text-secondary">
-        {n}° {eta != null ? "Bambino" : "Passeggero"}
+        {n}° {eta != null ? "Bambino" + " " + eta + " anni" : "Passeggero"}
       </h5>
       <div className="nomeCognome row justify-content-center align-items-center g-2 mb-2 flex-column flex-lg-row">
         <div className="col">
@@ -124,14 +124,14 @@ export const CheckoutPasseggero = ({
             }
           />
         </div>
-        <div class="col col-lg-2">
+        {/* <div class="col col-lg-2">
           <input
             type="text"
             class="form-control"
             id={n + "Eta"}
             value={eta != null ? eta : "12+"}
           />
-        </div>
+        </div> */}
       </div>
     </>
   );

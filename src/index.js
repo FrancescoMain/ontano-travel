@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Routes,
   Route,
   useNavigate,

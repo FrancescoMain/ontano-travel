@@ -25,26 +25,7 @@ export const Condizioni = ({ value, onChange }) => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              {t("termini e condizioni")}
-            </a>
-          </label>
-        </div>
-        <div className="form-check">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault2"
-            required
-          />
-          <label className="form-check-label" htmlFor="flexCheckDefault2">
-            {t("Accetto")}{" "}
-            <a
-              href="https://www.quickferries.com/it/privacy-policy/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {t("Informativa sulla privacy")}
+              {t("termini e condizioni")} / {t("Informativa sulla privacy")}
             </a>
           </label>
         </div>
