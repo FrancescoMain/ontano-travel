@@ -6,7 +6,10 @@ import {
   stopLoading,
 } from "../features/spinner/spinnerSlice";
 import dayjs from "dayjs";
-import { upsertResult } from "../features/viaggio/resultTratta";
+import {
+  upsertResult,
+  resetSelectedAll,
+} from "../features/viaggio/resultTratta";
 import { useLocation } from "react-router-dom";
 import {
   upsertDate,
@@ -33,6 +36,12 @@ export const useResult = () => {
   const getQueryParams = (query) => {
     return new URLSearchParams(query);
   };
+
+  useEffect(() => {
+    // Reset selected state when the component mounts
+    dispatch(resetSelectedAll());
+  }, [dispatch]);
+
   useEffect(() => {
     // Esegui la chiamata API
     const fetchPriceData = async (id) => {
