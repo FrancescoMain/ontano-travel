@@ -272,7 +272,13 @@ export const Checkout = () => {
             </div>
             <div className="col-lg-4 col bg-aliceblue mte-3 rounded mb-3 sticky-lg-top d-flex flex-column flex-basis-0 flex-grow-0 mt-3">
               <div>
-                <h3 className="text-primary text-center">Il tuo viaggio</h3>
+                {!isTour ? (
+                  <h3 className="text-primary text-center">Il tuo viaggio</h3>
+                ) : (
+                  <h3 className="text-primary text-center">
+                    {prenotazione.tour}
+                  </h3>
+                )}
               </div>
               {prenotazione?.reservationRoutes.map((route, index) => (
                 <CheckoutTratta route={route} key={index} />
