@@ -87,7 +87,7 @@ export const useTourForm = () => {
         etaBambini: dettagli[0]?.etaBambini || [], // Add this line
       };
       localStorage.setItem("tourQuote", JSON.stringify(tourQuote));
-      localStorage.removeItem("viaggioData");
+      localStorage.removeItem("linkQuote");
       navigate("/checkout");
     } catch (error) {
       console.error("Error posting tour quote:", error);

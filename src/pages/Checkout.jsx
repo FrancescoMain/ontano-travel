@@ -88,7 +88,7 @@ export const Checkout = () => {
                 dispatch(resetResults());
                 dispatch(resetViaggio());
                 dispatch(resetTourDetails());
-                localStorage.removeItem("viaggioData");
+                localStorage.removeItem("linkQuote");
                 navigate("/success");
               } else {
                 toast.error("Errore durante il pagamento");
@@ -115,7 +115,7 @@ export const Checkout = () => {
           dispatch(resetResults());
           dispatch(resetViaggio());
           dispatch(resetTourDetails());
-          localStorage.removeItem("viaggioData");
+          localStorage.removeItem("linkQuote");
           navigate("/pay-by-link-success");
         } catch (error) {
           console.error("Error:", error);
@@ -129,7 +129,7 @@ export const Checkout = () => {
             dispatch(resetResults());
             dispatch(resetViaggio());
             dispatch(resetTourDetails());
-            localStorage.removeItem("viaggioData");
+            localStorage.removeItem("linkQuote");
             navigate("/success");
           } else {
             toast.error("Errore durante il pagamento tramite Estratto Conto");

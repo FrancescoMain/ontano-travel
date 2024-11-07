@@ -16,25 +16,16 @@ export const useReservations = () => {
   const [passeggeri, setPasseggeri] = useState([]);
   const [quote, setQuote] = useState(null);
   const [prenotazione, setPrenotazione] = useState(null);
-  const [tratte, setTratte] = useState([]);
   const [isQuoteFetched, setIsQuoteFetched] = useState(false); // Nuovo stato per tracciare se la chiamata è stata effettuata
   const [paymentsMethod, setPaymentsMethod] = useState([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const viaggioData = localStorage.getItem("viaggioData");
   const tourQuote = localStorage.getItem("tourQuote");
+  const linkQuote = localStorage.getItem("linkQuote");
   const [isTour, setIsTour] = useState(false);
 
   useEffect(() => {
-    if (viaggioData) {
-      const parsedData = JSON.parse(viaggioData);
-      const selected2 = parsedData.selected;
-      selected2.forEach((element) => {
-        if (element.prezzo) {
-          setTratte((prev) => [...prev, element]);
-        }
-      });
-    } else if (!tourQuote) {
+    if (!tourQuote && !linkQuote) {
       dispatch(stopLoading());
       dispatch(resetResults());
       dispatch(resetSelectedAll());
@@ -45,23 +36,20 @@ export const useReservations = () => {
       console.log("parsedData", parsedData);
       setQuote(parsedData.reservationCode);
       setIsQuoteFetched(true);
+    } else if (linkQuote) {
+      const parsedData = JSON.parse(linkQuote);
+      setQuote(parsedData.result);
+      setIsQuoteFetched(true);
     }
-  }, [navigate, viaggioData, tourQuote]);
-
-  useEffect(() => {
-    if (tratte.length > 0 && !isQuoteFetched && !tourQuote) {
-      const fetchQuote = async () => {
-        const result = await postQuote({ tratte });
-        setQuote(result);
-        setIsQuoteFetched(true); // Imposta lo stato per indicare che la chiamata è stata effettuata
-      };
-      fetchQuote();
-    }
-  }, [tratte, isQuoteFetched]);
+  }, [navigate, tourQuote, linkQuote]);
 
   useEffect(() => {
     let passeggeri = [];
-    if (tratte.length > 0) {
+
+    if (linkQuote) {
+      const parsedData = JSON.parse(linkQuote);
+      console.log(parsedData);
+      const tratte = parsedData.tratte;
       tratte.forEach((tratta) => {
         const { id, adulti, bambini, etaBambini } = tratta;
 
@@ -110,7 +98,7 @@ export const useReservations = () => {
 
     // Imposta l'array dei passeggeri nello stato
     setPasseggeri(passeggeri);
-  }, [tratte, prenotazione]);
+  }, [prenotazione]);
 
   useEffect(() => {
     const fetchReservation = async () => {

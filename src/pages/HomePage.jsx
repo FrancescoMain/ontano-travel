@@ -17,6 +17,9 @@ export const HomePage = () => {
     dispatch(resetSelectedAll()); // Dispatch resetSelectedAll action on mount
     dispatch(resetResults()); // Dispatch resetResults action on mount
     dispatch(resetAll()); // Dispatch resetAll action on mount
+    localStorage.removeItem("tourQuote");
+    localStorage.removeItem("linkQuote");
+    localStorage.removeItem("viaggioData");
   }, [dispatch]);
 
   return <HomePageComponent />;

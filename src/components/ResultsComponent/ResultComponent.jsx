@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   ViaggioDiAndataForm,
   ViaggoiDiRitornoForm,
@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { postQuote } from "../../_api/reservations/quote";
 export const ResultComponent = () => {
   const {
     results,
@@ -21,6 +22,8 @@ export const ResultComponent = () => {
     setNTratte,
   } = useResult();
   const { t } = useTranslation();
+  const [tratte, setTratte] = React.useState([]);
+  const [quote, setQuote] = React.useState(null);
   const isHidden = (groupIndex, index) => {
     if (selected.length === 0 || selected[groupIndex]?.data.length === 0)
       return false;
@@ -57,10 +60,27 @@ export const ResultComponent = () => {
     const viaggioData = {
       selected,
     };
-    localStorage.setItem("viaggioData", JSON.stringify(viaggioData));
-    localStorage.removeItem("tourQuote");
-    navigate("/checkout");
+    selected.forEach((element) => {
+      if (element.prezzo) {
+        setTratte((prev) => [...prev, element]);
+      }
+    });
   };
+
+  useEffect(() => {
+    const fetchQuote = async () => {
+      if (tratte.length > 0) {
+        const result = await postQuote({ tratte });
+        setQuote(result);
+        const data = { result, tratte };
+        localStorage.setItem("linkQuote", JSON.stringify(data));
+        localStorage.removeItem("tourQuote");
+        navigate("/checkout");
+      }
+    };
+    fetchQuote();
+  }, [tratte]);
+
   return (
     <div className="row justify-content-center">
       <div className="col col-lg-6 p-4">
