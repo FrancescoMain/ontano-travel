@@ -7,10 +7,15 @@ import snav from "../assets/snav.png";
 import alilauro from "../assets/Logo-AliLauro.png";
 import alilauroGruson from "../assets/Alilauro Gruson.png";
 import Nlg from "../assets/nlg.png";
+import { formatDateTime } from "../utils/dateUtils"; // Import formatDateTime function
+import { useTranslation } from "react-i18next"; // Import useTranslation hook
 
 export const CheckoutTratta = ({ route, post }) => {
-  const formattedDeparture = dayjs(route.departure).format("DD/MMM/YYYY HH:mm");
-  const formattedArrival = dayjs(route.arrive).format("DD/MMM/YYYY HH:mm");
+  const { i18n } = useTranslation();
+  const language = i18n.language;
+
+  const formattedDeparture = formatDateTime(dayjs(route.departure), language);
+  const formattedArrival = formatDateTime(dayjs(route.arrive), language);
 
   // Process tariffs
   let processedTariffs = [];
@@ -113,11 +118,15 @@ export const CheckoutTratta = ({ route, post }) => {
           <p class="h5 fw-bold mb-0">{route.to}</p>
         </div>
         <div class="text-start col-4">
-          <p class="mb-0 text-capitalize">{formattedDeparture}</p>
+          <p class="mb-0 text-capitalize">
+            {formattedDeparture.date} {formattedDeparture.time}
+          </p>
         </div>
         <div class="text-center col-4"></div>
         <div class="text-end col-4">
-          <p class="mb-0 text-capitalize">{formattedArrival}</p>
+          <p class="mb-0 text-capitalize">
+            {formattedArrival.date} {formattedArrival.time}
+          </p>
         </div>
       </div>
       <div class="list-group list-group-flush bg-aliceblue">

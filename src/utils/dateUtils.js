@@ -7,9 +7,9 @@ dayjs.extend(customParseFormat);
 
 export const formatDate = (date, language) => {
   if (language === "it") {
-    return date.format("DD MMM YYYY", { locale: "it" });
+    return date.locale("it").format("DD MMM YYYY");
   }
-  return date.format("DD MMM YYYY");
+  return date.locale("en").format("DD MMM YYYY");
 };
 
 export const formatTime = (date) => date.format("HH:mm");
@@ -23,7 +23,6 @@ export const calculateDuration = (departureDate, arrivalDate) => {
 };
 
 export const formatDateTime = (date, language) => {
-  dayjs.locale(language);
   return {
     date: formatDate(date, language),
     time: formatTime(date),

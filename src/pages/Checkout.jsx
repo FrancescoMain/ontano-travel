@@ -276,7 +276,7 @@ export const Checkout = () => {
                   <h3 className="text-primary text-center">Il tuo viaggio</h3>
                 ) : (
                   <h3 className="text-primary text-center">
-                    {prenotazione.tour}
+                    {prenotazione?.tour}
                   </h3>
                 )}
               </div>
