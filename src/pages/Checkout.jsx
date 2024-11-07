@@ -24,6 +24,7 @@ import { submitExternalPayment } from "../_api/reservations/submitExternalPaymen
 import { resetSelected, resetResults } from "../features/viaggio/resultTratta"; // Import reset actions
 import { resetAll as resetViaggio } from "../features/viaggio/findTratta"; // Import resetAll action for viaggio
 import { resetTourDetails } from "../features/tour/tourSlice"; // Import resetTourDetails action for tour
+import { formatDateTime } from "../utils/dateUtils"; // Import formatDateTime function
 
 export const Checkout = () => {
   const { passeggeri, prenotazione, paymentsMethod, quote, isTour } =
@@ -45,6 +46,9 @@ export const Checkout = () => {
   const [paymentMethodCheck, setPyamentMethodCheck] =
     React.useState("CREDIT_CARD");
 
+  const { i18n } = useTranslation();
+  const language = i18n.language;
+
   React.useEffect(() => {
     const fetchStore = async () => {
       const storeF = await getStore();
@@ -53,6 +57,7 @@ export const Checkout = () => {
 
     fetchStore();
   }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(startLoading());
@@ -193,10 +198,26 @@ export const Checkout = () => {
                                 }
                               </div>
                               <div className="text-secondary small fst-italic">
-                                {dayjs(
-                                  prenotazione?.reservationRoutes[trattaIndex]
-                                    ?.departure
-                                ).format("DD/MMM/YYYY HH:mm")}
+                                {
+                                  formatDateTime(
+                                    dayjs(
+                                      prenotazione?.reservationRoutes[
+                                        trattaIndex
+                                      ]?.departure
+                                    ),
+                                    language
+                                  ).date
+                                }{" "}
+                                {
+                                  formatDateTime(
+                                    dayjs(
+                                      prenotazione?.reservationRoutes[
+                                        trattaIndex
+                                      ]?.departure
+                                    ),
+                                    language
+                                  ).time
+                                }
                               </div>
                             </>
                           )}

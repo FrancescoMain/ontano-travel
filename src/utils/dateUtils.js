@@ -1,3 +1,10 @@
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import "dayjs/locale/it"; // Import Italian locale
+import "dayjs/locale/en"; // Import English locale
+
+dayjs.extend(customParseFormat);
+
 export const formatDate = (date, language) => {
   if (language === "it") {
     return date.format("DD MMM YYYY", { locale: "it" });
@@ -13,4 +20,12 @@ export const calculateDuration = (departureDate, arrivalDate) => {
   const hours = Math.floor(diffInMinutes / 60);
   const minutes = diffInMinutes % 60;
   return { hours, minutes };
+};
+
+export const formatDateTime = (date, language) => {
+  dayjs.locale(language);
+  return {
+    date: formatDate(date, language),
+    time: formatTime(date),
+  };
 };
