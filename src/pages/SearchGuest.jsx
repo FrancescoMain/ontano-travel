@@ -49,12 +49,11 @@ const SearchGuest = () => {
               <span>Garanzia di rimborso</span>
               <span>0,00</span>
             </div>
-
-            <div className="d-flex justify-content-between align-items-center"></div>
+          </div>
+          <div className="d-flex justify-content-between align-items-center">
             <span>Diritti di prenotazione</span>
             <span>{reservation?.taxPreview.priceFormatted}</span>
           </div>
-
           <div className="spacer my-3 sconto d-none"></div>
 
           <div className="d-flex justify-content-between align-items-center sconto d-none">
