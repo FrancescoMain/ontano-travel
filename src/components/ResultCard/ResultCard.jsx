@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import i18n from "../../i18n";
 import "./ResultCard.css";
 import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import "dayjs/locale/it"; // Import Italian locale
+import "dayjs/locale/en"; // Import English locale
 import { useDispatch, useSelector } from "react-redux";
 import { SpinnerOnly } from "../Spinner/SpinnerOnly";
 import travelmar from "../../assets/travelmar.png";
@@ -12,7 +15,13 @@ import Nlg from "../../assets/nlg.png";
 import { upsertSelected } from "../../features/viaggio/resultTratta";
 import { animateScroll as scroll } from "react-scroll";
 import { useFetchPriceData } from "../../_hooks/useFetchPriceData";
-import { formatDateTime, calculateDuration } from "../../utils/dateUtils";
+import {
+  formatDate,
+  formatTime,
+  calculateDuration,
+} from "../../utils/dateUtils";
+
+dayjs.extend(customParseFormat);
 
 export const ResultCard = ({ data, selected, hidden, id, index }) => {
   const [loading, setLoading] = useState(false);
@@ -20,17 +29,14 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
   const dispatch = useDispatch();
 
   const language = i18n.language;
+  dayjs.locale(language); // Set dayjs locale based on i18n language
 
   const departureDate = dayjs(data.departure);
-  const { date: dateDep, time: timeDep } = formatDateTime(
-    departureDate,
-    language
-  );
+  const dateDep = formatDate(departureDate, language);
+  const timeDep = formatTime(departureDate);
   const arrivalDate = dayjs(data.arrive);
-  const { date: dateArr, time: timeArr } = formatDateTime(
-    arrivalDate,
-    language
-  );
+  const dateArr = formatDate(arrivalDate, language);
+  const timeArr = formatTime(arrivalDate);
   const { hours, minutes } = calculateDuration(departureDate, arrivalDate);
 
   const { adulti, bambini, etaBambini, animali, bagagli } = useSelector(
