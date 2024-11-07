@@ -28,7 +28,7 @@ export const useResult = () => {
   const { loadingId } = useSelector((state) => state.spinner);
 
   const [totalPrice, setTotalPrice] = React.useState(0);
-  const [nTratte, setNTratte] = React.useState(0);
+  const [nTratte, setNTratte] = React.useState(multitratta === false ? 1 : 0);
   const location = useLocation();
   const getQueryParams = (query) => {
     return new URLSearchParams(query);
@@ -61,7 +61,8 @@ export const useResult = () => {
       }
     };
     if (tratte.length > 0 && date.length > 0) {
-      tratte.forEach((_, index) => {
+      console.log(nTratte, multitratta);
+      Array.from({ length: nTratte + 1 }).forEach((_, index) => {
         if (tratte[index]?.tratta && date[index]?.dateFormatted) {
           fetchPriceData(index);
         }
@@ -104,7 +105,6 @@ export const useResult = () => {
         (route) => route.route_id == departure_route_id
       );
 
-      console.log(tratta);
       if (tratta) {
         const trattaFormatted = [`${tratta.from} -> ${tratta.to}`];
         const date = dayjs(departure_data);
