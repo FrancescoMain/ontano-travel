@@ -34,7 +34,7 @@ const SearchGuest = () => {
           {reservation?.tour && (
             <div>
               <h3 className="text-primary text-center">
-                Prenotazione {<span>{reservation?.tour}</span>}
+                Tour {<span>{reservation?.tour}</span>}
               </h3>
             </div>
           )}
