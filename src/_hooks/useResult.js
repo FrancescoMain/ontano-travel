@@ -72,8 +72,16 @@ export const useResult = () => {
     if (tratte.length > 0 && date.length > 0) {
       console.log(nTratte, multitratta);
       Array.from({ length: nTratte + 1 }).forEach((_, index) => {
-        if (tratte[index]?.tratta && date[index]?.dateFormatted) {
-          fetchPriceData(index);
+        if (tratte[index]?.tratta?.route_id && date[index]?.dateFormatted) {
+          const resultDepartureDate =
+            dayjs(results[index]?.data[0]?.departure).format("YYYY-MM-DD") ||
+            "";
+          const formattedDate = dayjs(date[index].dateFormatted).format(
+            "YYYY-MM-DD"
+          );
+          if (resultDepartureDate !== formattedDate) {
+            fetchPriceData(index);
+          }
         }
       });
     }
