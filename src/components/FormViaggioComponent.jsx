@@ -23,6 +23,7 @@ import {
   resetDate,
   resetDettagli,
   resetTratta,
+  setNTratte,
   upsertDettagli,
 } from "../features/viaggio/findTratta";
 import {
@@ -122,7 +123,6 @@ export const ViaggioDiAndataForm = ({
   optionsChange,
   optionState,
   resultMode,
-  setNTratte,
   nTratte,
 }) => {
   const {
@@ -138,7 +138,7 @@ export const ViaggioDiAndataForm = ({
     multitratta,
   } = useFormViaggioComponent(false);
   const resetRoute = (id) => {
-    setNTratte(nTratte - 1);
+    dispatch(setNTratte(nTratte - 1));
     dispatch(resetTratta({ id }));
     dispatch(resetDate({ id }));
     dispatch(resetDettagli({ id }));

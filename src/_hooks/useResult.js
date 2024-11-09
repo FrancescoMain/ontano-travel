@@ -12,6 +12,7 @@ import {
 } from "../features/viaggio/resultTratta";
 import { useLocation } from "react-router-dom";
 import {
+  setNTratte,
   upsertDate,
   upsertDettagli,
   upsertTratta,
@@ -31,7 +32,8 @@ export const useResult = () => {
   const { loadingId } = useSelector((state) => state.spinner);
 
   const [totalPrice, setTotalPrice] = React.useState(0);
-  const [nTratte, setNTratte] = React.useState(multitratta === false ? 1 : 0);
+  // const [nTratte, setNTratte] = React.useState(multitratta === false ? 1 : 0);
+  const { nTratte } = useSelector((state) => state.tratte);
   const location = useLocation();
   const getQueryParams = (query) => {
     return new URLSearchParams(query);
@@ -146,7 +148,8 @@ export const useResult = () => {
     }
     if (return_route_id && return_data) {
       const tratta = routes.find((route) => route.route_id == return_route_id);
-      setNTratte(1);
+      // setNTratte(1);
+      dispatch(setNTratte(1));
       if (tratta) {
         const trattaFormatted = [`${tratta.from} -> ${tratta.to}`];
         const date = dayjs(return_data);

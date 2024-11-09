@@ -94,6 +94,7 @@ const initialState = {
     },
   ],
   multitratta: true,
+  nTratte: 0,
 };
 
 export const viaggioSlice = createSlice({
@@ -218,6 +219,12 @@ export const viaggioSlice = createSlice({
     },
     setMultitratta: (state, action) => {
       state.multitratta = action.payload;
+      if (action.payload === false) {
+        state.nTratte = 1;
+      }
+    },
+    setNTratte: (state, action) => {
+      state.nTratte = action.payload;
     },
     resetAll: () => initialState,
   },
@@ -240,6 +247,7 @@ export const {
   resetDettagli,
   resetTratta,
   resetAll,
+  setNTratte,
 } = viaggioSlice.actions;
 
 export default viaggioSlice.reducer;

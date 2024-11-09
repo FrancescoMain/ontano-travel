@@ -11,6 +11,8 @@ import dayjs from "dayjs";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { postQuote } from "../../_api/reservations/quote";
+import { setNTratte } from "../../features/viaggio/findTratta";
+import { useDispatch } from "react-redux";
 export const ResultComponent = () => {
   const {
     results,
@@ -19,7 +21,7 @@ export const ResultComponent = () => {
     totalPrice,
     multitratta,
     nTratte,
-    setNTratte,
+    // setNTratte,
   } = useResult();
   const { t } = useTranslation();
   const [tratte, setTratte] = React.useState([]);
@@ -31,7 +33,7 @@ export const ResultComponent = () => {
     return selected[groupIndex]?.idSelected !== index;
   };
   const navigate = useNavigate(); // Se la partenza di biglietto di andata è minore rispetto a biglietto di ritorno
-
+  const dispatch = useDispatch();
   const handleSubmit = () => {
     for (let i = 1; i < selected.length; i++) {
       if (
@@ -183,7 +185,7 @@ export const ResultComponent = () => {
                 )
             )}
             <button
-              onClick={() => setNTratte(nTratte + 1)}
+              onClick={() => dispatch(setNTratte(nTratte + 1))}
               type="button"
               class="ms-3 btn btn-primary"
             >
