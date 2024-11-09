@@ -163,18 +163,7 @@ export const Checkout = () => {
                       <>
                         <div className="d-flex flex-column">
                           {isTour ? (
-                            <div
-                              className="text-primary fs-4"
-                              data-bs-toggle="collapse"
-                              href={"#collapseExample" + trattaIndex}
-                              role="button"
-                              aria-expanded={
-                                trattaIndex === 0 ? "true" : "false"
-                              }
-                              aria-controls={"collapseExample" + trattaIndex}
-                            >
-                              Tour
-                            </div>
+                            ""
                           ) : (
                             <>
                               <div
