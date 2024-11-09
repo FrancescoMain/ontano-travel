@@ -39,10 +39,10 @@ export const useResult = () => {
     return new URLSearchParams(query);
   };
 
-  useEffect(() => {
-    // Reset selected state when the component mounts
-    dispatch(resetSelectedAll());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   // Reset selected state when the component mounts
+  //   dispatch(resetSelectedAll());
+  // }, [dispatch]);
 
   useEffect(() => {
     // Esegui la chiamata API
@@ -81,7 +81,12 @@ export const useResult = () => {
           const formattedDate = dayjs(date[index].dateFormatted).format(
             "YYYY-MM-DD"
           );
-          if (resultDepartureDate !== formattedDate) {
+          console.log(tratte);
+          if (
+            resultDepartureDate !== formattedDate ||
+            !results[index].data.length ||
+            results[index].data.fromPort !== tratte[index].tratta.from
+          ) {
             fetchPriceData(index);
           }
         }

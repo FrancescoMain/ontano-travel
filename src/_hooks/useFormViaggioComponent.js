@@ -28,6 +28,7 @@ import {
   upsertDettagli,
   upsertTratta,
 } from "../features/viaggio/findTratta";
+import { resetSelected } from "../features/viaggio/resultTratta";
 
 export const useFormViaggioComponent = (disableFetch) => {
   //REFACORING MULTITRATTAù
@@ -142,6 +143,7 @@ export const useFormViaggioComponent = (disableFetch) => {
     if (!multitratta && id === 0) {
       dispatch(upsertDettagli({ id: 1, adulti: value }));
     }
+    dispatch(resetSelected({ id }));
   };
 
   const handleChangeBambini = (e, id) => {
@@ -168,6 +170,7 @@ export const useFormViaggioComponent = (disableFetch) => {
         dispatch(upsertDettagli({ id: 1, etaBambini: newEtaBambini }));
       }
     }
+    dispatch(resetSelected({ id }));
   };
 
   const handleChangeAnimali = (e, id) => {
@@ -178,6 +181,7 @@ export const useFormViaggioComponent = (disableFetch) => {
     if (!multitratta && id === 0) {
       dispatch(upsertDettagli({ id: 1, animali: value }));
     }
+    dispatch(resetSelected({ id }));
   };
 
   const handleChangeBagagli = (e, id) => {
@@ -187,6 +191,7 @@ export const useFormViaggioComponent = (disableFetch) => {
     if (!multitratta && id === 0) {
       dispatch(upsertDettagli({ id: 1, bagagli: value }));
     }
+    dispatch(resetSelected({ id }));
   };
 
   const handleChangeAndata = (e, id) => {
@@ -224,6 +229,7 @@ export const useFormViaggioComponent = (disableFetch) => {
         trattaFormatted: uniqueToLocations,
       })
     );
+    dispatch(resetSelected({ id }));
   };
 
   const handleChangeRitorno = (e, id) => {
@@ -244,6 +250,7 @@ export const useFormViaggioComponent = (disableFetch) => {
         trattaFormatted: uniqueFromLocations,
       })
     );
+    dispatch(resetSelected({ id }));
   };
   const handleChangeDataA = (e, id) => {
     const date = dayjs(e);
@@ -268,6 +275,7 @@ export const useFormViaggioComponent = (disableFetch) => {
       // Gestisci il caso in cui la data non è valida
       console.error("Invalid date");
     }
+    dispatch(resetSelected({ id }));
   };
 
   const handleChangeDataB = (e) => {
