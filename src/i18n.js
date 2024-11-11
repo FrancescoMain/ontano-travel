@@ -76,6 +76,35 @@ const resources = {
         "An error occurred. Please try again.",
       "Invalid username or password.": "Invalid username or password.",
       "Prenotazione non trovata": "Reservation not found",
+      "Register Agency": "Register Agency",
+      "Agency Name": "Agency Name",
+      "Ragione Sociale": "Ragione Sociale",
+      "Partita IVA": "Partita IVA",
+      Address: "Address",
+      City: "City",
+      CAP: "CAP",
+      Province: "Province",
+      Nationality: "Nationality",
+      Telephone: "Telephone",
+      Email: "Email",
+      Referente: "Referente",
+      Password: "Password",
+      Submit: "Submit",
+      "An agency with this name already exists.":
+        "An agency with this name already exists.",
+      "An agency with this Ragione Sociale already exists.":
+        "An agency with this Ragione Sociale already exists.",
+      "An agency with this Partita IVA already exists.":
+        "An agency with this Partita IVA already exists.",
+      "An agency with this email already exists.":
+        "An agency with this email already exists.",
+      "Password must be at least 8 characters long and include a number, an uppercase letter, a lowercase letter, and a special character.":
+        "Password must be at least 8 characters long and include a number, an uppercase letter, a lowercase letter, and a special character.",
+      "CAP must be exactly 5 digits.": "CAP must be exactly 5 digits.",
+      "Partita IVA must be exactly 11 digits.":
+        "Partita IVA must be exactly 11 digits.",
+      "Loading...": "Loading...",
+      "Agency registered successfully!": "Agency registered successfully!",
     },
   },
   it: {
@@ -145,6 +174,36 @@ const resources = {
         "Si è verificato un errore. Per favore riprova.",
       "Invalid username or password.": "Nome utente o password non validi.",
       "Prenotazione non trovata": "Prenotazione non trovata",
+      "Register Agency": "Registrare Agenzia",
+      "Agency Name": "Nome dell'Agenzia",
+      "Ragione Sociale": "Ragione Sociale",
+      "Partita IVA": "Partita IVA",
+      Address: "Indirizzo",
+      City: "Città",
+      CAP: "CAP",
+      Province: "Provincia",
+      Nationality: "Nazionalità",
+      Telephone: "Telefono",
+      Email: "Email",
+      Referente: "Referente",
+      Password: "Password",
+      Submit: "Invia",
+      "An agency with this name already exists.":
+        "Un'agenzia con questo nome esiste già.",
+      "An agency with this Ragione Sociale already exists.":
+        "Un'agenzia con questa Ragione Sociale esiste già.",
+      "An agency with this Partita IVA already exists.":
+        "Un'agenzia con questa Partita IVA esiste già.",
+      "An agency with this email already exists.":
+        "Un'agenzia con questa email esiste già.",
+      "Password must be at least 8 characters long and include a number, an uppercase letter, a lowercase letter, and a special character.":
+        "La password deve essere lunga almeno 8 caratteri e includere un numero, una lettera maiuscola, una lettera minuscola e un carattere speciale.",
+      "CAP must be exactly 5 digits.":
+        "Il CAP deve essere esattamente di 5 cifre.",
+      "Partita IVA must be exactly 11 digits.":
+        "La Partita IVA deve essere esattamente di 11 cifre.",
+      "Loading...": "Caricamento...",
+      "Agency registered successfully!": "Agenzia registrata con successo!",
     },
   },
 };

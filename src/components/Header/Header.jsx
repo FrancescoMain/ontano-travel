@@ -44,6 +44,7 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate }) => (
         {t("Dashboard")}
       </Link>
     </li>
+
     {!isWebUser && (
       <li>
         <Link
@@ -91,6 +92,19 @@ const UnauthenticatedLinks = ({ t, navigate }) => (
       >
         {t("Cerca prenotazione")}
         <SearchIcon />
+      </Link>
+    </li>
+    <li>
+      <Link
+        className="Link"
+        color="primary"
+        disabled={false}
+        level="body-md"
+        underline="none"
+        variant="plain"
+        onClick={() => navigate("/registra-agenzia")}
+      >
+        {t("Registra Agenzia")}
       </Link>
     </li>
   </>

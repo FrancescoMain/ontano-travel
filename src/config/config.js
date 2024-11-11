@@ -22,4 +22,5 @@ export const config = {
     route: "/api/booking/reservation/:bookingCode/guest",
     method: "GET",
   },
+  postAgency: { route: "/api/booking/agency", method: "POST" },
 };

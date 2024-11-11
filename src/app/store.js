@@ -9,6 +9,7 @@ import accountReducer from "../features/account/accountSlice"; // Import account
 import payByLinkReducer from "../features/payByLink/payByLinkSlice"; // Import payByLinkReducer
 import tourReducer from "../features/tour/tourSlice"; // Import tourReducer
 import reservationReducer from "../features/reservation/reservationSlice"; // Import reservationReducer
+import registraAgenziaReducer from "../features/registraAgenzia/registraAgenziaSlice"; // Import registraAgenziaReducer
 
 export const store = configureStore({
   reducer: {
@@ -22,5 +23,6 @@ export const store = configureStore({
     payByLink: payByLinkReducer, // Add payByLink reducer
     tour: tourReducer, // Add tour reducer
     reservation: reservationReducer, // Add reservation reducer
+    registraAgenzia: registraAgenziaReducer, // Add registraAgenzia reducer
   },
 });
