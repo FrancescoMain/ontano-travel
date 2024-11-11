@@ -21,13 +21,18 @@ export const RegistraAgenzia = () => {
     <div className="container mt-5">
       <ToastContainer />
       <div className="row justify-content-center align-items-center g-2">
-        <form onSubmit={handleSubmit} className="col-6">
-          <h2>{t("Register Agency")}</h2>
-
+        <form onSubmit={handleSubmit} className="col-lg-6">
+          <h2>{t("Registrazione Agenzia")}</h2>
+          {loading && <p>{t("Loading...")}</p>}
+          {success && (
+            <p className="text-success">
+              {t("Agency registered successfully!")}
+            </p>
+          )}
           <div className="row">
             <div className="col-md-4 mb-3">
               <label htmlFor="name" className="form-label">
-                {t("Agency Name")}
+                {t("Agency Name")} *
               </label>
               <input
                 type="text"
@@ -42,7 +47,7 @@ export const RegistraAgenzia = () => {
             </div>
             <div className="col-md-4 mb-3">
               <label htmlFor="ragSoc" className="form-label">
-                {t("Ragione Sociale")}
+                {t("Ragione Sociale")} *
               </label>
               <input
                 type="text"
@@ -57,7 +62,7 @@ export const RegistraAgenzia = () => {
             </div>
             <div className="col-md-4 mb-3">
               <label htmlFor="parIva" className="form-label">
-                {t("Partita IVA")}
+                {t("Partita IVA")} *
               </label>
               <input
                 type="text"
@@ -73,7 +78,7 @@ export const RegistraAgenzia = () => {
           </div>
           <div className="mb-3">
             <label htmlFor="address" className="form-label">
-              {t("Address")}
+              {t("Address")} *
             </label>
             <input
               type="text"
@@ -89,7 +94,7 @@ export const RegistraAgenzia = () => {
           <div className="row">
             <div className="col-md-3 mb-3">
               <label htmlFor="city" className="form-label">
-                {t("City")}
+                {t("City")} *
               </label>
               <input
                 type="text"
@@ -104,7 +109,7 @@ export const RegistraAgenzia = () => {
             </div>
             <div className="col-md-3 mb-3">
               <label htmlFor="cap" className="form-label">
-                {t("CAP")}
+                {t("CAP")} *
               </label>
               <input
                 type="text"
@@ -119,7 +124,7 @@ export const RegistraAgenzia = () => {
             </div>
             <div className="col-md-3 mb-3">
               <label htmlFor="prov" className="form-label">
-                {t("Province")}
+                {t("Province")} *
               </label>
               <input
                 type="text"
@@ -134,7 +139,7 @@ export const RegistraAgenzia = () => {
             </div>
             <div className="col-md-3 mb-3">
               <label htmlFor="nationality" className="form-label">
-                {t("Nationality")}
+                {t("Nationality")} *
               </label>
               <input
                 type="text"
@@ -152,7 +157,7 @@ export const RegistraAgenzia = () => {
           <div className="row">
             <div className="col-md-6 mb-3">
               <label htmlFor="telephone" className="form-label">
-                {t("Telephone")}
+                {t("Telephone")} *
               </label>
               <input
                 type="text"
@@ -165,9 +170,13 @@ export const RegistraAgenzia = () => {
                 required
               />
             </div>
+          </div>
+
+          <h3>{t("Dati per l'accesso")}</h3>
+          <div className="row">
             <div className="col-md-6 mb-3">
               <label htmlFor="email" className="form-label">
-                {t("Email")}
+                {t("Email")} *
               </label>
               <input
                 type="email"
@@ -183,23 +192,8 @@ export const RegistraAgenzia = () => {
           </div>
           <div className="row">
             <div className="col-md-6 mb-3">
-              <label htmlFor="referente" className="form-label">
-                {t("Referente")}
-              </label>
-              <input
-                type="text"
-                className={getInputClass("referente")}
-                id="referente"
-                name="referente"
-                value={formData.referente}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                required
-              />
-            </div>
-            <div className="col-md-6 mb-3">
               <label htmlFor="password" className="form-label">
-                {t("Password")}
+                {t("Password")} *
               </label>
               <input
                 type="password"
@@ -212,10 +206,56 @@ export const RegistraAgenzia = () => {
                 required
               />
             </div>
+            <div className="col-md-6 mb-3">
+              <label htmlFor="confirmPassword" className="form-label">
+                {t("Confirm Password")} *
+              </label>
+              <input
+                type="password"
+                className={getInputClass("confirmPassword")}
+                id="confirmPassword"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                required
+              />
+            </div>
+          </div>
+          <div className="mb-3 form-check">
+            <input
+              type="checkbox"
+              className="form-check-input"
+              id="termsAccepted"
+              name="termsAccepted"
+              checked={formData.termsAccepted}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              required
+            />
+            <label className="form-check-label" htmlFor="termsAccepted">
+              {t("Ho letto e accettato i")}{" "}
+              <a
+                href="https://www.quickferries.com/it/condizioni-generali-di-prenotazioni/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t("termini e condizioni")}
+              </a>
+              {" / "}
+              <a
+                href="https://www.quickferries.com/it/privacy-policy/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t("Informativa sulla privacy")}
+              </a>
+            </label>
           </div>
           <button type="submit" className="btn btn-primary">
             {t("Submit")}
           </button>
+          <p className="mt-3">* {t("Campi obbligatori")}</p>
         </form>
       </div>
     </div>

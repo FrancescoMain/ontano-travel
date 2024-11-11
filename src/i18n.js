@@ -76,7 +76,7 @@ const resources = {
         "An error occurred. Please try again.",
       "Invalid username or password.": "Invalid username or password.",
       "Prenotazione non trovata": "Reservation not found",
-      "Register Agency": "Register Agency",
+      "Register Agency": "Registration Agency",
       "Agency Name": "Agency Name",
       "Ragione Sociale": "Ragione Sociale",
       "Partita IVA": "Partita IVA",
@@ -105,6 +105,10 @@ const resources = {
         "Partita IVA must be exactly 11 digits.",
       "Loading...": "Loading...",
       "Agency registered successfully!": "Agency registered successfully!",
+      "Agency registered successfully! You will receive an email when the site administrator accepts your registration request.":
+        "Agency registered successfully! You will receive an email when the site administrator accepts your registration request.",
+      "Registrazione Agenzia": "Agency Registration",
+      "This will be used for logging in": "This will be used for logging in",
     },
   },
   it: {
@@ -174,7 +178,7 @@ const resources = {
         "Si è verificato un errore. Per favore riprova.",
       "Invalid username or password.": "Nome utente o password non validi.",
       "Prenotazione non trovata": "Prenotazione non trovata",
-      "Register Agency": "Registrare Agenzia",
+      "Register Agency": "Registrazione Agenzia",
       "Agency Name": "Nome dell'Agenzia",
       "Ragione Sociale": "Ragione Sociale",
       "Partita IVA": "Partita IVA",
@@ -204,6 +208,9 @@ const resources = {
         "La Partita IVA deve essere esattamente di 11 cifre.",
       "Loading...": "Caricamento...",
       "Agency registered successfully!": "Agenzia registrata con successo!",
+      "Agency registered successfully! You will receive an email when the site administrator accepts your registration request.":
+        "Agenzia registrata con successo! Riceverai un'email quando l'amministratore del sito accetterà la tua richiesta di registrazione.",
+      "This will be used for logging in": "Questo sarà utilizzato per accedere",
     },
   },
 };

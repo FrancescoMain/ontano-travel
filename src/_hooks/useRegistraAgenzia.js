@@ -22,6 +22,8 @@ const useRegistraAgenzia = () => {
     telephone: "",
     email: "",
     password: "",
+    confirmPassword: "",
+    termsAccepted: false,
   });
 
   const [touched, setTouched] = useState({});
@@ -75,26 +77,33 @@ const useRegistraAgenzia = () => {
         telephone: "",
         email: "",
         password: "",
+        confirmPassword: "",
+        termsAccepted: false,
       });
       setTouched({});
-      toast.success(t("Agency registered successfully!"), {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+      toast.success(
+        t(
+          "Agency registered successfully! You will receive an email when the site administrator accepts your registration request."
+        ),
+        {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        }
+      );
     }
   }, [error, success, t]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: type === "checkbox" ? checked : value,
     });
   };
 
@@ -126,6 +135,8 @@ const useRegistraAgenzia = () => {
       telephone: true,
       email: true,
       password: true,
+      confirmPassword: true,
+      termsAccepted: true,
     });
 
     if (!passwordRegex.test(formData.password)) {
@@ -147,6 +158,20 @@ const useRegistraAgenzia = () => {
       return;
     }
 
+    if (formData.password !== formData.confirmPassword) {
+      toast.error(t("Passwords do not match."), {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      return;
+    }
+
     if (!capRegex.test(formData.cap)) {
       toast.error(t("CAP must be exactly 5 digits."), {
         position: "top-center",
@@ -163,6 +188,20 @@ const useRegistraAgenzia = () => {
 
     if (!partitaIvaRegex.test(formData.parIva)) {
       toast.error(t("Partita IVA must be exactly 11 digits."), {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      return;
+    }
+
+    if (!formData.termsAccepted) {
+      toast.error(t("You must accept the terms and conditions."), {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
