@@ -23,12 +23,7 @@ export const RegistraAgenzia = () => {
       <div className="row justify-content-center align-items-center g-2">
         <form onSubmit={handleSubmit} className="col-6">
           <h2>{t("Register Agency")}</h2>
-          {loading && <p>{t("Loading...")}</p>}
-          {success && (
-            <p className="text-success">
-              {t("Agency registered successfully!")}
-            </p>
-          )}
+
           <div className="row">
             <div className="col-md-4 mb-3">
               <label htmlFor="name" className="form-label">
