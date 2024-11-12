@@ -41,3 +41,7 @@ img {
 .mb--2 {
   margin-bottom: -14px !important;
 }
+
+.MuiTablePagination-displayedRows {
+  margin: 0 !important;
+}

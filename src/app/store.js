@@ -10,6 +10,7 @@ import payByLinkReducer from "../features/payByLink/payByLinkSlice"; // Import p
 import tourReducer from "../features/tour/tourSlice"; // Import tourReducer
 import reservationReducer from "../features/reservation/reservationSlice"; // Import reservationReducer
 import registraAgenziaReducer from "../features/registraAgenzia/registraAgenziaSlice"; // Import registraAgenziaReducer
+import ricercaAgenziaReducer from "../features/ricercaAgenzia/ricercaAgenziaSlice"; // Import ricercaAgenziaReducer
 
 export const store = configureStore({
   reducer: {
@@ -24,5 +25,6 @@ export const store = configureStore({
     tour: tourReducer, // Add tour reducer
     reservation: reservationReducer, // Add reservation reducer
     registraAgenzia: registraAgenziaReducer, // Add registraAgenzia reducer
+    ricercaAgenzia: ricercaAgenziaReducer, // Add ricercaAgenzia reducer
   },
 });

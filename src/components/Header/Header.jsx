@@ -44,6 +44,19 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate }) => (
         {t("Dashboard")}
       </Link>
     </li>
+    <li>
+      <Link
+        className="Link"
+        color="primary"
+        disabled={false}
+        level="body-md"
+        underline="none"
+        variant="plain"
+        onClick={() => navigate("/ricerca-agenzia")}
+      >
+        {t("Ricerca Agenzia")}
+      </Link>
+    </li>
 
     {!isWebUser && (
       <li>

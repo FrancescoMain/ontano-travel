@@ -23,4 +23,8 @@ export const config = {
     method: "GET",
   },
   postAgency: { route: "/api/booking/agency", method: "POST" },
+  fetchAgenzie: {
+    route: "/api/booking/agency/search",
+    method: "GET",
+  }, // Remove page and size parameters
 };
