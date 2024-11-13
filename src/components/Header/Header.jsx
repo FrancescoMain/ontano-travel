@@ -14,51 +14,15 @@ import { handleLogout } from "../../utils/auth";
 import { useAuth } from "../../_hooks/useAuth";
 import i18n from "../../i18n";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 // Component for authenticated user links
-const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate }) => (
-  <>
-    <li>
-      <Link
-        className="Link"
-        color="primary"
-        disabled={false}
-        level="body-md"
-        underline="none"
-        variant="plain"
-        onClick={() => navigate("/prenotazioni")}
-      >
-        {t("Prenotazioni")}
-      </Link>
-    </li>
-    <li>
-      <Link
-        className="Link"
-        color="primary"
-        disabled={false}
-        level="body-md"
-        underline="none"
-        variant="plain"
-        onClick={() => navigate("/dashboard")}
-      >
-        {t("Dashboard")}
-      </Link>
-    </li>
-    <li>
-      <Link
-        className="Link"
-        color="primary"
-        disabled={false}
-        level="body-md"
-        underline="none"
-        variant="plain"
-        onClick={() => navigate("/ricerca-agenzia")}
-      >
-        {t("Ricerca Agenzia")}
-      </Link>
-    </li>
+const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate }) => {
+  const accountData = useSelector((state) => state.account.data);
+  const isAdmin = accountData?.authorities?.includes("ROLE_WEB_ADMIN");
 
-    {!isWebUser && (
+  return (
+    <>
       <li>
         <Link
           className="Link"
@@ -67,14 +31,59 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate }) => (
           level="body-md"
           underline="none"
           variant="plain"
-          onClick={handleLogout}
+          onClick={() => navigate("/prenotazioni")}
         >
-          {t("Logout")}
+          {t("Prenotazioni")}
         </Link>
       </li>
-    )}
-  </>
-);
+      {isAdmin && (
+        <>
+          <li>
+            <Link
+              className="Link"
+              color="primary"
+              disabled={false}
+              level="body-md"
+              underline="none"
+              variant="plain"
+              onClick={() => navigate("/dashboard")}
+            >
+              {t("Dashboard")}
+            </Link>
+          </li>
+          <li>
+            <Link
+              className="Link"
+              color="primary"
+              disabled={false}
+              level="body-md"
+              underline="none"
+              variant="plain"
+              onClick={() => navigate("/ricerca-agenzia")}
+            >
+              {t("Ricerca Agenzia")}
+            </Link>
+          </li>
+        </>
+      )}
+      {!isWebUser && (
+        <li>
+          <Link
+            className="Link"
+            color="primary"
+            disabled={false}
+            level="body-md"
+            underline="none"
+            variant="plain"
+            onClick={handleLogout}
+          >
+            {t("Logout")}
+          </Link>
+        </li>
+      )}
+    </>
+  );
+};
 
 // Component for unauthenticated user links
 const UnauthenticatedLinks = ({ t, navigate }) => (

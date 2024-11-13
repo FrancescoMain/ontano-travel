@@ -26,5 +26,9 @@ export const config = {
   fetchAgenzie: {
     route: "/api/booking/agency/search",
     method: "GET",
-  }, // Remove page and size parameters
+  },
+  fetchDettaglioAgenzia: {
+    route: "/api/booking/agency/:id/get",
+    method: "GET",
+  }, // Add fetchDettaglioAgenzia route
 };

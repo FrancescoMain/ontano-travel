@@ -11,6 +11,7 @@ import tourReducer from "../features/tour/tourSlice"; // Import tourReducer
 import reservationReducer from "../features/reservation/reservationSlice"; // Import reservationReducer
 import registraAgenziaReducer from "../features/registraAgenzia/registraAgenziaSlice"; // Import registraAgenziaReducer
 import ricercaAgenziaReducer from "../features/ricercaAgenzia/ricercaAgenziaSlice"; // Import ricercaAgenziaReducer
+import dettaglioAgenziaReducer from "../features/ricercaAgenzia/dettaglioAgenziaSlice"; // Import dettaglioAgenziaReducer
 
 export const store = configureStore({
   reducer: {
@@ -26,5 +27,6 @@ export const store = configureStore({
     reservation: reservationReducer, // Add reservation reducer
     registraAgenzia: registraAgenziaReducer, // Add registraAgenzia reducer
     ricercaAgenzia: ricercaAgenziaReducer, // Add ricercaAgenzia reducer
+    dettaglioAgenzia: dettaglioAgenziaReducer, // Add dettaglioAgenzia reducer
   },
 });
