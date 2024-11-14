@@ -31,4 +31,8 @@ export const config = {
     route: "/api/booking/agency/:id/get",
     method: "GET",
   }, // Add fetchDettaglioAgenzia route
+  searchReservations: {
+    route: "/api/booking/reservation/search",
+    method: "GET",
+  },
 };

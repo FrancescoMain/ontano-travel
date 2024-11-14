@@ -30,6 +30,7 @@ import SearchGuest from "./pages/SearchGuest"; // Import SearchGuest
 import { RegistraAgenzia } from "./pages/RegistraAgenzia";
 import { RicercaAgenzia } from "./pages/RicercaAgenzia";
 import { DettaglioAgenzia } from "./pages/DettaglioAgenzia"; // Import DettaglioAgenzia
+import { Prenotazioni } from "./pages/Prenotazioni"; // Import Prenotazioni
 
 const App = () => {
   const navigate = useNavigate();
@@ -73,6 +74,8 @@ const App = () => {
         <Route path="/registra-agenzia" element={<RegistraAgenzia />} />
         <Route path="/ricerca-agenzia" element={<RicercaAgenzia />} />
         <Route path="/agenzia/:id" element={<DettaglioAgenzia />} />{" "}
+        {/* Add route */}
+        <Route path="/prenotazioni" element={<Prenotazioni />} />{" "}
         {/* Add route */}
         <Route path="*" element={<HomePage />} />
       </Routes>

@@ -36,6 +36,7 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate }) => {
           {t("Prenotazioni")}
         </Link>
       </li>
+
       {isAdmin && (
         <>
           <li>

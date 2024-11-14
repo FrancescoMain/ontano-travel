@@ -12,6 +12,7 @@ import reservationReducer from "../features/reservation/reservationSlice"; // Im
 import registraAgenziaReducer from "../features/registraAgenzia/registraAgenziaSlice"; // Import registraAgenziaReducer
 import ricercaAgenziaReducer from "../features/ricercaAgenzia/ricercaAgenziaSlice"; // Import ricercaAgenziaReducer
 import dettaglioAgenziaReducer from "../features/ricercaAgenzia/dettaglioAgenziaSlice"; // Import dettaglioAgenziaReducer
+import prenotazioniReducer from "../features/reservation/prenotazioniSlice"; // Import prenotazioniReducer
 
 export const store = configureStore({
   reducer: {
@@ -28,5 +29,6 @@ export const store = configureStore({
     registraAgenzia: registraAgenziaReducer, // Add registraAgenzia reducer
     ricercaAgenzia: ricercaAgenziaReducer, // Add ricercaAgenzia reducer
     dettaglioAgenzia: dettaglioAgenziaReducer, // Add dettaglioAgenzia reducer
+    prenotazioni: prenotazioniReducer, // Add prenotazioni reducer
   },
 });
