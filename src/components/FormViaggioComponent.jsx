@@ -159,6 +159,8 @@ export const ViaggioDiAndataForm = ({
           <span
             onClick={() => resetRoute(id)}
             className="text-secondary link-underline-secondary pointer"
+            role="button"
+            aria-label={t("Rimuovi tratta")}
           >
             {t("Rimuovi tratta")}
           </span>
@@ -173,6 +175,8 @@ export const ViaggioDiAndataForm = ({
           filterOptions={filterOptions}
           sx={{ height: 56 }}
           onChange={(e) => handleChangeAndata(e, id)}
+          id={`tratta-autocomplete-${id}`}
+          aria-label={t("Seleziona una tratta")}
         />
 
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="it">
@@ -306,15 +310,16 @@ export const DettagliViaggio = ({ id, selected, resetHandle }) => {
 
   return (
     <>
-      <div className="row flex-column flex-lg-row">
+      <div className="row flex-column flex-lg-row" role="group" aria-labelledby={`dettagli-viaggio-${id}`}>
         <div className="col col-lg-3 d-flex flex-column">
-          <label htmlFor="adults">{t("Adulti")}</label>
+          <label htmlFor={`adults-${id}`}>{t("Adulti")}</label>
 
           <select
             value={dettagli[id]?.adulti}
             onChange={(e) => handleChangeAdulti(e, id)}
-            id="adults"
+            id={`adults-${id}`}
             className="select-detail"
+            aria-label={t("Seleziona numero di adulti")}
           >
             {Array.from({ length: 9 }, (_, i) => (
               <option key={i + 1} value={i + 1}>

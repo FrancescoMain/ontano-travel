@@ -178,3 +178,5 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
     </div>
   );
 };
+
+// Se necessario, aggiungi una logica per mostrare un loader specifico nel ResultCard

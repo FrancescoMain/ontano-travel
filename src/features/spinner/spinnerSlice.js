@@ -1,26 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  loading: false,
-  loadingId: -1,
+  loadingIds: [],
 };
 
 export const spinnerSlice = createSlice({
   name: "spinner",
   initialState,
   reducers: {
-    startLoading: (state) => {
-      state.loading = true;
+    startLoading: (state, action) => {
+      state.loadingIds.push(action.payload);
     },
-    stopLoading: (state) => {
-      state.loading = false;
-    },
-    setLoadingId: (state, action) => {
-      state.loadingId = action.payload;
+    stopLoading: (state, action) => {
+      state.loadingIds = state.loadingIds.filter(id => id !== action.payload);
     },
   },
 });
 
-export const { startLoading, stopLoading, setLoadingId } = spinnerSlice.actions;
+export const { startLoading, stopLoading } = spinnerSlice.actions;
 
 export default spinnerSlice.reducer;

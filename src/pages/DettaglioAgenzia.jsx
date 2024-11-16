@@ -57,6 +57,7 @@ export const DettaglioAgenzia = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     dispatch(updateDettaglioAgenzia({ id, data: formData }));
     navigate("/ricerca-agenzia");
   };
@@ -203,6 +204,7 @@ export const DettaglioAgenzia = () => {
                   <input
                     type="number"
                     step="0.01"
+                    min="0"
                     className="form-control"
                     name="percentualCommissione"
                     value={formData.percentualCommissione}
@@ -216,6 +218,7 @@ export const DettaglioAgenzia = () => {
                   <input
                     type="number"
                     step="0.01"
+                    min="0"
                     className="form-control"
                     name="dirittiDiPrenotazione"
                     value={formData.dirittiDiPrenotazione}

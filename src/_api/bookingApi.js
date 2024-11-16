@@ -1,5 +1,6 @@
 import axios from "axios";
 import { config } from "../config/config";
+import { getAuthHeader } from "../utils/auth";
 
 export const fetchReservation = async (bookingCode, email) => {
   try {
@@ -10,6 +11,30 @@ export const fetchReservation = async (bookingCode, email) => {
       )}`,
       {
         params: { email: decodeURIComponent(email) },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.detail) {
+      throw new Error(error.response.data.detail);
+    } else {
+      throw error;
+    }
+  }
+};
+
+export const fetchReservationByCode = async (reservationCode) => {
+  try {
+    const response = await axios.get(
+      `${config.basePath}${config.fetchReservation.route.replace(
+        ":bookingCode",
+        reservationCode
+      )}`,
+      {
+        headers: {
+          ...getAuthHeader(),
+          accept: "application/json",
+        },
       }
     );
     return response.data;

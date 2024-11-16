@@ -13,10 +13,11 @@ import { useNavigate } from "react-router-dom";
 import { postQuote } from "../../_api/reservations/quote";
 import { setNTratte } from "../../features/viaggio/findTratta";
 import { useDispatch } from "react-redux";
+
 export const ResultComponent = () => {
   const {
     results,
-    loadingId,
+    loadingIds,
     selected,
     totalPrice,
     multitratta,
@@ -69,6 +70,8 @@ export const ResultComponent = () => {
     });
   };
 
+  const isLoading = (id) => loadingIds.includes(id);
+
   useEffect(() => {
     const fetchQuote = async () => {
       if (tratte.length > 0) {
@@ -84,11 +87,11 @@ export const ResultComponent = () => {
   }, [tratte]);
 
   return (
-    <div className="row justify-content-center">
-      <div className="col col-lg-6 p-4">
+    <div className="row justify-content-center" role="main">
+      <div className="col col-lg-6 p-4" role="region" aria-label={t("Risultati della ricerca")}>
         <ViaggioDiAndataForm resultMode={true} id={0} />
         <div className="mb-3"></div>
-        {loadingId === 0 ? (
+        {isLoading(0) ? (
           <div className="row d-flex justify-content-center">
             <div
               className="spinner-border text-primary align-items-center"
@@ -99,7 +102,7 @@ export const ResultComponent = () => {
           </div>
         ) : (
           <div>
-            {!results[0]?.data[0] && <div> No results </div>}
+            {!results[0]?.data[0] && <div>{t("Nessun risultato")}</div>}
             {results[0]?.data?.map((result, index) => (
               <ResultCard
                 key={result.id}
@@ -108,13 +111,16 @@ export const ResultComponent = () => {
                 id={0}
                 index={index}
                 hidden={isHidden(0, index)}
+                role="button"
+                aria-pressed={selected[0]?.idSelected === index}
+                tabIndex="0"
               />
             ))}
           </div>
         )}
         {!multitratta && <ViaggoiDiRitornoForm resultMode={true} id={1} />}
         <div className="mb-3"></div>
-        {!multitratta && loadingId === 1 ? (
+        {!multitratta && isLoading(1) ? (
           <div className="row d-flex justify-content-center">
             <div
               className="spinner-border text-primary align-items-center"
@@ -146,7 +152,7 @@ export const ResultComponent = () => {
               { length: nTratte + 1 },
               (_, id) =>
                 id !== 0 && (
-                  <div>
+                  <div key={id}>
                     <ViaggioDiAndataForm
                       resultMode={true}
                       id={id}
@@ -154,7 +160,7 @@ export const ResultComponent = () => {
                       setNTratte={setNTratte}
                     />
                     <div className="mb-3"></div>
-                    {loadingId === id ? (
+                    {isLoading(id) ? (
                       <div className="row d-flex justify-content-center">
                         <div
                           className="spinner-border text-primary align-items-center"
@@ -197,7 +203,7 @@ export const ResultComponent = () => {
 
       <div className="marginDiv "></div>
       {selected[0].prezzo || selected[1].prezzo ? (
-        <div className="to-checkout">
+        <div className="to-checkout" role="contentinfo">
           <div className="to-checkout-cont">
             <div className="to-checkout-cont__left">
               <div>
@@ -211,6 +217,7 @@ export const ResultComponent = () => {
                 size="lg"
                 color="warning"
                 variant="solid"
+                aria-label={t("Procedi al checkout")}
               >
                 Avanti
               </Button>

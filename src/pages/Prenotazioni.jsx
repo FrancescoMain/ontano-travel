@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -14,6 +14,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import TablePagination from "@mui/material/TablePagination";
+import { useNavigate } from "react-router-dom";
+import { fetchAgenzie } from "../features/ricercaAgenzia/ricercaAgenziaSlice";
 
 export const Prenotazioni = () => {
   const [formData, setFormData] = useState({
@@ -26,11 +28,22 @@ export const Prenotazioni = () => {
     contact_surname: "",
     sort: "",
   });
-
   const dispatch = useDispatch();
+
+
+  const [agenzie, setAgenzie] = useState([]);
+
+  useEffect(() => {
+    dispatch(fetchAgenzie({ page: 0, size: 100 })).then((response) => {
+      setAgenzie(response.payload.data);
+    });
+  }, [dispatch]);
+
   const { reservations, status, error, totalCount, page, size } = useSelector(
     (state) => state.prenotazioni
   );
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,6 +64,10 @@ export const Prenotazioni = () => {
     const newSize = parseInt(event.target.value, 10);
     dispatch(setSize(newSize));
     dispatch(searchReservations({ ...formData, page, size: newSize }));
+  };
+
+  const handleRowClick = (reservationCode) => {
+    navigate(`/reservation/${reservationCode}`);
   };
 
   return (
@@ -89,14 +106,20 @@ export const Prenotazioni = () => {
             />
           </div>
           <div className="col-md-2 mb-3">
-            <label className="form-label">ID dell'agenzia:</label>
-            <input
-              type="number"
+            <label className="form-label">Agenzia:</label>
+            <select
               name="agency_id"
               className="form-control"
               value={formData.agency_id}
               onChange={handleChange}
-            />
+            >
+              <option value="">Select Agency</option>
+              {agenzie.map((agenzia) => (
+                <option key={agenzia.id} value={agenzia.id}>
+                  {agenzia.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="col-md-2 mb-3">
             <label className="form-label">Email dell'ospite:</label>
@@ -177,7 +200,11 @@ export const Prenotazioni = () => {
               </TableRow>
             )}
             {reservations.map((reservation) => (
-              <TableRow key={reservation.reservationCode}>
+              <TableRow 
+                key={reservation.reservationCode} 
+                onClick={() => handleRowClick(reservation.reservationCode)}
+                style={{ cursor: 'pointer' }}
+              >
                 <TableCell>{reservation.reservationCode}</TableCell>
                 <TableCell>{reservation.dataReservation}</TableCell>
                 <TableCell>{reservation.prezzo}</TableCell>

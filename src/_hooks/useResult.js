@@ -29,7 +29,7 @@ export const useResult = () => {
   );
   const { routes } = useSelector((state) => state.routes);
   const { results, selected } = useSelector((state) => state.resultsTratta);
-  const { loadingId } = useSelector((state) => state.spinner);
+  const { loadingId, loadingIds } = useSelector((state) => state.spinner);
 
   const [totalPrice, setTotalPrice] = React.useState(0);
   // const [nTratte, setNTratte] = React.useState(multitratta === false ? 1 : 0);
@@ -39,6 +39,9 @@ export const useResult = () => {
     return new URLSearchParams(query);
   };
 
+  // Aggiungi uno stato per il caching dei risultati
+  const cacheRef = React.useRef({});
+
   // useEffect(() => {
   //   // Reset selected state when the component mounts
   //   dispatch(resetSelectedAll());
@@ -47,7 +50,7 @@ export const useResult = () => {
   useEffect(() => {
     // Esegui la chiamata API
     const fetchPriceData = async (id) => {
-      dispatch(startLoading());
+      dispatch(startLoading(id));
       const formattedDate = dayjs(date[id]?.dateFormatted).format("YYYY-MM-DD");
 
       // Get the current language or default to 'it'
@@ -68,31 +71,28 @@ export const useResult = () => {
         console.error(error);
         dispatch(stopLoading(null));
       } finally {
-        dispatch(stopLoading(null));
+        dispatch(stopLoading(id));
       }
     };
+
     if (tratte.length > 0 && date.length > 0) {
-      console.log(nTratte, multitratta);
       Array.from({ length: nTratte + 1 }).forEach((_, index) => {
-        if (tratte[index]?.tratta?.route_id && date[index]?.dateFormatted) {
-          const resultDepartureDate =
-            dayjs(results[index]?.data[0]?.departure).format("YYYY-MM-DD") ||
-            "";
-          const formattedDate = dayjs(date[index].dateFormatted).format(
-            "YYYY-MM-DD"
-          );
-          console.log(tratte);
-          if (
-            resultDepartureDate !== formattedDate ||
-            !results[index].data.length ||
-            results[index].data.fromPort !== tratte[index].tratta.from
-          ) {
+        const routeId = tratte[index]?.tratta?.route_id;
+        const dateFormatted = date[index]?.dateFormatted;
+
+        if (routeId && dateFormatted) {
+          const cacheKey = `${routeId}-${dateFormatted}`;
+
+          // Verifica se i dati sono già nel cache
+          if (!cacheRef.current[cacheKey]) {
             fetchPriceData(index);
+            // Salva i parametri nel cache
+            cacheRef.current[cacheKey] = true;
           }
         }
       });
     }
-  }, [tratte, date, dispatch, nTratte]);
+  }, [tratte, date, nTratte]);
 
   useEffect(() => {
     setTotalPrice(0);
@@ -211,5 +211,6 @@ export const useResult = () => {
     multitratta,
     nTratte,
     setNTratte,
+    loadingIds,
   };
 };
