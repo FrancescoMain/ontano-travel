@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux"; // Import useDispatch
 import { HomePageComponent } from "../components/HomePageComponent/HomePageComponent";
-import { fetchAccountData } from "../utils/auth";
 import { resetTour } from "../features/tour/tourSlice"; // Import resetTour
 import {
   resetResults,

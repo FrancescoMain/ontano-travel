@@ -19,7 +19,10 @@ export const getAuthHeader = () => {
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
+let accountDataFetched = false;
+
 export const fetchAccountData = async () => {
+  if (accountDataFetched) return;
   const token = getToken();
   if (token) {
     const state = store.getState();
@@ -31,9 +34,15 @@ export const fetchAccountData = async () => {
             headers: getAuthHeader(),
           }
         );
-        store.dispatch(setAccountData(response.data));
+        if (response.status === 200) {
+          store.dispatch(setAccountData(response.data));
+          accountDataFetched = true;
+        } else {
+          handleLogout();
+        }
       } catch (error) {
         console.error("Error fetching account data:", error);
+        handleLogout();
       }
     }
   }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
@@ -35,16 +35,14 @@ import { ReservationDetail } from "./pages/ReservationDetail"; // Import Reserva
 
 const App = () => {
   const navigate = useNavigate();
-  let accountDataFetched = false;
+  const token =
+  localStorage.getItem("id_token") || sessionStorage.getItem("id_token");
+  useEffect(() => {
 
-  store.subscribe(() => {
-    const token =
-      localStorage.getItem("id_token") || sessionStorage.getItem("id_token");
-    if (token && !accountDataFetched) {
+    if (token) {
       fetchAccountData();
-      accountDataFetched = true;
     }
-  });
+  }, [token]);
 
   return (
     <Provider store={store}>
