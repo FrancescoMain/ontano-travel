@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Header.css";
 import { Dropdown, Link, Menu, MenuButton, MenuItem } from "@mui/joy";
 import { useTranslation } from "react-i18next";
@@ -15,9 +15,10 @@ import { useAuth } from "../../_hooks/useAuth";
 import i18n from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 // Component for authenticated user links
-const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate }) => {
+const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcanvasClose }) => {
   const accountData = useSelector((state) => state.account.data);
   const isAdmin = accountData?.authorities?.includes("ROLE_WEB_ADMIN");
 
@@ -31,7 +32,10 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate }) => {
           level="body-md"
           underline="none"
           variant="plain"
-          onClick={() => navigate("/prenotazioni")}
+          onClick={() => {
+            navigate("/prenotazioni");
+            handleOffcanvasClose();
+          }}
         >
           {t("Prenotazioni")}
         </Link>
@@ -47,7 +51,10 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate }) => {
               level="body-md"
               underline="none"
               variant="plain"
-              onClick={() => navigate("/dashboard")}
+              onClick={() => {
+                navigate("/dashboard");
+                handleOffcanvasClose();
+              }}
             >
               {t("Dashboard")}
             </Link>
@@ -60,7 +67,10 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate }) => {
               level="body-md"
               underline="none"
               variant="plain"
-              onClick={() => navigate("/ricerca-agenzia")}
+              onClick={() => {
+                navigate("/ricerca-agenzia");
+                handleOffcanvasClose();
+              }}
             >
               {t("Ricerca Agenzia")}
             </Link>
@@ -76,7 +86,10 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate }) => {
             level="body-md"
             underline="none"
             variant="plain"
-            onClick={handleLogout}
+            onClick={() => {
+              handleLogout();
+              handleOffcanvasClose();
+            }}
           >
             {t("Logout")}
           </Link>
@@ -87,7 +100,7 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate }) => {
 };
 
 // Component for unauthenticated user links
-const UnauthenticatedLinks = ({ t, navigate }) => (
+const UnauthenticatedLinks = ({ t, navigate, handleOffcanvasClose }) => (
   <>
     <li>
       <Link
@@ -97,7 +110,10 @@ const UnauthenticatedLinks = ({ t, navigate }) => (
         level="body-md"
         underline="none"
         variant="plain"
-        onClick={() => navigate("/login")}
+        onClick={() => {
+          navigate("/login");
+          handleOffcanvasClose();
+        }}
       >
         {t("Login")}
         <LoginIcon />
@@ -111,7 +127,10 @@ const UnauthenticatedLinks = ({ t, navigate }) => (
         level="body-md"
         underline="none"
         variant="plain"
-        onClick={() => navigate("/cerca-prenotazione")}
+        onClick={() => {
+          navigate("/cerca-prenotazione");
+          handleOffcanvasClose();
+        }}
       >
         {t("Cerca prenotazione")}
         <SearchIcon />
@@ -125,7 +144,10 @@ const UnauthenticatedLinks = ({ t, navigate }) => (
         level="body-md"
         underline="none"
         variant="plain"
-        onClick={() => navigate("/registra-agenzia")}
+        onClick={() => {
+          navigate("/registra-agenzia");
+          handleOffcanvasClose();
+        }}
       >
         {t("Registra Agenzia")}
       </Link>
@@ -137,6 +159,10 @@ export const Header = () => {
   const { loading, token, isWebUser } = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [showOffcanvas, setShowOffcanvas] = useState(false);
+
+  const handleOffcanvasClose = () => setShowOffcanvas(false);
+  const handleOffcanvasShow = () => setShowOffcanvas(true);
 
   return (
     <div className="header">
@@ -166,16 +192,21 @@ export const Header = () => {
                 handleLogout={handleLogout}
                 isWebUser={isWebUser}
                 navigate={navigate}
+                handleOffcanvasClose={handleOffcanvasClose}
               />
             ) : (
-              <UnauthenticatedLinks t={t} navigate={navigate} />
+              <UnauthenticatedLinks
+                t={t}
+                navigate={navigate}
+                handleOffcanvasClose={handleOffcanvasClose}
+              />
             )}
             <li className="lang">
               <Dropdown>
                 <MenuButton
                   color="primary"
                   size="sm"
-                  sx={{ padding: 0, border: 0 }}
+                  sx={{ padding: 0, border: 0, zIndex: 1050 }}
                 >
                   <img
                     className="img-lang"
@@ -184,7 +215,7 @@ export const Header = () => {
                   />
                   <ArrowDropDownIcon />
                 </MenuButton>
-                <Menu variant="plain" color="primary" size="sm">
+                <Menu variant="plain" color="primary" size="sm" sx={{ zIndex: 1050 }}>
                   <MenuItem
                     className="lang-item"
                     onClick={() => changeLanguage("it")}
@@ -200,37 +231,58 @@ export const Header = () => {
           </div>
 
           <div className="header-mobile">
-            <Dropdown>
-              <MenuButton color="primary" size="sm">
-                <MenuIcon />
-              </MenuButton>
-              <Menu variant="plain" color="primary" size="sm">
+            <button
+              className="btn btn-text"
+              type="button"
+              onClick={handleOffcanvasShow}
+            >
+              <MenuIcon />
+            </button>
+            <div
+              className={`offcanvas offcanvas-end ${showOffcanvas ? "show" : ""}`}
+              tabIndex="-1"
+              style={{ visibility: showOffcanvas ? "visible" : "hidden", width: "250px" }}
+            >
+              <div className="offcanvas-header">
+                <h5 className="offcanvas-title">{t("Menu")}</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  aria-label="Close"
+                  onClick={handleOffcanvasClose}
+                ></button>
+              </div>
+              <div className="offcanvas-body">
                 {token ? (
                   <AuthenticatedLinks
                     t={t}
                     handleLogout={handleLogout}
                     isWebUser={isWebUser}
                     navigate={navigate}
+                    handleOffcanvasClose={handleOffcanvasClose}
                   />
                 ) : (
-                  <UnauthenticatedLinks t={t} navigate={navigate} />
+                  <UnauthenticatedLinks
+                    t={t}
+                    navigate={navigate}
+                    handleOffcanvasClose={handleOffcanvasClose}
+                  />
                 )}
-              </Menu>
-            </Dropdown>
-            <li className="lang">
+               <li className="lang">
               <Dropdown>
                 <MenuButton
                   color="primary"
                   size="sm"
-                  sx={{ padding: 0, border: 0 }}
+                  sx={{ padding: 0, border: 0, zIndex: 1050 }}
                 >
                   <img
                     className="img-lang"
                     src={i18n.language === "it" ? it : us}
                     alt="language"
                   />
+                  <ArrowDropDownIcon />
                 </MenuButton>
-                <Menu variant="plain" color="primary" size="sm">
+                <Menu variant="plain" color="primary" size="sm" sx={{ zIndex: 1050 }}>
                   <MenuItem
                     className="lang-item"
                     onClick={() => changeLanguage("it")}
@@ -243,6 +295,8 @@ export const Header = () => {
                 </Menu>
               </Dropdown>
             </li>
+              </div>
+            </div>
           </div>
         </ul>
       </nav>

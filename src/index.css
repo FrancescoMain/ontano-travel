@@ -45,3 +45,25 @@ img {
 .MuiTablePagination-displayedRows {
   margin: 0 !important;
 }
+
+
+select {
+  background-color: white !important;
+  color: black !important;
+  border: 1px solid black !important;
+}
+
+.icon,
+.text-primary {
+  color: black !important;
+}
+
+/* Mobile specific styles */
+@media (max-width: 768px) {
+  
+  select {
+    background-color: white !important;
+    color: black !important;
+    border: 1px solid black !important;
+  }
+}

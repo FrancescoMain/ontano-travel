@@ -7,6 +7,8 @@ import {
 } from "../features/ricercaAgenzia/dettaglioAgenziaSlice";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Spinner } from "../components/Spinner/Spinner";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const DettaglioAgenzia = () => {
   const { id } = useParams();
@@ -58,8 +60,15 @@ export const DettaglioAgenzia = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    dispatch(updateDettaglioAgenzia({ id, data: formData }));
-    navigate("/ricerca-agenzia");
+    dispatch(updateDettaglioAgenzia({ id, data: formData }))
+      .unwrap()
+      .then(() => {
+        toast.success("Update successful!");
+        navigate("/ricerca-agenzia");
+      })
+      .catch(() => {
+        toast.error("Update failed!");
+      });
   };
 
   if (status === "loading") {
