@@ -168,6 +168,12 @@ export const CheckoutTratta = ({ route, post, onRefund, isAdmin }) => {
           <span class="h5"> Totale tratta </span>
           <span class="fw-bold">{route.priceFinal.priceFormatted}</span>
         </div>
+        {route?.status === "CANCELLED" && (
+          <div class="bg-aliceblue d-flex justify-content-between align-items-center subtotal mb-3 ">
+            <span class="h5"> Rimborso </span>
+            <span class="fw-bold">{route.priceReturned.priceFormatted}</span>
+          </div>
+        )}
         {isAdmin && route?.status !== "CANCELLED" && (
           <>
             <button
