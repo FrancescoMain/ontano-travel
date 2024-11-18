@@ -22,6 +22,10 @@ export const config = {
     route: "/api/booking/reservation/:bookingCode/guest",
     method: "GET",
   },
+  fetchReservationAdmin: {
+    route: "/api/booking/reservation/:bookingCode/admin",
+    method: "GET",
+  },
   postAgency: { route: "/api/booking/agency", method: "POST" },
   fetchAgenzie: {
     route: "/api/booking/agency/search",

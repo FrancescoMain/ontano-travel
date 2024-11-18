@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import dayjs from "dayjs";
 import { IoMdPeople } from "react-icons/io";
 import { CheckoutTariffe } from "./CheckoutTariffe";
@@ -10,7 +10,7 @@ import Nlg from "../assets/nlg.png";
 import { formatDateTime } from "../utils/dateUtils"; // Import formatDateTime function
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
 
-export const CheckoutTratta = ({ route, post }) => {
+export const CheckoutTratta = ({ route, post, onRefund, isAdmin }) => {
   const { i18n } = useTranslation();
   const language = i18n.language;
 
@@ -84,6 +84,24 @@ export const CheckoutTratta = ({ route, post }) => {
     processedTariffs = route.tariffs;
   }
 
+  const [showModal, setShowModal] = useState(false);
+  const [amount, setAmount] = useState(0);
+  const [executeRefund, setExecuteRefund] = useState(true);
+
+  const handleRefundClick = () => {
+    setShowModal(true);
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
+
+  const handleRefundSubmit = (e) => {
+    e.preventDefault();
+    onRefund(route.id, amount, executeRefund);
+    setShowModal(false);
+  };
+
   return (
     <div>
       <div class="bg-aliceblue row g-0 pb-2 pt-3">
@@ -150,6 +168,82 @@ export const CheckoutTratta = ({ route, post }) => {
           <span class="h5"> Totale tratta </span>
           <span class="fw-bold">{route.priceFinal.priceFormatted}</span>
         </div>
+        {isAdmin && route?.status !== "CANCELLED" && (
+          <>
+            <button
+              className="btn btn-danger mt-2 mb-2"
+              onClick={handleRefundClick}
+            >
+              Richiedi Rimborso
+            </button>
+
+            {showModal && (
+              <>
+                {/* Backdrop */}
+                <div className="modal-backdrop fade show"></div>
+                {/* Modale */}
+                <div className="modal show d-block" tabIndex="-1">
+                  <div className="modal-dialog">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h5 className="modal-title">Richiedi Rimborso</h5>
+                        <button
+                          type="button"
+                          className="btn-close"
+                          onClick={handleModalClose}
+                        ></button>
+                      </div>
+                      <div className="modal-body">
+                        <form onSubmit={handleRefundSubmit}>
+                          <div className="mb-3">
+                            <label htmlFor="formAmount" className="form-label">
+                              Importo
+                            </label>
+                            <input
+                              type="number"
+                              className="form-control"
+                              id="formAmount"
+                              value={amount}
+                              onChange={(e) => setAmount(e.target.value)}
+                              required
+                            />
+                          </div>
+                          <div className="form-check mb-3">
+                            <input
+                              type="checkbox"
+                              className="form-check-input"
+                              id="formExecuteRefund"
+                              checked={executeRefund}
+                              onChange={(e) => setExecuteRefund(e.target.checked)}
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor="formExecuteRefund"
+                            >
+                              Esegui Rimborso
+                            </label>
+                          </div>
+                          <div className="modal-footer">
+                            <button
+                              type="button"
+                              className="btn btn-secondary"
+                              onClick={handleModalClose}
+                            >
+                              Annulla
+                            </button>
+                            <button type="submit" className="btn btn-primary">
+                              Conferma
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

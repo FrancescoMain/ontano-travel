@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchReservation, fetchReservationByCode } from "../../_api/bookingApi";
+import { fetchReservation, fetchReservationByCode, sendRefundRequest } from "../../_api/bookingApi";
 
 export const fetchReservationThunk = createAsyncThunk(
   "reservation/fetchReservation",
@@ -18,6 +18,23 @@ export const fetchReservationByCodeThunk = createAsyncThunk(
   async (reservationCode, { rejectWithValue }) => {
     try {
       const response = await fetchReservationByCode(reservationCode);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const requestRefund = createAsyncThunk(
+  "reservation/requestRefund",
+  async ({ routeId, amount, executeRefund, reservationCode }, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await sendRefundRequest(routeId, {
+        amount,
+        executeRefund,
+      });
+      // Dispatch fetchReservationByCodeThunk to refresh the reservation data
+      dispatch(fetchReservationByCodeThunk(reservationCode));
       return response;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -60,6 +77,17 @@ const reservationSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(fetchReservationByCodeThunk.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(requestRefund.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(requestRefund.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(requestRefund.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       });

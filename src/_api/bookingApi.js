@@ -26,10 +26,32 @@ export const fetchReservation = async (bookingCode, email) => {
 export const fetchReservationByCode = async (reservationCode) => {
   try {
     const response = await axios.get(
-      `${config.basePath}${config.fetchReservation.route.replace(
+      `${config.basePath}${config.fetchReservationAdmin.route.replace(
         ":bookingCode",
         reservationCode
       )}`,
+      {
+        headers: {
+          ...getAuthHeader(),
+          accept: "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.detail) {
+      throw new Error(error.response.data.detail);
+    } else {
+      throw error;
+    }
+  }
+};
+
+export const sendRefundRequest = async (routeId, body) => {
+  try {
+    const response = await axios.post(
+      `${config.basePath}/api/booking/ticket/${routeId}/cancel`,
+      body,
       {
         headers: {
           ...getAuthHeader(),

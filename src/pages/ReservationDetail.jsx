@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { resetReservation, fetchReservationByCodeThunk } from "../features/reservation/reservationSlice";
+import { resetReservation, fetchReservationByCodeThunk, requestRefund } from "../features/reservation/reservationSlice";
 import { CheckoutTratta } from "../components/CheckoutTratta";
 
 export const ReservationDetail = () => {
@@ -9,6 +9,7 @@ export const ReservationDetail = () => {
   const reservation = useSelector((state) => state.reservation.data);
   const dispatch = useDispatch();
   const navigate = useNavigate(); // Initialize useNavigate
+  const isAdmin = true; // Imposta questa variabile in base alla tua logica
 
   useEffect(() => {
     dispatch(fetchReservationByCodeThunk(reservationCode)); // Use the new thunk
@@ -17,6 +18,11 @@ export const ReservationDetail = () => {
       dispatch(resetReservation()); // Reset reservation data on unmount
     };
   }, [dispatch, reservationCode]);
+
+  const handleRefund = (routeId, amount, executeRefund) => {
+    dispatch(requestRefund({ routeId, amount, executeRefund, reservationCode }));
+  };
+
   return (
     <div className="container">
       <div className="  align-items-center">
@@ -33,8 +39,14 @@ export const ReservationDetail = () => {
               </h3>
             </div>
           )}
-          {reservation?.reservationRoutes.map((route, index) => (
-            <CheckoutTratta route={route} key={index} post={true} />
+          {reservation?.reservationRoutes?.map((route, index) => (
+            <CheckoutTratta
+              route={route}
+              key={index}
+              post={true}
+              onRefund={handleRefund}
+              isAdmin={isAdmin}
+            />
           ))}
           <div className="card-footer bg-ice-white py-lg-3 rounded-bottom-left-4x rounded-bottom-right-4x border-top border-primary">
             <div
@@ -61,7 +73,7 @@ export const ReservationDetail = () => {
           <div className="spacer my-3 sconto d-none"></div>
           <div className="d-flex justify-content-between align-items-center">
             <span>Diritti di prenotazione</span>
-            <span>{reservation?.taxPreview.priceFormatted}</span>
+            <span>{reservation?.taxPreview?.priceFormatted}</span>
           </div>
           <div className="spacer my-3 sconto d-none"></div>
 
@@ -76,7 +88,7 @@ export const ReservationDetail = () => {
           >
             <span className="h4">Totale</span>
             <span className="h4 total-price" data-total-price-in-cents="11150">
-              {reservation?.priceToPay.priceFormatted}
+              {reservation?.priceToPay?.priceFormatted}
             </span>
           </div>
         </div>
