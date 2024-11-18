@@ -4,6 +4,7 @@ import {
   fetchAgenzie,
   setPage,
   setSize,
+  setName
 } from "../features/ricercaAgenzia/ricercaAgenziaSlice";
 import { useNavigate } from "react-router-dom";
 
@@ -17,10 +18,11 @@ const useAgenziaTable = () => {
   const page = useSelector((state) => state.ricercaAgenzia.page);
   const size = useSelector((state) => state.ricercaAgenzia.size);
   const loading = useSelector((state) => state.spinner.loading);
+  const name = useSelector((state) => state.ricercaAgenzia.name);
 
   useEffect(() => {
-    dispatch(fetchAgenzie({ page, size }));
-  }, [dispatch, page, size]);
+    dispatch(fetchAgenzie({ page, size, name }));
+  }, [dispatch, page, size, name]);
 
   const handleRowClick = (row) => {
     navigate(`/agenzia/${row.id}`);
@@ -34,7 +36,13 @@ const useAgenziaTable = () => {
     const newSize = parseInt(event.target.value, 10);
     dispatch(setSize(newSize));
     dispatch(setPage(0)); // Reset to first page when page size changes
-    dispatch(fetchAgenzie({ page: 0, size: newSize })); // Fetch data with updated size
+    dispatch(fetchAgenzie({ page: 0, size: newSize, name }));
+  };
+
+  const handleSearch = (searchName) => {
+    dispatch(setName(searchName));
+    dispatch(setPage(0)); // Reset to first page when search changes
+    dispatch(fetchAgenzie({ page: 0, size, name: searchName }));
   };
 
   return {
@@ -48,6 +56,7 @@ const useAgenziaTable = () => {
     handleRowClick,
     handlePageChange,
     handleSizeChange,
+    handleSearch,
   };
 };
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -12,6 +12,7 @@ import useAgenziaTable from "../_hooks/useAgenziaTable";
 
 export const RicercaAgenzia = () => {
   const { t } = useTranslation();
+  const [searchName, setSearchName] = useState("");
   const {
     agenzie,
     status,
@@ -23,13 +24,34 @@ export const RicercaAgenzia = () => {
     handleRowClick,
     handlePageChange,
     handleSizeChange,
+    handleSearch,
   } = useAgenziaTable();
+
+  const handleSearchChange = (event) => {
+    setSearchName(event.target.value);
+  };
+
+  const handleSearchClick = () => {
+    handleSearch(searchName);
+  };
 
   return (
     <div className="container">
       <div className="row justify-content-center align-items-center g-2">
         <div className="col mt-3">
           <h1>{t("Ricerca Agenzia")}</h1>
+          <div className="mb-3 d-flex">
+            <input
+              type="text"
+              value={searchName}
+              onChange={handleSearchChange}
+              placeholder={t("Search by name")}
+              className="form-control me-2"
+            />
+            <button onClick={handleSearchClick} className="btn btn-primary">
+              {t("Search")}
+            </button>
+          </div>
           <TableContainer component={Paper}>
             <Table>
               <TableHead>

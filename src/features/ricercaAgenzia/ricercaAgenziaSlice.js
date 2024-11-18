@@ -6,10 +6,10 @@ import { startLoading, stopLoading } from "../spinner/spinnerSlice";
 
 export const fetchAgenzie = createAsyncThunk(
   "ricercaAgenzia/fetchAgenzie",
-  async ({ page, size }, { dispatch }) => {
+  async ({ page, size, name }, { dispatch }) => {
     dispatch(startLoading());
     const response = await axios.get(
-      `${config.basePath}${config.fetchAgenzie.route}?page=${page}&size=${size}`,
+      `${config.basePath}${config.fetchAgenzie.route}?page=${page}&size=${size}&name=${name}`,
       { headers: getAuthHeader() }
     );
     dispatch(stopLoading());
@@ -29,6 +29,7 @@ const ricercaAgenziaSlice = createSlice({
     totalCount: 0,
     page: 0,
     size: 20,
+    name: "",
   },
   reducers: {
     setPage: (state, action) => {
@@ -36,6 +37,9 @@ const ricercaAgenziaSlice = createSlice({
     },
     setSize: (state, action) => {
       state.size = action.payload;
+    },
+    setName: (state, action) => {
+      state.name = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -55,6 +59,6 @@ const ricercaAgenziaSlice = createSlice({
   },
 });
 
-export const { setPage, setSize } = ricercaAgenziaSlice.actions;
+export const { setPage, setSize, setName } = ricercaAgenziaSlice.actions;
 
 export default ricercaAgenziaSlice.reducer;
