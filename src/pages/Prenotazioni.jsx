@@ -186,17 +186,18 @@ export const Prenotazioni = () => {
               <TableCell>Email Contatto</TableCell>
               <TableCell>Nome Contatto</TableCell>
               <TableCell>Cognome Contatto</TableCell>
+              <TableCell>Nome Agenzia</TableCell> {/* Added line */}
             </TableRow>
           </TableHead>
           <TableBody>
             {status === "loading" && (
               <TableRow>
-                <TableCell colSpan={6}>Loading...</TableCell>
+                <TableCell colSpan={7}>Loading...</TableCell> {/* Updated colSpan */}
               </TableRow>
             )}
             {status === "failed" && (
               <TableRow>
-                <TableCell colSpan={6}>Error: {error}</TableCell>
+                <TableCell colSpan={7}>Error: {error}</TableCell> {/* Updated colSpan */}
               </TableRow>
             )}
             {reservations.map((reservation) => (
@@ -211,6 +212,7 @@ export const Prenotazioni = () => {
                 <TableCell>{reservation.contact_mail}</TableCell>
                 <TableCell>{reservation.contact_name}</TableCell>
                 <TableCell>{reservation.contact_surname}</TableCell>
+                <TableCell>{reservation.name_agency}</TableCell> {/* Added line */}
               </TableRow>
             ))}
           </TableBody>

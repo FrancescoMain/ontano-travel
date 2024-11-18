@@ -16,6 +16,7 @@ export const fetchAgenzie = createAsyncThunk(
     return {
       data: response.data,
       totalCount: response.headers["x-total-count"],
+      nameAgency: response.data.name_agency, // Added line
     };
   }
 );
@@ -51,6 +52,7 @@ const ricercaAgenziaSlice = createSlice({
         state.status = "succeeded";
         state.agenzie = action.payload.data;
         state.totalCount = action.payload.totalCount;
+        state.nameAgency = action.payload.nameAgency; // Added line
       })
       .addCase(fetchAgenzie.rejected, (state, action) => {
         state.status = "failed";
