@@ -21,7 +21,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcanvasClose }) => {
   const accountData = useSelector((state) => state.account.data);
   const isAdmin = accountData?.authorities?.includes("ROLE_WEB_ADMIN");
-  const isAgency = accountData?.authorities?.includes("ROLE_AGENCY");
+  const isAgency = accountData?.authorities?.includes("ROLE_AGENCY_USER");
 
   return (
     <>

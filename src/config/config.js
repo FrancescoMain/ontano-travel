@@ -40,4 +40,5 @@ export const config = {
     method: "GET",
   },
   fetchEstrattoConto: { route: "/api/booking/estrattoconto/search", method: "GET" }, // Add fetchEstrattoConto route
+  approveEstrattoConto: { route: "/api/booking/estrattoconto", method: "POST" }, // Add approveEstrattoConto route
 };
