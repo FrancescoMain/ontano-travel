@@ -16,13 +16,13 @@ import i18n from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { FaUserCircle } from "react-icons/fa";
 
 // Component for authenticated user links
-const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcanvasClose }) => {
+const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcanvasClose, email }) => {
   const accountData = useSelector((state) => state.account.data);
   const isAdmin = accountData?.authorities?.includes("ROLE_WEB_ADMIN");
   const isAgency = accountData?.authorities?.includes("ROLE_AGENCY_USER");
-
   return (
     <>
       <li>
@@ -113,21 +113,44 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
         </li>
       )}
       {!isWebUser && (
-        <li>
-          <Link
-            className="Link"
-            color="primary"
-            disabled={false}
-            level="body-md"
-            underline="none"
-            variant="plain"
-            onClick={() => {
-              handleLogout();
-              handleOffcanvasClose();
-            }}
-          >
-            {t("Logout")}
-          </Link>
+        <li className="d-none d-md-block">
+          <Dropdown >
+            <MenuButton
+              color="primary"
+              size="sm"
+              sx={{ padding: 0, border: 0, zIndex: 1050 }}
+            >
+              <FaUserCircle size={24} />
+            </MenuButton>
+            <Menu variant="plain" color="primary" size="sm" sx={{ zIndex: 1050 }}>
+              <MenuItem disabled className="profile-item" sx={{ justifyContent: 'center' }}>
+                {email}
+              </MenuItem>
+              <MenuItem disabled className="profile-item" sx={{ justifyContent: 'center' }}>
+                <FaUserCircle size={24} />
+              </MenuItem>
+              <MenuItem
+                className="profile-item"
+                onClick={() => {
+                  navigate("/set-password");
+                  handleOffcanvasClose();
+                }}
+                sx={{ justifyContent: 'center' }}
+              >
+                {t("Set Password")}
+              </MenuItem>
+              <MenuItem
+                className="profile-item"
+                onClick={() => {
+                  handleLogout();
+                  handleOffcanvasClose();
+                }}
+                sx={{ justifyContent: 'center' }}
+              >
+                {t("Logout")}
+              </MenuItem>
+            </Menu>
+          </Dropdown>
         </li>
       )}
     </>
@@ -195,6 +218,8 @@ export const Header = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [showOffcanvas, setShowOffcanvas] = useState(false);
+  const accountData = useSelector((state) => state.account.data);
+  const email = accountData?.email;
 
   const handleOffcanvasClose = () => setShowOffcanvas(false);
   const handleOffcanvasShow = () => setShowOffcanvas(true);
@@ -228,6 +253,7 @@ export const Header = () => {
                 isWebUser={isWebUser}
                 navigate={navigate}
                 handleOffcanvasClose={handleOffcanvasClose}
+                email={email}
               />
             ) : (
               <UnauthenticatedLinks
@@ -288,14 +314,59 @@ export const Header = () => {
                 ></button>
               </div>
               <div className="offcanvas-body">
+                {token && (
+                  <>
+                    <div className="offcanvas-email" style={{ fontSize: "0.775rem", textAlign: "center" }}>
+                      {email}
+                    </div>
+                    <div style={{ textAlign: "center", margin: "10px 0" }}>
+                      <FaUserCircle size={24} />
+                    </div>
+                  </>
+                )}
                 {token ? (
-                  <AuthenticatedLinks
-                    t={t}
-                    handleLogout={handleLogout}
-                    isWebUser={isWebUser}
-                    navigate={navigate}
-                    handleOffcanvasClose={handleOffcanvasClose}
-                  />
+                  <>
+                    <AuthenticatedLinks
+                      t={t}
+                      handleLogout={handleLogout}
+                      isWebUser={isWebUser}
+                      navigate={navigate}
+                      handleOffcanvasClose={handleOffcanvasClose}
+                      email={email}
+                    />
+                    <li>
+                      <Link
+                        className="Link"
+                        color="primary"
+                        disabled={false}
+                        level="body-md"
+                        underline="none"
+                        variant="plain"
+                        onClick={() => {
+                          navigate("/set-password");
+                          handleOffcanvasClose();
+                        }}
+                      >
+                        {t("Set Password")}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className="Link"
+                        color="primary"
+                        disabled={false}
+                        level="body-md"
+                        underline="none"
+                        variant="plain"
+                        onClick={() => {
+                          handleLogout();
+                          handleOffcanvasClose();
+                        }}
+                      >
+                        {t("Logout")}
+                      </Link>
+                    </li>
+                  </>
                 ) : (
                   <UnauthenticatedLinks
                     t={t}

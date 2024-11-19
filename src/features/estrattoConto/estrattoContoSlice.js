@@ -10,7 +10,7 @@ export const fetchEstrattoConto = createAsyncThunk(
     dispatch(startLoading('fetchEstrattoConto'));
     const response = await axios.get(`${config.basePath}${config.fetchEstrattoConto.route}`, {
       headers: getAuthHeader(),
-      params: { toapprove: toApprove },
+      params: { toApprove: toApprove },
     });
     dispatch(stopLoading('fetchEstrattoConto'));
     return response.data;
@@ -21,7 +21,7 @@ export const approveEstrattoConto = createAsyncThunk(
   'estrattoConto/approveEstrattoConto',
   async (id, { dispatch }) => {
     dispatch(startLoading(id));
-    const response = await axios.post(`${config.basePath}${config.approveEstrattoConto.route}/${id}`, {}, {
+    const response = await axios.post(`${config.basePath}${config.approveEstrattoConto.route}/${id}/approve`, {}, {
       headers: getAuthHeader(),
     });
     dispatch(stopLoading(id));
