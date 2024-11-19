@@ -21,6 +21,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcanvasClose }) => {
   const accountData = useSelector((state) => state.account.data);
   const isAdmin = accountData?.authorities?.includes("ROLE_WEB_ADMIN");
+  const isAgency = accountData?.authorities?.includes("ROLE_AGENCY");
 
   return (
     <>
@@ -73,6 +74,22 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
               }}
             >
               {t("Ricerca Agenzia")}
+            </Link>
+          </li>
+          <li>
+            <Link
+              className="Link"
+              color="primary"
+              disabled={false}
+              level="body-md"
+              underline="none"
+              variant="plain"
+              onClick={() => {
+                navigate("/admin-estratto-conto");
+                handleOffcanvasClose();
+              }}
+            >
+              {t("Visualizza Estratto Conto")}
             </Link>
           </li>
         </>

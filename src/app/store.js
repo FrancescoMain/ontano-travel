@@ -13,6 +13,7 @@ import registraAgenziaReducer from "../features/registraAgenzia/registraAgenziaS
 import ricercaAgenziaReducer from "../features/ricercaAgenzia/ricercaAgenziaSlice"; // Import ricercaAgenziaReducer
 import dettaglioAgenziaReducer from "../features/ricercaAgenzia/dettaglioAgenziaSlice"; // Import dettaglioAgenziaReducer
 import prenotazioniReducer from "../features/reservation/prenotazioniSlice"; // Import prenotazioniReducer
+import estrattoContoReducer from "../features/estrattoConto/estrattoContoSlice"; // Import estrattoContoReducer
 
 export const store = configureStore({
   reducer: {
@@ -30,5 +31,6 @@ export const store = configureStore({
     ricercaAgenzia: ricercaAgenziaReducer, // Add ricercaAgenzia reducer
     dettaglioAgenzia: dettaglioAgenziaReducer, // Add dettaglioAgenzia reducer
     prenotazioni: prenotazioniReducer, // Add prenotazioni reducer
+    estrattoConto: estrattoContoReducer, // Add estrattoConto reducer
   },
 });

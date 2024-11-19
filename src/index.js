@@ -32,6 +32,7 @@ import { RicercaAgenzia } from "./pages/RicercaAgenzia";
 import { DettaglioAgenzia } from "./pages/DettaglioAgenzia"; // Import DettaglioAgenzia
 import { Prenotazioni } from "./pages/Prenotazioni"; // Import Prenotazioni
 import { ReservationDetail } from "./pages/ReservationDetail"; // Import ReservationDetail
+import AdminEstrattoConto from "./pages/AdminEstrattoConto"; // Import AdminEstrattoConto
 
 const App = () => {
   const navigate = useNavigate();
@@ -75,6 +76,7 @@ const App = () => {
         <Route path="/agenzia/:id" element={<DettaglioAgenzia />} />{" "}
         <Route path="/prenotazioni" element={<Prenotazioni />} />{" "}
         <Route path="/reservation/:reservationCode" element={<ReservationDetail />} /> {/* Add route */}
+        <Route path="/admin-estratto-conto" element={<AdminEstrattoConto />} /> {/* Add route */}
         <Route path="*" element={<HomePage />} />
       </Routes>
       {/* <Footer /> */}
