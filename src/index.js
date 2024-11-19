@@ -6,7 +6,6 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  useNavigate,
 } from "react-router-dom";
 import "@fontsource/inter";
 import "./i18n";
@@ -35,13 +34,12 @@ import { ReservationDetail } from "./pages/ReservationDetail"; // Import Reserva
 import AdminEstrattoConto from "./pages/AdminEstrattoConto"; // Import AdminEstrattoConto
 import AgencyEstrattoConto from "./pages/AgencyEstrattoConto"; // Import AgencyEstrattoConto
 import Rendicontazione from "./pages/Rendicontazione"; // Import Rendicontazione
+import { Dashboard } from "./pages/Dashboard"; // Import Dashboard
 
 const App = () => {
-  const navigate = useNavigate();
   const token =
-  localStorage.getItem("id_token") || sessionStorage.getItem("id_token");
+    localStorage.getItem("id_token") || sessionStorage.getItem("id_token");
   useEffect(() => {
-
     if (token) {
       fetchAccountData();
     }
@@ -61,7 +59,7 @@ const App = () => {
         pauseOnHover
         theme="colored"
       />
-      <Header navigate={navigate} />
+      <Header />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/results" element={<ResultPage />} />
@@ -81,6 +79,7 @@ const App = () => {
         <Route path="/admin-estratto-conto" element={<AdminEstrattoConto />} /> {/* Add route */}
         <Route path="/agency-estratto-conto" element={<AgencyEstrattoConto />} /> {/* Add route */}
         <Route path="/rendicontazione" element={<Rendicontazione />} /> {/* Add route */}
+        <Route path="/dashboard" element={<Dashboard />} /> {/* Add route */}
         <Route path="*" element={<HomePage />} />
       </Routes>
       {/* <Footer /> */}

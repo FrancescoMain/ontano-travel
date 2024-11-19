@@ -39,11 +39,16 @@ export const downloadEstrattoConto = createAsyncThunk(
         'Accept': 'application/octet-stream',
       },
       responseType: 'blob',
+      withCredentials: true,
     });
     const url = window.URL.createObjectURL(new Blob([response.data]));
+    const contentDisposition = response.headers['content-disposition'];
+    const filename = contentDisposition
+      ? contentDisposition.split('filename=')[1].split(';')[0].trim().replace(/"/g, '')
+      : `estratto_conto_${id}.pdf`;
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `estratto_conto_${id}.pdf`);
+    link.setAttribute('download', filename);
     document.body.appendChild(link);
     link.click();
     dispatch(stopLoading(id));

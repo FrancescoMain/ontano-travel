@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchEstrattoConto, downloadEstrattoConto } from '../features/estrattoConto/estrattoContoSlice';
 import { FaDownload } from 'react-icons/fa';
+import { CircularProgress } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -58,7 +59,7 @@ const AgencyEstrattoConto = () => {
                       <TableCell>{formatDate(item.approvalDate)}</TableCell>
                       <TableCell>
                         <button onClick={() => handleDownload(item.id)} className="btn btn-primary" disabled={loadingIds.includes(item.id)}>
-                          <FaDownload />
+                          {loadingIds.includes(item.id) ? <CircularProgress size={20} /> : <FaDownload />}
                         </button>
                       </TableCell>
                     </TableRow>

@@ -9,6 +9,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { CircularProgress } from '@mui/material';
 
 const AdminEstrattoConto = () => {
   const dispatch = useDispatch();
@@ -80,7 +81,7 @@ const AdminEstrattoConto = () => {
                           </button>
                         )}
                         <button onClick={() => handleDownload(item.id)} className="btn btn-primary" disabled={loadingIds.includes(item.id)}>
-                          <FaDownload />
+                          {loadingIds.includes(item.id) ? <CircularProgress size={20} /> : <FaDownload />}
                         </button>
                       </TableCell>
                     </TableRow>
