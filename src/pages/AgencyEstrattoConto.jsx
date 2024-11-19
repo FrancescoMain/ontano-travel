@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchEstrattoConto, downloadEstrattoConto } from '../features/estrattoConto/estrattoContoSlice';
 import { FaDownload } from 'react-icons/fa';
@@ -10,18 +10,30 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import TablePagination from '@mui/material/TablePagination';
 
 const AgencyEstrattoConto = () => {
   const dispatch = useDispatch();
-  const { data, status, error } = useSelector((state) => state.estrattoConto);
+  const { data, status, error, totalCount } = useSelector((state) => state.estrattoConto);
   const { loadingIds } = useSelector((state) => state.spinner);
+  const [page, setPage] = useState(0);
+  const [size, setSize] = useState(20);
 
   useEffect(() => {
-    dispatch(fetchEstrattoConto({ toApprove: '' }));
-  }, [dispatch]);
+    dispatch(fetchEstrattoConto({ toApprove: '', page, size }));
+  }, [dispatch, page, size]);
 
   const handleDownload = (id) => {
     dispatch(downloadEstrattoConto(id));
+  };
+
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleSizeChange = (event) => {
+    setSize(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
   const formatDate = (dateString) => {
@@ -66,6 +78,16 @@ const AgencyEstrattoConto = () => {
                   ))}
                 </TableBody>
               </Table>
+              <TablePagination
+                rowsPerPageOptions={[1, 5, 10, 20]}
+                component="div"
+                count={totalCount}
+                rowsPerPage={size}
+                page={page}
+                onPageChange={handlePageChange}
+                onRowsPerPageChange={handleSizeChange}
+                labelRowsPerPage={<div className="mt-3">Page Size</div>}
+              />
             </TableContainer>
           )}
         </div>

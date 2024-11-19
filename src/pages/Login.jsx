@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { authenticateUser } from "../_api/auth/auth";
 import { LoginForm } from "../components/Login/LoginForm";
+import { fetchAccountData } from "../utils/auth";
 
 export const Login = () => {
   const { t } = useTranslation(); // Initialize t
@@ -13,6 +14,7 @@ export const Login = () => {
     try {
       const result = await authenticateUser(username, password, rememberMe);
       if (result.success) {
+        fetchAccountData(); // Fetch account data after successful login
         navigate("/"); // Redirect to home page after successful login
       } else {
         result.message = t(result.message); // Translate error message

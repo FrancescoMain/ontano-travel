@@ -6,14 +6,17 @@ import { startLoading, stopLoading } from '../spinner/spinnerSlice';
 
 export const fetchEstrattoConto = createAsyncThunk(
   'estrattoConto/fetchEstrattoConto',
-  async ({ toApprove }, { dispatch }) => {
+  async ({ toApprove, page, size }, { dispatch }) => {
     dispatch(startLoading('fetchEstrattoConto'));
     const response = await axios.get(`${config.basePath}${config.fetchEstrattoConto.route}`, {
       headers: getAuthHeader(),
-      params: { toApprove: toApprove },
+      params: { toApprove, page, size },
     });
     dispatch(stopLoading('fetchEstrattoConto'));
-    return response.data;
+    return {
+      data: response.data,
+      totalCount: parseInt(response.headers['x-total-count'], 10),
+    };
   }
 );
 
@@ -61,6 +64,9 @@ const estrattoContoSlice = createSlice({
     data: [],
     status: 'idle',
     error: null,
+    page: 0,
+    size: 20,
+    totalCount: 0,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -70,7 +76,8 @@ const estrattoContoSlice = createSlice({
       })
       .addCase(fetchEstrattoConto.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.data = action.payload;
+        state.data = action.payload.data;
+        state.totalCount = action.payload.totalCount;
       })
       .addCase(fetchEstrattoConto.rejected, (state, action) => {
         state.status = 'failed';

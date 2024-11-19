@@ -10,24 +10,36 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { CircularProgress } from '@mui/material';
+import TablePagination from '@mui/material/TablePagination';
 
 const AdminEstrattoConto = () => {
   const dispatch = useDispatch();
-  const { data, status, error } = useSelector((state) => state.estrattoConto);
+  const { data, status, error, totalCount } = useSelector((state) => state.estrattoConto);
   const { loadingIds } = useSelector((state) => state.spinner);
   const [toApprove, setToApprove] = useState('');
+  const [page, setPage] = useState(0);
+  const [size, setSize] = useState(20);
 
   useEffect(() => {
-    dispatch(fetchEstrattoConto({ toApprove }));
-  }, [dispatch, toApprove]);
+    dispatch(fetchEstrattoConto({ toApprove, page, size }));
+  }, [dispatch, toApprove, page, size]);
 
   const handleApprove = async (id) => {
     await dispatch(approveEstrattoConto(id));
-    dispatch(fetchEstrattoConto({ toApprove }));
+    dispatch(fetchEstrattoConto({ toApprove, page, size }));
   };
 
   const handleDownload = (id) => {
     dispatch(downloadEstrattoConto(id));
+  };
+
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleSizeChange = (event) => {
+    setSize(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
   const formatDate = (dateString) => {
@@ -88,6 +100,16 @@ const AdminEstrattoConto = () => {
                   ))}
                 </TableBody>
               </Table>
+              <TablePagination
+                rowsPerPageOptions={[1, 5, 10, 20]}
+                component="div"
+                count={totalCount}
+                rowsPerPage={size}
+                page={page}
+                onPageChange={handlePageChange}
+                onRowsPerPageChange={handleSizeChange}
+                labelRowsPerPage={<div className="mt-3">Page Size</div>}
+              />
             </TableContainer>
           )}
         </div>
