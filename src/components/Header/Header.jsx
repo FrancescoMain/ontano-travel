@@ -92,6 +92,22 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
               {t("Visualizza Estratto Conto")}
             </Link>
           </li>
+          <li>
+            <Link
+              className="Link"
+              color="primary"
+              disabled={false}
+              level="body-md"
+              underline="none"
+              variant="plain"
+              onClick={() => {
+                navigate("/rendicontazione");
+                handleOffcanvasClose();
+              }}
+            >
+              {t("Rendicontazione")}
+            </Link>
+          </li>
         </>
       )}
       {isAgency && (
