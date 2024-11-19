@@ -130,7 +130,7 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
                 <FaUserCircle size={24} />
               </MenuItem>
               <MenuItem
-                className="profile-item"
+                className="profile-item text-primary"
                 onClick={() => {
                   navigate("/set-password");
                   handleOffcanvasClose();
@@ -140,7 +140,7 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
                 {t("Set Password")}
               </MenuItem>
               <MenuItem
-                className="profile-item"
+                className="profile-item text-primary"
                 onClick={() => {
                   handleLogout();
                   handleOffcanvasClose();

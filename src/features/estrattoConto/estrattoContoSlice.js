@@ -33,8 +33,11 @@ export const downloadEstrattoConto = createAsyncThunk(
   'estrattoConto/downloadEstrattoConto',
   async (id, { dispatch }) => {
     dispatch(startLoading(id));
-    const response = await axios.get(`${config.basePath}/api/booking/estattoconto/get?id=${id}`, {
-      headers: getAuthHeader(),
+    const response = await axios.get(`${config.basePath}/api/booking/estrattoconto/get?id=${id}`, {
+      headers: {
+        ...getAuthHeader(),
+        'Accept': 'application/octet-stream',
+      },
       responseType: 'blob',
     });
     const url = window.URL.createObjectURL(new Blob([response.data]));
