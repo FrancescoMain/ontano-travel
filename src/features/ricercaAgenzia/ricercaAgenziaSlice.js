@@ -9,7 +9,7 @@ export const fetchAgenzie = createAsyncThunk(
   async ({ page, size, name }, { dispatch }) => {
     dispatch(startLoading());
     const response = await axios.get(
-      `${config.basePath}${config.fetchAgenzie.route}?page=${page}&size=${size}&name=${name}`,
+      `${config.basePath}${config.fetchAgenzie.route}?page=${page}&size=${size}&name=${name || ""}`,
       { headers: getAuthHeader() }
     );
     dispatch(stopLoading());
