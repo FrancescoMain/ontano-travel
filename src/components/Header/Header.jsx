@@ -94,6 +94,24 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
           </li>
         </>
       )}
+      {isAgency && (
+        <li>
+          <Link
+            className="Link"
+            color="primary"
+            disabled={false}
+            level="body-md"
+            underline="none"
+            variant="plain"
+            onClick={() => {
+              navigate("/agency-estratto-conto");
+              handleOffcanvasClose();
+            }}
+          >
+            {t("Visualizza Estratto Conto Agenzia")}
+          </Link>
+        </li>
+      )}
       {!isWebUser && (
         <li>
           <Link
