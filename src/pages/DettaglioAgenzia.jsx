@@ -33,8 +33,8 @@ export const DettaglioAgenzia = () => {
     if (data) {
       setFormData({
         attivo: data.attivo,
-        dirittiDiPrenotazione: data.dirittiDiPrenotazione || 0,
-        percentualCommissione: data.percentualCommissione || 0,
+        dirittiDiPrenotazione: data.dirittiDiPrenotazione || null,
+        percentualCommissione: data.percentualCommissione || null,
         abilitaPagamentoEstrattoConto:
           data.abilitaPagamentoEstrattoConto || false,
         abilitaPagamentoPayByLink: data.abilitaPagamentoPayByLink || false,
