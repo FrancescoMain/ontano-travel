@@ -16,6 +16,7 @@ import Paper from "@mui/material/Paper";
 import TablePagination from "@mui/material/TablePagination";
 import { useNavigate } from "react-router-dom";
 import { fetchAgenzie } from "../features/ricercaAgenzia/ricercaAgenziaSlice";
+import { setAccountData } from "../features/account/accountSlice"; // Import setAccountData
 
 export const Prenotazioni = () => {
   const [formData, setFormData] = useState({
@@ -35,13 +36,17 @@ export const Prenotazioni = () => {
 
   useEffect(() => {
     dispatch(fetchAgenzie({ page: 0, size: 100 })).then((response) => {
-      setAgenzie(response.payload.data);
+      if (response.payload && response.payload.data) {
+        setAgenzie(response.payload.data);
+      }
     });
   }, [dispatch]);
 
   const { reservations, status, error, totalCount, page, size } = useSelector(
     (state) => state.prenotazioni
   );
+
+  const { data: accountData } = useSelector((state) => state.account); // Get account data from state
 
   const navigate = useNavigate();
 
@@ -105,22 +110,24 @@ export const Prenotazioni = () => {
               onChange={handleChange}
             />
           </div>
-          <div className="col-md-2 mb-3">
-            <label className="form-label">Agenzia:</label>
-            <select
-              name="agency_id"
-              className="form-control"
-              value={formData.agency_id}
-              onChange={handleChange}
-            >
-              <option value="">Select Agency</option>
-              {agenzie.map((agenzia) => (
-                <option key={agenzia.id} value={agenzia.id}>
-                  {agenzia.name}
-                </option>
-              ))}
-            </select>
-          </div>
+          {accountData?.authorities.includes('ROLE_WEB_ADMIN') && ( // Check if user has ROLE_WEB_ADMIN
+            <div className="col-md-2 mb-3">
+              <label className="form-label">Agenzia:</label>
+              <select
+                name="agency_id"
+                className="form-control"
+                value={formData.agency_id}
+                onChange={handleChange}
+              >
+                <option value="">Select Agency</option>
+                {agenzie.map((agenzia) => (
+                  <option key={agenzia.id} value={agenzia.id}>
+                    {agenzia.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
           <div className="col-md-2 mb-3">
             <label className="form-label">Email dell'ospite:</label>
             <input
