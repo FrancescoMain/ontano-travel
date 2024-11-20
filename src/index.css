@@ -57,6 +57,15 @@ select {
 .text-primary {
   color: black !important;
 }
+.select-viaggio{
+  background-color: white !important;
+  color: black !important;
+}
+.date-picker{
+  background-color: white !important;
+  color: black !important;
+  height: 58px !important;
+}
 
 /* Mobile specific styles */
 @media (max-width: 768px) {
