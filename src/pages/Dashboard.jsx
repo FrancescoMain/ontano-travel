@@ -1,6 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 export const Dashboard = () => {
+  const account = useSelector((state) => state.account.data);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!account || !account.authorities.includes('ROLE_WEB_ADMIN')) {
+      navigate('/');
+    }
+  }, [account, navigate]);
+
   return (
     <div style={
       {
@@ -11,7 +22,6 @@ export const Dashboard = () => {
         left: 0
       }
     }>
-
       {/* ...Dashboard content... */}
       <iframe
         width="100%"
