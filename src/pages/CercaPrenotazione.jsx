@@ -55,7 +55,6 @@ export const CercaPrenotazione = () => {
           </div>
         </div>
       </div>
-      <ToastContainer />
     </div>
   );
 };
