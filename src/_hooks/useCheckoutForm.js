@@ -12,6 +12,18 @@ export const useCheckoutForm = () => {
     email: accountData?.email || "",
   });
   const [payByLinkEmail, setPayByLinkEmail] = React.useState("");
+  const [fattura, setFattura] = React.useState(false);
+  const [invoiceDTO, setInvoiceDTO] = React.useState({
+    intestazione: "",
+    pIvaCodiceFiscale: "",
+    indirizzo: "",
+    cap: "",
+    citta: "",
+    provincia: "",
+    nazione: "",
+    codiceUnivoco: "",
+    emailPec: "",
+  });
 
   const handleNomiChange = (numeroCampo, n, newValue) => {
     setNomi((prevNomi) => {
@@ -51,14 +63,26 @@ export const useCheckoutForm = () => {
     setPayByLinkEmail(email);
   };
 
+  const handleFatturaChange = (checked) => {
+    setFattura(checked);
+  };
+
+  const handleInvoiceDTOChange = (newInvoiceDTO) => {
+    setInvoiceDTO(newInvoiceDTO);
+  };
+
   return {
     nomi,
     cognomi,
     dto,
     payByLinkEmail,
+    fattura,
+    invoiceDTO,
     handleNomiChange,
     handleCognomiChange,
     handleDtoChange,
     handlePayByLinkEmailChange,
+    handleFatturaChange,
+    handleInvoiceDTOChange,
   };
 };

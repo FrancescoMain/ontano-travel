@@ -3,7 +3,7 @@ import { getAuthHeader } from "../../utils/auth"; // Import getAuthHeader
 import { config } from "../../config/config"; // Import config
 
 // Funzione per fare la chiamata POST
-export const reserve = async (nomi, cognomi, dto, payment, nTratte, quote) => {
+export const reserve = async (nomi, cognomi, dto, payment, nTratte, quote, invoiceDTO = null) => {
   const body = {
     passengers: [],
     contactDTO: {
@@ -37,6 +37,11 @@ export const reserve = async (nomi, cognomi, dto, payment, nTratte, quote) => {
     }
 
     body.passengers.push(tratta);
+  }
+
+  // Aggiungi invoiceDTO se presente
+  if (invoiceDTO) {
+    body.invoiceDTO = invoiceDTO;
   }
 
   // Get the current language or default to 'it'

@@ -71,8 +71,8 @@ export const Prenotazioni = () => {
     dispatch(searchReservations({ ...formData, page, size: newSize }));
   };
 
-  const handleRowClick = (reservationCode) => {
-    navigate(`/reservation/${reservationCode}`);
+  const handleRowClick = (reservationCode, guestEmail) => {
+    navigate(`/reservation/${reservationCode}?guestEmail=${guestEmail}`);
   };
 
   return (
@@ -210,7 +210,7 @@ export const Prenotazioni = () => {
             {reservations.map((reservation) => (
               <TableRow 
                 key={reservation.reservationCode} 
-                onClick={() => handleRowClick(reservation.reservationCode)}
+                onClick={() => handleRowClick(reservation.reservationCode, reservation.contact_mail)} // Pass guest email
                 style={{ cursor: 'pointer' }}
               >
                 <TableCell>{reservation.reservationCode}</TableCell>

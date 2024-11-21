@@ -34,10 +34,14 @@ export const Checkout = () => {
     cognomi,
     dto,
     payByLinkEmail,
+    fattura,
+    invoiceDTO,
     handleNomiChange,
     handleCognomiChange,
     handleDtoChange,
     handlePayByLinkEmailChange,
+    handleFatturaChange,
+    handleInvoiceDTOChange,
   } = useCheckoutForm();
   const [store, setStore] = React.useState();
   const dispatch = useDispatch();
@@ -68,7 +72,8 @@ export const Checkout = () => {
       dto,
       paymentMethodCheck,
       prenotazione.reservationRoutes.length,
-      quote
+      quote,
+      fattura ? invoiceDTO : null // Pass invoiceDTO if fattura is checked
     );
     if (resultReserve) {
       if (paymentMethodCheck === "CREDIT_CARD") {
@@ -250,7 +255,14 @@ export const Checkout = () => {
                   </div>
                 </div>
               </div>
-              <Condizioni value={dto} onChange={handleDtoChange} />
+              <Condizioni
+                value={dto}
+                onChange={handleDtoChange}
+                fattura={fattura}
+                onFatturaChange={handleFatturaChange}
+                invoiceDTO={invoiceDTO}
+                onInvoiceDTOChange={handleInvoiceDTOChange}
+              />
               <Pagamento
                 methods={paymentsMethod}
                 checked={paymentMethodCheck}

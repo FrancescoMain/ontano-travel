@@ -26,7 +26,7 @@ export const fetchReservation = async (bookingCode, email) => {
 export const fetchReservationByCode = async (reservationCode) => {
   try {
     const response = await axios.get(
-      `${config.basePath}${config.fetchReservationAdmin.route.replace(
+      `${config.basePath}${config.fetchReservationLogged.route.replace(
         ":bookingCode",
         reservationCode
       )}`,

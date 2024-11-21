@@ -1,23 +1,28 @@
 import React, { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom"; // Import useLocation
 import { useDispatch, useSelector } from "react-redux";
-import { resetReservation, fetchReservationByCodeThunk, requestRefund } from "../features/reservation/reservationSlice";
+import { resetReservation, fetchReservationByCodeThunk, requestRefund, fetchReservationThunk } from "../features/reservation/reservationSlice";
 import { CheckoutTratta } from "../components/CheckoutTratta";
 
 export const ReservationDetail = () => {
   const { reservationCode } = useParams();
+  const location = useLocation(); // Initialize useLocation
+  const queryParams = new URLSearchParams(location.search);
+  const email = queryParams.get('guestEmail'); // Get guestEmail from query params
   const reservation = useSelector((state) => state.reservation.data);
   const dispatch = useDispatch();
   const navigate = useNavigate(); // Initialize useNavigate
-  const isAdmin = true; // Imposta questa variabile in base alla tua logica
+  const accountData = useSelector((state) => state.account.data);
+  const isAdmin = accountData?.authorities?.includes("ROLE_WEB_ADMIN");
 
   useEffect(() => {
-    dispatch(fetchReservationByCodeThunk(reservationCode)); // Use the new thunk
-
+   
+      dispatch(fetchReservationByCodeThunk(reservationCode)); // Use the new thunk
+   
     return () => {
       dispatch(resetReservation()); // Reset reservation data on unmount
     };
-  }, [dispatch, reservationCode]);
+  }, [dispatch, reservationCode, email, isAdmin]);
 
   const handleRefund = (routeId, amount, executeRefund) => {
     dispatch(requestRefund({ routeId, amount, executeRefund, reservationCode }));
@@ -91,6 +96,55 @@ export const ReservationDetail = () => {
               {reservation?.priceToPay?.priceFormatted}
             </span>
           </div>
+          {reservation?.invoice && (
+            <div className="mt-3 ">
+              <h4 className="text-primary text-center">Dati Fattura</h4>
+              <div className="row mb-3 justify-content-center">
+                <div className="col-md-4">
+                  <label className="form-label">Nome Azienda</label>
+                  <p className="text-muted small">{reservation.invoice.intestazione}</p>
+                </div>
+                <div className="col-md-4">
+                  <label className="form-label">Partita IVA / Codice Fiscale</label>
+                  <p className="text-muted small">{reservation.invoice.pIvaCodiceFiscale}</p>
+                </div>
+                <div className="col-4">
+                  <label className="form-label">Indirizzo</label>
+                  <p className="text-muted small">{reservation.invoice.indirizzo}</p>
+                </div>
+              </div>
+              <div className="row mb-3 justify-content-center">
+                <div className="col-md-4">
+                  <label className="form-label">CAP</label>
+                  <p className="text-muted small">{reservation.invoice.cap}</p>
+                </div>
+                <div className="col-md-4">
+                  <label className="form-label">Città</label>
+                  <p className="text-muted small">{reservation.invoice.citta}</p>
+                </div>
+                <div className="col-md-4">
+                  <label className="form-label">Provincia</label>
+                  <p className="text-muted small">{reservation.invoice.provincia}</p>
+                </div>
+              </div>
+              <div className="row mb-3">
+                <div className="col-md-4">
+                  <label className="form-label">Nazione</label>
+                  <p className="text-muted small">{reservation.invoice.nazione}</p>
+                </div>
+                <div className="col-md-4">
+                  <label className="form-label">Codice Univoco</label>
+                  <p className="text-muted small">{reservation.invoice.codiceUnivoco}</p>
+                </div>
+              </div>
+              <div className="row mb-3 ">
+                <div className="col-md-4">
+                  <label className="form-label">Email PEC</label>
+                  <p className="text-muted small">{reservation.invoice.emailPec}</p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
