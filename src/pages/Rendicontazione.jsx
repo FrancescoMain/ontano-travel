@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { FaDownload } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { downloadRendicontazione } from "../features/rendicontazione/rendicontazioneSlice";
-import axios from "axios";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const Rendicontazione = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const dispatch = useDispatch();
@@ -14,7 +15,7 @@ const Rendicontazione = () => {
   const handleDownload = (event) => {
     event.preventDefault();
     if (!fromDate || !toDate) {
-      alert("Both dates are required.");
+      alert(t("Both dates are required."));
       return;
     }
     dispatch(downloadRendicontazione({ fromDate, toDate }));
@@ -22,11 +23,11 @@ const Rendicontazione = () => {
 
   return (
     <div className="container">
-      <h1>Rendicontazione</h1>
-      <p>Contenuto della pagina di rendicontazione.</p>
+      <h1>{t("Rendicontazione")}</h1>
+      <p>{t("Contenuto della pagina di rendicontazione.")}</p>
       <form onSubmit={handleDownload}>
         <div className="mb-3">
-          <label htmlFor="fromDate" className="form-label">From Date</label>
+          <label htmlFor="fromDate" className="form-label">{t("From Date")}</label>
           <input
             type="date"
             className="form-control"
@@ -36,7 +37,7 @@ const Rendicontazione = () => {
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="toDate" className="form-label">To Date</label>
+          <label htmlFor="toDate" className="form-label">{t("To Date")}</label>
           <input
             type="date"
             className="form-control"
@@ -51,7 +52,7 @@ const Rendicontazione = () => {
           ) : (
             <FaDownload />
           )}
-          {isLoading ? ' Scaricando...' : ' Scarica'}
+          {isLoading ? ` ${t('Scaricando...')}` : ` ${t('Scarica')}`}
         </button>
       </form>
     </div>

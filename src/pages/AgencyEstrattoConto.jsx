@@ -11,8 +11,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const AgencyEstrattoConto = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
   const dispatch = useDispatch();
   const { data, status, error, totalCount } = useSelector((state) => state.estrattoConto);
   const { loadingIds } = useSelector((state) => state.spinner);
@@ -45,17 +47,17 @@ const AgencyEstrattoConto = () => {
     <div className="container">
       <div className="row justify-content-center align-items-center g-2">
         <div className="col mt-3">
-          <h1>Agency Estratto Conto</h1>
-          {status === 'loading' && <p>Loading...</p>}
-          {status === 'failed' && <p>Error: {error}</p>}
+          <h1>{t("Agency Estratto Conto")}</h1>
+          {status === 'loading' && <p>{t("Loading...")}</p>}
+          {status === 'failed' && <p>{t("Error")}: {error}</p>}
           {status === 'succeeded' && (
             <TableContainer component={Paper}>
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Month</TableCell>
-                    <TableCell>Approval Date</TableCell>
-                    <TableCell>Actions</TableCell>
+                    <TableCell>{t("Month")}</TableCell>
+                    <TableCell>{t("Approval Date")}</TableCell>
+                    <TableCell>{t("Actions")}</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -80,7 +82,7 @@ const AgencyEstrattoConto = () => {
                 page={page}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleSizeChange}
-                labelRowsPerPage={<div className="mt-3">Page Size</div>}
+                labelRowsPerPage={<div className="mt-3">{t("Page Size")}</div>}
               />
             </TableContainer>
           )}

@@ -17,8 +17,10 @@ import TablePagination from "@mui/material/TablePagination";
 import { useNavigate } from "react-router-dom";
 import { fetchAgenzie } from "../features/ricercaAgenzia/ricercaAgenziaSlice";
 import { setAccountData } from "../features/account/accountSlice"; // Import setAccountData
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 export const Prenotazioni = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
   const [formData, setFormData] = useState({
     reservation_code: "",
     from_date: "",
@@ -77,11 +79,11 @@ export const Prenotazioni = () => {
 
   return (
     <div className="container mt-4">
-      <h1>Prenotazioni</h1>
+      <h1>{t("Prenotazioni")}</h1>
       <form onSubmit={handleSubmit}>
         <div className="row">
           <div className="col-md-2 mb-3">
-            <label className="form-label">Codice della prenotazione:</label>
+            <label className="form-label">{t("Codice della prenotazione")}:</label>
             <input
               type="text"
               name="reservation_code"
@@ -91,7 +93,7 @@ export const Prenotazioni = () => {
             />
           </div>
           <div className="col-md-2 mb-3">
-            <label className="form-label">Data di inizio:</label>
+            <label className="form-label">{t("Data di inizio")}:</label>
             <input
               type="date"
               name="from_date"
@@ -101,7 +103,7 @@ export const Prenotazioni = () => {
             />
           </div>
           <div className="col-md-2 mb-3">
-            <label className="form-label">Data di fine:</label>
+            <label className="form-label">{t("Data di fine")}:</label>
             <input
               type="date"
               name="to_date"
@@ -112,14 +114,14 @@ export const Prenotazioni = () => {
           </div>
           {accountData?.authorities.includes('ROLE_WEB_ADMIN') && ( // Check if user has ROLE_WEB_ADMIN
             <div className="col-md-2 mb-3">
-              <label className="form-label">Agenzia:</label>
+              <label className="form-label">{t("Agenzia")}:</label>
               <select
                 name="agency_id"
                 className="form-control"
                 value={formData.agency_id}
                 onChange={handleChange}
               >
-                <option value="">Select Agency</option>
+                <option value="">{t("Select Agency")}</option>
                 {agenzie.map((agenzia) => (
                   <option key={agenzia.id} value={agenzia.id}>
                     {agenzia.name}
@@ -129,7 +131,7 @@ export const Prenotazioni = () => {
             </div>
           )}
           <div className="col-md-2 mb-3">
-            <label className="form-label">Email dell'ospite:</label>
+            <label className="form-label">{t("Email dell'ospite")}:</label>
             <input
               type="email"
               name="guest_email"
@@ -139,7 +141,7 @@ export const Prenotazioni = () => {
             />
           </div>
           <div className="col-md-2 mb-3">
-            <label className="form-label">Nome del contatto:</label>
+            <label className="form-label">{t("Nome del contatto")}:</label>
             <input
               type="text"
               name="contact_name"
@@ -149,7 +151,7 @@ export const Prenotazioni = () => {
             />
           </div>
           <div className="col-md-2 mb-3">
-            <label className="form-label">Cognome del contatto:</label>
+            <label className="form-label">{t("Cognome del contatto")}:</label>
             <input
               type="text"
               name="contact_surname"
@@ -178,7 +180,7 @@ export const Prenotazioni = () => {
           />
           <div className="col-md-2 mb-3 align-self-end">
             <button type="submit" className="btn btn-primary">
-              Cerca
+              {t("Cerca")}
             </button>
           </div>
         </div>
@@ -187,24 +189,24 @@ export const Prenotazioni = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Codice Prenotazione</TableCell>
-              <TableCell>Data Prenotazione</TableCell>
-              <TableCell>Prezzo</TableCell>
-              <TableCell>Email Contatto</TableCell>
-              <TableCell>Nome Contatto</TableCell>
-              <TableCell>Cognome Contatto</TableCell>
-              <TableCell>Nome Agenzia</TableCell> {/* Added line */}
+              <TableCell>{t("Codice Prenotazione")}</TableCell>
+              <TableCell>{t("Data Prenotazione")}</TableCell>
+              <TableCell>{t("Prezzo")}</TableCell>
+              <TableCell>{t("Email Contatto")}</TableCell>
+              <TableCell>{t("Nome Contatto")}</TableCell>
+              <TableCell>{t("Cognome Contatto")}</TableCell>
+              <TableCell>{t("Nome Agenzia")}</TableCell> {/* Added line */}
             </TableRow>
           </TableHead>
           <TableBody>
             {status === "loading" && (
               <TableRow>
-                <TableCell colSpan={7}>Loading...</TableCell> {/* Updated colSpan */}
+                <TableCell colSpan={7}>{t("Loading...")}</TableCell> {/* Updated colSpan */}
               </TableRow>
             )}
             {status === "failed" && (
               <TableRow>
-                <TableCell colSpan={7}>Error: {error}</TableCell> {/* Updated colSpan */}
+                <TableCell colSpan={7}>{t("Error")}: {error}</TableCell> {/* Updated colSpan */}
               </TableRow>
             )}
             {reservations.map((reservation) => (
@@ -232,7 +234,7 @@ export const Prenotazioni = () => {
           page={page}
           onPageChange={handlePageChange}
           onRowsPerPageChange={handleSizeChange}
-          labelRowsPerPage={<div className="mt-3">Page Size</div>}
+          labelRowsPerPage={<div className="mt-3">{t("Page Size")}</div>}
         />
       </TableContainer>
     </div>

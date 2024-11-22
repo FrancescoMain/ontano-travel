@@ -11,8 +11,10 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { CircularProgress } from '@mui/material';
 import TablePagination from '@mui/material/TablePagination';
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const AdminEstrattoConto = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
   const dispatch = useDispatch();
   const { data, status, error, totalCount } = useSelector((state) => state.estrattoConto);
   const { loadingIds } = useSelector((state) => state.spinner);
@@ -51,31 +53,31 @@ const AdminEstrattoConto = () => {
     <div className="container">
       <div className="row justify-content-center align-items-center g-2">
         <div className="col mt-3">
-          <h1>Visualizza Estratto Conto</h1>
+          <h1>{t("Visualizza Estratto Conto")}</h1>
           <div className="mb-3 d-flex">
             <select
               value={toApprove}
               onChange={(e) => setToApprove(e.target.value)}
               className="form-select me-2"
             >
-              <option value="">Tutti</option>
-              <option value="true">Da approvare</option>
-              <option value="false">Approvati</option>
+              <option value="">{t("Tutti")}</option>
+              <option value="true">{t("Da approvare")}</option>
+              <option value="false">{t("Approvati")}</option>
             </select>
           </div>
-          {status === 'loading' && <p>Loading...</p>}
-          {status === 'failed' && <p>Error: {error}</p>}
+          {status === 'loading' && <p>{t("Loading...")}</p>}
+          {status === 'failed' && <p>{t("Error")}: {error}</p>}
           {status === 'succeeded' && (
             <TableContainer component={Paper}>
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Name Agency</TableCell>
-                    <TableCell>Month</TableCell>
-                    <TableCell>Approved</TableCell>
-                    <TableCell>Upload Date</TableCell>
-                    <TableCell>Approval Date</TableCell>
-                    <TableCell>Actions</TableCell>
+                    <TableCell>{t("Name Agency")}</TableCell>
+                    <TableCell>{t("Month")}</TableCell>
+                    <TableCell>{t("Approved")}</TableCell>
+                    <TableCell>{t("Upload Date")}</TableCell>
+                    <TableCell>{t("Approval Date")}</TableCell>
+                    <TableCell>{t("Actions")}</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -83,7 +85,7 @@ const AdminEstrattoConto = () => {
                     <TableRow key={item.id}>
                       <TableCell>{item.nameAgency}</TableCell>
                       <TableCell>{item.month}</TableCell>
-                      <TableCell>{item.approved ? 'Yes' : 'No'}</TableCell>
+                      <TableCell>{item.approved ? t("Yes") : t("No")}</TableCell>
                       <TableCell>{formatDate(item.uploadDate)}</TableCell>
                       <TableCell>{formatDate(item.approvalDate)}</TableCell>
                       <TableCell>
@@ -108,7 +110,7 @@ const AdminEstrattoConto = () => {
                 page={page}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleSizeChange}
-                labelRowsPerPage={<div className="mt-3">Page Size</div>}
+                labelRowsPerPage={<div className="mt-3">{t("Page Size")}</div>}
               />
             </TableContainer>
           )}
