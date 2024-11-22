@@ -53,10 +53,7 @@ const AgencyEstrattoConto = () => {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Name Agency</TableCell>
                     <TableCell>Month</TableCell>
-                    <TableCell>Approved</TableCell>
-                    <TableCell>Upload Date</TableCell>
                     <TableCell>Approval Date</TableCell>
                     <TableCell>Actions</TableCell>
                   </TableRow>
@@ -64,10 +61,7 @@ const AgencyEstrattoConto = () => {
                 <TableBody>
                   {data.map((item) => (
                     <TableRow key={item.id}>
-                      <TableCell>{item.nameAgency}</TableCell>
                       <TableCell>{item.month}</TableCell>
-                      <TableCell>{item.approved ? 'Yes' : 'No'}</TableCell>
-                      <TableCell>{formatDate(item.uploadDate)}</TableCell>
                       <TableCell>{formatDate(item.approvalDate)}</TableCell>
                       <TableCell>
                         <button onClick={() => handleDownload(item.id)} className="btn btn-primary" disabled={loadingIds.includes(item.id)}>
