@@ -13,6 +13,10 @@ const Rendicontazione = () => {
 
   const handleDownload = (event) => {
     event.preventDefault();
+    if (!fromDate || !toDate) {
+      alert("Both dates are required.");
+      return;
+    }
     dispatch(downloadRendicontazione({ fromDate, toDate }));
   };
 
@@ -41,7 +45,7 @@ const Rendicontazione = () => {
             onChange={(e) => setToDate(e.target.value)}
           />
         </div>
-        <button type="submit" className="btn btn-primary" disabled={isLoading}>
+        <button type="submit" className="btn btn-primary" disabled={isLoading || !fromDate || !toDate}>
           {isLoading ? (
             <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
           ) : (
