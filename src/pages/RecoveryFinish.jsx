@@ -1,50 +1,43 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { config } from "../config/config"; // Import config
-import { getAuthHeader } from "../utils/auth"; // Import getAuthHeader
 
 const passwordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).{8,}$/; // Update password regex
 
-export const SetPassword = () => {
-  const [oldPassword, setOldPassword] = useState("");
+export const RecoveryFinish = () => {
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const key = params.get("key");
+
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const navigate = useNavigate();
+  const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      toast.error("Passwords do not match");
+      setMessage("Passwords do not match");
       return;
     }
     if (!passwordRegex.test(password)) {
-      toast.error("Password must be at least 8 characters long and contain at least one number, one lowercase letter, one uppercase letter, and one special character");
+      setMessage("Password must be at least 8 characters long and contain at least one number, one lowercase letter, one uppercase letter, and one special character");
       return;
     }
 
     try {
-      const response = await axios.post(
-        `${config.basePath}/api/booking/account/change-password`,
-        {
-          currentpassword: oldPassword,
-          newpassword: password,
-        },
-        {
-          headers: getAuthHeader(), // Include the token in the headers
-        }
-      );
-
+      const response = await axios.post(`${config.basePath}/api/booking/account/reset-password/finish`, {
+        key: key,
+        newpassword: password,
+      });
       if (response.status === 200) {
-        toast.success("Password set successfully");
-        navigate("/");
+        setMessage("Password changed successfully");
       } else {
-        toast.error("Failed to set password");
+        setMessage("Failed to change password");
       }
     } catch (error) {
-      toast.error("An error occurred. Please try again.");
+      setMessage("An error occurred. Please try again.");
     }
   };
 
@@ -54,23 +47,12 @@ export const SetPassword = () => {
         <div className="col-md-6">
           <div className="card">
             <div className="card-header" style={{ backgroundColor: "#F0F8FF" }}>
-              <h3 className="text-primary">Set New Password</h3>
+              <h3 className="text-primary">Recovery</h3>
             </div>
             <div className="card-body">
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                  <label htmlFor="oldPassword">Old Password:</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="oldPassword"
-                    value={oldPassword}
-                    onChange={(e) => setOldPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="password">New Password:</label>
+                  <label htmlFor="password">New Password</label>
                   <input
                     type="password"
                     className="form-control"
@@ -81,7 +63,7 @@ export const SetPassword = () => {
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="confirmPassword">Confirm Password:</label>
+                  <label htmlFor="confirmPassword">Confirm Password</label>
                   <input
                     type="password"
                     className="form-control"
@@ -92,9 +74,10 @@ export const SetPassword = () => {
                   />
                 </div>
                 <button type="submit" className="btn btn-primary mt-3">
-                  Set Password
+                  Change Password
                 </button>
               </form>
+              {message && <p className="mt-3">{message}</p>}
             </div>
           </div>
         </div>

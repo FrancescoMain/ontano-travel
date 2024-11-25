@@ -37,6 +37,7 @@ import Rendicontazione from "./pages/Rendicontazione"; // Import Rendicontazione
 import { Dashboard } from "./pages/Dashboard"; // Import Dashboard
 import { Recovery } from "./pages/Recovery"; // Import Recovery
 import { SetPassword } from "./pages/SetPassword"; // Import SetPassword
+import { RecoveryFinish } from "./pages/RecoveryFinish"; // Import RecoveryFinish
 
 const App = () => {
   const token =
@@ -84,6 +85,7 @@ const App = () => {
         <Route path="/rendicontazione" element={<Rendicontazione />} /> {/* Add route */}
         <Route path="/dashboard" element={<Dashboard />} /> {/* Add route */}
         <Route path="/set-password" element={<SetPassword />} /> {/* Add route */}
+        <Route path="/account/reset/finish" element={<RecoveryFinish />} /> {/* Add route */}
         <Route path="*" element={<HomePage />} />
       </Routes>
       {/* <Footer /> */}
