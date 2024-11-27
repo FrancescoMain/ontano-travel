@@ -38,6 +38,7 @@ import { Dashboard } from "./pages/Dashboard"; // Import Dashboard
 import { Recovery } from "./pages/Recovery"; // Import Recovery
 import { SetPassword } from "./pages/SetPassword"; // Import SetPassword
 import { RecoveryFinish } from "./pages/RecoveryFinish"; // Import RecoveryFinish
+import { TabellonePartenze } from "./pages/TabellonePartenze"; // Import TabellonePartenze
 
 const App = () => {
   const token =
@@ -62,31 +63,41 @@ const App = () => {
         pauseOnHover
         theme="colored"
       />
-      <Header />
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/results" element={<ResultPage />} />
-        <Route path="/results/external" element={<ResultPageExternal />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/success" element={<Success />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/recovery" element={<Recovery />} /> {/* Add route */}
-        <Route path="/recovery" element={<RecoveryPassword />} />
-        <Route path="/pay-by-link-success" element={<PayByLinkSuccess />} />
-        <Route path="/cerca-prenotazione" element={<CercaPrenotazione />} />
-        <Route path="/result-guest" element={<SearchGuest />} />
-        <Route path="/registra-agenzia" element={<RegistraAgenzia />} />
-        <Route path="/ricerca-agenzia" element={<RicercaAgenzia />} />
-        <Route path="/agenzia/:id" element={<DettaglioAgenzia />} />{" "}
-        <Route path="/prenotazioni" element={<Prenotazioni />} />{" "}
-        <Route path="/reservation/:reservationCode" element={<ReservationDetail />} /> {/* Add route */}
-        <Route path="/admin-estratto-conto" element={<AdminEstrattoConto />} /> {/* Add route */}
-        <Route path="/agency-estratto-conto" element={<AgencyEstrattoConto />} /> {/* Add route */}
-        <Route path="/rendicontazione" element={<Rendicontazione />} /> {/* Add route */}
-        <Route path="/dashboard" element={<Dashboard />} /> {/* Add route */}
-        <Route path="/set-password" element={<SetPassword />} /> {/* Add route */}
-        <Route path="/account/reset/finish" element={<RecoveryFinish />} /> {/* Add route */}
-        <Route path="*" element={<HomePage />} />
+        <Route path="/tabellone-partenze" element={<TabellonePartenze />} /> {/* Add route */}
+        <Route
+          path="*"
+          element={
+            <>
+              <Header />
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/results" element={<ResultPage />} />
+                <Route path="/results/external" element={<ResultPageExternal />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/success" element={<Success />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/recovery" element={<Recovery />} /> {/* Add route */}
+                <Route path="/recovery" element={<RecoveryPassword />} />
+                <Route path="/pay-by-link-success" element={<PayByLinkSuccess />} />
+                <Route path="/cerca-prenotazione" element={<CercaPrenotazione />} />
+                <Route path="/result-guest" element={<SearchGuest />} />
+                <Route path="/registra-agenzia" element={<RegistraAgenzia />} />
+                <Route path="/ricerca-agenzia" element={<RicercaAgenzia />} />
+                <Route path="/agenzia/:id" element={<DettaglioAgenzia />} />{" "}
+                <Route path="/prenotazioni" element={<Prenotazioni />} />{" "}
+                <Route path="/reservation/:reservationCode" element={<ReservationDetail />} /> {/* Add route */}
+                <Route path="/admin-estratto-conto" element={<AdminEstrattoConto />} /> {/* Add route */}
+                <Route path="/agency-estratto-conto" element={<AgencyEstrattoConto />} /> {/* Add route */}
+                <Route path="/rendicontazione" element={<Rendicontazione />} /> {/* Add route */}
+                <Route path="/dashboard" element={<Dashboard />} /> {/* Add route */}
+                <Route path="/set-password" element={<SetPassword />} /> {/* Add route */}
+                <Route path="/account/reset/finish" element={<RecoveryFinish />} /> {/* Add route */}
+                <Route path="*" element={<HomePage />} />
+              </Routes>
+            </>
+          }
+        />
       </Routes>
       {/* <Footer /> */}
     </Provider>

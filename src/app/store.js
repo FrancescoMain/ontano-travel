@@ -15,6 +15,8 @@ import dettaglioAgenziaReducer from "../features/ricercaAgenzia/dettaglioAgenzia
 import prenotazioniReducer from "../features/reservation/prenotazioniSlice"; // Import prenotazioniReducer
 import estrattoContoReducer from "../features/estrattoConto/estrattoContoSlice"; // Import estrattoContoReducer
 import rendicontazioneReducer from "../features/rendicontazione/rendicontazioneSlice"; // Import rendicontazioneReducer
+import routeReducer from "../features/routes/routeAsyncSlice"; // Import routeReducer
+import tabellonePartenzeReducer from "../features/tabellonePartenze/tabellonePartenzeSlice"; // Import tabellonePartenzeReducer
 
 export const store = configureStore({
   reducer: {
@@ -34,5 +36,7 @@ export const store = configureStore({
     prenotazioni: prenotazioniReducer, // Add prenotazioni reducer
     estrattoConto: estrattoContoReducer, // Add estrattoConto reducer
     rendicontazione: rendicontazioneReducer, // Add rendicontazione reducer
+    route: routeReducer, // Add route reducer
+    tabellonePartenze: tabellonePartenzeReducer, // Add tabellonePartenze reducer
   },
 });
