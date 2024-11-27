@@ -47,8 +47,7 @@ export const TabellonePartenze = () => {
       adulti: 1,
  
     }).toString();
-    navigate(`/results?${queryParams}`);
-  };
+    window.location.href = `/results?${queryParams}`;  };
 
   const formatDuration = (departure, arrival) => {
     const diffMs = new Date(arrival) - new Date(departure);
@@ -80,7 +79,7 @@ export const TabellonePartenze = () => {
               <span className="visually-hidden">Loading...</span>
             </div>
           )}
-          {!isLoading && localDepartures.length === 0 && (
+          {!isLoading && selectedPort && localDepartures.length === 0 && (
             <div className="alert alert-info" role="alert">
               Non ci sono partenze previste per oggi
             </div>
