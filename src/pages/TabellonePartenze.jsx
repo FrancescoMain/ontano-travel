@@ -59,7 +59,7 @@ export const TabellonePartenze = () => {
 
   return (
     <div className="d-flex justify-content-center mt-3">
-      <div className="card col-8 p-3">
+      <div className="card col-12 col-md-8 p-3">
         <div className="card-header">
           Partenze di oggi: {today}
         </div>

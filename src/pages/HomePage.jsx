@@ -7,11 +7,18 @@ import {
   resetSelectedAll,
 } from "../features/viaggio/resultTratta";
 import { resetAll } from "../features/viaggio/findTratta";
+import Cookies from "js-cookie"; // Import js-cookie
 
 export const HomePage = () => {
   const dispatch = useDispatch(); // Initialize dispatch
 
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const codice = urlParams.get('yafl');
+    if (codice) {
+      Cookies.set('codice', codice, { expires: 48 });
+    }
+
     dispatch(resetTour()); // Dispatch resetTour action on mount
     dispatch(resetSelectedAll()); // Dispatch resetSelectedAll action on mount
     dispatch(resetResults()); // Dispatch resetResults action on mount

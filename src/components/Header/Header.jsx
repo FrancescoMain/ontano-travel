@@ -41,7 +41,24 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
           {t("Prenotazioni")}
         </Link>
       </li>
-
+      {isAgency && (
+        <li>
+          <Link
+            className="Link"
+            color="primary"
+            disabled={false}
+            level="body-md"
+            underline="none"
+            variant="plain"
+            onClick={() => {
+              navigate("/agenzia/:id");
+              handleOffcanvasClose();
+            }}
+          >
+            {t("Dati Agenzia")}
+          </Link>
+        </li>
+      )}
       {isAdmin && (
         <>
           <li>

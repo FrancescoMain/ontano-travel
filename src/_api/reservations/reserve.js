@@ -1,6 +1,7 @@
 import i18n from "../../i18n"; // Import i18n to access the current language
 import { getAuthHeader } from "../../utils/auth"; // Import getAuthHeader
 import { config } from "../../config/config"; // Import config
+import Cookies from "js-cookie"; // Import js-cookie
 
 // Funzione per fare la chiamata POST
 export const reserve = async (nomi, cognomi, dto, payment, nTratte, quote, invoiceDTO = null) => {
@@ -16,6 +17,12 @@ export const reserve = async (nomi, cognomi, dto, payment, nTratte, quote, invoi
       paymentMode: payment,
     },
   };
+
+  // Aggiungi aff_code se presente nei cookies
+  const affCode = Cookies.get('codice');
+  if (affCode) {
+    body.aff_code = affCode;
+  }
 
   // Itera sulle tratte e crea i dettagli dei passeggeri
   for (let i = 0; i < nTratte; i++) {

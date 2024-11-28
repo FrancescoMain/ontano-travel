@@ -17,17 +17,24 @@ export const DettaglioAgenzia = () => {
   const { data, status, error } = useSelector(
     (state) => state.dettaglioAgenzia
   );
+  const accountData = useSelector((state) => state.account.data);
+  const isAgency = accountData?.authorities?.includes("ROLE_AGENCY_USER");
   const [formData, setFormData] = useState({
     attivo: true,
     dirittiDiPrenotazione: 0,
     percentualCommissione: 0,
     abilitaPagamentoEstrattoConto: true,
     abilitaPagamentoPayByLink: true,
+    enableAffiliation: false, // Corrected state property
   });
 
   useEffect(() => {
-    dispatch(fetchDettaglioAgenzia(id));
-  }, [dispatch, id]);
+    if (isAgency) {
+      dispatch(fetchDettaglioAgenzia());
+    } else {
+      dispatch(fetchDettaglioAgenzia(id));
+    }
+  }, [dispatch, id, isAgency]);
 
   useEffect(() => {
     if (data) {
@@ -38,6 +45,7 @@ export const DettaglioAgenzia = () => {
         abilitaPagamentoEstrattoConto:
           data.abilitaPagamentoEstrattoConto || false,
         abilitaPagamentoPayByLink: data.abilitaPagamentoPayByLink || false,
+        enableAffiliation: data.enableAffiliation || false, // Corrected state property
       });
     }
   }, [data]);
@@ -59,16 +67,22 @@ export const DettaglioAgenzia = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!isAgency) {
+      dispatch(updateDettaglioAgenzia({ id, data: formData }))
+        .unwrap()
+        .then(() => {
+          toast.success("Update successful!");
+          navigate("/ricerca-agenzia");
+        })
+        .catch(() => {
+          toast.error("Update failed!");
+        });
+    }
+  };
 
-    dispatch(updateDettaglioAgenzia({ id, data: formData }))
-      .unwrap()
-      .then(() => {
-        toast.success("Update successful!");
-        navigate("/ricerca-agenzia");
-      })
-      .catch(() => {
-        toast.error("Update failed!");
-      });
+  const handleCopy = () => {
+    navigator.clipboard.writeText(data.linkAffiliation);
+    toast.success("Link copied to clipboard!");
   };
 
   if (status === "loading") {
@@ -96,6 +110,7 @@ export const DettaglioAgenzia = () => {
                     value={data.name}
                     readOnly
                     style={{ backgroundColor: "#e9ecef" }}
+                    disabled={isAgency}
                   />
                 </div>
                 <div className="col-md-4 mb-3">
@@ -106,6 +121,7 @@ export const DettaglioAgenzia = () => {
                     value={data.ragSoc || ""}
                     readOnly
                     style={{ backgroundColor: "#e9ecef" }}
+                    disabled={isAgency}
                   />
                 </div>
                 <div className="col-md-4 mb-3">
@@ -116,6 +132,7 @@ export const DettaglioAgenzia = () => {
                     value={data.parIva || ""}
                     readOnly
                     style={{ backgroundColor: "#e9ecef" }}
+                    disabled={isAgency}
                   />
                 </div>
               </div>
@@ -127,6 +144,7 @@ export const DettaglioAgenzia = () => {
                   value={data.address || ""}
                   readOnly
                   style={{ backgroundColor: "#e9ecef" }}
+                  disabled={isAgency}
                 />
               </div>
               <div className="row">
@@ -138,6 +156,7 @@ export const DettaglioAgenzia = () => {
                     value={data.city || ""}
                     readOnly
                     style={{ backgroundColor: "#e9ecef" }}
+                    disabled={isAgency}
                   />
                 </div>
                 <div className="col-md-3 mb-3">
@@ -148,6 +167,7 @@ export const DettaglioAgenzia = () => {
                     value={data.cap || ""}
                     readOnly
                     style={{ backgroundColor: "#e9ecef" }}
+                    disabled={isAgency}
                   />
                 </div>
                 <div className="col-md-3 mb-3">
@@ -158,6 +178,7 @@ export const DettaglioAgenzia = () => {
                     value={data.prov || ""}
                     readOnly
                     style={{ backgroundColor: "#e9ecef" }}
+                    disabled={isAgency}
                   />
                 </div>
                 <div className="col-md-3 mb-3">
@@ -168,6 +189,7 @@ export const DettaglioAgenzia = () => {
                     value={data.nationality || ""}
                     readOnly
                     style={{ backgroundColor: "#e9ecef" }}
+                    disabled={isAgency}
                   />
                 </div>
               </div>
@@ -180,6 +202,7 @@ export const DettaglioAgenzia = () => {
                     value={data.telephone || ""}
                     readOnly
                     style={{ backgroundColor: "#e9ecef" }}
+                    disabled={isAgency}
                   />
                 </div>
               </div>
@@ -192,6 +215,7 @@ export const DettaglioAgenzia = () => {
                     value={data.email || ""}
                     readOnly
                     style={{ backgroundColor: "#e9ecef" }}
+                    disabled={isAgency}
                   />
                 </div>
               </div>
@@ -203,6 +227,7 @@ export const DettaglioAgenzia = () => {
                     name="attivo"
                     value={formData.attivo}
                     onChange={handleChange}
+                    disabled={isAgency}
                   >
                     <option value={true}>Yes</option>
                     <option value={false}>No</option>
@@ -218,6 +243,8 @@ export const DettaglioAgenzia = () => {
                     name="percentualCommissione"
                     value={formData.percentualCommissione}
                     onChange={handleChange}
+                    readOnly={isAgency}
+                    disabled={isAgency}
                   />
                 </div>
               </div>
@@ -232,6 +259,8 @@ export const DettaglioAgenzia = () => {
                     name="dirittiDiPrenotazione"
                     value={formData.dirittiDiPrenotazione}
                     onChange={handleChange}
+                    readOnly={isAgency}
+                    disabled={isAgency}
                   />
                 </div>
                 <div className="col-md-6 mb-3">
@@ -243,6 +272,7 @@ export const DettaglioAgenzia = () => {
                     name="abilitaPagamentoEstrattoConto"
                     value={formData.abilitaPagamentoEstrattoConto}
                     onChange={handleChange}
+                    disabled={isAgency}
                   >
                     <option value={true}>Yes</option>
                     <option value={false}>No</option>
@@ -257,15 +287,55 @@ export const DettaglioAgenzia = () => {
                     name="abilitaPagamentoPayByLink"
                     value={formData.abilitaPagamentoPayByLink}
                     onChange={handleChange}
+                    disabled={isAgency}
                   >
                     <option value={true}>Yes</option>
                     <option value={false}>No</option>
                   </select>
                 </div>
               </div>
-              <button type="submit" className="btn btn-primary">
-                Save
-              </button>
+              <div className="row">
+                <div className="col-md-6 mb-3">
+                  <label className="form-label">Abilita Affiliazione</label>
+                  <select
+                    className="form-select"
+                    name="enableAffiliation" // Corrected name attribute
+                    value={formData.enableAffiliation} // Corrected state property
+                    onChange={handleChange}
+                    disabled={isAgency}
+                  >
+                    <option value={true}>Yes</option>
+                    <option value={false}>No</option>
+                  </select>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-md-12 mb-3">
+                  <label className="form-label">Link Affiliazione</label>
+                  <div className="input-group">
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={data.linkAffiliation || ""}
+                      readOnly
+                      style={{ backgroundColor: "#e9ecef" }}
+                      disabled={isAgency}
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-outline-secondary"
+                      onClick={handleCopy}
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </div>
+              </div>
+              {!isAgency && (
+                <button type="submit" className="btn btn-primary">
+                  Save
+                </button>
+              )}
             </>
           )}
         </form>

@@ -8,13 +8,10 @@ export const fetchDettaglioAgenzia = createAsyncThunk(
   "dettaglioAgenzia/fetchDettaglioAgenzia",
   async (id, { dispatch }) => {
     dispatch(startLoading());
-    const response = await axios.get(
-      `${config.basePath}${config.fetchDettaglioAgenzia.route.replace(
-        ":id",
-        id
-      )}`,
-      { headers: getAuthHeader() }
-    );
+    const url = id
+      ? `${config.basePath}${config.fetchDettaglioAgenzia.route.replace(":id", id)}`
+      : `${config.basePath}/api/booking/agency/get`;
+    const response = await axios.get(url, { headers: getAuthHeader() });
     dispatch(stopLoading());
     return response.data;
   }

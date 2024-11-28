@@ -25,6 +25,7 @@ import { resetSelected, resetResults } from "../features/viaggio/resultTratta"; 
 import { resetAll as resetViaggio } from "../features/viaggio/findTratta"; // Import resetAll action for viaggio
 import { resetTourDetails } from "../features/tour/tourSlice"; // Import resetTourDetails action for tour
 import { formatDateTime } from "../utils/dateUtils"; // Import formatDateTime function
+import Cookies from "js-cookie"; // Import js-cookie
 
 export const Checkout = () => {
   const { passeggeri, prenotazione, paymentsMethod, quote, isTour } =
@@ -89,6 +90,7 @@ export const Checkout = () => {
             reserveLightbox.PaymentToken,
             function callback(response) {
               if (response.status === "OK") {
+                Cookies.remove('codice'); // Remove the codice cookie if payment is successful
                 dispatch(resetSelected({ id: 0 }));
                 dispatch(resetResults());
                 dispatch(resetViaggio());
@@ -116,6 +118,7 @@ export const Checkout = () => {
               reservationId: prenotazione.code,
             })
           );
+          Cookies.remove('codice'); // Remove the codice cookie if payment is successful
           dispatch(resetSelected({ id: 0 }));
           dispatch(resetResults());
           dispatch(resetViaggio());
@@ -130,6 +133,7 @@ export const Checkout = () => {
         try {
           const response = await submitExternalPayment(quote);
           if (response.ok) {
+            Cookies.remove('codice'); // Remove the codice cookie if payment is successful
             dispatch(resetSelected({ id: 0 }));
             dispatch(resetResults());
             dispatch(resetViaggio());
