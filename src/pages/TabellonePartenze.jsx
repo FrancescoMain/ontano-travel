@@ -54,7 +54,7 @@ export const TabellonePartenze = () => {
     const diffMins = Math.round(diffMs / 60000);
     const hours = Math.floor(diffMins / 60);
     const minutes = diffMins % 60;
-    return hours > 0 ? ` ${hours}h ${minutes}m` : ` ${minutes}m`;
+    return  ` ${hours}h ${minutes}m` ;
   };
 
   return (
