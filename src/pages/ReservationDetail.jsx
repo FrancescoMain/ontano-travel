@@ -27,7 +27,7 @@ export const ReservationDetail = () => {
   const handleRefund = (routeId, amount, executeRefund) => {
     dispatch(requestRefund({ routeId, amount, executeRefund, reservationCode }));
   };
-
+console.log(reservation)
   return (
     <div className="container">
       <div className="  align-items-center">
@@ -45,13 +45,20 @@ export const ReservationDetail = () => {
             </div>
           )}
           {reservation?.reservationRoutes?.map((route, index) => (
-            <CheckoutTratta
-              route={route}
-              key={index}
-              post={true}
-              onRefund={handleRefund}
-              isAdmin={isAdmin}
-            />
+            <div key={index}>
+              <CheckoutTratta
+                route={route}
+                post={true}
+                onRefund={handleRefund}
+                isAdmin={isAdmin}
+              />
+              {route.descriptionTour && (
+                <div className="col bg-aliceblue rounded mb-3 d-flex flex-column mt-3 p-3">
+                  <h4 className="text-primary text-center">Dettaglio Tour</h4>
+                  <div dangerouslySetInnerHTML={{ __html: route.descriptionTour }} />
+                </div>
+              )}
+            </div>
           ))}
           <div className="card-footer bg-ice-white py-lg-3 rounded-bottom-left-4x rounded-bottom-right-4x border-top border-primary">
             <div
