@@ -11,8 +11,11 @@ import {
 import dayjs from "dayjs";
 import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 export const useTourForm = () => {
+  const { t } = useTranslation();
   const [ports, setPorts] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -27,6 +30,7 @@ export const useTourForm = () => {
         setPorts(data);
       } catch (error) {
         console.error("Error fetching ports:", error);
+        toast.error("Errore nel recupero dei porti. Please try again.");
       }
     };
     getPorts();
@@ -36,9 +40,13 @@ export const useTourForm = () => {
     const getTours = async () => {
       try {
         const data = await fetchTours();
+        if (data.length === 0) {
+          toast.info("Nessun tour trovato. No tours found.");
+        }
         dispatch(setTours(data));
       } catch (error) {
         console.error("Error fetching tours:", error);
+        toast.error("Errore nel recupero dei tour. Please try again.");
       }
     };
     getTours();
@@ -91,6 +99,7 @@ export const useTourForm = () => {
       navigate("/checkout");
     } catch (error) {
       console.error("Error posting tour quote:", error);
+      toast.error(t("Errore nella ricerca del tour. Riprova con un'altra data o contatta l'assistenza."));
     }
     dispatch(stopLoading());
   };

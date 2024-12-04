@@ -164,6 +164,11 @@ const resources = {
       "Send Recovery Email": "Send Recovery Email",
       "Recovery email sent successfully.": "Recovery email sent successfully.",
       "Back to Login": "Back to Login",
+      "Error fetching ports. Please try again.": "Error fetching ports. Please try again.",
+      "No tours found.": "No tours found.",
+      "Error fetching tours. Please try again.": "Error fetching tours. Please try again.",
+      "Error posting tour quote. Please try again.": "Error posting tour quote. Please try again.",
+      "Errore nella ricerca del tour. Riprova con un'altra data o contatta l'assistenza.": "Error searching for tour. Please try again with another date or contact support.",
     },
   },
   it: {
@@ -322,6 +327,11 @@ const resources = {
       "Send Recovery Email": "Invia Email di Recupero",
       "Recovery email sent successfully.": "Email di recupero inviata con successo.",
       "Back to Login": "Torna al Login",
+      "Error fetching ports. Please try again.": "Errore nel recupero dei porti. Per favore riprova.",
+      "No tours found.": "Nessun tour trovato.",
+      "Error fetching tours. Please try again.": "Errore nel recupero dei tour. Per favore riprova.",
+      "Error posting tour quote. Please try again.": "Errore nell'invio del preventivo. Per favore riprova.",
+      "Errore nella ricerca del tour. Riprova con un'altra data o contatta l'assistenza.": "Errore nella ricerca del tour. Riprova con un'altra data o contatta l'assistenza.",
     },
   },
 };

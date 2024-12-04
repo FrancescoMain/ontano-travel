@@ -8,6 +8,8 @@ import dayjs from "dayjs";
 import { useTourForm } from "../_hooks/useTourForm";
 import { DettagliViaggioTour } from "./DettagliViaggioTour";
 import { postTourQuote } from "../_api/tourApi";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const TourComponent = () => {
   const { t } = useTranslation();
@@ -33,6 +35,7 @@ export const TourComponent = () => {
 
   return (
     <div>
+      <ToastContainer />
       <h4 className="text-primary">{t("Partenza")}</h4>
       <div className="row-cont">
         <Autocomplete
