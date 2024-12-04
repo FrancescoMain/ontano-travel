@@ -19,6 +19,21 @@ import { fetchAgenzie } from "../features/ricercaAgenzia/ricercaAgenziaSlice";
 import { setAccountData } from "../features/account/accountSlice"; // Import setAccountData
 import { useTranslation } from "react-i18next"; // Import useTranslation
 import { FaSortUp, FaSortDown } from "react-icons/fa"; // Import sorting icons
+import { styled } from "@mui/material/styles"; // Import styled from @mui/material/styles
+import "./Prenotazioni.css"; // Import the CSS file
+
+const HeaderTableRow = styled(TableRow)({
+  backgroundColor: "#f5f5f5",
+  fontWeight: "bold",
+});
+
+const OddTableRow = styled(TableRow)({
+  backgroundColor: "#e0e0e0 !important", // Darker shade for odd rows
+});
+
+const EvenTableRow = styled(TableRow)({
+  backgroundColor: "#ffffff !important", // Lighter shade for even rows
+});
 
 export const Prenotazioni = () => {
   const { t } = useTranslation(); // Initialize useTranslation
@@ -33,7 +48,6 @@ export const Prenotazioni = () => {
     sort: "",
   });
   const dispatch = useDispatch();
-
 
   const [agenzie, setAgenzie] = useState([]);
 
@@ -201,7 +215,7 @@ export const Prenotazioni = () => {
       <TableContainer component={Paper} className="mt-4">
         <Table>
           <TableHead>
-            <TableRow>
+            <HeaderTableRow>
               <TableCell onClick={() => handleSort("reservationCode")}>
                 {t("Codice Prenotazione")} {getSortIcon("reservationCode")}
               </TableCell>
@@ -223,7 +237,7 @@ export const Prenotazioni = () => {
               <TableCell onClick={() => handleSort("name_agency")}>
                 {t("Nome Agenzia")} {getSortIcon("name_agency")}
               </TableCell>
-            </TableRow>
+            </HeaderTableRow>
           </TableHead>
           <TableBody>
             {status === "loading" && (
@@ -236,11 +250,12 @@ export const Prenotazioni = () => {
                 <TableCell colSpan={7}>{t("Error")}: {error}</TableCell> {/* Updated colSpan */}
               </TableRow>
             )}
-            {reservations.map((reservation) => (
+            {reservations.map((reservation, index) => (
               <TableRow 
                 key={reservation.reservationCode} 
                 onClick={() => handleRowClick(reservation.reservationCode, reservation.contact_mail)} // Pass guest email
                 style={{ cursor: 'pointer' }}
+                className={index % 2 === 0 ? "row-even" : "row-odd"}
               >
                 <TableCell>{reservation.reservationCode}</TableCell>
                 <TableCell>{reservation.dataReservation}</TableCell>

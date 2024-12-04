@@ -262,6 +262,9 @@ export const DettaglioAgenzia = () => {
                     readOnly={isAgency}
                     disabled={isAgency}
                   />
+                  <small className="form-text text-muted">
+                    Se non vengono inseriti, il sistema calcola quelli di default del sito
+                  </small>
                 </div>
                 <div className="col-md-6 mb-3">
                   <label className="form-label">

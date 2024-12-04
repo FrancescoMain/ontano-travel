@@ -13,13 +13,14 @@ import { changeLanguage } from "../../utils/language";
 import { handleLogout } from "../../utils/auth";
 import { useAuth } from "../../_hooks/useAuth";
 import i18n from "../../i18n";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FaUserCircle } from "react-icons/fa";
 
 // Component for authenticated user links
 const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcanvasClose, email }) => {
+  const location = useLocation();
   const accountData = useSelector((state) => state.account.data);
   const isAdmin = accountData?.authorities?.includes("ROLE_WEB_ADMIN");
   const isAgency = accountData?.authorities?.includes("ROLE_AGENCY_USER");
@@ -27,7 +28,7 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
     <>
       <li>
         <Link
-          className="Link"
+          className={`Link ${location.pathname === "/prenotazioni" ? "active" : ""}`}
           color="primary"
           disabled={false}
           level="body-md"
@@ -44,7 +45,7 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
       {isAgency && (
         <li>
           <Link
-            className="Link"
+            className={`Link ${location.pathname === "/agenzia/:id" ? "active" : ""}`}
             color="primary"
             disabled={false}
             level="body-md"
@@ -63,7 +64,7 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
         <>
           <li>
             <Link
-              className="Link"
+              className={`Link ${location.pathname === "/dashboard" ? "active" : ""}`}
               color="primary"
               disabled={false}
               level="body-md"
@@ -79,7 +80,7 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
           </li>
           <li>
             <Link
-              className="Link"
+              className={`Link ${location.pathname === "/ricerca-agenzia" ? "active" : ""}`}
               color="primary"
               disabled={false}
               level="body-md"
@@ -95,7 +96,7 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
           </li>
           <li>
             <Link
-              className="Link"
+              className={`Link ${location.pathname === "/admin-estratto-conto" ? "active" : ""}`}
               color="primary"
               disabled={false}
               level="body-md"
@@ -111,7 +112,7 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
           </li>
           <li>
             <Link
-              className="Link"
+              className={`Link ${location.pathname === "/rendicontazione" ? "active" : ""}`}
               color="primary"
               disabled={false}
               level="body-md"
@@ -130,7 +131,7 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
       {isAgency && (
         <li>
           <Link
-            className="Link"
+            className={`Link ${location.pathname === "/agency-estratto-conto" ? "active" : ""}`}
             color="primary"
             disabled={false}
             level="body-md"
@@ -141,7 +142,7 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
               handleOffcanvasClose();
             }}
           >
-            {t("Visualizza Estratto Conto Agenzia")}
+            {t("Estratti Conto")}
           </Link>
         </li>
       )}
@@ -163,7 +164,7 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
                 <FaUserCircle size={24} />
               </MenuItem>
               <MenuItem
-                className="profile-item text-primary"
+                className={`profile-item text-primary ${location.pathname === "/set-password" ? "active" : ""}`}
                 onClick={() => {
                   navigate("/set-password");
                   handleOffcanvasClose();
@@ -191,65 +192,69 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
 };
 
 // Component for unauthenticated user links
-const UnauthenticatedLinks = ({ t, navigate, handleOffcanvasClose }) => (
-  <>
-    <li>
-      <Link
-        className="Link"
-        color="primary"
-        disabled={false}
-        level="body-md"
-        underline="none"
-        variant="plain"
-        onClick={() => {
-          navigate("/login");
-          handleOffcanvasClose();
-        }}
-      >
-        {t("Login")}
-        <LoginIcon />
-      </Link>
-    </li>
-    <li>
-      <Link
-        className="Link"
-        color="primary"
-        disabled={false}
-        level="body-md"
-        underline="none"
-        variant="plain"
-        onClick={() => {
-          navigate("/cerca-prenotazione");
-          handleOffcanvasClose();
-        }}
-      >
-        {t("Cerca prenotazione")}
-        <SearchIcon />
-      </Link>
-    </li>
-    <li>
-      <Link
-        className="Link"
-        color="primary"
-        disabled={false}
-        level="body-md"
-        underline="none"
-        variant="plain"
-        onClick={() => {
-          navigate("/registra-agenzia");
-          handleOffcanvasClose();
-        }}
-      >
-        {t("Registra Agenzia")}
-      </Link>
-    </li>
-  </>
-);
+const UnauthenticatedLinks = ({ t, navigate, handleOffcanvasClose }) => {
+  const location = useLocation();
+  return (
+    <>
+      <li>
+        <Link
+          className={`Link ${location.pathname === "/login" ? "active" : ""}`}
+          color="primary"
+          disabled={false}
+          level="body-md"
+          underline="none"
+          variant="plain"
+          onClick={() => {
+            navigate("/login");
+            handleOffcanvasClose();
+          }}
+        >
+          {t("Login")}
+          <LoginIcon />
+        </Link>
+      </li>
+      <li>
+        <Link
+          className={`Link ${location.pathname === "/cerca-prenotazione" ? "active" : ""}`}
+          color="primary"
+          disabled={false}
+          level="body-md"
+          underline="none"
+          variant="plain"
+          onClick={() => {
+            navigate("/cerca-prenotazione");
+            handleOffcanvasClose();
+          }}
+        >
+          {t("Cerca prenotazione")}
+          <SearchIcon />
+        </Link>
+      </li>
+      <li>
+        <Link
+          className={`Link ${location.pathname === "/registra-agenzia" ? "active" : ""}`}
+          color="primary"
+          disabled={false}
+          level="body-md"
+          underline="none"
+          variant="plain"
+          onClick={() => {
+            navigate("/registra-agenzia");
+            handleOffcanvasClose();
+          }}
+        >
+          {t("Registra Agenzia")}
+        </Link>
+      </li>
+    </>
+  );
+};
 
 export const Header = () => {
   const { loading, token, isWebUser } = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation(); // Add this line
   const [showOffcanvas, setShowOffcanvas] = useState(false);
   const accountData = useSelector((state) => state.account.data);
   const email = accountData?.email;
@@ -369,7 +374,7 @@ export const Header = () => {
                     />
                     <li>
                       <Link
-                        className="Link"
+                        className={`Link ${location.pathname === "/set-password" ? "active" : ""}`}
                         color="primary"
                         disabled={false}
                         level="body-md"

@@ -57,12 +57,13 @@ const SearchGuest = () => {
               <span>0,00</span>
             </div>
           </div>
-          {/* <div className="d-flex justify-content-between align-items-center">
-            <span>Totale biglietti </span>
+          <div className="spacer my-3 sconto d-none"></div>
+          <div className="d-flex justify-content-between align-items-center">
+            <span>Totale Biglietti</span>
             <span>
               {reservation?.priceToPay.price - reservation?.taxPreview.price} €
             </span>
-          </div> */}
+          </div>
           <div className="spacer my-3 sconto d-none"></div>
           <div className="d-flex justify-content-between align-items-center">
             <span>Diritti di prenotazione</span>

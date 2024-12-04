@@ -18,6 +18,12 @@
   gap: 10px;
 }
 
+.Link.active {
+  font-weight: bold;
+  color: #007bff; /* Cambia il colore per evidenziare */
+  border-bottom: 2px solid #007bff; /* Aggiungi una linea di fondo per evidenziare */
+}
+
 .header nav ul {
   display: flex;
   list-style: none;
