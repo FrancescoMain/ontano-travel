@@ -22,7 +22,7 @@ const AgencyEstrattoConto = () => {
   const [size, setSize] = useState(20);
 
   useEffect(() => {
-    dispatch(fetchEstrattoConto({ toApprove: '', page, size }));
+    dispatch(fetchEstrattoConto({ to_approve: '', page, size }));
   }, [dispatch, page, size]);
 
   const handleDownload = (id) => {

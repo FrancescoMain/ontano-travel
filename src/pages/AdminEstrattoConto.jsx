@@ -12,6 +12,7 @@ import Paper from '@mui/material/Paper';
 import { CircularProgress } from '@mui/material';
 import TablePagination from '@mui/material/TablePagination';
 import { useTranslation } from "react-i18next"; // Import useTranslation
+import { fetchAgenzie } from "../features/ricercaAgenzia/ricercaAgenziaSlice"; // Import fetchAgenzie
 
 const AdminEstrattoConto = () => {
   const { t } = useTranslation(); // Initialize useTranslation
@@ -21,14 +22,24 @@ const AdminEstrattoConto = () => {
   const [toApprove, setToApprove] = useState('');
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(20);
+  const [agencyId, setAgencyId] = useState(""); // Add state for agencyId
+  const [agenzie, setAgenzie] = useState([]); // Add state for agenzie
 
   useEffect(() => {
-    dispatch(fetchEstrattoConto({ toApprove, page, size }));
-  }, [dispatch, toApprove, page, size]);
+    dispatch(fetchAgenzie({ page: 0, size: 100 })).then((response) => {
+      if (response.payload && response.payload.data) {
+        setAgenzie(response.payload.data);
+      }
+    });
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchEstrattoConto({ toApprove, page, size, agencyId })); // Include agencyId in fetch
+  }, [dispatch, toApprove, page, size, agencyId]);
 
   const handleApprove = async (id) => {
     await dispatch(approveEstrattoConto(id));
-    dispatch(fetchEstrattoConto({ toApprove, page, size }));
+    dispatch(fetchEstrattoConto({ toApprove, page, size, agencyId }));
   };
 
   const handleDownload = (id) => {
@@ -63,6 +74,18 @@ const AdminEstrattoConto = () => {
               <option value="">{t("Tutti")}</option>
               <option value="true">{t("Da approvare")}</option>
               <option value="false">{t("Approvati")}</option>
+            </select>
+            <select
+              value={agencyId}
+              onChange={(e) => setAgencyId(e.target.value)}
+              className="form-select me-2"
+            >
+              <option value="">{t("Select Agency")}</option>
+              {agenzie.map((agenzia) => (
+                <option key={agenzia.id} value={agenzia.id}>
+                  {agenzia.name}
+                </option>
+              ))}
             </select>
           </div>
           {status === 'loading' && <p>{t("Loading...")}</p>}

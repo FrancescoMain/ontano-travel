@@ -6,11 +6,12 @@ import { startLoading, stopLoading } from '../spinner/spinnerSlice';
 
 export const fetchEstrattoConto = createAsyncThunk(
   'estrattoConto/fetchEstrattoConto',
-  async ({ toApprove, page, size }, { dispatch }) => {
+  async ({ toApprove, page, size, agencyId }, { dispatch }) => { // Include agencyId
+    const to_approve = toApprove;
     dispatch(startLoading('fetchEstrattoConto'));
     const response = await axios.get(`${config.basePath}${config.fetchEstrattoConto.route}`, {
       headers: getAuthHeader(),
-      params: { toApprove, page, size },
+      params: { to_approve, page, size, agency_id: agencyId }, // Use agency_id in params
     });
     dispatch(stopLoading('fetchEstrattoConto'));
     return {
