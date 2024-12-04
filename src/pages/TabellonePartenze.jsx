@@ -12,7 +12,7 @@ export const TabellonePartenze = () => {
   const dispatch = useDispatch();
   const routes = useSelector((state) => state.route.route);
   const departures = useSelector((state) => state.tabellonePartenze.departures);
-  const today = new Date().toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+  const today = new Date().toLocaleDateString('it-IT', { day: '2-digit', month: 'short', year: 'numeric' }).replace(/\./g, ''); // Format date as DD/MMM/YYYY
   const navigate = useNavigate();
   const [selectedPort, setSelectedPort] = useState('');
   const [localDepartures, setLocalDepartures] = useState([]);
@@ -33,7 +33,7 @@ export const TabellonePartenze = () => {
     setSelectedPort(port);
     setLocalDepartures([]); // Clear current departures
     dispatch(startLoading('fetchDepartures'));
-    dispatch(fetchDepartures({ departureDate: today, departurePort: port })).then((action) => {
+    dispatch(fetchDepartures({ departureDate: new Date().toISOString().split('T')[0], departurePort: port })).then((action) => {
       setLocalDepartures([...action.payload].sort((a, b) => new Date(a.departure) - new Date(b.departure)));
       dispatch(stopLoading('fetchDepartures'));
     });
@@ -113,6 +113,14 @@ const style = document.createElement('style');
 style.innerHTML = `
   .bg-custom {
     background-color: #e2ebfc !important;
+  }
+  @media (max-width: 768px) {
+    .card-body span {
+      font-size: 0.7rem;
+    }
+    .btn {
+      font-size: 0.6rem;
+    }
   }
 `;
 document.head.appendChild(style);

@@ -3,10 +3,12 @@ import { useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { config } from "../config/config"; // Import config
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const passwordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).{8,}$/; // Update password regex
 
 export const RecoveryFinish = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const key = params.get("key");
@@ -18,11 +20,11 @@ export const RecoveryFinish = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      setMessage("Passwords do not match");
+      setMessage(t("Passwords do not match"));
       return;
     }
     if (!passwordRegex.test(password)) {
-      setMessage("Password must be at least 8 characters long and contain at least one number, one lowercase letter, one uppercase letter, and one special character");
+      setMessage(t("Password must be at least 8 characters long and contain at least one number, one lowercase letter, one uppercase letter, and one special character"));
       return;
     }
 
@@ -32,12 +34,12 @@ export const RecoveryFinish = () => {
         newpassword: password,
       });
       if (response.status === 200) {
-        setMessage("Password changed successfully");
+        setMessage(t("Password changed successfully"));
       } else {
-        setMessage("Failed to change password");
+        setMessage(t("Failed to change password"));
       }
     } catch (error) {
-      setMessage("An error occurred. Please try again.");
+      setMessage(t("An error occurred. Please try again."));
     }
   };
 
@@ -47,12 +49,12 @@ export const RecoveryFinish = () => {
         <div className="col-md-6">
           <div className="card">
             <div className="card-header" style={{ backgroundColor: "#F0F8FF" }}>
-              <h3 className="text-primary">Recovery</h3>
+              <h3 className="text-primary">{t("Recovery")}</h3>
             </div>
             <div className="card-body">
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                  <label htmlFor="password">New Password</label>
+                  <label htmlFor="password">{t("New Password")}</label>
                   <input
                     type="password"
                     className="form-control"
@@ -63,7 +65,7 @@ export const RecoveryFinish = () => {
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="confirmPassword">Confirm Password</label>
+                  <label htmlFor="confirmPassword">{t("Confirm Password")}</label>
                   <input
                     type="password"
                     className="form-control"
@@ -74,7 +76,7 @@ export const RecoveryFinish = () => {
                   />
                 </div>
                 <button type="submit" className="btn btn-primary mt-3">
-                  Change Password
+                  {t("Change Password")}
                 </button>
               </form>
               {message && <p className="mt-3">{message}</p>}

@@ -5,10 +5,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { config } from "../config/config"; // Import config
 import { getAuthHeader } from "../utils/auth"; // Import getAuthHeader
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const passwordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).{8,}$/; // Update password regex
 
 export const SetPassword = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
   const [oldPassword, setOldPassword] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -17,11 +19,11 @@ export const SetPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      toast.error("Passwords do not match");
+      toast.error(t("Passwords do not match"));
       return;
     }
     if (!passwordRegex.test(password)) {
-      toast.error("Password must be at least 8 characters long and contain at least one number, one lowercase letter, one uppercase letter, and one special character");
+      toast.error(t("Password must be at least 8 characters long and contain at least one number, one lowercase letter, one uppercase letter, and one special character"));
       return;
     }
 
@@ -38,13 +40,13 @@ export const SetPassword = () => {
       );
 
       if (response.status === 200) {
-        toast.success("Password set successfully");
+        toast.success(t("Password set successfully"));
         navigate("/");
       } else {
-        toast.error("Failed to set password");
+        toast.error(t("Failed to set password"));
       }
     } catch (error) {
-      toast.error("An error occurred. Please try again.");
+      toast.error(t("An error occurred. Please try again."));
     }
   };
 
@@ -54,12 +56,12 @@ export const SetPassword = () => {
         <div className="col-md-6">
           <div className="card">
             <div className="card-header" style={{ backgroundColor: "#F0F8FF" }}>
-              <h3 className="text-primary">Set New Password</h3>
+              <h3 className="text-primary">{t("Set New Password")}</h3>
             </div>
             <div className="card-body">
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                  <label htmlFor="oldPassword">Old Password:</label>
+                  <label htmlFor="oldPassword">{t("Old Password")}:</label>
                   <input
                     type="password"
                     className="form-control"
@@ -70,7 +72,7 @@ export const SetPassword = () => {
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="password">New Password:</label>
+                  <label htmlFor="password">{t("New Password")}:</label>
                   <input
                     type="password"
                     className="form-control"
@@ -81,7 +83,7 @@ export const SetPassword = () => {
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="confirmPassword">Confirm Password:</label>
+                  <label htmlFor="confirmPassword">{t("Confirm Password")}:</label>
                   <input
                     type="password"
                     className="form-control"
@@ -92,7 +94,7 @@ export const SetPassword = () => {
                   />
                 </div>
                 <button type="submit" className="btn btn-primary mt-3">
-                  Set Password
+                  {t("Set Password")}
                 </button>
               </form>
             </div>

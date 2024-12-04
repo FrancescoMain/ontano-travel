@@ -1,0 +1,37 @@
+[debug] [2024-12-04T08:54:38.518Z] ----------------------------------------------------------------------
+[debug] [2024-12-04T08:54:38.521Z] Command:       C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\firebase-tools\lib\bin\firebase.js deploy --force
+[debug] [2024-12-04T08:54:38.521Z] CLI Version:   13.27.0
+[debug] [2024-12-04T08:54:38.521Z] Platform:      win32
+[debug] [2024-12-04T08:54:38.521Z] Node Version:  v22.11.0
+[debug] [2024-12-04T08:54:38.522Z] Time:          Wed Dec 04 2024 09:54:38 GMT+0100 (Ora standard dell’Europa centrale)
+[debug] [2024-12-04T08:54:38.522Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-12-04T08:54:38.577Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-12-04T08:54:38.577Z] > authorizing via signed-in user (cesaranofrancescomain@gmail.com)
+[debug] [2024-12-04T08:54:38.577Z] [iam] checking project quickferries-a95b3 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2024-12-04T08:54:38.579Z] Checked if tokens are valid: true, expires at: 1733306065521
+[debug] [2024-12-04T08:54:38.579Z] Checked if tokens are valid: true, expires at: 1733306065521
+[debug] [2024-12-04T08:54:38.580Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/quickferries-a95b3:testIamPermissions [none]
+[debug] [2024-12-04T08:54:38.580Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/quickferries-a95b3:testIamPermissions x-goog-quota-user=projects/quickferries-a95b3
+[debug] [2024-12-04T08:54:38.580Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/quickferries-a95b3:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2024-12-04T08:54:39.561Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/quickferries-a95b3:testIamPermissions 200
+[debug] [2024-12-04T08:54:39.562Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/quickferries-a95b3:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2024-12-04T08:54:39.563Z] Checked if tokens are valid: true, expires at: 1733306065521
+[debug] [2024-12-04T08:54:39.563Z] Checked if tokens are valid: true, expires at: 1733306065521
+[debug] [2024-12-04T08:54:39.563Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/quickferries-a95b3 [none]
+[debug] [2024-12-04T08:54:39.972Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/quickferries-a95b3 200
+[debug] [2024-12-04T08:54:39.972Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/quickferries-a95b3 {"projectId":"quickferries-a95b3","projectNumber":"931884839500","displayName":"Quickferries","name":"projects/quickferries-a95b3","resources":{"hostingSite":"quickferries-a95b3"},"state":"ACTIVE","etag":"1_b15f36c7-bf9c-46c2-8713-58648e1355ac"}
+[debug] [2024-12-04T08:54:39.975Z] Specified "public" directory "build" does not exist; Deploy to Hosting site "quickferries-a95b3" may fail or be empty.
+[info] 
+[info] === Deploying to 'quickferries-a95b3'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2024-12-04T08:54:39.982Z] Checked if tokens are valid: true, expires at: 1733306065521
+[debug] [2024-12-04T08:54:39.982Z] Checked if tokens are valid: true, expires at: 1733306065521
+[debug] [2024-12-04T08:54:39.982Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/quickferries-a95b3/versions [none]
+[debug] [2024-12-04T08:54:39.982Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/quickferries-a95b3/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2024-12-04T08:54:41.227Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/quickferries-a95b3/versions 200
+[debug] [2024-12-04T08:54:41.227Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/quickferries-a95b3/versions {"name":"projects/931884839500/sites/quickferries-a95b3/versions/3d8eda1812d475de","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  hosting[quickferries-a95b3]: beginning deploy... 
+[error] 
+[error] Error: Directory 'build' for Hosting does not exist.
