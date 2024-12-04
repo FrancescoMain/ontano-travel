@@ -6,10 +6,10 @@ import { startLoading, stopLoading } from "../spinner/spinnerSlice";
 
 export const fetchAgenzie = createAsyncThunk(
   "ricercaAgenzia/fetchAgenzie",
-  async ({ page, size, name }, { dispatch }) => {
+  async ({ page, size, name, sort }, { dispatch }) => {
     dispatch(startLoading());
     const response = await axios.get(
-      `${config.basePath}${config.fetchAgenzie.route}?page=${page}&size=${size}&name=${name || ""}`,
+      `${config.basePath}${config.fetchAgenzie.route}?page=${page}&size=${size}&name=${name || ""}&sort=${sort || ""}`,
       { headers: getAuthHeader() }
     );
     dispatch(stopLoading());

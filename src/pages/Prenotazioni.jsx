@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchAgenzie } from "../features/ricercaAgenzia/ricercaAgenziaSlice";
 import { setAccountData } from "../features/account/accountSlice"; // Import setAccountData
 import { useTranslation } from "react-i18next"; // Import useTranslation
+import { FaSortUp, FaSortDown } from "react-icons/fa"; // Import sorting icons
 
 export const Prenotazioni = () => {
   const { t } = useTranslation(); // Initialize useTranslation
@@ -75,6 +76,18 @@ export const Prenotazioni = () => {
 
   const handleRowClick = (reservationCode, guestEmail) => {
     navigate(`/reservation/${reservationCode}?guestEmail=${guestEmail}`);
+  };
+
+  const handleSort = (column) => {
+    const newSort = formData.sort === `${column},asc` ? `${column},desc` : `${column},asc`;
+    setFormData({ ...formData, sort: newSort });
+    dispatch(searchReservations({ ...formData, sort: newSort, page, size }));
+  };
+
+  const getSortIcon = (column) => {
+    if (formData.sort === `${column},asc`) return <FaSortUp />;
+    if (formData.sort === `${column},desc`) return <FaSortDown />;
+    return null;
   };
 
   return (
@@ -189,13 +202,27 @@ export const Prenotazioni = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>{t("Codice Prenotazione")}</TableCell>
-              <TableCell>{t("Data Prenotazione")}</TableCell>
-              <TableCell>{t("Prezzo")}</TableCell>
-              <TableCell>{t("Email Contatto")}</TableCell>
-              <TableCell>{t("Nome Contatto")}</TableCell>
-              <TableCell>{t("Cognome Contatto")}</TableCell>
-              <TableCell>{t("Nome Agenzia")}</TableCell> {/* Added line */}
+              <TableCell onClick={() => handleSort("reservationCode")}>
+                {t("Codice Prenotazione")} {getSortIcon("reservationCode")}
+              </TableCell>
+              <TableCell onClick={() => handleSort("dataReservation")}>
+                {t("Data Prenotazione")} {getSortIcon("dataReservation")}
+              </TableCell>
+              <TableCell onClick={() => handleSort("prezzo")}>
+                {t("Prezzo")} {getSortIcon("prezzo")}
+              </TableCell>
+              <TableCell onClick={() => handleSort("contact_mail")}>
+                {t("Email Contatto")} {getSortIcon("contact_mail")}
+              </TableCell>
+              <TableCell onClick={() => handleSort("contact_name")}>
+                {t("Nome Contatto")} {getSortIcon("contact_name")}
+              </TableCell>
+              <TableCell onClick={() => handleSort("contact_surname")}>
+                {t("Cognome Contatto")} {getSortIcon("contact_surname")}
+              </TableCell>
+              <TableCell onClick={() => handleSort("name_agency")}>
+                {t("Nome Agenzia")} {getSortIcon("name_agency")}
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

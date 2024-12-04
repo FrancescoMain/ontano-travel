@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchEstrattoConto, approveEstrattoConto, downloadEstrattoConto } from '../features/estrattoConto/estrattoContoSlice';
-import { FaCheck, FaDownload } from 'react-icons/fa';
+import { FaCheck, FaDownload, FaSortUp, FaSortDown } from 'react-icons/fa'; // Import sorting icons
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -24,6 +24,7 @@ const AdminEstrattoConto = () => {
   const [size, setSize] = useState(20);
   const [agencyId, setAgencyId] = useState(""); // Add state for agencyId
   const [agenzie, setAgenzie] = useState([]); // Add state for agenzie
+  const [sort, setSort] = useState(""); // Default sort is an empty string
 
   useEffect(() => {
     dispatch(fetchAgenzie({ page: 0, size: 100 })).then((response) => {
@@ -34,12 +35,12 @@ const AdminEstrattoConto = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(fetchEstrattoConto({ toApprove, page, size, agencyId })); // Include agencyId in fetch
-  }, [dispatch, toApprove, page, size, agencyId]);
+    dispatch(fetchEstrattoConto({ toApprove, page, size, agencyId, sort })); // Include sort in fetch
+  }, [dispatch, toApprove, page, size, agencyId, sort]);
 
   const handleApprove = async (id) => {
     await dispatch(approveEstrattoConto(id));
-    dispatch(fetchEstrattoConto({ toApprove, page, size, agencyId }));
+    dispatch(fetchEstrattoConto({ toApprove, page, size, agencyId, sort }));
   };
 
   const handleDownload = (id) => {
@@ -53,6 +54,17 @@ const AdminEstrattoConto = () => {
   const handleSizeChange = (event) => {
     setSize(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const handleSort = (column) => {
+    const newSort = sort === `${column},asc` ? `${column},desc` : `${column},asc`;
+    setSort(newSort);
+  };
+
+  const getSortIcon = (column) => {
+    if (sort === `${column},asc`) return <FaSortUp />;
+    if (sort === `${column},desc`) return <FaSortDown />;
+    return null;
   };
 
   const formatDate = (dateString) => {
@@ -95,11 +107,21 @@ const AdminEstrattoConto = () => {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>{t("Name Agency")}</TableCell>
-                    <TableCell>{t("Month")}</TableCell>
-                    <TableCell>{t("Approved")}</TableCell>
-                    <TableCell>{t("Upload Date")}</TableCell>
-                    <TableCell>{t("Approval Date")}</TableCell>
+                    <TableCell onClick={() => handleSort("nameAgency")}>
+                      {t("Name Agency")} {getSortIcon("nameAgency")}
+                    </TableCell>
+                    <TableCell onClick={() => handleSort("month")}>
+                      {t("Month")} {getSortIcon("month")}
+                    </TableCell>
+                    <TableCell onClick={() => handleSort("approved")}>
+                      {t("Approved")} {getSortIcon("approved")}
+                    </TableCell>
+                    <TableCell onClick={() => handleSort("uploadDate")}>
+                      {t("Upload Date")} {getSortIcon("uploadDate")}
+                    </TableCell>
+                    <TableCell onClick={() => handleSort("approvalDate")}>
+                      {t("Approval Date")} {getSortIcon("approvalDate")}
+                    </TableCell>
                     <TableCell>{t("Actions")}</TableCell>
                   </TableRow>
                 </TableHead>

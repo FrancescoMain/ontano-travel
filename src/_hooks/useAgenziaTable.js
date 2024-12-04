@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchAgenzie,
@@ -19,10 +19,11 @@ const useAgenziaTable = () => {
   const size = useSelector((state) => state.ricercaAgenzia.size);
   const loading = useSelector((state) => state.spinner.loading);
   const name = useSelector((state) => state.ricercaAgenzia.name);
+  const [sort, setSort] = useState(""); // Default sort is an empty string
 
   useEffect(() => {
-    dispatch(fetchAgenzie({ page, size, name }));
-  }, [dispatch, page, size, name]);
+    dispatch(fetchAgenzie({ page, size, name, sort }));
+  }, [dispatch, page, size, name, sort]);
 
   const handleRowClick = (row) => {
     navigate(`/agenzia/${row.id}`);
@@ -36,13 +37,13 @@ const useAgenziaTable = () => {
     const newSize = parseInt(event.target.value, 10);
     dispatch(setSize(newSize));
     dispatch(setPage(0)); // Reset to first page when page size changes
-    dispatch(fetchAgenzie({ page: 0, size: newSize, name }));
+    dispatch(fetchAgenzie({ page: 0, size: newSize, name, sort }));
   };
 
-  const handleSearch = (searchName) => {
+  const handleSearch = (searchName, newSort = sort) => {
     dispatch(setName(searchName));
     dispatch(setPage(0)); // Reset to first page when search changes
-    dispatch(fetchAgenzie({ page: 0, size, name: searchName }));
+    dispatch(fetchAgenzie({ page: 0, size, name: searchName, sort: newSort }));
   };
 
   return {
@@ -57,6 +58,8 @@ const useAgenziaTable = () => {
     handlePageChange,
     handleSizeChange,
     handleSearch,
+    sort,
+    setSort,
   };
 };
 

@@ -9,10 +9,12 @@ import Paper from "@mui/material/Paper";
 import TablePagination from "@mui/material/TablePagination";
 import { useTranslation } from "react-i18next";
 import useAgenziaTable from "../_hooks/useAgenziaTable";
+import { FaSortUp, FaSortDown } from "react-icons/fa"; // Import sorting icons
 
 export const RicercaAgenzia = () => {
   const { t } = useTranslation();
   const [searchName, setSearchName] = useState("");
+  const [sort, setSort] = useState(""); // Add sort state
   const {
     agenzie,
     status,
@@ -32,7 +34,19 @@ export const RicercaAgenzia = () => {
   };
 
   const handleSearchClick = () => {
-    handleSearch(searchName);
+    handleSearch(searchName, sort); // Pass sort parameter
+  };
+
+  const getSortIcon = (column) => {
+    if (sort === `${column},asc`) return <FaSortUp />;
+    if (sort === `${column},desc`) return <FaSortDown />;
+    return null;
+  };
+
+  const handleSort = (column) => {
+    const newSort = sort === `${column},asc` ? `${column},desc` : `${column},asc`;
+    setSort(newSort);
+    handleSearch(searchName, newSort);
   };
 
   return (
@@ -56,12 +70,24 @@ export const RicercaAgenzia = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>{t("Name")}</TableCell>
-                  <TableCell>{t("Abilita Pagamento Estratto Conto")}</TableCell>
-                  <TableCell>{t("Abilita Pagamento Pay By Link")}</TableCell>
-                  <TableCell>{t("Attivo")}</TableCell>
-                  <TableCell>{t("Percentual Commissione")}</TableCell>
-                  <TableCell>{t("Diritti Di Prenotazione")}</TableCell>
+                  <TableCell onClick={() => handleSort("name")}>
+                    {t("Name")} {getSortIcon("name")}
+                  </TableCell>
+                  <TableCell onClick={() => handleSort("abilitaPagamentoEstrattoConto")}>
+                    {t("Abilita Pagamento Estratto Conto")} {getSortIcon("abilitaPagamentoEstrattoConto")}
+                  </TableCell>
+                  <TableCell onClick={() => handleSort("abilitaPagamentoPayByLink")}>
+                    {t("Abilita Pagamento Pay By Link")} {getSortIcon("abilitaPagamentoPayByLink")}
+                  </TableCell>
+                  <TableCell onClick={() => handleSort("attivo")}>
+                    {t("Attivo")} {getSortIcon("attivo")}
+                  </TableCell>
+                  <TableCell onClick={() => handleSort("percentualCommissione")}>
+                    {t("Percentual Commissione")} {getSortIcon("percentualCommissione")}
+                  </TableCell>
+                  <TableCell onClick={() => handleSort("dirittiDiPrenotazione")}>
+                    {t("Diritti Di Prenotazione")} {getSortIcon("dirittiDiPrenotazione")}
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
