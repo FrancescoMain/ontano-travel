@@ -19,7 +19,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { FaUserCircle } from "react-icons/fa";
 
 // Component for authenticated user links
-const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcanvasClose, email }) => {
+const AuthenticatedLinks = ({
+  t,
+  handleLogout,
+  isWebUser,
+  navigate,
+  handleOffcanvasClose,
+  email,
+}) => {
   const location = useLocation();
   const accountData = useSelector((state) => state.account.data);
   const isAdmin = accountData?.authorities?.includes("ROLE_WEB_ADMIN");
@@ -28,7 +35,9 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
     <>
       <li>
         <Link
-          className={`Link ${location.pathname === "/prenotazioni" ? "active" : ""}`}
+          className={`Link ${
+            location.pathname === "/prenotazioni" ? "active" : ""
+          }`}
           color="primary"
           disabled={false}
           level="body-md"
@@ -43,28 +52,52 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
         </Link>
       </li>
       {isAgency && (
-        <li>
-          <Link
-            className={`Link ${location.pathname === "/agenzia/:id" ? "active" : ""}`}
-            color="primary"
-            disabled={false}
-            level="body-md"
-            underline="none"
-            variant="plain"
-            onClick={() => {
-              navigate("/agenzia/:id");
-              handleOffcanvasClose();
-            }}
-          >
-            {t("Dati Agenzia")}
-          </Link>
-        </li>
+        <>
+          <li>
+            <Link
+              className={`Link ${
+                location.pathname === "/dashboard-agenzia" ? "active" : ""
+              }`}
+              color="primary"
+              disabled={false}
+              level="body-md"
+              underline="none"
+              variant="plain"
+              onClick={() => {
+                navigate("/dashboard-agenzia");
+                handleOffcanvasClose();
+              }}
+            >
+              {t("Dashboard")}
+            </Link>
+          </li>
+          <li>
+            <Link
+              className={`Link ${
+                location.pathname === "/agenzia/:id" ? "active" : ""
+              }`}
+              color="primary"
+              disabled={false}
+              level="body-md"
+              underline="none"
+              variant="plain"
+              onClick={() => {
+                navigate("/agenzia/:id");
+                handleOffcanvasClose();
+              }}
+            >
+              {t("Dati Agenzia")}
+            </Link>
+          </li>
+        </>
       )}
       {isAdmin && (
         <>
           <li>
             <Link
-              className={`Link ${location.pathname === "/dashboard" ? "active" : ""}`}
+              className={`Link ${
+                location.pathname === "/dashboard" ? "active" : ""
+              }`}
               color="primary"
               disabled={false}
               level="body-md"
@@ -80,7 +113,9 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
           </li>
           <li>
             <Link
-              className={`Link ${location.pathname === "/ricerca-agenzia" ? "active" : ""}`}
+              className={`Link ${
+                location.pathname === "/ricerca-agenzia" ? "active" : ""
+              }`}
               color="primary"
               disabled={false}
               level="body-md"
@@ -96,7 +131,9 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
           </li>
           <li>
             <Link
-              className={`Link ${location.pathname === "/admin-estratto-conto" ? "active" : ""}`}
+              className={`Link ${
+                location.pathname === "/admin-estratto-conto" ? "active" : ""
+              }`}
               color="primary"
               disabled={false}
               level="body-md"
@@ -112,7 +149,9 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
           </li>
           <li>
             <Link
-              className={`Link ${location.pathname === "/rendicontazione" ? "active" : ""}`}
+              className={`Link ${
+                location.pathname === "/rendicontazione" ? "active" : ""
+              }`}
               color="primary"
               disabled={false}
               level="body-md"
@@ -131,7 +170,9 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
       {isAgency && (
         <li>
           <Link
-            className={`Link ${location.pathname === "/agency-estratto-conto" ? "active" : ""}`}
+            className={`Link ${
+              location.pathname === "/agency-estratto-conto" ? "active" : ""
+            }`}
             color="primary"
             disabled={false}
             level="body-md"
@@ -148,7 +189,7 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
       )}
       {!isWebUser && (
         <li className="d-none d-md-block">
-          <Dropdown >
+          <Dropdown>
             <MenuButton
               color="primary"
               size="sm"
@@ -156,20 +197,47 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
             >
               <FaUserCircle size={24} />
             </MenuButton>
-            <Menu variant="plain" color="primary" size="sm" sx={{ zIndex: 1050 }}>
-              <MenuItem disabled className="profile-item" sx={{ justifyContent: 'center' }}>
+            <Menu
+              variant="plain"
+              color="primary"
+              size="sm"
+              sx={{ zIndex: 1050 }}
+            >
+              <MenuItem
+                disabled
+                className="profile-item"
+                sx={{ justifyContent: "center" }}
+              >
                 {email}
               </MenuItem>
-              <MenuItem disabled className="profile-item" sx={{ justifyContent: 'center' }}>
+              <MenuItem
+                disabled
+                className="profile-item"
+                sx={{ justifyContent: "center" }}
+              >
                 <FaUserCircle size={24} />
               </MenuItem>
               <MenuItem
-                className={`profile-item text-primary ${location.pathname === "/set-password" ? "active" : ""}`}
+                className={`profile-item text-primary ${
+                  location.pathname === "/pannello" ? "active" : ""
+                }`}
+                onClick={() => {
+                  window.location.href = "https://dev-bookingferries.com/";
+                  handleOffcanvasClose();
+                }}
+                sx={{ justifyContent: "center" }}
+              >
+                {t("Pannello di controllo")}
+              </MenuItem>
+              <MenuItem
+                className={`profile-item text-primary ${
+                  location.pathname === "/set-password" ? "active" : ""
+                }`}
                 onClick={() => {
                   navigate("/set-password");
                   handleOffcanvasClose();
                 }}
-                sx={{ justifyContent: 'center' }}
+                sx={{ justifyContent: "center" }}
               >
                 {t("Set Password")}
               </MenuItem>
@@ -179,7 +247,7 @@ const AuthenticatedLinks = ({ t, handleLogout, isWebUser, navigate, handleOffcan
                   handleLogout();
                   handleOffcanvasClose();
                 }}
-                sx={{ justifyContent: 'center' }}
+                sx={{ justifyContent: "center" }}
               >
                 {t("Logout")}
               </MenuItem>
@@ -215,7 +283,9 @@ const UnauthenticatedLinks = ({ t, navigate, handleOffcanvasClose }) => {
       </li>
       <li>
         <Link
-          className={`Link ${location.pathname === "/cerca-prenotazione" ? "active" : ""}`}
+          className={`Link ${
+            location.pathname === "/cerca-prenotazione" ? "active" : ""
+          }`}
           color="primary"
           disabled={false}
           level="body-md"
@@ -232,7 +302,9 @@ const UnauthenticatedLinks = ({ t, navigate, handleOffcanvasClose }) => {
       </li>
       <li>
         <Link
-          className={`Link ${location.pathname === "/registra-agenzia" ? "active" : ""}`}
+          className={`Link ${
+            location.pathname === "/registra-agenzia" ? "active" : ""
+          }`}
           color="primary"
           disabled={false}
           level="body-md"
@@ -314,7 +386,12 @@ export const Header = () => {
                   />
                   <ArrowDropDownIcon />
                 </MenuButton>
-                <Menu variant="plain" color="primary" size="sm" sx={{ zIndex: 1050 }}>
+                <Menu
+                  variant="plain"
+                  color="primary"
+                  size="sm"
+                  sx={{ zIndex: 1050 }}
+                >
                   <MenuItem
                     className="lang-item"
                     onClick={() => changeLanguage("it")}
@@ -338,9 +415,14 @@ export const Header = () => {
               <MenuIcon />
             </button>
             <div
-              className={`offcanvas offcanvas-end ${showOffcanvas ? "show" : ""}`}
+              className={`offcanvas offcanvas-end ${
+                showOffcanvas ? "show" : ""
+              }`}
               tabIndex="-1"
-              style={{ visibility: showOffcanvas ? "visible" : "hidden", width: "250px" }}
+              style={{
+                visibility: showOffcanvas ? "visible" : "hidden",
+                width: "250px",
+              }}
             >
               <div className="offcanvas-header">
                 <h5 className="offcanvas-title">{t("Menu")}</h5>
@@ -354,7 +436,10 @@ export const Header = () => {
               <div className="offcanvas-body">
                 {token && (
                   <>
-                    <div className="offcanvas-email" style={{ fontSize: "0.775rem", textAlign: "center" }}>
+                    <div
+                      className="offcanvas-email"
+                      style={{ fontSize: "0.775rem", textAlign: "center" }}
+                    >
                       {email}
                     </div>
                     <div style={{ textAlign: "center", margin: "10px 0" }}>
@@ -374,7 +459,28 @@ export const Header = () => {
                     />
                     <li>
                       <Link
-                        className={`Link ${location.pathname === "/set-password" ? "active" : ""}`}
+                        // className={`Link ${
+                        //   location.pathname === "/pannell" ? "active" : ""
+                        // }`}
+                        color="primary"
+                        disabled={false}
+                        level="body-md"
+                        underline="none"
+                        variant="plain"
+                        onClick={() => {
+                          window.location.href =
+                            "https://dev-bookingferries.com/";
+                          handleOffcanvasClose();
+                        }}
+                      >
+                        {t("Pannello di controllo")}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className={`Link ${
+                          location.pathname === "/set-password" ? "active" : ""
+                        }`}
                         color="primary"
                         disabled={false}
                         level="body-md"
@@ -412,33 +518,46 @@ export const Header = () => {
                     handleOffcanvasClose={handleOffcanvasClose}
                   />
                 )}
-               <li className="lang">
-              <Dropdown>
-                <MenuButton
-                  color="primary"
-                  size="sm"
-                  sx={{ padding: 0, border: 0, zIndex: 1050 }}
-                >
-                  <img
-                    className="img-lang"
-                    src={i18n.language === "it" ? it : us}
-                    alt="language"
-                  />
-                  <ArrowDropDownIcon />
-                </MenuButton>
-                <Menu variant="plain" color="primary" size="sm" sx={{ zIndex: 1050 }}>
-                  <MenuItem
-                    className="lang-item"
-                    onClick={() => changeLanguage("it")}
-                  >
-                    <img className="rounded-circle" src={it} alt="Italiano" />
-                  </MenuItem>
-                  <MenuItem onClick={() => changeLanguage("en")}>
-                    <img className="rounded-circle" src={us} alt="English" />
-                  </MenuItem>
-                </Menu>
-              </Dropdown>
-            </li>
+                <li className="lang">
+                  <Dropdown>
+                    <MenuButton
+                      color="primary"
+                      size="sm"
+                      sx={{ padding: 0, border: 0, zIndex: 1050 }}
+                    >
+                      <img
+                        className="img-lang"
+                        src={i18n.language === "it" ? it : us}
+                        alt="language"
+                      />
+                      <ArrowDropDownIcon />
+                    </MenuButton>
+                    <Menu
+                      variant="plain"
+                      color="primary"
+                      size="sm"
+                      sx={{ zIndex: 1050 }}
+                    >
+                      <MenuItem
+                        className="lang-item"
+                        onClick={() => changeLanguage("it")}
+                      >
+                        <img
+                          className="rounded-circle"
+                          src={it}
+                          alt="Italiano"
+                        />
+                      </MenuItem>
+                      <MenuItem onClick={() => changeLanguage("en")}>
+                        <img
+                          className="rounded-circle"
+                          src={us}
+                          alt="English"
+                        />
+                      </MenuItem>
+                    </Menu>
+                  </Dropdown>
+                </li>
               </div>
             </div>
           </div>
