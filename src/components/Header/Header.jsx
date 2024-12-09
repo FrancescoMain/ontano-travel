@@ -167,6 +167,7 @@ const AuthenticatedLinks = ({
           </li>
         </>
       )}
+
       {isAgency && (
         <li>
           <Link
@@ -205,9 +206,17 @@ const AuthenticatedLinks = ({
             >
               <MenuItem
                 disabled
-                className="profile-item"
+                className="profile-item text-center justify-content-center flex-column"
                 sx={{ justifyContent: "center" }}
               >
+                {isAdmin && (
+                  <div className="label-admin text-secondary">{t("Admin")}</div>
+                )}
+                {isAgency && (
+                  <div className="label-agency text-secondary">
+                    {t("Agency")}
+                  </div>
+                )}
                 {email}
               </MenuItem>
               <MenuItem
@@ -330,6 +339,8 @@ export const Header = () => {
   const [showOffcanvas, setShowOffcanvas] = useState(false);
   const accountData = useSelector((state) => state.account.data);
   const email = accountData?.email;
+  const isAdmin = accountData?.authorities?.includes("ROLE_WEB_ADMIN");
+  const isAgency = accountData?.authorities?.includes("ROLE_AGENCY_USER");
 
   const handleOffcanvasClose = () => setShowOffcanvas(false);
   const handleOffcanvasShow = () => setShowOffcanvas(true);
@@ -436,6 +447,16 @@ export const Header = () => {
               <div className="offcanvas-body">
                 {token && (
                   <>
+                    {isAdmin && (
+                      <div style={{ textAlign: "center", margin: "10px 0" }}>
+                        <span className="label-admin">{t("Admin")}</span>
+                      </div>
+                    )}
+                    {isAgency && (
+                      <div style={{ textAlign: "center", margin: "10px 0" }}>
+                        <span className="label-agency">{t("Agency")}</span>
+                      </div>
+                    )}
                     <div
                       className="offcanvas-email"
                       style={{ fontSize: "0.775rem", textAlign: "center" }}
