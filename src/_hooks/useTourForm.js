@@ -59,13 +59,14 @@ export const useTourForm = () => {
     const tourId = params.get("tour_id");
     const departureDate = params.get("departure_data");
 
-    if (tourId && departureDate) {
+    if (tourId || departureDate) {
       const selectedTour = tours.find((t) => t.id === parseInt(tourId));
       if (selectedTour) {
         dispatch(setTour(selectedTour.name));
         const date = dayjs(departureDate);
-
-        dispatch(setDate(date));
+        if (date.isValid()) {
+          dispatch(setDate(date));
+        }
       }
     }
   }, [location.search, tours, dispatch]);
