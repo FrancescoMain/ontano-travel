@@ -8,17 +8,19 @@ import {
   setTours,
   resetTour,
 } from "../features/tour/tourSlice";
-import dayjs from "dayjs";
+import moment from "moment";
 import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; // Add useLocation
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
+import dayjs from "dayjs";
 
 export const useTourForm = () => {
   const { t } = useTranslation();
   const [ports, setPorts] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation(); // Add useLocation
   const { port, date, tour, tours, dettagli } = useSelector(
     (state) => state.tour
   );
@@ -52,12 +54,29 @@ export const useTourForm = () => {
     getTours();
   }, [dispatch]);
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const tourId = params.get("tour_id");
+    const departureDate = params.get("departure_data");
+
+    if (tourId && departureDate) {
+      const selectedTour = tours.find((t) => t.id === parseInt(tourId));
+      if (selectedTour) {
+        dispatch(setTour(selectedTour.name));
+        const date = dayjs(departureDate);
+
+        dispatch(setDate(date));
+      }
+    }
+  }, [location.search, tours, dispatch]);
+
   const handlePortChange = (event, value) => {
     const selectedPort = ports.find((port) => port.name === value);
     dispatch(setPort(selectedPort || { code: "", name: "" }));
   };
 
   const handleDateChange = (value) => {
+    console.log("value", value);
     dispatch(setDate(value));
   };
 
@@ -81,7 +100,7 @@ export const useTourForm = () => {
 
     const logObject = {
       tour_id: selectedTour,
-      data_departure: dayjs(date).format("YYYY-MM-DD"),
+      data_departure: moment(date).format("YYYY-MM-DD"),
       animals: animali,
       luggages: bagagli,
       passengersAge: passengers,
@@ -99,7 +118,11 @@ export const useTourForm = () => {
       navigate("/checkout");
     } catch (error) {
       console.error("Error posting tour quote:", error);
-      toast.error(t("Errore nella ricerca del tour. Riprova con un'altra data o contatta l'assistenza."));
+      toast.error(
+        t(
+          "Errore nella ricerca del tour. Riprova con un'altra data o contatta l'assistenza."
+        )
+      );
     }
     dispatch(stopLoading());
   };

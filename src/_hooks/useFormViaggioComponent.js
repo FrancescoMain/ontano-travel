@@ -13,7 +13,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { matchSorter } from "match-sorter";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; // Add useLocation
 import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
@@ -45,6 +45,17 @@ export const useFormViaggioComponent = (disableFetch) => {
   );
 
   const { selected } = useSelector((state) => state.resultsTratta);
+
+  const location = useLocation(); // Add useLocation
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const tourId = params.get("tour_id");
+    console.log(tourId);
+    if (tourId) {
+      setTab("Tour");
+    }
+  }, [location.search]);
 
   const handleOptionChange = (event) => {
     let dueTratte = true;
