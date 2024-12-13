@@ -1,25 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchEstrattoConto, approveEstrattoConto, downloadEstrattoConto } from '../features/estrattoConto/estrattoContoSlice';
-import { FaCheck, FaDownload, FaSortUp, FaSortDown } from 'react-icons/fa'; // Import sorting icons
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { CircularProgress } from '@mui/material';
-import TablePagination from '@mui/material/TablePagination';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchEstrattoConto,
+  approveEstrattoConto,
+  downloadEstrattoConto,
+} from "../features/estrattoConto/estrattoContoSlice";
+import { FaCheck, FaDownload, FaSortUp, FaSortDown } from "react-icons/fa"; // Import sorting icons
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { CircularProgress } from "@mui/material";
+import TablePagination from "@mui/material/TablePagination";
 import { useTranslation } from "react-i18next"; // Import useTranslation
 import { fetchAgenzie } from "../features/ricercaAgenzia/ricercaAgenziaSlice"; // Import fetchAgenzie
 
 const AdminEstrattoConto = () => {
   const { t } = useTranslation(); // Initialize useTranslation
   const dispatch = useDispatch();
-  const { data, status, error, totalCount } = useSelector((state) => state.estrattoConto);
+  const { data, status, error, totalCount } = useSelector(
+    (state) => state.estrattoConto
+  );
   const { loadingIds } = useSelector((state) => state.spinner);
-  const [toApprove, setToApprove] = useState('');
+  const [toApprove, setToApprove] = useState("");
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(20);
   const [agencyId, setAgencyId] = useState(""); // Add state for agencyId
@@ -57,7 +63,8 @@ const AdminEstrattoConto = () => {
   };
 
   const handleSort = (column) => {
-    const newSort = sort === `${column},asc` ? `${column},desc` : `${column},asc`;
+    const newSort =
+      sort === `${column},asc` ? `${column},desc` : `${column},asc`;
     setSort(newSort);
   };
 
@@ -68,7 +75,7 @@ const AdminEstrattoConto = () => {
   };
 
   const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
@@ -100,9 +107,13 @@ const AdminEstrattoConto = () => {
               ))}
             </select>
           </div>
-          {status === 'loading' && <p>{t("Loading...")}</p>}
-          {status === 'failed' && <p>{t("Error")}: {error}</p>}
-          {status === 'succeeded' && (
+          {status === "loading" && <p>{t("Loading...")}</p>}
+          {status === "failed" && (
+            <p>
+              {t("Error")}: {error}
+            </p>
+          )}
+          {status === "succeeded" && (
             <TableContainer component={Paper}>
               <Table>
                 <TableHead>
@@ -130,17 +141,35 @@ const AdminEstrattoConto = () => {
                     <TableRow key={item.id}>
                       <TableCell>{item.nameAgency}</TableCell>
                       <TableCell>{item.month}</TableCell>
-                      <TableCell>{item.approved ? t("Yes") : t("No")}</TableCell>
-                      <TableCell>{formatDate(item.uploadDate)}</TableCell>
-                      <TableCell>{formatDate(item.approvalDate)}</TableCell>
+                      <TableCell>
+                        {item.approved ? t("Yes") : t("No")}
+                      </TableCell>
+                      <TableCell>
+                        {item.uploadDate ? formatDate(item.uploadDate) : ""}
+                      </TableCell>
+                      <TableCell>
+                        {item.approvalDate ? formatDate(item.approvalDate) : ""}
+                      </TableCell>
                       <TableCell>
                         {!item.approved && (
-                          <button onClick={() => handleApprove(item.id)} className="btn btn-success me-2" disabled={loadingIds.includes(item.id)}>
+                          <button
+                            onClick={() => handleApprove(item.id)}
+                            className="btn btn-success me-2"
+                            disabled={loadingIds.includes(item.id)}
+                          >
                             <FaCheck />
                           </button>
                         )}
-                        <button onClick={() => handleDownload(item.id)} className="btn btn-primary" disabled={loadingIds.includes(item.id)}>
-                          {loadingIds.includes(item.id) ? <CircularProgress size={20} /> : <FaDownload />}
+                        <button
+                          onClick={() => handleDownload(item.id)}
+                          className="btn btn-primary"
+                          disabled={loadingIds.includes(item.id)}
+                        >
+                          {loadingIds.includes(item.id) ? (
+                            <CircularProgress size={20} />
+                          ) : (
+                            <FaDownload />
+                          )}
                         </button>
                       </TableCell>
                     </TableRow>

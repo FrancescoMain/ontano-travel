@@ -126,7 +126,7 @@ const AuthenticatedLinks = ({
                 handleOffcanvasClose();
               }}
             >
-              {t("Ricerca Agenzia")}
+              {t("Agenzie")}
             </Link>
           </li>
           <li>
@@ -144,7 +144,7 @@ const AuthenticatedLinks = ({
                 handleOffcanvasClose();
               }}
             >
-              {t("Visualizza Estratto Conto")}
+              {t("Estratti Conto")}
             </Link>
           </li>
           <li>
