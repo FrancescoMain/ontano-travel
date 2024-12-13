@@ -10,8 +10,13 @@ import TablePagination from "@mui/material/TablePagination";
 import { useTranslation } from "react-i18next";
 import useAgenziaTable from "../_hooks/useAgenziaTable";
 import { FaSortUp, FaSortDown } from "react-icons/fa"; // Import sorting icons
+import { styled } from "@mui/material/styles"; // Import styled from @mui/material/styles
 
 export const RicercaAgenzia = () => {
+  const HeaderTableRow = styled(TableRow)({
+    backgroundColor: "#f5f5f5",
+    fontWeight: "bold",
+  });
   const { t } = useTranslation();
   const [searchName, setSearchName] = useState("");
   const [sort, setSort] = useState(""); // Add sort state
@@ -44,7 +49,8 @@ export const RicercaAgenzia = () => {
   };
 
   const handleSort = (column) => {
-    const newSort = sort === `${column},asc` ? `${column},desc` : `${column},asc`;
+    const newSort =
+      sort === `${column},asc` ? `${column},desc` : `${column},asc`;
     setSort(newSort);
     handleSearch(searchName, newSort);
   };
@@ -69,26 +75,38 @@ export const RicercaAgenzia = () => {
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
-                <TableRow>
+                <HeaderTableRow>
                   <TableCell onClick={() => handleSort("name")}>
                     {t("Name")} {getSortIcon("name")}
                   </TableCell>
-                  <TableCell onClick={() => handleSort("abilitaPagamentoEstrattoConto")}>
-                    {t("Abilita Pagamento Estratto Conto")} {getSortIcon("abilitaPagamentoEstrattoConto")}
+                  <TableCell
+                    onClick={() => handleSort("abilitaPagamentoEstrattoConto")}
+                  >
+                    {t("Abilita Pagamento Estratto Conto")}{" "}
+                    {getSortIcon("abilitaPagamentoEstrattoConto")}
                   </TableCell>
-                  <TableCell onClick={() => handleSort("abilitaPagamentoPayByLink")}>
-                    {t("Abilita Pagamento Pay By Link")} {getSortIcon("abilitaPagamentoPayByLink")}
+                  <TableCell
+                    onClick={() => handleSort("abilitaPagamentoPayByLink")}
+                  >
+                    {t("Abilita Pagamento Pay By Link")}{" "}
+                    {getSortIcon("abilitaPagamentoPayByLink")}
                   </TableCell>
                   <TableCell onClick={() => handleSort("attivo")}>
                     {t("Attivo")} {getSortIcon("attivo")}
                   </TableCell>
-                  <TableCell onClick={() => handleSort("percentualCommissione")}>
-                    {t("Percentual Commissione")} {getSortIcon("percentualCommissione")}
+                  <TableCell
+                    onClick={() => handleSort("percentualCommissione")}
+                  >
+                    {t("Percentual Commissione")}{" "}
+                    {getSortIcon("percentualCommissione")}
                   </TableCell>
-                  <TableCell onClick={() => handleSort("dirittiDiPrenotazione")}>
-                    {t("Diritti Di Prenotazione")} {getSortIcon("dirittiDiPrenotazione")}
+                  <TableCell
+                    onClick={() => handleSort("dirittiDiPrenotazione")}
+                  >
+                    {t("Diritti Di Prenotazione")}{" "}
+                    {getSortIcon("dirittiDiPrenotazione")}
                   </TableCell>
-                </TableRow>
+                </HeaderTableRow>
               </TableHead>
               <TableBody>
                 {loading && (
@@ -103,11 +121,12 @@ export const RicercaAgenzia = () => {
                     </TableCell>
                   </TableRow>
                 )}
-                {agenzie.map((row) => (
+                {agenzie.map((row, index) => (
                   <TableRow
                     key={row.id}
                     onClick={() => handleRowClick(row)}
                     style={{ cursor: "pointer" }}
+                    className={index % 2 === 0 ? "row-even" : "row-odd"}
                   >
                     <TableCell>{row.name}</TableCell>
                     <TableCell

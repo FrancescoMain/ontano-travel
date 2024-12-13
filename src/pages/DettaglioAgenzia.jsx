@@ -21,8 +21,8 @@ export const DettaglioAgenzia = () => {
   const isAgency = accountData?.authorities?.includes("ROLE_AGENCY_USER");
   const [formData, setFormData] = useState({
     attivo: true,
-    dirittiDiPrenotazione: 0,
-    percentualCommissione: 0,
+    dirittiDiPrenotazione: null,
+    percentualCommissione: null,
     abilitaPagamentoEstrattoConto: true,
     abilitaPagamentoPayByLink: true,
     enableAffiliation: false, // Corrected state property
@@ -263,7 +263,8 @@ export const DettaglioAgenzia = () => {
                     disabled={isAgency}
                   />
                   <small className="form-text text-muted">
-                    Se non vengono inseriti, il sistema calcola quelli di default del sito
+                    Se non vengono inseriti, il sistema calcola quelli di
+                    default del sito
                   </small>
                 </div>
                 <div className="col-md-6 mb-3">

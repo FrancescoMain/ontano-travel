@@ -60,9 +60,7 @@ const SearchGuest = () => {
           <div className="spacer my-3 sconto d-none"></div>
           <div className="d-flex justify-content-between align-items-center">
             <span>Totale Biglietti</span>
-            <span>
-              {reservation?.priceToPay.price - reservation?.taxPreview.price} €
-            </span>
+            <span>{reservation?.initialPrice.priceFormatted}</span>
           </div>
           <div className="spacer my-3 sconto d-none"></div>
           <div className="d-flex justify-content-between align-items-center">
@@ -91,20 +89,26 @@ const SearchGuest = () => {
               <div className="row mb-3 justify-content-center">
                 <div className="col-md-4">
                   <label className="form-label">Nome Azienda</label>
-                  <p className="text-muted small">{reservation.invoice.intestazione}</p>
+                  <p className="text-muted small">
+                    {reservation.invoice.intestazione}
+                  </p>
                 </div>
                 <div className="col-md-4">
-                  <label className="form-label">Partita IVA / Codice Fiscale</label>
-                  <p className="text-muted small">{reservation.invoice.pIvaCodiceFiscale}</p>
+                  <label className="form-label">
+                    Partita IVA / Codice Fiscale
+                  </label>
+                  <p className="text-muted small">
+                    {reservation.invoice.pIvaCodiceFiscale}
+                  </p>
                 </div>
                 <div className="col-4">
                   <label className="form-label">Indirizzo</label>
-                  <p className="text-muted small">{reservation.invoice.indirizzo}</p>
+                  <p className="text-muted small">
+                    {reservation.invoice.indirizzo}
+                  </p>
                 </div>
               </div>
-              <div className="row mb-3 justify-content-center">
-             
-              </div>
+              <div className="row mb-3 justify-content-center"></div>
               <div className="row mb-3 justify-content-center">
                 <div className="col-md-4">
                   <label className="form-label">CAP</label>
@@ -112,33 +116,40 @@ const SearchGuest = () => {
                 </div>
                 <div className="col-md-4">
                   <label className="form-label">Città</label>
-                  <p className="text-muted small">{reservation.invoice.citta}</p>
+                  <p className="text-muted small">
+                    {reservation.invoice.citta}
+                  </p>
                 </div>
                 <div className="col-md-4">
                   <label className="form-label">Provincia</label>
-                  <p className="text-muted small">{reservation.invoice.provincia}</p>
+                  <p className="text-muted small">
+                    {reservation.invoice.provincia}
+                  </p>
                 </div>
               </div>
               <div className="row mb-3 ">
                 <div className="col-md-4">
                   <label className="form-label">Nazione</label>
-                  <p className="text-muted small">{reservation.invoice.nazione}</p>
+                  <p className="text-muted small">
+                    {reservation.invoice.nazione}
+                  </p>
                 </div>
                 <div className="col-md-4">
                   <label className="form-label">Codice Univoco</label>
-                  <p className="text-muted small">{reservation.invoice.codiceUnivoco}</p>
+                  <p className="text-muted small">
+                    {reservation.invoice.codiceUnivoco}
+                  </p>
                 </div>
-              
               </div>
               <div className="row mb-3">
-              <div className="col-md-4">
-              <label className="form-label">Email PEC</label>
-              <p className="text-muted small fs-6">{reservation.invoice.emailPec}</p>
+                <div className="col-md-4">
+                  <label className="form-label">Email PEC</label>
+                  <p className="text-muted small fs-6">
+                    {reservation.invoice.emailPec}
+                  </p>
+                </div>
+              </div>
             </div>
-            </div>
-            </div>
-          
-              
           )}
         </div>
       </div>

@@ -27,14 +27,6 @@ const HeaderTableRow = styled(TableRow)({
   fontWeight: "bold",
 });
 
-const OddTableRow = styled(TableRow)({
-  backgroundColor: "#e0e0e0 !important", // Darker shade for odd rows
-});
-
-const EvenTableRow = styled(TableRow)({
-  backgroundColor: "#ffffff !important", // Lighter shade for even rows
-});
-
 export const Prenotazioni = () => {
   const { t } = useTranslation(); // Initialize useTranslation
   const [formData, setFormData] = useState({
@@ -93,7 +85,8 @@ export const Prenotazioni = () => {
   };
 
   const handleSort = (column) => {
-    const newSort = formData.sort === `${column},asc` ? `${column},desc` : `${column},asc`;
+    const newSort =
+      formData.sort === `${column},asc` ? `${column},desc` : `${column},asc`;
     setFormData({ ...formData, sort: newSort });
     dispatch(searchReservations({ ...formData, sort: newSort, page, size }));
   };
@@ -110,7 +103,9 @@ export const Prenotazioni = () => {
       <form onSubmit={handleSubmit}>
         <div className="row">
           <div className="col-md-2 mb-3">
-            <label className="form-label">{t("Codice della prenotazione")}:</label>
+            <label className="form-label">
+              {t("Codice della prenotazione")}:
+            </label>
             <input
               type="text"
               name="reservation_code"
@@ -139,7 +134,7 @@ export const Prenotazioni = () => {
               onChange={handleChange}
             />
           </div>
-          {accountData?.authorities.includes('ROLE_WEB_ADMIN') && ( // Check if user has ROLE_WEB_ADMIN
+          {accountData?.authorities.includes("ROLE_WEB_ADMIN") && ( // Check if user has ROLE_WEB_ADMIN
             <div className="col-md-2 mb-3">
               <label className="form-label">{t("Agenzia")}:</label>
               <select
@@ -242,19 +237,28 @@ export const Prenotazioni = () => {
           <TableBody>
             {status === "loading" && (
               <TableRow>
-                <TableCell colSpan={7}>{t("Loading...")}</TableCell> {/* Updated colSpan */}
+                <TableCell colSpan={7}>{t("Loading...")}</TableCell>{" "}
+                {/* Updated colSpan */}
               </TableRow>
             )}
             {status === "failed" && (
               <TableRow>
-                <TableCell colSpan={7}>{t("Error")}: {error}</TableCell> {/* Updated colSpan */}
+                <TableCell colSpan={7}>
+                  {t("Error")}: {error}
+                </TableCell>{" "}
+                {/* Updated colSpan */}
               </TableRow>
             )}
             {reservations.map((reservation, index) => (
-              <TableRow 
-                key={reservation.reservationCode} 
-                onClick={() => handleRowClick(reservation.reservationCode, reservation.contact_mail)} // Pass guest email
-                style={{ cursor: 'pointer' }}
+              <TableRow
+                key={reservation.reservationCode}
+                onClick={() =>
+                  handleRowClick(
+                    reservation.reservationCode,
+                    reservation.contact_mail
+                  )
+                } // Pass guest email
+                style={{ cursor: "pointer" }}
                 className={index % 2 === 0 ? "row-even" : "row-odd"}
               >
                 <TableCell>{reservation.reservationCode}</TableCell>
@@ -263,7 +267,8 @@ export const Prenotazioni = () => {
                 <TableCell>{reservation.contact_mail}</TableCell>
                 <TableCell>{reservation.contact_name}</TableCell>
                 <TableCell>{reservation.contact_surname}</TableCell>
-                <TableCell>{reservation.name_agency}</TableCell> {/* Added line */}
+                <TableCell>{reservation.name_agency}</TableCell>{" "}
+                {/* Added line */}
               </TableRow>
             ))}
           </TableBody>

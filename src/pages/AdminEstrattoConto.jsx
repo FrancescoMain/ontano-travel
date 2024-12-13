@@ -17,8 +17,14 @@ import { CircularProgress } from "@mui/material";
 import TablePagination from "@mui/material/TablePagination";
 import { useTranslation } from "react-i18next"; // Import useTranslation
 import { fetchAgenzie } from "../features/ricercaAgenzia/ricercaAgenziaSlice"; // Import fetchAgenzie
+import { styled } from "@mui/material/styles"; // Import styled from @mui/material/styles
 
 const AdminEstrattoConto = () => {
+  const HeaderTableRow = styled(TableRow)({
+    backgroundColor: "#f5f5f5",
+    fontWeight: "bold",
+  });
+
   const { t } = useTranslation(); // Initialize useTranslation
   const dispatch = useDispatch();
   const { data, status, error, totalCount } = useSelector(
@@ -117,7 +123,7 @@ const AdminEstrattoConto = () => {
             <TableContainer component={Paper}>
               <Table>
                 <TableHead>
-                  <TableRow>
+                  <HeaderTableRow>
                     <TableCell onClick={() => handleSort("nameAgency")}>
                       {t("Name Agency")} {getSortIcon("nameAgency")}
                     </TableCell>
@@ -134,11 +140,14 @@ const AdminEstrattoConto = () => {
                       {t("Approval Date")} {getSortIcon("approvalDate")}
                     </TableCell>
                     <TableCell>{t("Actions")}</TableCell>
-                  </TableRow>
+                  </HeaderTableRow>
                 </TableHead>
                 <TableBody>
-                  {data.map((item) => (
-                    <TableRow key={item.id}>
+                  {data.map((item, index) => (
+                    <TableRow
+                      key={item.id}
+                      className={index % 2 === 0 ? "row-even" : "row-odd"}
+                    >
                       <TableCell>{item.nameAgency}</TableCell>
                       <TableCell>{item.month}</TableCell>
                       <TableCell>

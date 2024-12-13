@@ -1,29 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchEstrattoConto, downloadEstrattoConto } from '../features/estrattoConto/estrattoContoSlice';
-import { FaDownload, FaSortUp, FaSortDown } from 'react-icons/fa'; // Import sorting icons
-import { CircularProgress } from '@mui/material';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import TablePagination from '@mui/material/TablePagination';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchEstrattoConto,
+  downloadEstrattoConto,
+} from "../features/estrattoConto/estrattoContoSlice";
+import { FaDownload, FaSortUp, FaSortDown } from "react-icons/fa"; // Import sorting icons
+import { CircularProgress } from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import TablePagination from "@mui/material/TablePagination";
 import { useTranslation } from "react-i18next"; // Import useTranslation
+import { styled } from "@mui/material/styles"; // Import styled from @mui/material/styles
 
 const AgencyEstrattoConto = () => {
+  const HeaderTableRow = styled(TableRow)({
+    backgroundColor: "#f5f5f5",
+    fontWeight: "bold",
+  });
   const { t } = useTranslation(); // Initialize useTranslation
   const dispatch = useDispatch();
-  const { data, status, error, totalCount } = useSelector((state) => state.estrattoConto);
+  const { data, status, error, totalCount } = useSelector(
+    (state) => state.estrattoConto
+  );
   const { loadingIds } = useSelector((state) => state.spinner);
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(20);
   const [sort, setSort] = useState(""); // Default sort is an empty string
 
   useEffect(() => {
-    dispatch(fetchEstrattoConto({ to_approve: '', page, size, sort }));
+    dispatch(fetchEstrattoConto({ to_approve: "", page, size, sort }));
   }, [dispatch, page, size, sort]);
 
   const handleDownload = (id) => {
@@ -40,7 +50,8 @@ const AgencyEstrattoConto = () => {
   };
 
   const handleSort = (column) => {
-    const newSort = sort === `${column},asc` ? `${column},desc` : `${column},asc`;
+    const newSort =
+      sort === `${column},asc` ? `${column},desc` : `${column},asc`;
     setSort(newSort);
   };
 
@@ -51,7 +62,7 @@ const AgencyEstrattoConto = () => {
   };
 
   const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
@@ -60,13 +71,17 @@ const AgencyEstrattoConto = () => {
       <div className="row justify-content-center align-items-center g-2">
         <div className="col mt-3">
           <h1>{t("Agency Estratto Conto")}</h1>
-          {status === 'loading' && <p>{t("Loading...")}</p>}
-          {status === 'failed' && <p>{t("Error")}: {error}</p>}
-          {status === 'succeeded' && (
+          {status === "loading" && <p>{t("Loading...")}</p>}
+          {status === "failed" && (
+            <p>
+              {t("Error")}: {error}
+            </p>
+          )}
+          {status === "succeeded" && (
             <TableContainer component={Paper}>
               <Table>
                 <TableHead>
-                  <TableRow>
+                  <HeaderTableRow>
                     <TableCell onClick={() => handleSort("month")}>
                       {t("Month")} {getSortIcon("month")}
                     </TableCell>
@@ -74,16 +89,27 @@ const AgencyEstrattoConto = () => {
                       {t("Approval Date")} {getSortIcon("approvalDate")}
                     </TableCell>
                     <TableCell>{t("Actions")}</TableCell>
-                  </TableRow>
+                  </HeaderTableRow>
                 </TableHead>
                 <TableBody>
-                  {data.map((item) => (
-                    <TableRow key={item.id}>
+                  {data.map((item, index) => (
+                    <TableRow
+                      key={item.id}
+                      className={index % 2 === 0 ? "row-even" : "row-odd"}
+                    >
                       <TableCell>{item.month}</TableCell>
                       <TableCell>{formatDate(item.approvalDate)}</TableCell>
                       <TableCell>
-                        <button onClick={() => handleDownload(item.id)} className="btn btn-primary" disabled={loadingIds.includes(item.id)}>
-                          {loadingIds.includes(item.id) ? <CircularProgress size={20} /> : <FaDownload />}
+                        <button
+                          onClick={() => handleDownload(item.id)}
+                          className="btn btn-primary"
+                          disabled={loadingIds.includes(item.id)}
+                        >
+                          {loadingIds.includes(item.id) ? (
+                            <CircularProgress size={20} />
+                          ) : (
+                            <FaDownload />
+                          )}
                         </button>
                       </TableCell>
                     </TableRow>

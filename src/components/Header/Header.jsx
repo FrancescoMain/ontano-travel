@@ -226,18 +226,20 @@ const AuthenticatedLinks = ({
               >
                 <FaUserCircle size={24} />
               </MenuItem>
-              <MenuItem
-                className={`profile-item text-primary ${
-                  location.pathname === "/pannello" ? "active" : ""
-                }`}
-                onClick={() => {
-                  window.location.href = "https://dev-bookingferries.com/";
-                  handleOffcanvasClose();
-                }}
-                sx={{ justifyContent: "center" }}
-              >
-                {t("Pannello di controllo")}
-              </MenuItem>
+              {isAdmin && (
+                <MenuItem
+                  className={`profile-item text-primary ${
+                    location.pathname === "/pannello" ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    window.location.href = "https://dev-bookingferries.com/";
+                    handleOffcanvasClose();
+                  }}
+                  sx={{ justifyContent: "center" }}
+                >
+                  {t("Pannello di controllo")}
+                </MenuItem>
+              )}
               <MenuItem
                 className={`profile-item text-primary ${
                   location.pathname === "/set-password" ? "active" : ""
