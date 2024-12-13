@@ -3,6 +3,7 @@ import { store } from "../app/store";
 import { setAccountData } from "../features/account/accountSlice";
 import i18n from "../i18n";
 import { config } from "../config/config"; // Import config
+import { toast } from "react-toastify";
 
 export const getToken = () => {
   return localStorage.getItem("id_token") || sessionStorage.getItem("id_token");
@@ -42,6 +43,7 @@ export const fetchAccountData = async () => {
         }
       } catch (error) {
         console.error("Error fetching account data:", error);
+        toast.error("Errore di autenticazione.");
         handleLogout();
       }
     }

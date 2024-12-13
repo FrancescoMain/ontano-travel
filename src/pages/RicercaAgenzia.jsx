@@ -9,13 +9,16 @@ import Paper from "@mui/material/Paper";
 import TablePagination from "@mui/material/TablePagination";
 import { useTranslation } from "react-i18next";
 import useAgenziaTable from "../_hooks/useAgenziaTable";
-import { FaSortUp, FaSortDown } from "react-icons/fa"; // Import sorting icons
+import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa"; // Import sorting icons
 import { styled } from "@mui/material/styles"; // Import styled from @mui/material/styles
 
 export const RicercaAgenzia = () => {
   const HeaderTableRow = styled(TableRow)({
     backgroundColor: "#f5f5f5",
     fontWeight: "bold",
+    "& .MuiTableCell-root": {
+      fontSize: "0.775rem", // Reduce font size
+    },
   });
   const { t } = useTranslation();
   const [searchName, setSearchName] = useState("");
@@ -45,7 +48,7 @@ export const RicercaAgenzia = () => {
   const getSortIcon = (column) => {
     if (sort === `${column},asc`) return <FaSortUp />;
     if (sort === `${column},desc`) return <FaSortDown />;
-    return null;
+    return <FaSort />; // Default sort icon
   };
 
   const handleSort = (column) => {

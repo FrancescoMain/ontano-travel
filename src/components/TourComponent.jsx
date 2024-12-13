@@ -35,7 +35,18 @@ export const TourComponent = () => {
 
   return (
     <div>
-      <ToastContainer />
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />{" "}
       <h4 className="text-primary">{t("Partenza")}</h4>
       <div className="row-cont">
         <Autocomplete

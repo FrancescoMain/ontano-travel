@@ -18,13 +18,16 @@ import { useNavigate } from "react-router-dom";
 import { fetchAgenzie } from "../features/ricercaAgenzia/ricercaAgenziaSlice";
 import { setAccountData } from "../features/account/accountSlice"; // Import setAccountData
 import { useTranslation } from "react-i18next"; // Import useTranslation
-import { FaSortUp, FaSortDown } from "react-icons/fa"; // Import sorting icons
+import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa"; // Import sorting icons
 import { styled } from "@mui/material/styles"; // Import styled from @mui/material/styles
 import "./Prenotazioni.css"; // Import the CSS file
 
 const HeaderTableRow = styled(TableRow)({
   backgroundColor: "#f5f5f5",
   fontWeight: "bold",
+  "& .MuiTableCell-root": {
+    fontSize: "0.775rem", // Reduce font size
+  },
 });
 
 export const Prenotazioni = () => {
@@ -94,7 +97,7 @@ export const Prenotazioni = () => {
   const getSortIcon = (column) => {
     if (formData.sort === `${column},asc`) return <FaSortUp />;
     if (formData.sort === `${column},desc`) return <FaSortDown />;
-    return null;
+    return <FaSort />; // Default sort icon
   };
 
   return (

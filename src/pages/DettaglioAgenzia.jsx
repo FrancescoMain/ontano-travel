@@ -67,8 +67,19 @@ export const DettaglioAgenzia = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const updatedFormData = {
+      ...formData,
+      dirittiDiPrenotazione:
+        formData.dirittiDiPrenotazione === 0
+          ? null
+          : formData.dirittiDiPrenotazione,
+      percentualCommissione:
+        formData.percentualCommissione === 0
+          ? null
+          : formData.percentualCommissione,
+    };
     if (!isAgency) {
-      dispatch(updateDettaglioAgenzia({ id, data: formData }))
+      dispatch(updateDettaglioAgenzia({ id, data: updatedFormData }))
         .unwrap()
         .then(() => {
           toast.success("Update successful!");

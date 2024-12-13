@@ -5,7 +5,13 @@ import {
   approveEstrattoConto,
   downloadEstrattoConto,
 } from "../features/estrattoConto/estrattoContoSlice";
-import { FaCheck, FaDownload, FaSortUp, FaSortDown } from "react-icons/fa"; // Import sorting icons
+import {
+  FaCheck,
+  FaDownload,
+  FaSortUp,
+  FaSortDown,
+  FaSort,
+} from "react-icons/fa"; // Import default sort icon
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -23,6 +29,9 @@ const AdminEstrattoConto = () => {
   const HeaderTableRow = styled(TableRow)({
     backgroundColor: "#f5f5f5",
     fontWeight: "bold",
+    "& .MuiTableCell-root": {
+      fontSize: "0.775rem", // Reduce font size
+    },
   });
 
   const { t } = useTranslation(); // Initialize useTranslation
@@ -77,7 +86,7 @@ const AdminEstrattoConto = () => {
   const getSortIcon = (column) => {
     if (sort === `${column},asc`) return <FaSortUp />;
     if (sort === `${column},desc`) return <FaSortDown />;
-    return null;
+    return <FaSort />; // Default sort icon
   };
 
   const formatDate = (dateString) => {

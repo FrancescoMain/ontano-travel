@@ -13,9 +13,10 @@ export const TabellonePartenze = () => {
   const routes = useSelector((state) => state.route.route);
   const departures = useSelector((state) => state.tabellonePartenze.departures);
   const today = new Date()
-    .toLocaleDateString("it-IT", {
+    .toLocaleDateString("en-US", {
+      month: "2-digit",
       day: "2-digit",
-      month: "short",
+
       year: "numeric",
     })
     .replace(/\./g, ""); // Format date as DD/MMM/YYYY
@@ -121,11 +122,13 @@ export const TabellonePartenze = () => {
                   {new Date(departure.departure).toLocaleTimeString([], {
                     hour: "2-digit",
                     minute: "2-digit",
+                    hour12: false,
                   })}{" "}
                   &gt;
                   {new Date(departure.arrive).toLocaleTimeString([], {
                     hour: "2-digit",
                     minute: "2-digit",
+                    hour12: false,
                   })}{" "}
                   |{formatDuration(departure.departure, departure.arrive)}
                 </span>
