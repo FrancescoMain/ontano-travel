@@ -8,7 +8,6 @@ import {
   setTours,
   resetTour,
 } from "../features/tour/tourSlice";
-import moment from "moment";
 import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
 import { useNavigate, useLocation } from "react-router-dom"; // Add useLocation
 import { useTranslation } from "react-i18next";
@@ -98,10 +97,11 @@ export const useTourForm = () => {
       ...Array(dettagli[0]?.adulti || 0).fill({ age: 18 }),
       ...(dettagli[0]?.etaBambini || []).map((eta) => ({ age: eta })),
     ];
-
+    const formattedDate = encodeURIComponent(dayjs(date).format("YYYY-MM-DD")); // Use encodeURIComponent
+    console.log(formattedDate); // Change format here
     const logObject = {
       tour_id: selectedTour,
-      data_departure: moment(date).format("YYYY-MM-DD"),
+      data_departure: formattedDate, // Use encoded date here
       animals: animali,
       luggages: bagagli,
       passengersAge: passengers,

@@ -367,6 +367,18 @@ export const Header = () => {
             </Link>
           </li>
           <div className="header-side">
+            <li>
+              <Link
+                color="primary"
+                disabled={false}
+                level="body-md"
+                underline="none"
+                variant="plain"
+                onClick={() => navigate("/")}
+              >
+                {t("Home")}
+              </Link>
+            </li>
             {token ? (
               <AuthenticatedLinks
                 t={t}
@@ -468,6 +480,18 @@ export const Header = () => {
                     </div>
                   </>
                 )}
+                <li>
+                  <Link
+                    color="primary"
+                    disabled={false}
+                    level="body-md"
+                    underline="none"
+                    variant="plain"
+                    onClick={() => navigate("/")}
+                  >
+                    {t("Home")}
+                  </Link>
+                </li>
                 {token ? (
                   <>
                     <AuthenticatedLinks
