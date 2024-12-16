@@ -87,8 +87,12 @@ export const ResultComponent = () => {
   }, [tratte]);
 
   return (
-    <div className="row justify-content-center" role="main">
-      <div className="col col-lg-6 p-4" role="region" aria-label={t("Risultati della ricerca")}>
+    <div className=" d-flex  justify-content-center" role="main">
+      <div
+        className="col col-lg-6 p-4"
+        role="region"
+        aria-label={t("Risultati della ricerca")}
+      >
         <ViaggioDiAndataForm resultMode={true} id={0} />
         <div className="mb-3"></div>
         {isLoading(0) ? (

@@ -8,7 +8,6 @@ import "./i18n";
 import { HomePage } from "./pages/HomePage";
 import "./index.css";
 import { Header } from "./components/Header/Header";
-import { Footer } from "./components/Footer/Footer";
 import { ResultPage } from "./pages/ResultPage";
 import { ResultPageExternal } from "./pages/ResultPageExternal";
 import { ToastContainer } from "react-toastify";
@@ -18,7 +17,6 @@ import { Success } from "./pages/Success";
 import { Login } from "./pages/Login";
 import { RecoveryPassword } from "./pages/RecoveryPassword";
 import { fetchAccountData } from "./utils/auth";
-import { setAccountData } from "./features/account/accountSlice";
 import { PayByLinkSuccess } from "./pages/PayByLinkSuccess";
 import { CercaPrenotazione } from "./pages/CercaPrenotazione";
 import SearchGuest from "./pages/SearchGuest"; // Import SearchGuest
@@ -49,96 +47,117 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
-      <Routes>
-        <Route path="/tabellone-partenze" element={<TabellonePartenze />} />{" "}
-        {/* Add route */}
-        <Route
-          path="*"
-          element={
-            <>
-              <Header />
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/results" element={<ResultPage />} />
-                <Route
-                  path="/results/external"
-                  element={<ResultPageExternal />}
-                />
-                <Route path="/checkout" element={<Checkout />} />
-                <Route path="/success" element={<Success />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/recovery" element={<Recovery />} />{" "}
-                {/* Add route */}
-                <Route path="/recovery" element={<RecoveryPassword />} />
-                <Route
-                  path="/pay-by-link-success"
-                  element={<PayByLinkSuccess />}
-                />
-                <Route
-                  path="/cerca-prenotazione"
-                  element={<CercaPrenotazione />}
-                />
-                <Route path="/result-guest" element={<SearchGuest />} />
-                <Route path="/registra-agenzia" element={<RegistraAgenzia />} />
-                <Route path="/ricerca-agenzia" element={<RicercaAgenzia />} />
-                <Route
-                  path="/agenzia/:id"
-                  element={<DettaglioAgenzia />}
-                />{" "}
-                <Route path="/prenotazioni" element={<Prenotazioni />} />{" "}
-                <Route
-                  path="/reservation/:reservationCode"
-                  element={<ReservationDetail />}
-                />{" "}
-                {/* Add route */}
-                <Route
-                  path="/admin-estratto-conto"
-                  element={<AdminEstrattoConto />}
-                />{" "}
-                {/* Add route */}
-                <Route
-                  path="/agency-estratto-conto"
-                  element={<AgencyEstrattoConto />}
-                />{" "}
-                {/* Add route */}
-                <Route
-                  path="/rendicontazione"
-                  element={<Rendicontazione />}
-                />{" "}
-                {/* Add route */}
-                <Route path="/dashboard" element={<Dashboard />} />{" "}
-                {/* Add route */}
-                <Route path="/set-password" element={<SetPassword />} />{" "}
-                {/* Add route */}
-                <Route
-                  path="/account/reset/finish"
-                  element={<RecoveryFinish />}
-                />{" "}
-                {/* Add route */}
-                <Route
-                  path="/dashboard-agenzia"
-                  element={<DashboardAgenzia />}
-                />
-                <Route path="/result-tour" element={<RestultTour />} />
-                <Route path="*" element={<HomePage />} />
-              </Routes>
-            </>
-          }
+      <div
+        style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+      >
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
         />
-      </Routes>
-      {/* <Footer /> */}
+        <div style={{ flex: "1" }}>
+          <Routes>
+            <Route path="/tabellone-partenze" element={<TabellonePartenze />} />{" "}
+            {/* Add route */}
+            <Route
+              path="*"
+              element={
+                <>
+                  <Header />
+                  <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/results" element={<ResultPage />} />
+                    <Route
+                      path="/results/external"
+                      element={<ResultPageExternal />}
+                    />
+                    <Route path="/checkout" element={<Checkout />} />
+                    <Route path="/success" element={<Success />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/recovery" element={<Recovery />} />{" "}
+                    {/* Add route */}
+                    <Route path="/recovery" element={<RecoveryPassword />} />
+                    <Route
+                      path="/pay-by-link-success"
+                      element={<PayByLinkSuccess />}
+                    />
+                    <Route
+                      path="/cerca-prenotazione"
+                      element={<CercaPrenotazione />}
+                    />
+                    <Route path="/result-guest" element={<SearchGuest />} />
+                    <Route
+                      path="/registra-agenzia"
+                      element={<RegistraAgenzia />}
+                    />
+                    <Route
+                      path="/ricerca-agenzia"
+                      element={<RicercaAgenzia />}
+                    />
+                    <Route path="/agenzia/:id" element={<DettaglioAgenzia />} />{" "}
+                    <Route path="/prenotazioni" element={<Prenotazioni />} />{" "}
+                    <Route
+                      path="/reservation/:reservationCode"
+                      element={<ReservationDetail />}
+                    />{" "}
+                    {/* Add route */}
+                    <Route
+                      path="/admin-estratto-conto"
+                      element={<AdminEstrattoConto />}
+                    />{" "}
+                    {/* Add route */}
+                    <Route
+                      path="/agency-estratto-conto"
+                      element={<AgencyEstrattoConto />}
+                    />{" "}
+                    {/* Add route */}
+                    <Route
+                      path="/rendicontazione"
+                      element={<Rendicontazione />}
+                    />{" "}
+                    {/* Add route */}
+                    <Route path="/dashboard" element={<Dashboard />} />{" "}
+                    {/* Add route */}
+                    <Route
+                      path="/set-password"
+                      element={<SetPassword />}
+                    />{" "}
+                    {/* Add route */}
+                    <Route
+                      path="/account/reset/finish"
+                      element={<RecoveryFinish />}
+                    />{" "}
+                    {/* Add route */}
+                    <Route
+                      path="/dashboard-agenzia"
+                      element={<DashboardAgenzia />}
+                    />
+                    <Route path="/result-tour" element={<RestultTour />} />
+                    <Route path="*" element={<HomePage />} />
+                  </Routes>
+                </>
+              }
+            />
+          </Routes>
+        </div>
+        <footer
+          style={{
+            textAlign: "center",
+            padding: "1rem",
+            background: "aliceblue",
+          }}
+        >
+          Copyright © 2024 QuickFerries By ONTANO SRL Largo Angioino Snc, 80133
+          Naples (NA) Italy - VAT number 06723760630
+        </footer>
+      </div>
     </Provider>
   );
 };
