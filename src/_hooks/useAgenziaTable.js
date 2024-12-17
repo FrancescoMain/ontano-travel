@@ -4,7 +4,7 @@ import {
   fetchAgenzie,
   setPage,
   setSize,
-  setName
+  setName,
 } from "../features/ricercaAgenzia/ricercaAgenziaSlice";
 import { useNavigate } from "react-router-dom";
 
@@ -37,7 +37,6 @@ const useAgenziaTable = () => {
     const newSize = parseInt(event.target.value, 10);
     dispatch(setSize(newSize));
     dispatch(setPage(0)); // Reset to first page when page size changes
-    dispatch(fetchAgenzie({ page: 0, size: newSize, name, sort }));
   };
 
   const handleSearch = (searchName, newSort = sort) => {

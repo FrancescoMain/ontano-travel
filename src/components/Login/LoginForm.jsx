@@ -19,8 +19,8 @@ export const LoginForm = ({ onLogin }) => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="form-group mb-2">
+        <label htmlFor="username">{t("Username")}</label>
         <input
-          placeholder={t("Username")}
           type="text"
           className="form-control"
           id="username"
@@ -33,11 +33,11 @@ export const LoginForm = ({ onLogin }) => {
         </div>
       </div>
       <div className="form-group mb-2">
+        <label htmlFor="password">{t("Password")}</label>
         <input
           type="password"
           className="form-control"
           id="password"
-          placeholder={t("Password")}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
