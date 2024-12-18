@@ -26,6 +26,17 @@ import { resetAll as resetViaggio } from "../features/viaggio/findTratta"; // Im
 import { resetTourDetails } from "../features/tour/tourSlice"; // Import resetTourDetails action for tour
 import { formatDateTime } from "../utils/dateUtils"; // Import formatDateTime function
 import Cookies from "js-cookie"; // Import js-cookie
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { styled } from "@mui/material/styles";
+
+const TransparentAccordion = styled(Accordion)({
+  backgroundColor: "transparent",
+  boxShadow: "none",
+  border: "none",
+});
 
 export const Checkout = () => {
   const { passeggeri, prenotazione, paymentsMethod, quote, isTour } =
@@ -90,7 +101,7 @@ export const Checkout = () => {
             reserveLightbox.PaymentToken,
             function callback(response) {
               if (response.status === "OK") {
-                Cookies.remove('codice'); // Remove the codice cookie if payment is successful
+                Cookies.remove("codice"); // Remove the codice cookie if payment is successful
                 dispatch(resetSelected({ id: 0 }));
                 dispatch(resetResults());
                 dispatch(resetViaggio());
@@ -118,7 +129,7 @@ export const Checkout = () => {
               reservationId: prenotazione.code,
             })
           );
-          Cookies.remove('codice'); // Remove the codice cookie if payment is successful
+          Cookies.remove("codice"); // Remove the codice cookie if payment is successful
           dispatch(resetSelected({ id: 0 }));
           dispatch(resetResults());
           dispatch(resetViaggio());
@@ -133,7 +144,7 @@ export const Checkout = () => {
         try {
           const response = await submitExternalPayment(quote);
           if (response.ok) {
-            Cookies.remove('codice'); // Remove the codice cookie if payment is successful
+            Cookies.remove("codice"); // Remove the codice cookie if payment is successful
             dispatch(resetSelected({ id: 0 }));
             dispatch(resetResults());
             dispatch(resetViaggio());
@@ -152,8 +163,6 @@ export const Checkout = () => {
     dispatch(stopLoading());
   };
 
-  console.log(isTour);
-
   return (
     <div className="conatiner">
       <form
@@ -169,63 +178,58 @@ export const Checkout = () => {
                   <div className="col">
                     <h2 className="text-primary">Dati Passeggeri</h2>
                     {passeggeri.map((tratta, trattaIndex) => (
-                      <>
-                        <div className="d-flex flex-column">
-                          {isTour ? (
-                            ""
-                          ) : (
-                            <>
-                              <div
-                                className="text-primary fs-4"
-                                data-bs-toggle="collapse"
-                                href={"#collapseExample" + trattaIndex}
-                                role="button"
-                                aria-expanded={
-                                  trattaIndex === 0 ? "true" : "false"
-                                }
-                                aria-controls={"collapseExample" + trattaIndex}
-                              >
-                                {
-                                  prenotazione?.reservationRoutes[trattaIndex]
-                                    ?.from
-                                }{" "}
-                                -{" "}
-                                {
-                                  prenotazione?.reservationRoutes[trattaIndex]
-                                    ?.to
-                                }
-                              </div>
-                              <div className="text-secondary small fst-italic">
-                                {
-                                  formatDateTime(
-                                    dayjs(
-                                      prenotazione?.reservationRoutes[
-                                        trattaIndex
-                                      ]?.departure
-                                    ),
-                                    language
-                                  ).date
-                                }{" "}
-                                {
-                                  formatDateTime(
-                                    dayjs(
-                                      prenotazione?.reservationRoutes[
-                                        trattaIndex
-                                      ]?.departure
-                                    ),
-                                    language
-                                  ).time
-                                }
-                              </div>
-                            </>
-                          )}
-                        </div>
-                        <div
-                          className={
-                            trattaIndex !== 0 ? "collapse" : "collapse show"
-                          }
-                          id={"collapseExample" + trattaIndex}
+                      <TransparentAccordion
+                        key={trattaIndex}
+                        defaultExpanded={trattaIndex === 0}
+                      >
+                        <AccordionSummary
+                          expandIcon={<ExpandMoreIcon />}
+                          aria-controls={"panel" + trattaIndex + "a-content"}
+                          id={"panel" + trattaIndex + "a-header"}
                         >
+                          <div className="d-flex flex-column">
+                            {isTour ? (
+                              ""
+                            ) : (
+                              <>
+                                <span className="text-primary fs-4">
+                                  {
+                                    prenotazione?.reservationRoutes[trattaIndex]
+                                      ?.from
+                                  }{" "}
+                                  -{" "}
+                                  {
+                                    prenotazione?.reservationRoutes[trattaIndex]
+                                      ?.to
+                                  }
+                                </span>
+                                <div className="text-secondary small fst-italic">
+                                  {
+                                    formatDateTime(
+                                      dayjs(
+                                        prenotazione?.reservationRoutes[
+                                          trattaIndex
+                                        ]?.departure
+                                      ),
+                                      language
+                                    ).date
+                                  }{" "}
+                                  {
+                                    formatDateTime(
+                                      dayjs(
+                                        prenotazione?.reservationRoutes[
+                                          trattaIndex
+                                        ]?.departure
+                                      ),
+                                      language
+                                    ).time
+                                  }
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        </AccordionSummary>
+                        <AccordionDetails>
                           {Array.from({ length: tratta.adulti }).map(
                             (_, index) => (
                               <CheckoutPasseggero
@@ -253,8 +257,8 @@ export const Checkout = () => {
                               numeroCampo={trattaIndex}
                             />
                           ))}
-                        </div>
-                      </>
+                        </AccordionDetails>
+                      </TransparentAccordion>
                     ))}
                   </div>
                 </div>
@@ -290,13 +294,19 @@ export const Checkout = () => {
                   <CheckoutTratta route={route} />
                   {route.descriptionTour && (
                     <div className="col bg-aliceblue rounded mb-3 d-flex flex-column mt-3 p-3">
-                      <h4 className="text-primary text-center">Dettaglio Tour</h4>
-                      <div dangerouslySetInnerHTML={{ __html: route.descriptionTour }} />
+                      <h4 className="text-primary text-center">
+                        Dettaglio Tour
+                      </h4>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: route.descriptionTour,
+                        }}
+                      />
                     </div>
                   )}
                 </div>
               ))}
-              
+
               <div className="card-footer bg-ice-white py-lg-3 rounded-bottom-left-4x rounded-bottom-right-4x border-top border-primary">
                 <div
                   id="div_DonazioneRiepilogo"

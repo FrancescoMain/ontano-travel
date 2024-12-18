@@ -3,8 +3,13 @@ import { useSelector } from "react-redux";
 
 export const useCheckoutForm = () => {
   const { data: accountData } = useSelector((state) => state.account);
-  const [nomi, setNomi] = React.useState(Array(10).fill([{ value: "" }]));
-  const [cognomi, setCognomi] = React.useState(Array(10).fill([{ value: "" }]));
+  const [nomi, setNomi] = React.useState(
+    Array.from({ length: 10 }, () => [{ value: "" }])
+  );
+
+  const [cognomi, setCognomi] = React.useState(
+    Array.from({ length: 10 }, () => [{ value: "" }])
+  );
   const [dto, setDto] = React.useState({
     nome: "",
     cognome: "",
@@ -28,6 +33,14 @@ export const useCheckoutForm = () => {
   const handleNomiChange = (numeroCampo, n, newValue) => {
     setNomi((prevNomi) => {
       const updatedNomi = [...prevNomi];
+      // se il numero campo è maggiore di zero cambia solo il campo selezionato
+      if (numeroCampo > 0) {
+        updatedNomi[numeroCampo][n] = {
+          ...updatedNomi[numeroCampo][n],
+          value: newValue,
+        };
+        return updatedNomi;
+      }
       for (
         let i = numeroCampo;
         i < updatedNomi.length || i < numeroCampo + 1;
@@ -36,6 +49,7 @@ export const useCheckoutForm = () => {
         if (!updatedNomi[i]) updatedNomi[i] = [];
         updatedNomi[i][n] = { ...updatedNomi[i][n], value: newValue };
       }
+
       return updatedNomi;
     });
   };
@@ -51,6 +65,7 @@ export const useCheckoutForm = () => {
         if (!updatedNomi[i]) updatedNomi[i] = [];
         updatedNomi[i][n] = { ...updatedNomi[i][n], value: newValue, eta: eta };
       }
+
       return updatedNomi;
     });
   };

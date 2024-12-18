@@ -7,25 +7,26 @@ export const Footer = () => {
   return (
     <footer>
       <div
-        className="row p-4 justify-content-lg-around justify-content-center flex-direction-column flex-direction-lg-row "
+        className="d-flex justify-content-center flex-column  align-items-center"
         style={{
+          textAlign: "center",
           padding: "1rem",
+          color: "black",
           background: "aliceblue",
         }}
       >
-        <div className="col-md-1 d-none d-lg-block md-lg-0">
-          <img
-            src="https://www.quickferries.com/wp-content/uploads/2018/12/Logo-QuickFerries.png"
-            alt="QuickFerries"
-          />
-        </div>
-        <div className="d-flex col-lg-3 text-lg-start align-items-lg-start align-items-center flex-column">
-          <h4>Contatti</h4>
+        <div className="d-flex col text-lg-start gap-md-5 align-items-center align-items-center flex-column flex-md-row">
           <p>
             <strong>
               <BsTelephoneFill />
             </strong>
-            <a className="ms-2" href="tel:+390815800340">
+            <a
+              style={{
+                color: "black",
+              }}
+              className="ms-2"
+              href="tel:+390815800340"
+            >
               +39 081.580 03 40
             </a>
           </p>
@@ -34,6 +35,9 @@ export const Footer = () => {
               <IoLogoWhatsapp />
             </strong>
             <a
+              style={{
+                color: "black",
+              }}
               className="ms-2"
               href="https://api.whatsapp.com/send?phone=3311830265"
             >
@@ -42,18 +46,16 @@ export const Footer = () => {
           </p>
           <p>
             <strong>Email: </strong>
-            <a href="mailto:info@quickferries.com">info@quickferries.com</a>
+            <a
+              style={{
+                color: "black",
+              }}
+              href="mailto:info@quickferries.com"
+            >
+              info@quickferries.com
+            </a>
           </p>
         </div>
-      </div>
-      <div
-        style={{
-          textAlign: "center",
-          padding: "1rem",
-          color: "white",
-          background: "#282154",
-        }}
-      >
         Copyright © 2024 QuickFerries By ONTANO SRL Largo Angioino Snc, 80133
         Naples (NA) Italy - VAT number 06723760630
       </div>

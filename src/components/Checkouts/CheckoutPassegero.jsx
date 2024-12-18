@@ -77,6 +77,7 @@ export const CheckoutPasseggero = ({
   nomi,
   numeroCampo,
   cognomi,
+  required,
 }) => {
   const handleChange = (e) => {
     const newValue = e.target.value;
@@ -100,7 +101,7 @@ export const CheckoutPasseggero = ({
             type="text"
             className="form-control"
             id={n + "Nome"}
-            required
+            required={!required}
             placeholder="Nome*"
             value={
               Array.isArray(nomi) && nomi[numeroCampo]?.[n]?.value
@@ -115,7 +116,7 @@ export const CheckoutPasseggero = ({
             type="text"
             className="form-control"
             id={n + "Cognome"}
-            required
+            required={!required}
             placeholder="Cognome*"
             value={
               Array.isArray(cognomi) && cognomi[numeroCampo]?.[n]?.value
