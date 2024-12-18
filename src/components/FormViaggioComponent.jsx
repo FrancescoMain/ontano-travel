@@ -310,7 +310,11 @@ export const DettagliViaggio = ({ id, selected, resetHandle }) => {
 
   return (
     <>
-      <div className="row flex-column flex-lg-row" role="group" aria-labelledby={`dettagli-viaggio-${id}`}>
+      <div
+        className="row flex-column flex-lg-row"
+        role="group"
+        aria-labelledby={`dettagli-viaggio-${id}`}
+      >
         <div className="col col-lg-3 d-flex flex-column">
           <label htmlFor={`adults-${id}`}>{t("Adulti")}</label>
 
@@ -362,7 +366,7 @@ export const DettagliViaggio = ({ id, selected, resetHandle }) => {
         </div>
         <div className="col col-lg-3 d-flex flex-column">
           <label htmlFor="animals" className="d-flex align-items-center">
-            {t("Animali Domestici")}
+            {t("Animali")}
             <MuiTooltip
               title="Informazioni sugli animali domestici"
               enterTouchDelay={0}

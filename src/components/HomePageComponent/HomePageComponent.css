@@ -1,5 +1,9 @@
 .home-page {
-  margin: 8px;
+  background-image: url("https://www.quickferries.com/wp-content/uploads/2022/10/HOMEPAGE_QUICKFERRIES_IT_res.jpg");
+  background-size: cover;
+  background-position: center; /* Adjusted to move the background to the right */
+  height: 82vh !important;
+  background-color: #282154;
 }
 
 .row-cont {
@@ -47,7 +51,7 @@
 }
 
 .card-viaggio {
-  width: 680px;
+  width: 450px;
 
   margin-bottom: 10px;
 
@@ -55,12 +59,14 @@
 }
 
 .home-page-viaggio {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 20px;
-}
+  justify-content: start;
 
+  gap: 20px;
+  overflow: auto; /* Enable overflow auto */
+}
+.background-form {
+  background-color: #3896f3 !important;
+}
 .tab-viaggio {
   border-radius: 10px !important;
 }
@@ -135,13 +141,31 @@
 .css-onp1ch-JoyTypography-root {
   margin-bottom: 2px !important;
 }
+.sticky-image {
+  position: sticky !important;
+  top: 0 !important;
+}
 
 .marginDiv {
   margin-bottom: 100px;
 }
+
+.form-container {
+  width: 400px; /* Set a fixed width */
+  height: 600px; /* Set a fixed height */
+}
+@media (max-width: 1100px) {
+  .home-page {
+    background-image: none;
+  }
+  .home-page-viaggio {
+    justify-content: center;
+  }
+}
 @media (max-width: 768px) {
   .home-page {
     margin: 8px;
+    background-color: unset;
   }
   .MuiAutocomplete-clearIndicator.css-1nnzn02-JoyAutocomplete-clearIndicator {
     display: none;

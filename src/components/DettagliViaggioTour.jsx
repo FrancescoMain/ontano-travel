@@ -67,7 +67,7 @@ export const DettagliViaggioTour = ({ id }) => {
         </div>
         <div className="col col-lg-3 d-flex flex-column">
           <label htmlFor="animals" className="d-flex align-items-center">
-            {t("Animali Domestici")}
+            {t("Animali")}
             <MuiTooltip
               title="Informazioni sugli animali domestici"
               enterTouchDelay={0}
