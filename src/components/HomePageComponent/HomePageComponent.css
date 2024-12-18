@@ -2,7 +2,7 @@
   background-image: url("https://www.quickferries.com/wp-content/uploads/2022/10/HOMEPAGE_QUICKFERRIES_IT_res.jpg");
   background-size: cover;
   background-position: center; /* Adjusted to move the background to the right */
-  height: calc(100vh - 156px) !important;
+  min-height: calc(100vh - 156px) !important;
   background-color: #282154;
 }
 
