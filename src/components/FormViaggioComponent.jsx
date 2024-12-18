@@ -55,7 +55,7 @@ export const FormViaggioComponent = () => {
   };
   return (
     <Card
-      className="card-viaggio"
+      className="card-viaggio col-lg-4 ms-lg-4"
       color="white"
       orientation="vertical"
       size="sm"
