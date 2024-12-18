@@ -278,9 +278,9 @@ export const useFormViaggioComponent = (disableFetch) => {
         dispatch(upsertDate({ id: 1, date: date, dateFormatted: dateString }));
       } else {
         dispatch(upsertDate({ id, date: date, dateFormatted: dateString }));
-        dispatch(
-          upsertDate({ id: id + 1, date: date, dateFormatted: dateString })
-        );
+        // dispatch(
+        //   upsertDate({ id: id + 1, date: date, dateFormatted: dateString })
+        // );
       }
     } else {
       // Gestisci il caso in cui la data non è valida

@@ -35,6 +35,7 @@ import { RecoveryFinish } from "./pages/RecoveryFinish"; // Import RecoveryFinis
 import { TabellonePartenze } from "./pages/TabellonePartenze"; // Import TabellonePartenze
 import { DashboardAgenzia } from "./pages/DashboardAgenzia";
 import { RestultTour } from "./pages/RestultTour";
+import { Footer } from "./components/Footer/Footer";
 
 const App = () => {
   const token =
@@ -147,16 +148,7 @@ const App = () => {
             />
           </Routes>
         </div>
-        <footer
-          style={{
-            textAlign: "center",
-            padding: "1rem",
-            background: "aliceblue",
-          }}
-        >
-          Copyright © 2024 QuickFerries By ONTANO SRL Largo Angioino Snc, 80133
-          Naples (NA) Italy - VAT number 06723760630
-        </footer>
+        <Footer />
       </div>
     </Provider>
   );
