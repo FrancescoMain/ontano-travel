@@ -3,10 +3,10 @@ import { FaDownload } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { downloadRendicontazione } from "../features/rendicontazione/rendicontazioneSlice";
 import { useTranslation } from "react-i18next"; // Import useTranslation
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import TextField from '@mui/material/TextField';
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import TextField from "@mui/material/TextField";
 
 const Rendicontazione = () => {
   const { t } = useTranslation(); // Initialize useTranslation
@@ -14,7 +14,7 @@ const Rendicontazione = () => {
   const [toDate, setToDate] = useState(null);
   const dispatch = useDispatch();
   const loadingIds = useSelector((state) => state.spinner.loadingIds);
-  const isLoading = loadingIds.includes('downloadRendicontazione');
+  const isLoading = loadingIds.includes("downloadRendicontazione");
 
   const handleDownload = (event) => {
     event.preventDefault();
@@ -22,9 +22,14 @@ const Rendicontazione = () => {
       alert(t("Both dates are required."));
       return;
     }
-    const formattedFromDate = fromDate.format('YYYY-MM-DD');
-    const formattedToDate = toDate.format('YYYY-MM-DD');
-    dispatch(downloadRendicontazione({ fromDate: formattedFromDate, toDate: formattedToDate }));
+    const formattedFromDate = fromDate.format("YYYY-MM-DD");
+    const formattedToDate = toDate.format("YYYY-MM-DD");
+    dispatch(
+      downloadRendicontazione({
+        fromDate: formattedFromDate,
+        toDate: formattedToDate,
+      })
+    );
   };
 
   return (
@@ -34,10 +39,11 @@ const Rendicontazione = () => {
       <form onSubmit={handleDownload}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <div className="mb-3">
-            <label htmlFor="fromDate" className="form-label">{t("From Date")}</label>
+            <label htmlFor="fromDate" className="form-label">
+              {t("From Date")}
+            </label>
             <DatePicker
-                        className="form-control"
-
+              className="form-control"
               label={t("From Date")}
               value={fromDate}
               onChange={(newValue) => setFromDate(newValue)}
@@ -45,10 +51,11 @@ const Rendicontazione = () => {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="toDate" className="form-label">{t("To Date")}</label>
+            <label htmlFor="toDate" className="form-label">
+              {t("To Date")}
+            </label>
             <DatePicker
-                        className="form-control"
-
+              className="form-control"
               label={t("To Date")}
               value={toDate}
               onChange={(newValue) => setToDate(newValue)}
@@ -56,13 +63,21 @@ const Rendicontazione = () => {
             />
           </div>
         </LocalizationProvider>
-        <button type="submit" className="btn btn-primary" disabled={isLoading || !fromDate || !toDate}>
+        <button
+          type="submit"
+          className="btn btn-primary"
+          disabled={isLoading || !fromDate || !toDate}
+        >
           {isLoading ? (
-            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span
+              className="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
           ) : (
             <FaDownload />
           )}
-          {isLoading ? ` ${t('Scaricando...')}` : ` ${t('Scarica')}`}
+          {isLoading ? ` ${t("Scaricando...")}` : ` ${t("Scarica")}`}
         </button>
       </form>
     </div>

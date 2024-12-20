@@ -83,32 +83,18 @@ export const RicercaAgenzia = () => {
                     {t("Name")} {getSortIcon("name")}
                   </TableCell>
                   <TableCell
-                    onClick={() => handleSort("abilitaPagamentoEstrattoConto")}
+                    onClick={() => handleSort("enabledSubmitWithoutPayment")}
                   >
                     {t("Abilita Pagamento Estratto Conto")}{" "}
-                    {getSortIcon("abilitaPagamentoEstrattoConto")}
+                    {getSortIcon("enabledSubmitWithoutPayment")}
                   </TableCell>
-                  <TableCell
-                    onClick={() => handleSort("abilitaPagamentoPayByLink")}
-                  >
+                  <TableCell onClick={() => handleSort("enabledPaybylink")}>
                     {t("Abilita Pagamento Pay By Link")}{" "}
-                    {getSortIcon("abilitaPagamentoPayByLink")}
+                    {getSortIcon("enabledPaybylink")}
                   </TableCell>
-                  <TableCell onClick={() => handleSort("attivo")}>
-                    {t("Attivo")} {getSortIcon("attivo")}
-                  </TableCell>
-                  <TableCell
-                    onClick={() => handleSort("percentualCommissione")}
-                  >
-                    {t("Percentual Commissione")}{" "}
-                    {getSortIcon("percentualCommissione")}
-                  </TableCell>
-                  <TableCell
-                    onClick={() => handleSort("dirittiDiPrenotazione")}
-                  >
-                    {t("Diritti Di Prenotazione")}{" "}
-                    {getSortIcon("dirittiDiPrenotazione")}
-                  </TableCell>
+                  <TableCell>{t("Attivo")}</TableCell>
+                  <TableCell>{t("Percentual Commissione")} </TableCell>
+                  <TableCell>{t("Diritti Di Prenotazione")} </TableCell>
                 </HeaderTableRow>
               </TableHead>
               <TableBody>

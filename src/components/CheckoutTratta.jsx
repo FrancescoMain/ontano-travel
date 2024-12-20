@@ -10,7 +10,13 @@ import Nlg from "../assets/nlg.png";
 import { formatDateTime } from "../utils/dateUtils"; // Import formatDateTime function
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
 
-export const CheckoutTratta = ({ route, post, onRefund, isAdmin }) => {
+export const CheckoutTratta = ({
+  route,
+  post,
+  onRefund,
+  isAdmin,
+  paymentMethod,
+}) => {
   const { i18n } = useTranslation();
   const language = i18n.language;
 
@@ -101,7 +107,6 @@ export const CheckoutTratta = ({ route, post, onRefund, isAdmin }) => {
     onRefund(route.id, amount, executeRefund);
     setShowModal(false);
   };
-
   return (
     <div>
       <div class="bg-aliceblue row g-0 pb-2 pt-3">
@@ -214,21 +219,28 @@ export const CheckoutTratta = ({ route, post, onRefund, isAdmin }) => {
                               required
                             />
                           </div>
-                          <div className="form-check mb-3">
-                            <input
-                              type="checkbox"
-                              className="form-check-input"
-                              id="formExecuteRefund"
-                              checked={executeRefund}
-                              onChange={(e) => setExecuteRefund(e.target.checked)}
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="formExecuteRefund"
-                            >
-                              Esegui Rimborso
-                            </label>
-                          </div>
+                          {paymentMethod === "EXTERNAL_PAYMENT" ? (
+                            ""
+                          ) : (
+                            <div className="form-check mb-3">
+                              <input
+                                type="checkbox"
+                                className="form-check-input"
+                                id="formExecuteRefund"
+                                checked={executeRefund}
+                                onChange={(e) =>
+                                  setExecuteRefund(e.target.checked)
+                                }
+                              />
+                              <label
+                                className="form-check-label"
+                                htmlFor="formExecuteRefund"
+                              >
+                                Esegui Rimborso Banca
+                              </label>
+                            </div>
+                          )}
+
                           <div className="modal-footer">
                             <button
                               type="button"

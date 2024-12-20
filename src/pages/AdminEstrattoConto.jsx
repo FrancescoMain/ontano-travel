@@ -133,20 +133,18 @@ const AdminEstrattoConto = () => {
               <Table>
                 <TableHead>
                   <HeaderTableRow>
-                    <TableCell onClick={() => handleSort("nameAgency")}>
-                      {t("Name Agency")} {getSortIcon("nameAgency")}
+                    <TableCell>{t("Name Agency")}</TableCell>
+                    <TableCell onClick={() => handleSort("periodFrom")}>
+                      {t("Month")} {getSortIcon("periodFrom")}
                     </TableCell>
-                    <TableCell onClick={() => handleSort("month")}>
-                      {t("Month")} {getSortIcon("month")}
+                    <TableCell onClick={() => handleSort("accepted")}>
+                      {t("Approved")} {getSortIcon("accepted")}
                     </TableCell>
-                    <TableCell onClick={() => handleSort("approved")}>
-                      {t("Approved")} {getSortIcon("approved")}
+                    <TableCell onClick={() => handleSort("dateCreated")}>
+                      {t("Upload Date")} {getSortIcon("dateCreated")}
                     </TableCell>
-                    <TableCell onClick={() => handleSort("uploadDate")}>
-                      {t("Upload Date")} {getSortIcon("uploadDate")}
-                    </TableCell>
-                    <TableCell onClick={() => handleSort("approvalDate")}>
-                      {t("Approval Date")} {getSortIcon("approvalDate")}
+                    <TableCell onClick={() => handleSort("dateAccepted")}>
+                      {t("Approval Date")} {getSortIcon("dateAccepted")}
                     </TableCell>
                     <TableCell>{t("Actions")}</TableCell>
                   </HeaderTableRow>

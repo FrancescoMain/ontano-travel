@@ -21,6 +21,7 @@ import { useTranslation } from "react-i18next"; // Import useTranslation
 import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa"; // Import sorting icons
 import { styled } from "@mui/material/styles"; // Import styled from @mui/material/styles
 import "./Prenotazioni.css"; // Import the CSS file
+import { format } from "date-fns"; // Import date-fns for date formatting
 
 const HeaderTableRow = styled(TableRow)({
   backgroundColor: "#f5f5f5",
@@ -29,6 +30,12 @@ const HeaderTableRow = styled(TableRow)({
     fontSize: "0.775rem", // Reduce font size
   },
 });
+
+const formatDate = (dateString) => {
+  if (!dateString) return ""; // Return empty string if dateString is null or empty
+  const date = new Date(dateString);
+  return format(date, "dd-MM-yyyy HH:mm");
+};
 
 export const Prenotazioni = () => {
   const { t } = useTranslation(); // Initialize useTranslation
@@ -214,27 +221,25 @@ export const Prenotazioni = () => {
         <Table>
           <TableHead>
             <HeaderTableRow>
-              <TableCell onClick={() => handleSort("reservationCode")}>
-                {t("Codice Prenotazione")} {getSortIcon("reservationCode")}
+              <TableCell onClick={() => handleSort("code")}>
+                {t("Codice Prenotazione")} {getSortIcon("code")}
               </TableCell>
-              <TableCell onClick={() => handleSort("dataReservation")}>
-                {t("Data Prenotazione")} {getSortIcon("dataReservation")}
+              <TableCell onClick={() => handleSort("dateSubmitted")}>
+                {t("Data Prenotazione")} {getSortIcon("dateSubmitted")}
               </TableCell>
-              <TableCell onClick={() => handleSort("prezzo")}>
-                {t("Prezzo")} {getSortIcon("prezzo")}
+              <TableCell onClick={() => handleSort("finalPrice")}>
+                {t("Prezzo")} {getSortIcon("finalPrice")}
               </TableCell>
-              <TableCell onClick={() => handleSort("contact_mail")}>
-                {t("Email Contatto")} {getSortIcon("contact_mail")}
+              <TableCell onClick={() => handleSort("guestMail")}>
+                {t("Email Contatto")} {getSortIcon("guestMail")}
               </TableCell>
-              <TableCell onClick={() => handleSort("contact_name")}>
-                {t("Nome Contatto")} {getSortIcon("contact_name")}
+              <TableCell onClick={() => handleSort("contactName")}>
+                {t("Nome Contatto")} {getSortIcon("contactName")}
               </TableCell>
-              <TableCell onClick={() => handleSort("contact_surname")}>
-                {t("Cognome Contatto")} {getSortIcon("contact_surname")}
+              <TableCell onClick={() => handleSort("contactSurname")}>
+                {t("Cognome Contatto")} {getSortIcon("contactSurname")}
               </TableCell>
-              <TableCell onClick={() => handleSort("name_agency")}>
-                {t("Nome Agenzia")} {getSortIcon("name_agency")}
-              </TableCell>
+              <TableCell>{t("Nome Agenzia")}</TableCell>
             </HeaderTableRow>
           </TableHead>
           <TableBody>
@@ -265,7 +270,10 @@ export const Prenotazioni = () => {
                 className={index % 2 === 0 ? "row-even" : "row-odd"}
               >
                 <TableCell>{reservation.reservationCode}</TableCell>
-                <TableCell>{reservation.dataReservation}</TableCell>
+                <TableCell>
+                  {formatDate(reservation.dataReservation)}
+                </TableCell>{" "}
+                {/* Format date */}
                 <TableCell>{reservation.prezzo}</TableCell>
                 <TableCell>{reservation.contact_mail}</TableCell>
                 <TableCell>{reservation.contact_name}</TableCell>

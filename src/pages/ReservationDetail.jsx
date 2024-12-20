@@ -1,14 +1,19 @@
 import React, { useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom"; // Import useLocation
 import { useDispatch, useSelector } from "react-redux";
-import { resetReservation, fetchReservationByCodeThunk, requestRefund, fetchReservationThunk } from "../features/reservation/reservationSlice";
+import {
+  resetReservation,
+  fetchReservationByCodeThunk,
+  requestRefund,
+  fetchReservationThunk,
+} from "../features/reservation/reservationSlice";
 import { CheckoutTratta } from "../components/CheckoutTratta";
 
 export const ReservationDetail = () => {
   const { reservationCode } = useParams();
   const location = useLocation(); // Initialize useLocation
   const queryParams = new URLSearchParams(location.search);
-  const email = queryParams.get('guestEmail'); // Get guestEmail from query params
+  const email = queryParams.get("guestEmail"); // Get guestEmail from query params
   const reservation = useSelector((state) => state.reservation.data);
   const dispatch = useDispatch();
   const navigate = useNavigate(); // Initialize useNavigate
@@ -16,18 +21,18 @@ export const ReservationDetail = () => {
   const isAdmin = accountData?.authorities?.includes("ROLE_WEB_ADMIN");
 
   useEffect(() => {
-   
-      dispatch(fetchReservationByCodeThunk(reservationCode)); // Use the new thunk
-   
+    dispatch(fetchReservationByCodeThunk(reservationCode)); // Use the new thunk
+
     return () => {
       dispatch(resetReservation()); // Reset reservation data on unmount
     };
   }, [dispatch, reservationCode, email, isAdmin]);
 
   const handleRefund = (routeId, amount, executeRefund) => {
-    dispatch(requestRefund({ routeId, amount, executeRefund, reservationCode }));
+    dispatch(
+      requestRefund({ routeId, amount, executeRefund, reservationCode })
+    );
   };
-console.log(reservation)
   return (
     <div className="container">
       <div className="  align-items-center">
@@ -51,11 +56,14 @@ console.log(reservation)
                 post={true}
                 onRefund={handleRefund}
                 isAdmin={isAdmin}
+                paymentMethod={reservation?.paymentmethod}
               />
               {route.descriptionTour && (
                 <div className="col bg-aliceblue rounded mb-3 d-flex flex-column mt-3 p-3">
                   <h4 className="text-primary text-center">Dettaglio Tour</h4>
-                  <div dangerouslySetInnerHTML={{ __html: route.descriptionTour }} />
+                  <div
+                    dangerouslySetInnerHTML={{ __html: route.descriptionTour }}
+                  />
                 </div>
               )}
             </div>
@@ -109,15 +117,23 @@ console.log(reservation)
               <div className="row mb-3 justify-content-center">
                 <div className="col-md-4">
                   <label className="form-label">Nome Azienda</label>
-                  <p className="text-muted small">{reservation.invoice.intestazione}</p>
+                  <p className="text-muted small">
+                    {reservation.invoice.intestazione}
+                  </p>
                 </div>
                 <div className="col-md-4">
-                  <label className="form-label">Partita IVA / Codice Fiscale</label>
-                  <p className="text-muted small">{reservation.invoice.pIvaCodiceFiscale}</p>
+                  <label className="form-label">
+                    Partita IVA / Codice Fiscale
+                  </label>
+                  <p className="text-muted small">
+                    {reservation.invoice.pIvaCodiceFiscale}
+                  </p>
                 </div>
                 <div className="col-4">
                   <label className="form-label">Indirizzo</label>
-                  <p className="text-muted small">{reservation.invoice.indirizzo}</p>
+                  <p className="text-muted small">
+                    {reservation.invoice.indirizzo}
+                  </p>
                 </div>
               </div>
               <div className="row mb-3 justify-content-center">
@@ -127,27 +143,37 @@ console.log(reservation)
                 </div>
                 <div className="col-md-4">
                   <label className="form-label">Città</label>
-                  <p className="text-muted small">{reservation.invoice.citta}</p>
+                  <p className="text-muted small">
+                    {reservation.invoice.citta}
+                  </p>
                 </div>
                 <div className="col-md-4">
                   <label className="form-label">Provincia</label>
-                  <p className="text-muted small">{reservation.invoice.provincia}</p>
+                  <p className="text-muted small">
+                    {reservation.invoice.provincia}
+                  </p>
                 </div>
               </div>
               <div className="row mb-3">
                 <div className="col-md-4">
                   <label className="form-label">Nazione</label>
-                  <p className="text-muted small">{reservation.invoice.nazione}</p>
+                  <p className="text-muted small">
+                    {reservation.invoice.nazione}
+                  </p>
                 </div>
                 <div className="col-md-4">
                   <label className="form-label">Codice Univoco</label>
-                  <p className="text-muted small">{reservation.invoice.codiceUnivoco}</p>
+                  <p className="text-muted small">
+                    {reservation.invoice.codiceUnivoco}
+                  </p>
                 </div>
               </div>
               <div className="row mb-3 ">
                 <div className="col-md-4">
                   <label className="form-label">Email PEC</label>
-                  <p className="text-muted small">{reservation.invoice.emailPec}</p>
+                  <p className="text-muted small">
+                    {reservation.invoice.emailPec}
+                  </p>
                 </div>
               </div>
             </div>
