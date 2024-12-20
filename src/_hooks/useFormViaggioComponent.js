@@ -274,8 +274,8 @@ export const useFormViaggioComponent = (disableFetch) => {
       // setDataAndataForm(date);
       // setDataRitornoForm(date);
       if (!multitratta) {
-        dispatch(upsertDate({ id: 0, date: date, dateFormatted: dateString }));
-        dispatch(upsertDate({ id: 1, date: date, dateFormatted: dateString }));
+        dispatch(upsertDate({ id, date: date, dateFormatted: dateString }));
+        // dispatch(upsertDate({ id: 1, date: date, dateFormatted: dateString }));
       } else {
         dispatch(upsertDate({ id, date: date, dateFormatted: dateString }));
         // dispatch(

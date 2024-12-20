@@ -40,8 +40,14 @@ export const DettaglioAgenzia = () => {
     if (data) {
       setFormData({
         attivo: data.attivo,
-        dirittiDiPrenotazione: data.dirittiDiPrenotazione || null,
-        percentualCommissione: data.percentualCommissione || null,
+        dirittiDiPrenotazione:
+          data.dirittiDiPrenotazione === null
+            ? null
+            : data.dirittiDiPrenotazione,
+        percentualCommissione:
+          data.percentualCommissione === null
+            ? null
+            : data.percentualCommissione,
         abilitaPagamentoEstrattoConto:
           data.abilitaPagamentoEstrattoConto || false,
         abilitaPagamentoPayByLink: data.abilitaPagamentoPayByLink || false,
@@ -70,11 +76,11 @@ export const DettaglioAgenzia = () => {
     const updatedFormData = {
       ...formData,
       dirittiDiPrenotazione:
-        formData.dirittiDiPrenotazione === 0
+        formData.dirittiDiPrenotazione === null
           ? null
           : formData.dirittiDiPrenotazione,
       percentualCommissione:
-        formData.percentualCommissione === 0
+        formData.percentualCommissione === null
           ? null
           : formData.percentualCommissione,
     };
@@ -105,7 +111,7 @@ export const DettaglioAgenzia = () => {
   }
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 mb-5">
       <div className="row justify-content-center align-items-center g-2">
         <form className="col-lg-6" onSubmit={handleSubmit}>
           <h2>Dettaglio Agenzia</h2>
@@ -244,20 +250,6 @@ export const DettaglioAgenzia = () => {
                     <option value={false}>No</option>
                   </select>
                 </div>
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">Percentuale Commissione</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    className="form-control"
-                    name="percentualCommissione"
-                    value={formData.percentualCommissione}
-                    onChange={handleChange}
-                    readOnly={isAgency}
-                    disabled={isAgency}
-                  />
-                </div>
               </div>
               <div className="row">
                 <div className="col-md-6 mb-3">
@@ -269,6 +261,24 @@ export const DettaglioAgenzia = () => {
                     className="form-control"
                     name="dirittiDiPrenotazione"
                     value={formData.dirittiDiPrenotazione}
+                    onChange={handleChange}
+                    readOnly={isAgency}
+                    disabled={isAgency}
+                  />
+                  <small className="form-text text-muted">
+                    Se non vengono inseriti, il sistema calcola quelli di
+                    default del sito
+                  </small>
+                </div>
+                <div className="col-md-6 mb-3">
+                  <label className="form-label">Percentuale Commissione</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    className="form-control"
+                    name="percentualCommissione"
+                    value={formData.percentualCommissione}
                     onChange={handleChange}
                     readOnly={isAgency}
                     disabled={isAgency}
