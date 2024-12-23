@@ -44,7 +44,9 @@ export const fetchAccountData = async () => {
       } catch (error) {
         console.error("Error fetching account data:", error);
         toast.error("Errore di autenticazione.");
-        handleLogout();
+        setTimeout(() => {
+          handleLogout();
+        }, 2000); // Delay of 2 seconds before logout
       }
     }
   }
