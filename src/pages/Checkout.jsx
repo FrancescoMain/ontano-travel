@@ -173,10 +173,10 @@ export const Checkout = () => {
         <div className="col-lg-9 col-11">
           <div className="row justify-content-between flex-lg-row flex-column align-items-start">
             <div className="col-lg-7 col rounded mb-3">
-              <div className="col-lg-12 col bg-passeggeri rounded mt-3 mb-3 p-4">
+              <div className="col-lg-12 col bg-passeggeri rounded mt-3 mb-3">
                 <div className="row">
                   <div className="col">
-                    <h2 className="text-primary">Dati Passeggeri</h2>
+                    <h2 className="text-primary ms-3 mt-2">Dati Passeggeri</h2>
                     {passeggeri.map((tratta, trattaIndex) => (
                       <TransparentAccordion
                         key={trattaIndex}

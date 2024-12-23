@@ -12,7 +12,7 @@ export const Condizioni = ({
 }) => {
   const { t } = useTranslation();
   return (
-    <div className="col-lg-12  col bg-passeggeri rounded mt-3 mb-3 p-4">
+    <div className="col-lg-12  col bg-passeggeri rounded mt-3 mb-3 p-3">
       <h2 className="text-primary">{t("Condizioni e Contatti")}</h2>
       <CheckoutPrimoPasseggero value={value} onChange={onChange} />
       <div className="col">
@@ -66,34 +66,44 @@ export const Condizioni = ({
                   className="form-control"
                   value={invoiceDTO.intestazione}
                   onChange={(e) =>
-                    onInvoiceDTOChange({ ...invoiceDTO, intestazione: e.target.value })
+                    onInvoiceDTOChange({
+                      ...invoiceDTO,
+                      intestazione: e.target.value,
+                    })
                   }
                   required
                 />
               </div>
               <div className="col-md-6">
-                <label className="form-label">{t("Partita IVA / Codice Fiscale")}</label>
+                <label className="form-label">
+                  {t("Partita IVA / Codice Fiscale")}
+                </label>
                 <input
                   type="text"
                   className="form-control"
                   value={invoiceDTO.pIvaCodiceFiscale}
                   onChange={(e) =>
-                    onInvoiceDTOChange({ ...invoiceDTO, pIvaCodiceFiscale: e.target.value })
+                    onInvoiceDTOChange({
+                      ...invoiceDTO,
+                      pIvaCodiceFiscale: e.target.value,
+                    })
                   }
                   required
                 />
               </div>
-              
             </div>
             <div className="row mb-3">
-            <div className="col">
+              <div className="col">
                 <label className="form-label">{t("Indirizzo")}</label>
                 <input
                   type="text"
                   className="form-control"
                   value={invoiceDTO.indirizzo}
                   onChange={(e) =>
-                    onInvoiceDTOChange({ ...invoiceDTO, indirizzo: e.target.value })
+                    onInvoiceDTOChange({
+                      ...invoiceDTO,
+                      indirizzo: e.target.value,
+                    })
                   }
                   required
                 />
@@ -131,7 +141,10 @@ export const Condizioni = ({
                   className="form-control"
                   value={invoiceDTO.provincia}
                   onChange={(e) =>
-                    onInvoiceDTOChange({ ...invoiceDTO, provincia: e.target.value })
+                    onInvoiceDTOChange({
+                      ...invoiceDTO,
+                      provincia: e.target.value,
+                    })
                   }
                   required
                 />
@@ -145,7 +158,10 @@ export const Condizioni = ({
                   className="form-control"
                   value={invoiceDTO.nazione}
                   onChange={(e) =>
-                    onInvoiceDTOChange({ ...invoiceDTO, nazione: e.target.value })
+                    onInvoiceDTOChange({
+                      ...invoiceDTO,
+                      nazione: e.target.value,
+                    })
                   }
                   required
                 />
@@ -157,7 +173,10 @@ export const Condizioni = ({
                   className="form-control"
                   value={invoiceDTO.codiceUnivoco}
                   onChange={(e) =>
-                    onInvoiceDTOChange({ ...invoiceDTO, codiceUnivoco: e.target.value })
+                    onInvoiceDTOChange({
+                      ...invoiceDTO,
+                      codiceUnivoco: e.target.value,
+                    })
                   }
                   required
                 />
@@ -169,7 +188,10 @@ export const Condizioni = ({
                   className="form-control"
                   value={invoiceDTO.emailPec}
                   onChange={(e) =>
-                    onInvoiceDTOChange({ ...invoiceDTO, emailPec: e.target.value })
+                    onInvoiceDTOChange({
+                      ...invoiceDTO,
+                      emailPec: e.target.value,
+                    })
                   }
                   required
                 />
