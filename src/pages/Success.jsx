@@ -13,9 +13,6 @@ export const Success = () => {
           <p>Riceverai una email a breve.</p>
         </div>
       </div>
-      <footer className="text-center mt-5">
-        <p>© 2024 Ontano Travel. Tutti i diritti riservati.</p>
-      </footer>
     </>
   );
 };

@@ -78,6 +78,10 @@ const SearchGuest = () => {
             <span>Diritti di prenotazione</span>
             <span>{reservation?.taxPreview.priceFormatted}</span>
           </div>
+          <div className="d-flex justify-content-between align-items-center">
+            <span>Metodo di pagamento</span>
+            <span>{reservation?.paymentmethod}</span>
+          </div>
           <div className="spacer my-3 sconto d-none"></div>
 
           <div className="d-flex justify-content-between align-items-center sconto d-none">

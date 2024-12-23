@@ -57,9 +57,6 @@ export const PayByLinkSuccess = () => {
           </p>
         </div>
       </div>
-      <footer className="text-center mt-5">
-        <p>© 2024 Ontano Travel. {t("Tutti i diritti riservati")}.</p>
-      </footer>
     </>
   );
 };

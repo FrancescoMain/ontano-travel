@@ -371,6 +371,7 @@ export const Header = () => {
           <div className="header-side">
             <li>
               <Link
+                className={`Link ${location.pathname === "/" ? "active" : ""}`}
                 color="primary"
                 disabled={false}
                 level="body-md"
