@@ -121,7 +121,7 @@ export const useTourForm = () => {
       console.error("Error posting tour quote:", error);
       toast.error(
         t(
-          "Errore nella ricerca del tour. Riprova con un'altra data o contatta l'assistenza."
+          "Nessun Tour trovato. Riprova con un'altra data o contatta l'assistenza."
         )
       );
     }

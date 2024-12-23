@@ -12,14 +12,11 @@ export const TabellonePartenze = () => {
   const dispatch = useDispatch();
   const routes = useSelector((state) => state.route.route);
   const departures = useSelector((state) => state.tabellonePartenze.departures);
-  const today = new Date()
-    .toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-
-      year: "numeric",
-    })
-    .replace(/\./g, ""); // Format date as DD/MMM/YYYY
+  const today = new Date().toLocaleDateString("it-IT", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }); // Format date as DD/MM/YYYY
   const navigate = useNavigate();
   const [selectedPort, setSelectedPort] = useState("");
   const [localDepartures, setLocalDepartures] = useState([]);
