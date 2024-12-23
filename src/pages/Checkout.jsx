@@ -31,6 +31,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/material/styles";
+import { Spinner } from "../components/Spinner/Spinner"; // Import Spinner component
 
 const TransparentAccordion = styled(Accordion)({
   backgroundColor: "transparent",
@@ -61,6 +62,7 @@ export const Checkout = () => {
   const navigate = useNavigate();
   const [paymentMethodCheck, setPyamentMethodCheck] =
     React.useState("CREDIT_CARD");
+  const [loading, setLoading] = React.useState(false); // Add loading state
 
   const { i18n } = useTranslation();
   const language = i18n.language;
@@ -76,6 +78,7 @@ export const Checkout = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Start spinner
     dispatch(startLoading());
 
     const resultReserve = await reserve(
@@ -100,6 +103,7 @@ export const Checkout = () => {
             reserveLightbox.PaymentID,
             reserveLightbox.PaymentToken,
             function callback(response) {
+              setLoading(false); // Stop spinner
               if (response.status === "OK") {
                 Cookies.remove("codice"); // Remove the codice cookie if payment is successful
                 dispatch(resetSelected({ id: 0 }));
@@ -114,6 +118,7 @@ export const Checkout = () => {
             }
           );
         } else {
+          setLoading(false); // Stop spinner
           console.error("Errore: PaymentToken o PaymentID mancanti");
         }
       } else if (paymentMethodCheck === "PAY_BY_LINK") {
@@ -137,12 +142,14 @@ export const Checkout = () => {
           localStorage.removeItem("linkQuote");
           navigate("/pay-by-link-success");
         } catch (error) {
+          setLoading(false); // Stop spinner
           console.error("Error:", error);
           toast.error("Errore durante il pagamento tramite PaybyLink");
         }
       } else if (paymentMethodCheck === "EXTERNAL_PAYMENT") {
         try {
           const response = await submitExternalPayment(quote);
+          setLoading(false); // Stop spinner
           if (response.ok) {
             Cookies.remove("codice"); // Remove the codice cookie if payment is successful
             dispatch(resetSelected({ id: 0 }));
@@ -155,16 +162,20 @@ export const Checkout = () => {
             toast.error("Errore durante il pagamento tramite Estratto Conto");
           }
         } catch (error) {
+          setLoading(false); // Stop spinner
           console.error("Error:", error);
         }
       }
+    } else {
+      setLoading(false); // Stop spinner
     }
 
     dispatch(stopLoading());
   };
 
   return (
-    <div className="conatiner">
+    <div className="container">
+      {loading && <Spinner active={loading} />} {/* Render Spinner */}
       <form
         className="row d-flex justify-content-center needs-validation"
         noValidate
