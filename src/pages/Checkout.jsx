@@ -354,10 +354,10 @@ export const Checkout = () => {
                     {prenotazione?.priceToPay.priceFormatted}
                   </span>
                 </div>
-                <div className="mt-3">
+                <div className="mt-3 mb-3">
                   <button
                     type="submit"
-                    className="btn btn-success btn btn-lg w-100 text-white bg-green border-0 ms-auto fw-bold py-3"
+                    className="btn btn-success btn btn-lg w-100 text-white bg-green border-0 ms-auto fw-bold py-3 fs-5"
                   >
                     CONFERMA
                   </button>

@@ -103,7 +103,7 @@
     font-size: large;
   }
 
-  .card-container {
+  .padding {
     padding: 5px !important;
   }
   .card-container__right h4,

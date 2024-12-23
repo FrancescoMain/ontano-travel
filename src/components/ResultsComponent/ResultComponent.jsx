@@ -197,7 +197,7 @@ export const ResultComponent = () => {
             <button
               onClick={() => dispatch(setNTratte(nTratte + 1))}
               type="button"
-              class="ms-3 btn btn-primary"
+              className="ms-3 btn btn-primary fs-5"
             >
               {t("+ Aggiungi Rotta")}
             </button>
@@ -210,8 +210,8 @@ export const ResultComponent = () => {
         <div className="to-checkout" role="contentinfo">
           <div className="to-checkout-cont">
             <div className="to-checkout-cont__left">
-              <div>
-                TOTALE BIGLIETTI:
+              <div className="fs-5">
+                TOTALE:
                 {" " + totalPrice?.toFixed(2) || ""}€
               </div>
             </div>
