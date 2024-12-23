@@ -7,6 +7,7 @@ import {
   setTour,
   setTours,
   resetTour,
+  filterToursByPort, // Add this line
 } from "../features/tour/tourSlice";
 import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
 import { useNavigate, useLocation } from "react-router-dom"; // Add useLocation
@@ -20,7 +21,7 @@ export const useTourForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation(); // Add useLocation
-  const { port, date, tour, tours, dettagli } = useSelector(
+  const { port, date, tour, tours, filteredTours, dettagli } = useSelector(
     (state) => state.tour
   );
 
@@ -73,6 +74,11 @@ export const useTourForm = () => {
   const handlePortChange = (event, value) => {
     const selectedPort = ports.find((port) => port.name === value);
     dispatch(setPort(selectedPort || { code: "", name: "" }));
+    if (selectedPort) {
+      dispatch(filterToursByPort());
+    } else {
+      dispatch(setTours(tours)); // Reset filteredTours to all tours
+    }
   };
 
   const handleDateChange = (value) => {
@@ -134,6 +140,7 @@ export const useTourForm = () => {
     date,
     tour,
     tours,
+    filteredTours, // Add this line
     dettagli,
     handlePortChange,
     handleDateChange,

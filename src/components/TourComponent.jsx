@@ -25,6 +25,7 @@ export const TourComponent = () => {
     handleTourChange,
     resetHandle,
     handleSubmit,
+    filteredTours,
   } = useTourForm();
 
   const isButtonDisabled =
@@ -62,7 +63,7 @@ export const TourComponent = () => {
           value={tour}
           className="select-viaggio mb-2"
           placeholder={t("Tour")}
-          options={tours.map((tour) => tour.name)}
+          options={filteredTours.map((tour) => tour.name)}
           sx={{ height: 56 }}
           onChange={handleTourChange}
         />
