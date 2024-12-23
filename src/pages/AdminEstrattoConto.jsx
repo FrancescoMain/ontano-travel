@@ -90,8 +90,8 @@ const AdminEstrattoConto = () => {
   };
 
   const formatDate = (dateString) => {
-    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+    const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+    return new Date(dateString).toLocaleDateString("it-IT", options); // Use Italian locale for date formatting
   };
 
   return (
