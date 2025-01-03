@@ -62,7 +62,8 @@ select {
 }
 .select-viaggio input,
 .date-picker input,
-.select-detail {
+.select-detail,
+.input-eta {
   font-weight: 600 !important;
 }
 .date-picker {

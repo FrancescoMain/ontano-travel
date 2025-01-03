@@ -1,7 +1,7 @@
 import { basePathDev, basePathProd } from "./basePath";
 
 export const config = {
-  basePath: basePathDev,
+  basePath: basePathProd,
   // basePath: basePathProd,
   authenticate: { route: "/api/authenticate", method: "POST" },
   getRoute: { route: "/api/booking/route", method: "GET" },
@@ -39,6 +39,9 @@ export const config = {
     route: "/api/booking/reservation/search",
     method: "GET",
   },
-  fetchEstrattoConto: { route: "/api/booking/estrattoconto/search", method: "GET" }, // Add fetchEstrattoConto route
+  fetchEstrattoConto: {
+    route: "/api/booking/estrattoconto/search",
+    method: "GET",
+  }, // Add fetchEstrattoConto route
   approveEstrattoConto: { route: "/api/booking/estrattoconto", method: "POST" }, // Add approveEstrattoConto route
 };
