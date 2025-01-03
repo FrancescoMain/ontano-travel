@@ -68,7 +68,7 @@ const Rendicontazione = () => {
         </LocalizationProvider>
         <button
           type="submit"
-          className="btn btn-primary"
+          className="btn btn-primary fs-6 mb-4"
           disabled={isLoading || !fromDate || !toDate}
         >
           {isLoading ? (

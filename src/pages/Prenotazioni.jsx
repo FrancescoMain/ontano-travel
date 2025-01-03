@@ -211,7 +211,7 @@ export const Prenotazioni = () => {
             onChange={handleChange}
           />
           <div className="col-md-2 mb-3 align-self-end">
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-primary fs-6">
               {t("Cerca")}
             </button>
           </div>

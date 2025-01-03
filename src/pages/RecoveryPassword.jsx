@@ -28,7 +28,7 @@ export const RecoveryPassword = () => {
                     {t("Please enter your email.")}
                   </div>
                 </div>
-                <button type="submit" className="btn btn-primary mt-3">
+                <button type="submit" className="btn btn-primary mt-3 fs-6">
                   {t("Recover Password")}
                 </button>
               </form>

@@ -252,7 +252,7 @@ export const RegistraAgenzia = () => {
               </a>
             </label>
           </div>
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-primary fs-6">
             {t("Submit")}
           </button>
           <p className="mt-3">* {t("Campi obbligatori")}</p>

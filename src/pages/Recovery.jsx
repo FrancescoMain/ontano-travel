@@ -14,7 +14,10 @@ export const Recovery = () => {
   const handleRecovery = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${config.basePath}/api/booking/account/reset-password/init`, { email });
+      const response = await axios.post(
+        `${config.basePath}/api/booking/account/reset-password/init`,
+        { email }
+      );
       if (response.status === 200) {
         setMessage(t("Recovery email sent successfully."));
       } else {
@@ -46,7 +49,7 @@ export const Recovery = () => {
                     required
                   />
                 </div>
-                <button type="submit" className="btn btn-primary mt-3">
+                <button type="submit" className="btn btn-primary mt-3 fs-6">
                   {t("Send Recovery Email")}
                 </button>
               </form>

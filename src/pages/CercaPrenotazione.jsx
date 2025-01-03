@@ -47,7 +47,7 @@ export const CercaPrenotazione = () => {
                     required
                   />
                 </div>
-                <button type="submit" className="btn btn-primary">
+                <button type="submit" className="btn btn-primary fs-6">
                   {t("Cerca")}
                 </button>
               </form>

@@ -7,7 +7,8 @@ import { config } from "../config/config"; // Import config
 import { getAuthHeader } from "../utils/auth"; // Import getAuthHeader
 import { useTranslation } from "react-i18next"; // Import useTranslation
 
-const passwordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).{8,}$/; // Update password regex
+const passwordRegex =
+  /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).{8,}$/; // Update password regex
 
 export const SetPassword = () => {
   const { t } = useTranslation(); // Initialize useTranslation
@@ -23,7 +24,11 @@ export const SetPassword = () => {
       return;
     }
     if (!passwordRegex.test(password)) {
-      toast.error(t("Password must be at least 8 characters long and contain at least one number, one lowercase letter, one uppercase letter, and one special character"));
+      toast.error(
+        t(
+          "Password must be at least 8 characters long and contain at least one number, one lowercase letter, one uppercase letter, and one special character"
+        )
+      );
       return;
     }
 
@@ -83,7 +88,9 @@ export const SetPassword = () => {
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="confirmPassword">{t("Confirm Password")}:</label>
+                  <label htmlFor="confirmPassword">
+                    {t("Confirm Password")}:
+                  </label>
                   <input
                     type="password"
                     className="form-control"
@@ -93,7 +100,7 @@ export const SetPassword = () => {
                     required
                   />
                 </div>
-                <button type="submit" className="btn btn-primary mt-3">
+                <button type="submit" className="btn btn-primary mt-3 fs-6">
                   {t("Set Password")}
                 </button>
               </form>
@@ -104,4 +111,3 @@ export const SetPassword = () => {
     </div>
   );
 };
-

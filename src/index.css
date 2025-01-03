@@ -46,7 +46,6 @@ img {
   margin: 0 !important;
 }
 
-
 select {
   background-color: white !important;
   color: black !important;
@@ -57,11 +56,16 @@ select {
 .text-primary {
   color: black !important;
 }
-.select-viaggio{
+.select-viaggio {
   background-color: white !important;
   color: black !important;
 }
-.date-picker{
+.select-viaggio input,
+.date-picker input,
+.select-detail {
+  font-weight: 600 !important;
+}
+.date-picker {
   background-color: white !important;
   color: black !important;
   height: 58px !important;
@@ -69,7 +73,6 @@ select {
 
 /* Mobile specific styles */
 @media (max-width: 768px) {
-  
   select {
     background-color: white !important;
     color: black !important;

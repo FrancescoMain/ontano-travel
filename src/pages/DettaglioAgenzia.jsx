@@ -357,7 +357,7 @@ export const DettaglioAgenzia = () => {
                 </div>
               </div>
               {!isAgency && (
-                <button type="submit" className="btn btn-primary">
+                <button type="submit" className="btn btn-primary fs-6">
                   Save
                 </button>
               )}

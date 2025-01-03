@@ -58,7 +58,7 @@ export const LoginForm = ({ onLogin }) => {
           {t("Remember me")}
         </label>
       </div>
-      <button type="submit" className="btn btn-primary mt-3">
+      <button type="submit" className="btn btn-primary mt-3 fs-6">
         {t("Login")}
       </button>
       {error && <p className="text-danger mt-3">{error}</p>}

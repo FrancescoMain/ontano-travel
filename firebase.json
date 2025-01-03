@@ -1,6 +1,7 @@
 {
   "hosting": {
     "public": "build",
+    "site": "prodquickferries",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
