@@ -64,7 +64,7 @@ export const FormViaggioComponent = () => {
       <ul class="nav nav-tabs">
         <li class="nav-item" onClick={handleClickTab}>
           <a
-            className={`nav-link tab text-primary ${
+            className={`fs-5 fw-bold nav-link tab text-primary ${
               tab === "Collegamento" && "active"
             }`}
             aria-current="page"
@@ -75,7 +75,7 @@ export const FormViaggioComponent = () => {
         </li>
         <li class="nav-item" onClick={handleClickTab}>
           <a
-            className={`nav-link tab text-primary ${
+            className={`nav-link tab text-primary fs-5 fw-bold ${
               tab === "Tour" && "active"
             }`}
             href="#"
