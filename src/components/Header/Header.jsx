@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./Header.css";
 import { Dropdown, Link, Menu, MenuButton, MenuItem } from "@mui/joy";
 import { useTranslation } from "react-i18next";
@@ -345,9 +345,26 @@ export const Header = () => {
   const email = accountData?.email;
   const isAdmin = accountData?.authorities?.includes("ROLE_WEB_ADMIN");
   const isAgency = accountData?.authorities?.includes("ROLE_AGENCY_USER");
+  const offcanvasRef = useRef(null);
 
   const handleOffcanvasClose = () => setShowOffcanvas(false);
   const handleOffcanvasShow = () => setShowOffcanvas(true);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        offcanvasRef.current &&
+        !offcanvasRef.current.contains(event.target)
+      ) {
+        handleOffcanvasClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="header">
@@ -443,6 +460,7 @@ export const Header = () => {
               <MenuIcon />
             </button>
             <div
+              ref={offcanvasRef}
               className={`offcanvas offcanvas-end ${
                 showOffcanvas ? "show" : ""
               }`}

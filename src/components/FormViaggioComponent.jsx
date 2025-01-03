@@ -191,7 +191,7 @@ export const ViaggioDiAndataForm = ({
           />
         </LocalizationProvider>
         {!resultMode && (
-          <div className="d-flex gap-3">
+          <div className="d-flex gap-3 ">
             <div class="form-check">
               <input
                 onClick={optionsChange}
@@ -311,7 +311,7 @@ export const DettagliViaggio = ({ id, selected, resetHandle }) => {
   return (
     <>
       <div
-        className="row flex-column flex-lg-row"
+        className="row flex-column flex-lg-row dettagli"
         role="group"
         aria-labelledby={`dettagli-viaggio-${id}`}
       >
