@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { getAuthHeader } from "../../utils/auth";
+import { getAuthHeader, handleLogout } from "../../utils/auth"; // Import handleLogout
 import { config } from "../../config/config";
 import { startLoading, stopLoading } from "../spinner/spinnerSlice";
 
@@ -9,11 +9,23 @@ export const fetchDettaglioAgenzia = createAsyncThunk(
   async (id, { dispatch }) => {
     dispatch(startLoading());
     const url = id
-      ? `${config.basePath}${config.fetchDettaglioAgenzia.route.replace(":id", id)}`
+      ? `${config.basePath}${config.fetchDettaglioAgenzia.route.replace(
+          ":id",
+          id
+        )}`
       : `${config.basePath}/api/booking/agency/get`;
-    const response = await axios.get(url, { headers: getAuthHeader() });
-    dispatch(stopLoading());
-    return response.data;
+    try {
+      const response = await axios.get(url, { headers: getAuthHeader() });
+      dispatch(stopLoading());
+      return response.data;
+    } catch (error) {
+      dispatch(stopLoading());
+      if (error.response && error.response.status === 401) {
+        handleLogout();
+        window.location.href = "/login"; // Redirect to login
+      }
+      throw error;
+    }
   }
 );
 
@@ -21,13 +33,22 @@ export const updateDettaglioAgenzia = createAsyncThunk(
   "dettaglioAgenzia/updateDettaglioAgenzia",
   async ({ id, data }, { dispatch }) => {
     dispatch(startLoading());
-    const response = await axios.post(
-      `${config.basePath}/api/booking/agency/${id}/update`,
-      data,
-      { headers: getAuthHeader() }
-    );
-    dispatch(stopLoading());
-    return response.data;
+    try {
+      const response = await axios.post(
+        `${config.basePath}/api/booking/agency/${id}/update`,
+        data,
+        { headers: getAuthHeader() }
+      );
+      dispatch(stopLoading());
+      return response.data;
+    } catch (error) {
+      dispatch(stopLoading());
+      if (error.response && error.response.status === 401) {
+        handleLogout();
+        window.location.href = "/login"; // Redirect to login
+      }
+      throw error;
+    }
   }
 );
 

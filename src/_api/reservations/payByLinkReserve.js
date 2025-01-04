@@ -1,4 +1,4 @@
-import { getAuthHeader } from "../../utils/auth";
+import { getAuthHeader, handleLogout } from "../../utils/auth"; // Import handleLogout
 import i18n from "../../i18n";
 import { config } from "../../config/config";
 
@@ -18,6 +18,10 @@ export const payByLinkReserve = async (quoteId, email) => {
     });
 
     if (!response.ok) {
+      if (response.status === 401) {
+        handleLogout();
+        window.location.href = "/login"; // Redirect to login
+      }
       throw new Error("Network response was not ok");
     }
 

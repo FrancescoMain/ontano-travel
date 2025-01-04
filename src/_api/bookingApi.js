@@ -1,6 +1,6 @@
 import axios from "axios";
 import { config } from "../config/config";
-import { getAuthHeader } from "../utils/auth";
+import { getAuthHeader, handleLogout } from "../utils/auth"; // Import handleLogout
 
 export const fetchReservation = async (bookingCode, email) => {
   try {
@@ -15,6 +15,10 @@ export const fetchReservation = async (bookingCode, email) => {
     );
     return response.data;
   } catch (error) {
+    if (error.response && error.response.status === 401) {
+      handleLogout();
+      window.location.href = "/login"; // Redirect to login
+    }
     if (error.response && error.response.data && error.response.data.detail) {
       throw new Error(error.response.data.detail);
     } else {
@@ -39,6 +43,10 @@ export const fetchReservationByCode = async (reservationCode) => {
     );
     return response.data;
   } catch (error) {
+    if (error.response && error.response.status === 401) {
+      handleLogout();
+      window.location.href = "/login"; // Redirect to login
+    }
     if (error.response && error.response.data && error.response.data.detail) {
       throw new Error(error.response.data.detail);
     } else {
@@ -61,6 +69,10 @@ export const sendRefundRequest = async (routeId, body) => {
     );
     return response.data;
   } catch (error) {
+    if (error.response && error.response.status === 401) {
+      handleLogout();
+      window.location.href = "/login"; // Redirect to login
+    }
     if (error.response && error.response.data && error.response.data.detail) {
       throw new Error(error.response.data.detail);
     } else {

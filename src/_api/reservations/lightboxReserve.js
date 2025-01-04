@@ -1,5 +1,5 @@
 import i18n from "../../i18n"; // Import i18n to access the current language
-import { getAuthHeader } from "../../utils/auth"; // Import getAuthHeader
+import { getAuthHeader, handleLogout } from "../../utils/auth"; // Import handleLogout
 import { config } from "../../config/config";
 
 export const lightboxReserve = async (quoteId) => {
@@ -19,6 +19,10 @@ export const lightboxReserve = async (quoteId) => {
 
     // Controlla se la risposta è ok
     if (!response.ok) {
+      if (response.status === 401) {
+        handleLogout();
+        window.location.href = "/login"; // Redirect to login
+      }
       throw new Error("Network response was not ok");
     }
 

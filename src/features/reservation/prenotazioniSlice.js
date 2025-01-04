@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { getAuthHeader } from "../../utils/auth";
+import { getAuthHeader, handleLogout } from "../../utils/auth"; // Import handleLogout
 import { config } from "../../config/config";
 import { startLoading, stopLoading } from "../spinner/spinnerSlice";
 
@@ -8,21 +8,30 @@ export const searchReservations = createAsyncThunk(
   "prenotazioni/searchReservations",
   async (queryParams, { dispatch }) => {
     dispatch(startLoading());
-    const response = await axios.get(
-      `${config.basePath}${config.searchReservations.route}`,
-      {
-        params: queryParams,
-        headers: {
-          ...getAuthHeader(),
-          accept: "application/json",
-        },
+    try {
+      const response = await axios.get(
+        `${config.basePath}${config.searchReservations.route}`,
+        {
+          params: queryParams,
+          headers: {
+            ...getAuthHeader(),
+            accept: "application/json",
+          },
+        }
+      );
+      dispatch(stopLoading());
+      return {
+        data: response.data,
+        totalCount: response.headers["x-total-count"],
+      };
+    } catch (error) {
+      dispatch(stopLoading());
+      if (error.response && error.response.status === 401) {
+        handleLogout();
+        window.location.href = "/login"; // Redirect to login
       }
-    );
-    dispatch(stopLoading());
-    return {
-      data: response.data,
-      totalCount: response.headers["x-total-count"],
-    };
+      throw error;
+    }
   }
 );
 

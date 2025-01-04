@@ -1,69 +1,111 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { getAuthHeader } from '../../utils/auth';
-import { config } from '../../config/config';
-import { startLoading, stopLoading } from '../spinner/spinnerSlice';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import { getAuthHeader, handleLogout } from "../../utils/auth"; // Import handleLogout
+import { config } from "../../config/config";
+import { startLoading, stopLoading } from "../spinner/spinnerSlice";
 
 export const fetchEstrattoConto = createAsyncThunk(
-  'estrattoConto/fetchEstrattoConto',
-  async ({ toApprove, page, size, agencyId, sort }, { dispatch }) => { // Include sort
+  "estrattoConto/fetchEstrattoConto",
+  async ({ toApprove, page, size, agencyId, sort }, { dispatch }) => {
+    // Include sort
     const to_approve = toApprove;
-    dispatch(startLoading('fetchEstrattoConto'));
-    const response = await axios.get(`${config.basePath}${config.fetchEstrattoConto.route}`, {
-      headers: getAuthHeader(),
-      params: { to_approve, page, size, agency_id: agencyId, sort }, // Use sort in params
-    });
-    dispatch(stopLoading('fetchEstrattoConto'));
-    return {
-      data: response.data,
-      totalCount: parseInt(response.headers['x-total-count'], 10),
-    };
+    dispatch(startLoading("fetchEstrattoConto"));
+    try {
+      const response = await axios.get(
+        `${config.basePath}${config.fetchEstrattoConto.route}`,
+        {
+          headers: getAuthHeader(),
+          params: { to_approve, page, size, agency_id: agencyId, sort }, // Use sort in params
+        }
+      );
+      dispatch(stopLoading("fetchEstrattoConto"));
+      return {
+        data: response.data,
+        totalCount: parseInt(response.headers["x-total-count"], 10),
+      };
+    } catch (error) {
+      dispatch(stopLoading("fetchEstrattoConto"));
+      if (error.response && error.response.status === 401) {
+        handleLogout();
+        window.location.href = "/login"; // Redirect to login
+      }
+      throw error;
+    }
   }
 );
 
 export const approveEstrattoConto = createAsyncThunk(
-  'estrattoConto/approveEstrattoConto',
+  "estrattoConto/approveEstrattoConto",
   async (id, { dispatch }) => {
     dispatch(startLoading(id));
-    const response = await axios.post(`${config.basePath}${config.approveEstrattoConto.route}/${id}/approve`, {}, {
-      headers: getAuthHeader(),
-    });
-    dispatch(stopLoading(id));
-    return response.data;
+    try {
+      const response = await axios.post(
+        `${config.basePath}${config.approveEstrattoConto.route}/${id}/approve`,
+        {},
+        {
+          headers: getAuthHeader(),
+        }
+      );
+      dispatch(stopLoading(id));
+      return response.data;
+    } catch (error) {
+      dispatch(stopLoading(id));
+      if (error.response && error.response.status === 401) {
+        handleLogout();
+        window.location.href = "/login"; // Redirect to login
+      }
+      throw error;
+    }
   }
 );
 
 export const downloadEstrattoConto = createAsyncThunk(
-  'estrattoConto/downloadEstrattoConto',
+  "estrattoConto/downloadEstrattoConto",
   async (id, { dispatch }) => {
     dispatch(startLoading(id));
-    const response = await axios.get(`${config.basePath}/api/booking/estrattoconto/get?id=${id}`, {
-      headers: {
-        ...getAuthHeader(),
-        'Accept': 'application/octet-stream',
-      },
-      responseType: 'blob',
-      withCredentials: true,
-    });
-    const url = window.URL.createObjectURL(new Blob([response.data]));
-    const contentDisposition = response.headers['content-disposition'];
-    const filename = contentDisposition
-      ? contentDisposition.split('filename=')[1].split(';')[0].trim().replace(/"/g, '')
-      : `estratto_conto_${id}.pdf`;
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', filename);
-    document.body.appendChild(link);
-    link.click();
-    dispatch(stopLoading(id));
+    try {
+      const response = await axios.get(
+        `${config.basePath}/api/booking/estrattoconto/get?id=${id}`,
+        {
+          headers: {
+            ...getAuthHeader(),
+            Accept: "application/octet-stream",
+          },
+          responseType: "blob",
+          withCredentials: true,
+        }
+      );
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const contentDisposition = response.headers["content-disposition"];
+      const filename = contentDisposition
+        ? contentDisposition
+            .split("filename=")[1]
+            .split(";")[0]
+            .trim()
+            .replace(/"/g, "")
+        : `estratto_conto_${id}.pdf`;
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", filename);
+      document.body.appendChild(link);
+      link.click();
+      dispatch(stopLoading(id));
+    } catch (error) {
+      dispatch(stopLoading(id));
+      if (error.response && error.response.status === 401) {
+        handleLogout();
+        window.location.href = "/login"; // Redirect to login
+      }
+      throw error;
+    }
   }
 );
 
 const estrattoContoSlice = createSlice({
-  name: 'estrattoConto',
+  name: "estrattoConto",
   initialState: {
     data: [],
-    status: 'idle',
+    status: "idle",
     error: null,
     page: 0,
     size: 20,
@@ -73,19 +115,21 @@ const estrattoContoSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchEstrattoConto.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
       })
       .addCase(fetchEstrattoConto.fulfilled, (state, action) => {
-        state.status = 'succeeded';
+        state.status = "succeeded";
         state.data = action.payload.data;
         state.totalCount = action.payload.totalCount;
       })
       .addCase(fetchEstrattoConto.rejected, (state, action) => {
-        state.status = 'failed';
+        state.status = "failed";
         state.error = action.error.message;
       })
       .addCase(approveEstrattoConto.fulfilled, (state, action) => {
-        const index = state.data.findIndex(item => item.id === action.payload.id);
+        const index = state.data.findIndex(
+          (item) => item.id === action.payload.id
+        );
         if (index !== -1) {
           state.data[index].approved = true;
         }

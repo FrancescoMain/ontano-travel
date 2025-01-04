@@ -1,10 +1,18 @@
 import i18n from "../../i18n"; // Import i18n to access the current language
-import { getAuthHeader } from "../../utils/auth"; // Import getAuthHeader
+import { getAuthHeader, handleLogout } from "../../utils/auth"; // Import handleLogout
 import { config } from "../../config/config"; // Import config
 import Cookies from "js-cookie"; // Import js-cookie
 
 // Funzione per fare la chiamata POST
-export const reserve = async (nomi, cognomi, dto, payment, nTratte, quote, invoiceDTO = null) => {
+export const reserve = async (
+  nomi,
+  cognomi,
+  dto,
+  payment,
+  nTratte,
+  quote,
+  invoiceDTO = null
+) => {
   const body = {
     passengers: [],
     contactDTO: {
@@ -19,7 +27,7 @@ export const reserve = async (nomi, cognomi, dto, payment, nTratte, quote, invoi
   };
 
   // Aggiungi aff_code se presente nei cookies
-  const affCode = Cookies.get('codice');
+  const affCode = Cookies.get("codice");
   if (affCode) {
     body.aff_code = affCode;
   }
@@ -70,6 +78,10 @@ export const reserve = async (nomi, cognomi, dto, payment, nTratte, quote, invoi
 
     // Controlla se la risposta è ok
     if (!response.ok) {
+      if (response.status === 401) {
+        handleLogout();
+        window.location.href = "/login"; // Redirect to login
+      }
       throw new Error("Network response was not ok");
     }
     if (response.ok) {
