@@ -1,15 +1,3 @@
-import {
-  setAdulti,
-  setAnimali,
-  setBagagli,
-  setBambini,
-  setDataAndata,
-  setDataRitorno,
-  setEtaBambini,
-  setSoloAndata,
-  setTrattaAndata,
-  setTrattaRitorno,
-} from "../features/viaggio/viaggioFormSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { matchSorter } from "match-sorter";
@@ -18,7 +6,7 @@ import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { getRoute } from "../_api/colllegamenti/getRoute";
-import { setFetch, setRoutes } from "../features/routes/routesSlice";
+import { setRoutes } from "../features/routes/routesSlice";
 import {
   removeDate,
   removeDettagli,
@@ -29,6 +17,8 @@ import {
   upsertTratta,
 } from "../features/viaggio/findTratta";
 import { resetSelected } from "../features/viaggio/resultTratta";
+
+const gtag = window.gtag || function () {}; // Add this line
 
 export const useFormViaggioComponent = (disableFetch) => {
   //REFACORING MULTITRATTAù
@@ -214,9 +204,12 @@ export const useFormViaggioComponent = (disableFetch) => {
     const uniqueFromLocations = [
       ...new Set(route.map((route) => route.from + " -> " + route.to)),
     ];
-
+    gtag("event", "search", {
+      search_term: uniqueFromLocations[0],
+    });
     // setFormAndata(uniqueFromLocations[0]);
     // dispatch(setTrattaAndata(route[0]));
+
     dispatch(
       upsertTratta({
         id,
@@ -252,6 +245,10 @@ export const useFormViaggioComponent = (disableFetch) => {
     const uniqueFromLocations = [
       ...new Set(route.map((route) => route.from + " -> " + route.to)),
     ];
+
+    gtag("event", "search", {
+      search_term: uniqueFromLocations[0],
+    });
     // setFormRitorno(uniqueFromLocations[0]);
     // dispatch(setTrattaRitorno(route[0]));
     dispatch(
@@ -263,6 +260,7 @@ export const useFormViaggioComponent = (disableFetch) => {
     );
     dispatch(resetSelected({ id }));
   };
+
   const handleChangeDataA = (e, id) => {
     const date = dayjs(e);
     const today = dayjs();

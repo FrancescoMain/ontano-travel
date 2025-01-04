@@ -75,6 +75,40 @@ export const Checkout = () => {
 
     fetchStore();
   }, []);
+  function gtagPurchase() {
+    const items = prenotazione?.reservationRoutes.map((route) => ({
+      item_name: `${route.from} - ${route.to}`,
+      item_id: `${route.from}_${route.to}`,
+      price: route.priceFinal.price,
+      quantity: route.tariffs.reduce((acc, tariff) => acc + tariff.qty, 0),
+    }));
+
+    window.gtag("event", "purchase", {
+      transaction_id: prenotazione?.code,
+
+      currency: "EUR",
+      value: prenotazione?.priceToPay.price,
+      items: items,
+    });
+  }
+
+  React.useEffect(() => {
+    const items = prenotazione?.reservationRoutes.map((route) => ({
+      item_name: `${route.from} - ${route.to}`,
+      item_id: `${route.from}_${route.to}`,
+      price: route.priceFinal.price,
+      quantity: route.tariffs.reduce((acc, tariff) => acc + tariff.qty, 0),
+    }));
+
+    const label = prenotazione?.reservationRoutes.map(
+      (route) => `${route.from} - ${route.to}`
+    );
+    window.gtag("event", "begin_checkout", {
+      currency: "EUR",
+      value: prenotazione?.priceToPay.price,
+      items: items,
+    });
+  }, [prenotazione]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -111,6 +145,7 @@ export const Checkout = () => {
                 dispatch(resetViaggio());
                 dispatch(resetTourDetails());
                 localStorage.removeItem("linkQuote");
+                gtagPurchase();
                 navigate("/success");
               } else {
                 toast.error("Errore durante il pagamento");
@@ -140,6 +175,7 @@ export const Checkout = () => {
           dispatch(resetViaggio());
           dispatch(resetTourDetails());
           localStorage.removeItem("linkQuote");
+          gtagPurchase();
           navigate("/pay-by-link-success");
         } catch (error) {
           setLoading(false); // Stop spinner
@@ -157,6 +193,7 @@ export const Checkout = () => {
             dispatch(resetViaggio());
             dispatch(resetTourDetails());
             localStorage.removeItem("linkQuote");
+            gtagPurchase();
             navigate("/success");
           } else {
             toast.error("Errore durante il pagamento tramite Estratto Conto");

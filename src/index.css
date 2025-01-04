@@ -67,14 +67,14 @@ select {
   height: 58px !important;
 }
 
-input::placeholder,
+/* input::placeholder,
 .date-picker label,
 .form-check-label,
 .dettagli label {
   color: black !important;
   font-weight: 600 !important;
   opacity: 1 !important;
-}
+} */
 
 /* Mobile specific styles */
 @media (max-width: 768px) {

@@ -2,7 +2,7 @@ import { basePathDev, basePathProd } from "./basePath";
 
 export const config = {
   basePath: basePathProd,
-  // basePath: basePathProd,
+  // basePath: basePathDev,
   authenticate: { route: "/api/authenticate", method: "POST" },
   getRoute: { route: "/api/booking/route", method: "GET" },
   fetchPriceData: { route: "/api/booking/route/search", method: "GET" },

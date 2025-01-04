@@ -14,6 +14,7 @@ import { useNavigate, useLocation } from "react-router-dom"; // Add useLocation
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
+import ReactGA from "react-ga4"; // Add this line
 
 export const useTourForm = () => {
   const { t } = useTranslation();
@@ -88,6 +89,11 @@ export const useTourForm = () => {
 
   const handleTourChange = (event, value) => {
     dispatch(setTour(value));
+    ReactGA.event({
+      category: "search-tour",
+      action: "search-tour",
+      label: value,
+    });
   };
 
   const resetHandle = () => {

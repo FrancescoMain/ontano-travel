@@ -22,6 +22,7 @@ import {
 } from "../../utils/dateUtils";
 
 dayjs.extend(customParseFormat);
+const gtag = window.gtag || function () {}; // Add this line
 
 export const ResultCard = ({ data, selected, hidden, id, index }) => {
   const [loading, setLoading] = useState(false);
@@ -59,6 +60,19 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
     };
     dispatch(upsertSelected(dataToDispatch));
     const element = document.getElementById("result-ritorno");
+
+    gtag("event", "add_to_cart", {
+      currency: "EUR",
+      value: priceData.price,
+      items: [
+        {
+          item_name: `${data.fromPort} - ${data.fromTo}`,
+          item_id: `${data.fromPort}_${data.fromTo}`,
+          price: priceData.price,
+          quantity: 1,
+        },
+      ],
+    });
 
     if (element) {
       setTimeout(() => {
