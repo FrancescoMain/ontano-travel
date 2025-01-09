@@ -1,8 +1,10 @@
 import { basePathDev, basePathProd } from "./basePath";
 
+const basePath =
+  process.env.REACT_APP_ENV === "production" ? basePathProd : basePathDev;
+
 export const config = {
-  // basePath: basePathProd,
-  basePath: basePathDev,
+  basePath: basePath,
   authenticate: { route: "/api/authenticate", method: "POST" },
   getRoute: { route: "/api/booking/route", method: "GET" },
   fetchPriceData: { route: "/api/booking/route/search", method: "GET" },

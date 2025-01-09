@@ -20,7 +20,7 @@ const useSearchReservation = () => {
   };
 
   useEffect(() => {
-    if (status === "failed") {
+    if (status !== "loading" && status !== "idle" && status !== "succeeded") {
       toast.error(t("Prenotazione non trovata"));
       dispatch(stopLoading());
     }
@@ -31,6 +31,7 @@ const useSearchReservation = () => {
       dispatch(stopLoading());
       navigate("/result-guest"); // Redirect to search-guest
     }
+
     // if (status === "idle") {
     //   dispatch(
 

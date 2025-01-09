@@ -34,13 +34,24 @@
     "react-scripts": "5.0.1",
     "react-scroll": "^1.9.0",
     "react-toastify": "^10.0.6",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "path-browserify": "^1.0.1",
+    "os-browserify": "^0.3.0",
+    "crypto-browserify": "^3.12.0"
+  },
+  "devDependencies": {
+    "env-cmd": "^10.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
+    "start:dev": "env-cmd -f .env.development react-scripts start",
+    "start:prod": "env-cmd -f .env.production react-scripts start",
     "build": "react-scripts build",
+    "build:dev": "env-cmd -f .env.development react-scripts build",
+    "build:prod": "env-cmd -f .env.production react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy:prod": "firebase deploy --only hosting:prodquickferries"
   },
   "eslintConfig": {
     "extends": [

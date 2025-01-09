@@ -8,6 +8,11 @@ import { FaShoppingCart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { resetAll } from "../features/viaggio/findTratta";
 
+const basePath =
+  process.env.REACT_APP_ENV === "production"
+    ? "https://booking.quickferries.com"
+    : "https://devbooking.quickferries.com";
+
 export const TabellonePartenze = () => {
   const dispatch = useDispatch();
   const routes = useSelector((state) => state.route.route);
@@ -59,7 +64,7 @@ export const TabellonePartenze = () => {
       departure_data: today,
       adulti: 1,
     }).toString();
-    const url = `https://devbooking.quickferries.com/results?${queryParams}`;
+    const url = `${basePath}/results?${queryParams}`;
     const link = document.createElement("a");
     link.href = url;
     link.target = "_blank";

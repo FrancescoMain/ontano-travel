@@ -43,9 +43,9 @@ export const useTourForm = () => {
     const getTours = async () => {
       try {
         const data = await fetchTours();
-        if (data.length === 0) {
-          toast.info("Nessun tour trovato. No tours found.");
-        }
+        // if (data.length === 0) {
+        //   toast.info("Nessun tour trovato. No tours found.");
+        // }
         dispatch(setTours(data));
       } catch (error) {
         console.error("Error fetching tours:", error);
