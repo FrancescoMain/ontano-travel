@@ -6,7 +6,10 @@ export const DashboardAgenzia = () => {
   const dispatch = useDispatch();
   const { data } = useSelector((state) => state.dettaglioAgenzia); // stato dettagli agenzia
   const uniqueCode = data?.uniqueCode; //codice univoco per l'agenzia
-
+  const basePath =
+    process.env.REACT_APP_ENV === "production"
+      ? `https://lookerstudio.google.com/embed/reporting/e6da68f4-d055-422f-a97f-4229d716af11/page/7LOFE?params={"filtro_xyz": "${uniqueCode}"}`
+      : `https://lookerstudio.google.com/embed/reporting/c7108c0f-746f-4b30-bbf4-69049a55cc99/page/7LOFE?params={"filtro_xyz": "${uniqueCode}"}`;
   React.useEffect(() => {
     dispatch(fetchDettaglioAgenzia());
   }, [dispatch]);
@@ -16,7 +19,7 @@ export const DashboardAgenzia = () => {
       <iframe
         width="100%"
         height="100%"
-        src={`https://lookerstudio.google.com/embed/reporting/c7108c0f-746f-4b30-bbf4-69049a55cc99/page/7LOFE?params={"filtro_xyz": "${uniqueCode}"}`}
+        src={basePath}
         frameborder="0"
         style={{ border: 0 }}
         allowfullscreen
