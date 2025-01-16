@@ -37,6 +37,11 @@ const formatDate = (dateString) => {
   return format(date, "dd-MM-yyyy HH:mm");
 };
 
+function reservationStatusMapping(status) {
+  if (status === "SUBMITTED") return "Sottomesso";
+  if (status === "SUBMITTED_FAILED") return "Sottomissione Fallita";
+  if (status === "RESERVED") return "In attesa di pagamento";
+}
 export const Prenotazioni = () => {
   const { t } = useTranslation(); // Initialize useTranslation
   const [formData, setFormData] = useState({
@@ -240,6 +245,7 @@ export const Prenotazioni = () => {
                 {t("Cognome Contatto")} {getSortIcon("contactSurname")}
               </TableCell>
               <TableCell>{t("Nome Agenzia")}</TableCell>
+              <TableCell>{t("Stato")}</TableCell>
             </HeaderTableRow>
           </TableHead>
           <TableBody>
@@ -278,7 +284,10 @@ export const Prenotazioni = () => {
                 <TableCell>{reservation.contact_mail}</TableCell>
                 <TableCell>{reservation.contact_name}</TableCell>
                 <TableCell>{reservation.contact_surname}</TableCell>
-                <TableCell>{reservation.name_agency}</TableCell>{" "}
+                <TableCell>{reservation.name_agency}</TableCell>
+                <TableCell>
+                  {reservationStatusMapping(reservation.status)}
+                </TableCell>
                 {/* Added line */}
               </TableRow>
             ))}

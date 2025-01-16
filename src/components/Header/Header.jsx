@@ -232,9 +232,10 @@ const AuthenticatedLinks = ({
                     location.pathname === "/pannello" ? "active" : ""
                   }`}
                   onClick={() => {
-                    // window.location.href = "https://dev-bookingferries.com/"; //col
-                    window.location.href =
-                      "https://configuration.quickferries.com/";
+                    window.open(
+                      "https://configuration.quickferries.com/",
+                      "_blank"
+                    );
                     handleOffcanvasClose();
                   }}
                   sx={{ justifyContent: "center" }}
@@ -536,11 +537,10 @@ export const Header = () => {
                         underline="none"
                         variant="plain"
                         onClick={() => {
-                          // window.location.href =
-                          //   "https://dev-bookingferries.com/"; //col
-                          window.location.href =
-                            " https://configuration.quickferries.com/";
-
+                          window.open(
+                            "https://configuration.quickferries.com/",
+                            "_blank"
+                          );
                           handleOffcanvasClose();
                         }}
                       >
