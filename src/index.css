@@ -52,11 +52,7 @@ img {
 select {
   background-color: white !important;
   color: black !important;
-  border: 1px solid black !important;
-}
-
-.selectBorder {
-  border: 1px solid #dee2e6 !important;
+  border: 1px solid black;
 }
 
 .icon,

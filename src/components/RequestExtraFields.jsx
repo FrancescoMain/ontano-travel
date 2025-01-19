@@ -10,6 +10,7 @@ const CustomInput = ({ value, onClick }) => (
     value={value}
     onClick={onClick}
     readOnly
+    required={true}
   />
 );
 
@@ -30,6 +31,7 @@ export const RequestExtraFields = (isTrue) => {
         <div className="nomeCognome row justify-content-center align-items-center g-2 mb-2 flex-column flex-lg-row">
           <div className=" col">
             <DatePicker
+              required={true}
               dateFormat="dd/MM/yyyy"
               selected={startDate}
               onChange={(date) => setStartDate(date)}
@@ -38,7 +40,7 @@ export const RequestExtraFields = (isTrue) => {
           </div>
 
           <div className="col">
-            <select className="form-control text-muted selectBorder">
+            <select required={true} className="form-control text-muted ">
               <option value="">Sesso*</option>
               <option value="M">Maschio</option>
               <option value="F">Femmina</option>
@@ -52,12 +54,12 @@ export const RequestExtraFields = (isTrue) => {
               type="text"
               className="form-control"
               //   id={n + "Cognome"}
-              //   required={!required}
+              required={true}
               placeholder="Luogo di nascita*"
             />
           </div>
           <div className="col">
-            <select className="form-control text-muted selectBorder">
+            <select className="form-control text-muted " required={true}>
               <option value="">Nazionalità*</option>
               <option value="M">Maschio</option>
               <option value="F">Femmina</option>
@@ -66,7 +68,7 @@ export const RequestExtraFields = (isTrue) => {
         </div>
         <div className="nomeCognome row justify-content-center align-items-center g-2 mb-2 flex-column flex-lg-row">
           <div className="col">
-            <select className="form-control text-muted selectBorder">
+            <select className="form-control text-muted " required={true}>
               <option value="">Tipo di documento*</option>
               <option value="M">Maschio</option>
               <option value="F">Femmina</option>
@@ -78,7 +80,7 @@ export const RequestExtraFields = (isTrue) => {
               type="text"
               className="form-control"
               //   id={n + "Cognome"}
-              //   required={!required}
+              required={true}
               placeholder="Numero documento*"
             />
           </div>
