@@ -281,6 +281,7 @@ export const Checkout = () => {
                           {Array.from({ length: tratta.adulti }).map(
                             (_, index) => (
                               <CheckoutPasseggero
+                                extraFields={prenotazione?.requestExtraFields}
                                 onChangeNomi={handleNomiChange}
                                 n={index + 1}
                                 key={`adulto-${trattaIndex}-${index}`}
@@ -294,6 +295,7 @@ export const Checkout = () => {
                           )}
                           {tratta.etaBambini.map((eta, index) => (
                             <CheckoutPasseggero
+                              extraFields={prenotazione?.requestExtraFields}
                               onChangeNomi={handleNomiChange}
                               n={tratta.adulti + index + 1}
                               key={`bambino-${trattaIndex}-${index}`}

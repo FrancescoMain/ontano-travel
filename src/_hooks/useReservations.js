@@ -67,7 +67,6 @@ export const useReservations = () => {
       });
     } else if (prenotazione) {
       const data = prenotazione.reservationRoutes[0].tariffs;
-      console.log(data);
 
       let adulti = 0;
       let bambini = 0;

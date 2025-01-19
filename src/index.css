@@ -24,6 +24,9 @@ img {
   position: sticky;
   top: 0;
 }
+.react-datepicker-wrapper {
+  width: 100%;
+}
 
 .tab.active {
   background-color: #0d6efd !important;
@@ -50,6 +53,10 @@ select {
   background-color: white !important;
   color: black !important;
   border: 1px solid black !important;
+}
+
+.selectBorder {
+  border: 1px solid #dee2e6 !important;
 }
 
 .icon,

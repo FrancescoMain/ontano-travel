@@ -1,5 +1,6 @@
 import { Input } from "@mui/joy";
 import { useTranslation } from "react-i18next";
+import { RequestExtraFields } from "../RequestExtraFields";
 
 export const CheckoutPrimoPasseggero = ({ value, onChange }) => {
   const { t } = useTranslation();
@@ -78,6 +79,7 @@ export const CheckoutPasseggero = ({
   numeroCampo,
   cognomi,
   required,
+  extraFields,
 }) => {
   const handleChange = (e) => {
     const newValue = e.target.value;
@@ -125,6 +127,7 @@ export const CheckoutPasseggero = ({
             }
           />
         </div>
+
         {/* <div class="col col-lg-2">
           <input
             type="text"
@@ -134,6 +137,7 @@ export const CheckoutPasseggero = ({
           />
         </div> */}
       </div>
+      <RequestExtraFields isTrue={extraFields} />
     </>
   );
 };
