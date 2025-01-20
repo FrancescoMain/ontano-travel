@@ -45,6 +45,13 @@ export const Checkout = () => {
   const {
     nomi,
     cognomi,
+    dateDiNascita,
+    luoghiDiNascita,
+    nazionalità,
+    tipiDiDocumento,
+    numeriDiDocumento,
+    disabilità,
+    generi,
     dto,
     payByLinkEmail,
     fattura,
@@ -55,6 +62,13 @@ export const Checkout = () => {
     handlePayByLinkEmailChange,
     handleFatturaChange,
     handleInvoiceDTOChange,
+    handleDataDiNascitaChange,
+    handleLuoghiDiNascita,
+    handleGeneri,
+    handleTipiDiDocumento,
+    handleNumeriDiDocumento,
+    handleDisabilità,
+    handleNazionalità,
   } = useCheckoutForm();
   const [store, setStore] = React.useState();
   const dispatch = useDispatch();
@@ -112,6 +126,10 @@ export const Checkout = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData = new FormData(e.target);
+    const formValues = Object.fromEntries(formData.entries());
+    console.log(formValues);
+    return;
     setLoading(true); // Start spinner
     dispatch(startLoading());
 
@@ -289,6 +307,24 @@ export const Checkout = () => {
                                 numeroCampo={trattaIndex}
                                 nomi={nomi}
                                 cognomi={cognomi}
+                                dateDiNascita={dateDiNascita}
+                                luoghiDiNascita={luoghiDiNascita}
+                                nazionalità={nazionalità}
+                                tipiDiDocumento={tipiDiDocumento}
+                                numeriDiDocumento={numeriDiDocumento}
+                                disabilità={disabilità}
+                                generi={generi}
+                                onChangeNazionalità={handleNazionalità}
+                                onChangeLuoghiDiNascita={handleLuoghiDiNascita}
+                                onChangeGeneri={handleGeneri}
+                                onChangeTipiDiDocumento={handleTipiDiDocumento}
+                                onChangeNumeriDiDocumento={
+                                  handleNumeriDiDocumento
+                                }
+                                onChangeDisabilità={handleDisabilità}
+                                onChangeDateDiNascita={
+                                  handleDataDiNascitaChange
+                                }
                                 onChangeCognomi={handleCognomiChange}
                               />
                             )
@@ -302,9 +338,25 @@ export const Checkout = () => {
                               eta={eta}
                               nomi={nomi}
                               cognomi={cognomi}
+                              luoghiDiNascita={luoghiDiNascita}
+                              nazionalità={nazionalità}
+                              tipiDiDocumento={tipiDiDocumento}
+                              numeriDiDocumento={numeriDiDocumento}
+                              disabilità={disabilità}
+                              generi={generi}
                               onChangeCognomi={handleCognomiChange}
                               lenght={tratta.adulti}
                               numeroCampo={trattaIndex}
+                              dateDiNascita={dateDiNascita}
+                              onChangeDateDiNascita={handleDataDiNascitaChange}
+                              onChangeLuoghiDiNascita={handleLuoghiDiNascita}
+                              onChangeNazionalità={handleNazionalità}
+                              onChangeGeneri={handleGeneri}
+                              onChangeTipiDiDocumento={handleTipiDiDocumento}
+                              onChangeNumeriDiDocumento={
+                                handleNumeriDiDocumento
+                              }
+                              onChangeDisabilità={handleDisabilità}
                             />
                           ))}
                         </AccordionDetails>

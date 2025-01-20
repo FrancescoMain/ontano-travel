@@ -80,6 +80,20 @@ export const CheckoutPasseggero = ({
   cognomi,
   required,
   extraFields,
+  dateDiNascita,
+  luoghiDiNascita,
+  nazionalità,
+  tipiDiDocumento,
+  numeriDiDocumento,
+  generi,
+  disabilità,
+  onChangeLuoghiDiNascita,
+  onChangeGeneri,
+  onChangeTipiDiDocumento,
+  onChangeNumeriDiDocumento,
+  onChangeDisabilità,
+  onChangeDateDiNascita,
+  onChangeNazionalità,
 }) => {
   const handleChange = (e) => {
     const newValue = e.target.value;
@@ -137,7 +151,25 @@ export const CheckoutPasseggero = ({
           />
         </div> */}
       </div>
-      <RequestExtraFields isTrue={extraFields} />
+      <RequestExtraFields
+        isTrue={extraFields}
+        dateDiNascita={dateDiNascita}
+        onChangeDateDiNascita={onChangeDateDiNascita}
+        luoghiDiNascita={luoghiDiNascita}
+        onChangeLuoghiDiNascita={onChangeLuoghiDiNascita}
+        nazionalità={nazionalità}
+        tipiDiDocumento={tipiDiDocumento}
+        numeriDiDocumento={numeriDiDocumento}
+        disabilità={disabilità}
+        generi={generi}
+        onChangeGeneri={onChangeGeneri}
+        onChangeTipiDiDocumento={onChangeTipiDiDocumento}
+        onChangeNumeriDiDocumento={onChangeNumeriDiDocumento}
+        onChangeDisabilità={onChangeDisabilità}
+        onChangeNazionalità={onChangeNazionalità}
+        numeroCampo={numeroCampo}
+        n={n}
+      />
     </>
   );
 };
