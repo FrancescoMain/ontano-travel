@@ -72,7 +72,15 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
-    <!-- <script src="https://sandbox.gestpay.net/pagam/javascript/axerve.js"></script>  COL -->
-    <script src="https://ecomm.sella.it/pagam/javascript/axerve.js"></script>
+    <script>
+      const env = process.env.REACT_APP_ENV;
+      const script = document.createElement("script");
+      if (env === "development") {
+        script.src = "https://sandbox.gestpay.net/pagam/javascript/axerve.js";
+      } else {
+        script.src = "https://ecomm.sella.it/pagam/javascript/axerve.js";
+      }
+      document.body.appendChild(script);
+    </script>
   </body>
 </html>

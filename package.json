@@ -53,7 +53,8 @@
     "build:prod": "env-cmd -f .env.production react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy:prod": "firebase deploy --only hosting:prodquickferries"
+    "deploy:prod": "firebase deploy --only hosting:prodquickferries",
+    "deploy:dev": "firebase deploy --only hosting:quickferries-a95b3"
   },
   "eslintConfig": {
     "extends": [

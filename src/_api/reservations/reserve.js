@@ -39,21 +39,6 @@ export const reserve = async (
     body.aff_code = affCode;
   }
 
-  // Funzione per calcolare l'età
-  const calculateAge = (birthDate) => {
-    const today = new Date();
-    const birthDateObj = new Date(birthDate);
-    let age = today.getFullYear() - birthDateObj.getFullYear();
-    const monthDifference = today.getMonth() - birthDateObj.getMonth();
-    if (
-      monthDifference < 0 ||
-      (monthDifference === 0 && today.getDate() < birthDateObj.getDate())
-    ) {
-      age--;
-    }
-    return age;
-  };
-
   // Itera sulle tratte e crea i dettagli dei passeggeri
   for (let i = 0; i < nTratte; i++) {
     const tratta = {
@@ -64,18 +49,10 @@ export const reserve = async (
     // Itera sui passeggeri, saltando il primo campo (indice 0)
     for (let j = 1; j < nomi[i].length; j++) {
       if (nomi[i][j] && cognomi[i] && cognomi[i][j]) {
-        const birthDate =
-          dateDiNascita && dateDiNascita[i] && dateDiNascita[i][j]
-            ? dateDiNascita[i][j].value
-            : null;
-        const age = birthDate
-          ? calculateAge(birthDate)
-          : parseInt(cognomi[i][j].eta, 10) || 0;
-
         tratta.details.push({
           name: nomi[i][j].value || "",
           surname: cognomi[i][j].value || "",
-          age: age, // Usa l'età calcolata o quella presente nel cognome
+          age: parseInt(cognomi[i][j].eta, 10) || 0, // Assicura che age sia sempre un numero
           sex: generi && generi[i] && generi[i][j] ? generi[i][j].value : "M", // Usa il genere se disponibile
           cure:
             disabilità && disabilità[i] && disabilità[i][j]
@@ -89,7 +66,10 @@ export const reserve = async (
             luoghiDiNascita && luoghiDiNascita[i] && luoghiDiNascita[i][j]
               ? luoghiDiNascita[i][j].value
               : "", // Usa luogo di nascita se disponibile
-          birthDate: birthDate || "", // Usa data di nascita se disponibile
+          birthDate:
+            dateDiNascita && dateDiNascita[i] && dateDiNascita[i][j]
+              ? dateDiNascita[i][j].value
+              : "", // Usa data di nascita se disponibile
           documentReference:
             numeriDiDocumento && numeriDiDocumento[i] && numeriDiDocumento[i][j]
               ? numeriDiDocumento[i][j].value

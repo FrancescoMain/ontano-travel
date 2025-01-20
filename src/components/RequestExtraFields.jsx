@@ -24,8 +24,10 @@ export const RequestExtraFields = ({
   generi,
   onChangeGeneri,
   n,
+  eta,
 }) => {
   const [startDate, setStartDate] = useState();
+  const [isDateValid, setIsDateValid] = useState(true);
   const dispatch = useDispatch();
   const nationalities = useSelector(
     (state) => state.nationalities.nationalities
@@ -42,9 +44,34 @@ export const RequestExtraFields = ({
     }
   }, [isTrue, dispatch]);
 
+  const calculateDateRange = (age) => {
+    const today = new Date();
+    const minDate = new Date(today.setFullYear(today.getFullYear() - age - 1));
+    const maxDate = new Date(today.setFullYear(today.getFullYear() + 1));
+    return {
+      min: minDate.toISOString().split("T")[0],
+      max: maxDate.toISOString().split("T")[0],
+    };
+  };
+
+  const dateRange =
+    eta !== null && eta !== undefined
+      ? calculateDateRange(eta)
+      : { min: calculateDateRange(100).min, max: calculateDateRange(13).max };
+
   const handleChangeDDN = (e) => {
     const newValue = e.target.value;
     onChangeDateDiNascita(numeroCampo, n, newValue);
+    if (eta !== null && eta !== undefined) {
+      const birthDate = new Date(newValue);
+      const today = new Date();
+      const ageDiff = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      const dayDiff = today.getDate() - birthDate.getDate();
+      const calculatedAge =
+        ageDiff - (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0) ? 1 : 0);
+      setIsDateValid(calculatedAge === eta);
+    }
   };
 
   const handleChangeLuogoDiNascita = (e) => {
@@ -76,15 +103,22 @@ export const RequestExtraFields = ({
     onChangeGeneri(numeroCampo, n, newValue);
   };
 
+  const handleSubmit = (e) => {
+    if (!isDateValid) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  };
+
   if (isTrue) {
     return (
-      <div lang="it">
+      <form lang="it" onSubmit={handleSubmit} noValidate>
         <div className="nomeCognome row justify-content-center align-items-center g-2 mb-2 flex-column flex-lg-row">
           <div className=" col">
             <input
               id={n + "dataDiNascita"}
               type="date"
-              className="form-control"
+              className={`form-control`}
               required
               onChange={(e) => handleChangeDDN(e)}
               value={
@@ -93,6 +127,9 @@ export const RequestExtraFields = ({
                   ? dateDiNascita[numeroCampo][n].value
                   : ""
               }
+              min={dateRange.min}
+              max={dateRange.max}
+              title={`La data deve essere compresa tra ${dateRange.min} e ${dateRange.max}`}
             />
           </div>
 
@@ -214,7 +251,7 @@ export const RequestExtraFields = ({
             />
           </div>
         </div>
-      </div>
+      </form>
     );
   }
 

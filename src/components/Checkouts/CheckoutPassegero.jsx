@@ -128,7 +128,7 @@ export const CheckoutPasseggero = ({
         </div>
         <div className="col">
           <input
-            onChange={(e) => handleChangeCognome(e, eta || 13)}
+            onChange={(e) => handleChangeCognome(e, eta == null ? 13 : eta)}
             type="text"
             className="form-control"
             id={n + "Cognome"}
@@ -169,6 +169,7 @@ export const CheckoutPasseggero = ({
         onChangeNazionalità={onChangeNazionalità}
         numeroCampo={numeroCampo}
         n={n}
+        eta={eta}
       />
     </>
   );
