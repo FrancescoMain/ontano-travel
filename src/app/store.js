@@ -17,6 +17,8 @@ import estrattoContoReducer from "../features/estrattoConto/estrattoContoSlice";
 import rendicontazioneReducer from "../features/rendicontazione/rendicontazioneSlice"; // Import rendicontazioneReducer
 import routeReducer from "../features/routes/routeAsyncSlice"; // Import routeReducer
 import tabellonePartenzeReducer from "../features/tabellonePartenze/tabellonePartenzeSlice"; // Import tabellonePartenzeReducer
+import nationalitiesReducer from "../features/nationalities/nationalitiesSlice"; // Import nationalitiesReducer
+import documentTypesReducer from "../features/documentTypes/documentTypesSlice"; // Import documentTypesReducer
 
 export const store = configureStore({
   reducer: {
@@ -38,5 +40,7 @@ export const store = configureStore({
     rendicontazione: rendicontazioneReducer, // Add rendicontazione reducer
     route: routeReducer, // Add route reducer
     tabellonePartenze: tabellonePartenzeReducer, // Add tabellonePartenze reducer
+    nationalities: nationalitiesReducer, // Add nationalities reducer
+    documentTypes: documentTypesReducer, // Add documentTypes reducer
   },
 });

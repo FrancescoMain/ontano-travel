@@ -84,6 +84,6 @@ select {
   select {
     background-color: white !important;
     color: black !important;
-    border: 1px solid black !important;
+    border: 1px solid black;
   }
 }
