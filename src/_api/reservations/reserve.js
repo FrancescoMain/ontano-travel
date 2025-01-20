@@ -11,7 +11,14 @@ export const reserve = async (
   payment,
   nTratte,
   quote,
-  invoiceDTO = null
+  invoiceDTO = null,
+  generi,
+  numeriDiDocumento,
+  tipiDiDocumento,
+  nazionalità,
+  luoghiDiNascita,
+  dateDiNascita,
+  disabilità
 ) => {
   const body = {
     passengers: [],
@@ -46,7 +53,31 @@ export const reserve = async (
           name: nomi[i][j].value || "",
           surname: cognomi[i][j].value || "",
           age: parseInt(cognomi[i][j].eta, 10) || 0, // Assicura che age sia sempre un numero
-          sex: "M", // Puoi modificare questo valore se necessario
+          sex: generi && generi[i] && generi[i][j] ? generi[i][j].value : "M", // Usa il genere se disponibile
+          cure:
+            disabilità && disabilità[i] && disabilità[i][j]
+              ? disabilità[i][j].value
+              : false, // Usa disabilità se disponibile
+          nation:
+            nazionalità && nazionalità[i] && nazionalità[i][j]
+              ? nazionalità[i][j].value
+              : "", // Usa nazionalità se disponibile
+          birthPlace:
+            luoghiDiNascita && luoghiDiNascita[i] && luoghiDiNascita[i][j]
+              ? luoghiDiNascita[i][j].value
+              : "", // Usa luogo di nascita se disponibile
+          birthDate:
+            dateDiNascita && dateDiNascita[i] && dateDiNascita[i][j]
+              ? dateDiNascita[i][j].value
+              : "", // Usa data di nascita se disponibile
+          documentReference:
+            numeriDiDocumento && numeriDiDocumento[i] && numeriDiDocumento[i][j]
+              ? numeriDiDocumento[i][j].value
+              : "", // Usa numero di documento se disponibile
+          documentTypeCode:
+            tipiDiDocumento && tipiDiDocumento[i] && tipiDiDocumento[i][j]
+              ? tipiDiDocumento[i][j].value
+              : "", // Usa tipo di documento se disponibile
         });
       }
     }

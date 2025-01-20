@@ -126,13 +126,10 @@ export const Checkout = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const formValues = Object.fromEntries(formData.entries());
-    console.log(formValues);
-    return;
     setLoading(true); // Start spinner
     dispatch(startLoading());
-
+    const extraFields = prenotazione?.requestExtraFields;
+    console.log(numeriDiDocumento);
     const resultReserve = await reserve(
       nomi,
       cognomi,
@@ -140,7 +137,14 @@ export const Checkout = () => {
       paymentMethodCheck,
       prenotazione.reservationRoutes.length,
       quote,
-      fattura ? invoiceDTO : null // Pass invoiceDTO if fattura is checked
+      fattura ? invoiceDTO : null, // Pass invoiceDTO if fattura is checked
+      extraFields ? generi : null,
+      extraFields ? numeriDiDocumento : null,
+      extraFields ? tipiDiDocumento : null,
+      extraFields ? nazionalità : null,
+      extraFields ? luoghiDiNascita : null,
+      extraFields ? dateDiNascita : null,
+      extraFields ? disabilità : null
     );
     if (resultReserve) {
       if (paymentMethodCheck === "CREDIT_CARD") {
