@@ -15,7 +15,7 @@ export const DettagliViaggioTour = ({ id }) => {
     const newDettagli = { ...dettagli[id], [field]: value };
     dispatch(setDettagli({ id, dettagli: newDettagli }));
   };
-
+  console.log(dettagli[id]?.etaBambini?.[0]);
   return (
     <>
       <div className="row flex-column flex-lg-row">
@@ -122,13 +122,17 @@ export const DettagliViaggioTour = ({ id }) => {
               newChildrenAge[index] = e.target.value;
               handleChange("etaBambini", newChildrenAge);
             }}
-            value={dettagli[id]?.etaBambini?.[index] || ""}
+            value={
+              dettagli[id]?.etaBambini?.[index] === 0
+                ? "0"
+                : dettagli[id]?.etaBambini?.[index] || ""
+            }
             type="number"
             color="neutral"
             placeholder={`${t("Età bambino")} ${index + 1}`}
             variant="outlined"
             className={`input-eta ${
-              !dettagli[id]?.etaBambini?.[index] ? "error" : ""
+              dettagli[id]?.etaBambini?.[index] === undefined ? "error" : ""
             }`}
           />
         </div>

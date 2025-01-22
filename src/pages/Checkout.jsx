@@ -32,6 +32,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/material/styles";
 import { Spinner } from "../components/Spinner/Spinner"; // Import Spinner component
+import { IoMdArrowBack } from "react-icons/io"; // Import the back arrow icon
 
 const TransparentAccordion = styled(Accordion)({
   backgroundColor: "transparent",
@@ -233,6 +234,18 @@ export const Checkout = () => {
 
   return (
     <div className="container">
+      <button
+        className="btn btn-link d-none d-md-block"
+        onClick={() => navigate(-1)}
+        style={{
+          position: "fixed",
+          top: "70px",
+          left: "20px",
+          zIndex: 1000,
+        }}
+      >
+        <IoMdArrowBack size={48} />
+      </button>
       {loading && <Spinner active={loading} />} {/* Render Spinner */}
       <form
         className="row d-flex justify-content-center needs-validation"

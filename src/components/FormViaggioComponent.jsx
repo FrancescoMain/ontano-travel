@@ -457,14 +457,18 @@ export const DettagliViaggio = ({ id, selected, resetHandle }) => {
                 dispatch(upsertDettagli({ id: 1, etaBambini: newChildrenAge }));
               }
             }}
-            value={dettagli[id]?.etaBambini[index] || ""}
+            value={
+              dettagli[id]?.etaBambini?.[index] === 0
+                ? "0"
+                : dettagli[id]?.etaBambini?.[index] || ""
+            }
             type="number"
             key={index}
             color="neutral"
             placeholder={`${etaBambinoString} ${index + 1}`}
             variant="outlined"
             className={`input-eta ${
-              !dettagli[id].etaBambini[index] ? "error" : ""
+              dettagli[id]?.etaBambini?.[index] === undefined ? "error" : ""
             }`}
           />
         </div>
