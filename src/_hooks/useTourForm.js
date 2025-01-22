@@ -167,7 +167,6 @@ export const useTourForm = () => {
       data_departure: formattedDate, // Use encoded date here
       animals: animali,
       passengersAge: passengers[0] ? passengers : [{ age: 18 }],
-      etaBambini: dettagli[0]?.etaBambini || [], // Add this line
     };
 
     try {
