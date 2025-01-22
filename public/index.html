@@ -62,20 +62,26 @@
         storage: { useSiteId: true },
       };
     </script>
-    <script
-      type="text/javascript"
-      src="https://cs.iubenda.com/autoblocking/3903950.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="//cdn.iubenda.com/cs/gpp/stub.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="//cdn.iubenda.com/cs/iubenda_cs.js"
-      charset="UTF-8"
-      async
-    ></script>
+    <script type="text/javascript">
+      if (!window.location.pathname.includes("tabellone-partenze")) {
+        var iubendaScript1 = document.createElement("script");
+        iubendaScript1.type = "text/javascript";
+        iubendaScript1.src = "https://cs.iubenda.com/autoblocking/3903950.js";
+        document.head.appendChild(iubendaScript1);
+
+        var iubendaScript2 = document.createElement("script");
+        iubendaScript2.type = "text/javascript";
+        iubendaScript2.src = "//cdn.iubenda.com/cs/gpp/stub.js";
+        document.head.appendChild(iubendaScript2);
+
+        var iubendaScript3 = document.createElement("script");
+        iubendaScript3.type = "text/javascript";
+        iubendaScript3.src = "//cdn.iubenda.com/cs/iubenda_cs.js";
+        iubendaScript3.charset = "UTF-8";
+        iubendaScript3.async = true;
+        document.head.appendChild(iubendaScript3);
+      }
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

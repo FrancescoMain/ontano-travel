@@ -4,6 +4,10 @@ import { BsTelephoneFill } from "react-icons/bs";
 import { IoLogoWhatsapp } from "react-icons/io";
 
 export const Footer = () => {
+  if (window.location.pathname.includes("tabellone-partenze")) {
+    return null;
+  }
+
   return (
     <footer>
       <div
