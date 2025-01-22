@@ -10,7 +10,7 @@ import {
   upsertResult,
   resetSelectedAll,
 } from "../features/viaggio/resultTratta";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   setNTratte,
   upsertDate,
@@ -21,12 +21,15 @@ import i18n from "../i18n"; // Import i18n to access the current language
 import { setRoutes } from "../features/routes/routesSlice";
 import { getRoute } from "../_api/colllegamenti/getRoute";
 import { config } from "../config/config";
+import { toast } from "react-toastify";
 
 export const useResult = () => {
   const dispatch = useDispatch();
   const { tratte, date, dettagli, multitratta } = useSelector(
     (state) => state.tratte
   );
+
+  const navigation = useNavigate();
   const { routes } = useSelector((state) => state.routes);
   const { results, selected } = useSelector((state) => state.resultsTratta);
   const { loadingId, loadingIds } = useSelector((state) => state.spinner);
@@ -65,11 +68,20 @@ export const useResult = () => {
           }&departure_data=${encodeURIComponent(formattedDate)}`,
           { method: config.fetchPriceData.method }
         );
+        if (response.status === 500) {
+          throw new Error("Server error");
+        }
         const data = await response.json();
         dispatch(upsertResult({ id, data: data.timetableGoing }));
       } catch (error) {
         console.error(error);
         dispatch(stopLoading(null));
+        navigation("/"); // Redirect to the home page
+        toast.error(
+          error.message === "Server error"
+            ? "Errore del server durante il recupero dei dati"
+            : "Errore durante il recupero dei dati"
+        );
       } finally {
         dispatch(stopLoading(id));
       }

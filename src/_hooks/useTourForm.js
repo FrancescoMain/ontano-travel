@@ -7,7 +7,8 @@ import {
   setTour,
   setTours,
   resetTour,
-  filterToursByPort, // Add this line
+  filterToursByPort,
+  setDettagli, // Add this line
 } from "../features/tour/tourSlice";
 import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
 import { useNavigate, useLocation } from "react-router-dom"; // Add useLocation
@@ -22,9 +23,12 @@ export const useTourForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation(); // Add useLocation
-  const { port, date, tour, tours, filteredTours, dettagli } = useSelector(
+  const { port, date, tour, tours, filteredTours } = useSelector(
     (state) => state.tour
   );
+  const dettagli = useSelector((state) => state.tour.dettagli);
+  console.log(dettagli);
+  const [loading, setLoading] = useState();
 
   useEffect(() => {
     const getPorts = async () => {
@@ -55,10 +59,22 @@ export const useTourForm = () => {
     getTours();
   }, [dispatch]);
 
+  // http://localhost:3000/?tour_id=22201&departure_data=2025-01-30&adulti=2&bambini=2&etaBambini=[1,5]&animali=1&toCheckout=true
+
+  const handleChange = (newDettagli) => {
+    const id = 0;
+    dispatch(setDettagli({ id, dettagli: newDettagli }));
+    console.log(dettagli);
+  };
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const tourId = params.get("tour_id");
     const departureDate = params.get("departure_data");
+    const adulti = params.get("adulti");
+    const bambini = params.get("bambini");
+    const etaBambini = JSON.parse(params.get("etaBambini"));
+    const animali = params.get("animali");
 
     if (tourId || departureDate) {
       const selectedTour = tours.find((t) => t.id === parseInt(tourId));
@@ -70,7 +86,46 @@ export const useTourForm = () => {
         }
       }
     }
+    let newDettagli;
+    if (adulti) {
+      newDettagli = { ...dettagli[0], adulti: parseInt(adulti) };
+    }
+    if (bambini) {
+      newDettagli = { ...newDettagli, bambini: parseInt(bambini) };
+      if (etaBambini) {
+        newDettagli = { ...newDettagli, etaBambini: etaBambini };
+      }
+    }
+    if (animali) {
+      newDettagli = { ...newDettagli, animali: parseInt(animali) };
+    }
+
+    handleChange(newDettagli);
   }, [location.search, tours, dispatch]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+
+    const toCheckout = params.get("toCheckout");
+
+    if (toCheckout === "true") {
+      setLoading(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+
+    const toCheckout = params.get("toCheckout");
+
+    if (toCheckout === "true" && port && date) {
+      setLoading(true);
+      handleSubmit();
+      setTimeout(() => {
+        setLoading(false);
+      }, 2000);
+    }
+  }, [port, date, tour, location.search]);
 
   const handlePortChange = (event, value) => {
     const selectedPort = ports.find((port) => port.name === value);
@@ -102,9 +157,8 @@ export const useTourForm = () => {
 
   const handleSubmit = async () => {
     dispatch(startLoading());
-    const selectedTour = tours.find((t) => t.name === tour).id;
+    const selectedTour = tours.find((t) => t.name === tour)?.id;
     const animali = dettagli[0]?.animali || 0;
-    const bagagli = dettagli[0]?.bagagli || 0;
     const passengers = [
       ...Array(dettagli[0]?.adulti || 0).fill({ age: 18 }),
       ...(dettagli[0]?.etaBambini || []).map((eta) => ({ age: eta })),
@@ -115,7 +169,6 @@ export const useTourForm = () => {
       tour_id: selectedTour,
       data_departure: formattedDate, // Use encoded date here
       animals: animali,
-      luggages: bagagli,
       passengersAge: passengers,
       etaBambini: dettagli[0]?.etaBambini || [], // Add this line
     };
@@ -153,5 +206,6 @@ export const useTourForm = () => {
     handleTourChange,
     resetHandle,
     handleSubmit,
+    loading,
   };
 };

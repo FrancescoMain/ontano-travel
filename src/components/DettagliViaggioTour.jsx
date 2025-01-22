@@ -97,35 +97,6 @@ export const DettagliViaggioTour = ({ id }) => {
             ))}
           </select>
         </div>
-        <div className="col col-lg-3 d-flex flex-column">
-          <label htmlFor="bagagli" className="d-flex align-items-center">
-            {t("Bagagli")}
-            <MuiTooltip title="Informazioni sui bagagli" enterTouchDelay={0}>
-              <span
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginLeft: "5px",
-                }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <CiCircleInfo />
-              </span>
-            </MuiTooltip>
-          </label>
-          <select
-            value={dettagli[id]?.bagagli || 0}
-            onChange={(e) => handleChange("bagagli", parseInt(e.target.value))}
-            id="bagagli"
-            className="select-detail"
-          >
-            {Array.from({ length: 10 }, (_, i) => (
-              <option key={i} value={i}>
-                {i}
-              </option>
-            ))}
-          </select>
-        </div>
       </div>
       {dettagli[id]?.bambini > 0 && (
         <Typography

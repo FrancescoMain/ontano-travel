@@ -10,6 +10,7 @@ import { DettagliViaggioTour } from "./DettagliViaggioTour";
 import { postTourQuote } from "../_api/tourApi";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Spinner } from "./Spinner/Spinner";
 
 export const TourComponent = () => {
   const { t } = useTranslation();
@@ -25,6 +26,7 @@ export const TourComponent = () => {
     handleTourChange,
     resetHandle,
     handleSubmit,
+    loading,
     filteredTours,
   } = useTourForm();
 
@@ -36,6 +38,7 @@ export const TourComponent = () => {
 
   return (
     <div>
+      <Spinner active={loading} />
       <ToastContainer
         position="top-center"
         autoClose={5000}

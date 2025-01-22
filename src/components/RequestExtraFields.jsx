@@ -5,6 +5,7 @@ import { FaWheelchair } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchNationalities } from "../features/nationalities/nationalitiesSlice";
 import { fetchDocumentTypes } from "../features/documentTypes/documentTypesSlice";
+import "./RequestExtraFields.css"; // Import the CSS file
 
 export const RequestExtraFields = ({
   isTrue,
@@ -117,7 +118,6 @@ export const RequestExtraFields = ({
           <div className=" col">
             <input
               id={n + "dataDiNascita"}
-              type="date"
               className={`form-control`}
               required
               onChange={(e) => handleChangeDDN(e)}
@@ -130,6 +130,11 @@ export const RequestExtraFields = ({
               min={dateRange.min}
               max={dateRange.max}
               title={`La data deve essere compresa tra ${dateRange.min} e ${dateRange.max}`}
+              placeholder="Data di nascita*"
+              type="text"
+              onfocus="(this.type='date')"
+              onClick={(e) => (e.target.type = "date")}
+              onblur="(this.type='text')"
             />
           </div>
 

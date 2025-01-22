@@ -106,7 +106,7 @@ export const ResultComponent = () => {
           </div>
         ) : (
           <div>
-            {!results[0]?.data[0] && <div>{t("Nessun risultato")}</div>}
+            {!results[0]?.data[0] == null && <div>{t("Nessun risultato")}</div>}
             {results[0]?.data?.map((result, index) => (
               <ResultCard
                 key={result.id}

@@ -1,0 +1,19 @@
+.placeholder-visible::-webkit-input-placeholder {
+  opacity: 1 !important;
+}
+
+.placeholder-visible::-moz-placeholder {
+  opacity: 1 !important;
+}
+
+.placeholder-visible:-ms-input-placeholder {
+  opacity: 1 !important;
+}
+
+.placeholder-visible::-ms-input-placeholder {
+  opacity: 1 !important;
+}
+
+.placeholder-visible::placeholder {
+  opacity: 1 !important;
+}
