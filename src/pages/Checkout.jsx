@@ -235,7 +235,7 @@ export const Checkout = () => {
   return (
     <div className="container">
       <button
-        className="btn btn-link d-none d-md-block"
+        className="btn btn-link d-none d-lg-block"
         onClick={() => navigate(-1)}
         style={{
           position: "fixed",

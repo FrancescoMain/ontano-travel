@@ -160,12 +160,13 @@ export const useTourForm = () => {
       ...Array(dettagli[0]?.adulti || 0).fill({ age: 18 }),
       ...(dettagli[0]?.etaBambini || []).map((eta) => ({ age: eta })),
     ];
+    console.log(passengers);
     const formattedDate = encodeURIComponent(dayjs(date).format("YYYY-MM-DD")); // Use encodeURIComponent
     const logObject = {
       tour_id: selectedTour,
       data_departure: formattedDate, // Use encoded date here
       animals: animali,
-      passengersAge: passengers,
+      passengersAge: passengers[0] ? passengers : [{ age: 18 }],
       etaBambini: dettagli[0]?.etaBambini || [], // Add this line
     };
 
