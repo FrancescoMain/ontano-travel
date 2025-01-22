@@ -39,7 +39,6 @@ export const RestultTour = () => {
         if (error.response && error.response.status === 500) {
           toast.error("Server error, please try again later.");
         } else {
-          console.log(error);
           toast.error("Abbiamo riscontrato un errore, riprova più tardi.");
         }
       }

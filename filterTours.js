@@ -54,4 +54,3 @@ const tours = [
 
 const selectedPort = "BEV";
 const filteredTours = filterToursByPort(tours, selectedPort);
-console.log(filteredTours);

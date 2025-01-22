@@ -41,7 +41,6 @@ export const useFormViaggioComponent = (disableFetch) => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const tourId = params.get("tour_id");
-    console.log(tourId);
     if (tourId) {
       setTab("Tour");
     }

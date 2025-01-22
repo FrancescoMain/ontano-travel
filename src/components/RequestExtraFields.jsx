@@ -37,7 +37,6 @@ export const RequestExtraFields = ({
     (state) => state.documentTypes.documentTypes
   );
 
-  console.log(disabilità);
   useEffect(() => {
     if (isTrue) {
       dispatch(fetchNationalities());

@@ -129,7 +129,6 @@ export const Checkout = () => {
     setLoading(true); // Start spinner
     dispatch(startLoading());
     const extraFields = prenotazione?.requestExtraFields;
-    console.log(numeriDiDocumento);
     const resultReserve = await reserve(
       nomi,
       cognomi,

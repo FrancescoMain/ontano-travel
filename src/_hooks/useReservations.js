@@ -23,7 +23,7 @@ export const useReservations = () => {
   const tourQuote = localStorage.getItem("tourQuote");
   const linkQuote = localStorage.getItem("linkQuote");
   const [isTour, setIsTour] = useState(false);
-
+  console.log(passeggeri);
   useEffect(() => {
     if (!tourQuote && !linkQuote) {
       dispatch(stopLoading());
@@ -33,7 +33,6 @@ export const useReservations = () => {
     } else if (tourQuote) {
       setIsTour(true);
       const parsedData = JSON.parse(tourQuote);
-      console.log("parsedData", parsedData);
       setQuote(parsedData.reservationCode);
       setIsQuoteFetched(true);
     } else if (linkQuote) {
@@ -48,7 +47,6 @@ export const useReservations = () => {
 
     if (linkQuote) {
       const parsedData = JSON.parse(linkQuote);
-      console.log(parsedData);
       const tratte = parsedData.tratte;
       tratte.forEach((tratta) => {
         const { id, adulti, bambini, etaBambini } = tratta;
@@ -76,9 +74,9 @@ export const useReservations = () => {
         const { qty, category_code } = item;
 
         if (category_code === "ADU") {
-          adulti = adulti + 1;
+          adulti = adulti + qty;
         } else if (category_code === "CHD" || category_code === "INF") {
-          bambini = bambini + 1;
+          bambini = bambini + qty;
         }
       });
 
@@ -92,7 +90,6 @@ export const useReservations = () => {
 
       // Aggiungi l'oggetto all'array dei passeggeri
       passeggeri.push(prenotazioneInfo);
-      console.log(prenotazioneInfo);
     }
 
     // Imposta l'array dei passeggeri nello stato
@@ -101,7 +98,6 @@ export const useReservations = () => {
 
   useEffect(() => {
     const fetchReservation = async () => {
-      console.log(quote);
       if (quote) {
         const reservation = await getReservation(quote);
         setPrenotazione(reservation);

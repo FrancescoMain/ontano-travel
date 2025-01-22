@@ -27,7 +27,6 @@ export const useTourForm = () => {
     (state) => state.tour
   );
   const dettagli = useSelector((state) => state.tour.dettagli);
-  console.log(dettagli);
   const [loading, setLoading] = useState();
 
   useEffect(() => {
@@ -64,7 +63,6 @@ export const useTourForm = () => {
   const handleChange = (newDettagli) => {
     const id = 0;
     dispatch(setDettagli({ id, dettagli: newDettagli }));
-    console.log(dettagli);
   };
 
   useEffect(() => {
@@ -138,7 +136,6 @@ export const useTourForm = () => {
   };
 
   const handleDateChange = (value) => {
-    console.log("value", value);
     dispatch(setDate(value));
   };
 
@@ -164,7 +161,6 @@ export const useTourForm = () => {
       ...(dettagli[0]?.etaBambini || []).map((eta) => ({ age: eta })),
     ];
     const formattedDate = encodeURIComponent(dayjs(date).format("YYYY-MM-DD")); // Use encodeURIComponent
-    console.log(formattedDate); // Change format here
     const logObject = {
       tour_id: selectedTour,
       data_departure: formattedDate, // Use encoded date here
