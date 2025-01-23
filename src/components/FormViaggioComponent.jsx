@@ -2,18 +2,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
-import {
-  Button,
-  Card,
-  Input,
-  Tab,
-  TabList,
-  Tabs,
-  Typography,
-  Tooltip,
-} from "@mui/joy";
-import React, { useState } from "react";
-import { setEtaBambini } from "../features/viaggio/viaggioFormSlice";
+import { Button, Card, Input, Typography } from "@mui/joy";
+import React from "react";
 import Autocomplete from "@mui/joy/Autocomplete";
 import dayjs from "dayjs";
 import "dayjs/locale/it";
@@ -26,10 +16,7 @@ import {
   setNTratte,
   upsertDettagli,
 } from "../features/viaggio/findTratta";
-import {
-  removeSelected,
-  resetSelected,
-} from "../features/viaggio/resultTratta";
+import { resetSelected } from "../features/viaggio/resultTratta";
 import { CiCircleInfo } from "react-icons/ci";
 import { Tooltip as MuiTooltip } from "@mui/material";
 import { TourComponent } from "./TourComponent";

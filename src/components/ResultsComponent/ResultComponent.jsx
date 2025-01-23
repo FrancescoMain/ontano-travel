@@ -60,9 +60,6 @@ export const ResultComponent = () => {
       }
     }
 
-    const viaggioData = {
-      selected,
-    };
     selected.forEach((element) => {
       if (element.prezzo) {
         setTratte((prev) => [...prev, element]);

@@ -1,15 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setLoadingId,
-  startLoading,
-  stopLoading,
-} from "../features/spinner/spinnerSlice";
+import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
 import dayjs from "dayjs";
-import {
-  upsertResult,
-  resetSelectedAll,
-} from "../features/viaggio/resultTratta";
+import { upsertResult } from "../features/viaggio/resultTratta";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   setNTratte,

@@ -1,20 +1,16 @@
 import React from "react";
 import { useReservations } from "../_hooks/useReservations";
-import { IoMdPeople } from "react-icons/io";
-import { MdLuggage } from "react-icons/md";
-import { FaChild, FaDog, FaBaby } from "react-icons/fa";
 import dayjs from "dayjs";
 import { reserve } from "../_api/reservations/reserve";
 import { lightboxReserve } from "../_api/reservations/lightboxReserve";
 import { payByLinkReserve } from "../_api/reservations/payByLinkReserve";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
 import { getStore } from "../_api/reservations/getStore";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; // Add useLocation
 import { useTranslation } from "react-i18next";
 import { CheckoutTratta } from "../components/CheckoutTratta";
-import { CheckoutTariffe } from "../components/CheckoutTariffe";
 import { Condizioni } from "../components/Condizioni";
 import { Pagamento } from "../components/Pagamento";
 import { CheckoutPasseggero } from "../components/Checkouts/CheckoutPassegero";
@@ -41,6 +37,8 @@ const TransparentAccordion = styled(Accordion)({
 });
 
 export const Checkout = () => {
+  const location = useLocation(); // Add useLocation
+
   const { passeggeri, prenotazione, paymentsMethod, quote, isTour } =
     useReservations();
   const {
@@ -73,7 +71,6 @@ export const Checkout = () => {
   } = useCheckoutForm();
   const [store, setStore] = React.useState();
   const dispatch = useDispatch();
-  const { data: accountData } = useSelector((state) => state.account);
   const navigate = useNavigate();
   const [paymentMethodCheck, setPyamentMethodCheck] =
     React.useState("CREDIT_CARD");
@@ -115,9 +112,6 @@ export const Checkout = () => {
       quantity: route.tariffs.reduce((acc, tariff) => acc + tariff.qty, 0),
     }));
 
-    const label = prenotazione?.reservationRoutes.map(
-      (route) => `${route.from} - ${route.to}`
-    );
     window.gtag("event", "begin_checkout", {
       currency: "EUR",
       value: prenotazione?.priceToPay.price,
@@ -236,7 +230,16 @@ export const Checkout = () => {
     <div className="container">
       <button
         className="btn btn-link d-none d-lg-block"
-        onClick={() => navigate(-1)}
+        onClick={() => {
+          // se ci sono query params facciamo il back usando i query params
+          const params = new URLSearchParams(location.search);
+          const search = params.toString();
+          if (search) {
+            navigate(`/?${search}`);
+          } else {
+            navigate(-1);
+          }
+        }}
         style={{
           position: "fixed",
           top: "70px",

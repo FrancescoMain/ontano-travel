@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
 import ButtonStepper from "./Stepper";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
-import Typography from "@mui/joy/Typography";
 import { ResultCard } from "../ResultCard/ResultCard"; // Assicurati di importare il componente ResultCard
 import { useTranslation } from "react-i18next";
 import { startLoading, stopLoading } from "../../features/spinner/spinnerSlice";
-import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
-import { Button, Modal, ModalClose, ModalDialog } from "@mui/joy";
-import { FormViaggioComponent } from "../FormViaggioComponent";
+import { Button } from "@mui/joy";
 import {
   FormViaggioComponentResultAndata,
   FormViaggioComponentResultRitorno,
@@ -39,7 +36,7 @@ export const ResultComponentExternal = () => {
     dataAndata,
     dataRitorno,
     adulti,
-    bambini,
+
     etaBambini,
     animali,
     bagagli,
@@ -116,11 +113,9 @@ export const ResultComponentExternal = () => {
     dispatch(startLoading());
     const fetchData = async () => {
       try {
-        const dataChecK = dataRitorno ? dataRitorno : "";
         const formattedDate = dayjs(dataAndata).format("YYYY-MM-DD");
         const formattedDataReturn =
           dataRitorno && dayjs(dataRitorno).format("YYYY-MM-DD");
-        const encodedDate = encodeURIComponent(formattedDataReturn);
 
         const response = await fetch(
           `http://ec2-13-51-37-99.eu-north-1.compute.amazonaws.com/api/booking/route/search?departure_route_id=${

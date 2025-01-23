@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaWheelchair } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,7 +26,6 @@ export const RequestExtraFields = ({
   n,
   eta,
 }) => {
-  const [startDate, setStartDate] = useState();
   const [isDateValid, setIsDateValid] = useState(true);
   const dispatch = useDispatch();
   const nationalities = useSelector(

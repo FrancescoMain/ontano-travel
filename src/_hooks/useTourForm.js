@@ -153,6 +153,8 @@ export const useTourForm = () => {
   };
 
   const handleSubmit = async () => {
+    const params = new URLSearchParams(location.search);
+    const toCheckout = params.get("toCheckout");
     dispatch(startLoading());
     const selectedTour = tours.find((t) => t.name === tour)?.id;
     const animali = dettagli[0]?.animali || 0;
@@ -177,7 +179,14 @@ export const useTourForm = () => {
       };
       localStorage.setItem("tourQuote", JSON.stringify(tourQuote));
       localStorage.removeItem("linkQuote");
-      navigate("/checkout");
+      if (toCheckout === "true") {
+        // rimettiamo nella checkout tutti i params che erano in questa pagina, levando il params toCheckout
+        params.delete("toCheckout");
+        const search = params.toString();
+        navigate(`/checkout?${search}`);
+      } else {
+        navigate("/checkout");
+      }
     } catch (error) {
       console.error("Error posting tour quote:", error);
       toast.error(

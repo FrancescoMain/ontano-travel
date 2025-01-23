@@ -2,13 +2,12 @@ import React from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Autocomplete, Button, Input, Typography } from "@mui/joy";
+import { Autocomplete, Button } from "@mui/joy";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { useTourForm } from "../_hooks/useTourForm";
 import { DettagliViaggioTour } from "./DettagliViaggioTour";
-import { postTourQuote } from "../_api/tourApi";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Spinner } from "./Spinner/Spinner";
 
@@ -19,12 +18,10 @@ export const TourComponent = () => {
     port,
     date,
     tour,
-    tours,
     dettagli,
     handlePortChange,
     handleDateChange,
     handleTourChange,
-    resetHandle,
     handleSubmit,
     loading,
     filteredTours,

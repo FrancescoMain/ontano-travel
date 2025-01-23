@@ -5,7 +5,6 @@ import { fetchDepartures } from "../features/tabellonePartenze/tabellonePartenze
 import "bootstrap/dist/css/bootstrap.min.css";
 import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
 import { FaShoppingCart } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import { resetAll } from "../features/viaggio/findTratta";
 
 const basePath =
@@ -22,7 +21,6 @@ export const TabellonePartenze = () => {
     month: "2-digit",
     year: "numeric",
   }); // Format date as DD/MM/YYYY
-  const navigate = useNavigate();
   const [selectedPort, setSelectedPort] = useState("");
   const [localDepartures, setLocalDepartures] = useState([]);
   const loadingIds = useSelector((state) => state.spinner.loadingIds);

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import dayjs from "dayjs";
-import { IoMdPeople } from "react-icons/io";
 import { CheckoutTariffe } from "./CheckoutTariffe";
 import travelmar from "../assets/travelmar.png";
 import snav from "../assets/snav.png";
