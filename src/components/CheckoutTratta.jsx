@@ -8,6 +8,8 @@ import alilauroGruson from "../assets/Alilauro Gruson.png";
 import Nlg from "../assets/nlg.png";
 import { formatDateTime } from "../utils/dateUtils"; // Import formatDateTime function
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
+import alicost from "../assets/alicost.png";
+import coastLines from "../assets/coast-lines.png";
 
 export const CheckoutTratta = ({
   route,
@@ -128,11 +130,21 @@ export const CheckoutTratta = ({
           {route.company === "Nlg" && (
             <img className="img-logo" src={Nlg} alt="Nlg" />
           )}
+          {route.company === "Alicost" && (
+            <img className="img-logo" src={alicost} alt="Alicost" />
+          )}
           {route.company === "Alilauro Gruson" && (
             <img
               className="img-logo"
               src={alilauroGruson}
               alt="Alilauro Gruson"
+            />
+          )}
+          {route.company === "Coast Lines" && (
+            <img
+              className="img-logo coast-lines"
+              src={coastLines}
+              alt="Coast Lines"
             />
           )}
         </div>

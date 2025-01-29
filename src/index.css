@@ -80,6 +80,9 @@ select {
 } */
 
 /* Mobile specific styles */
+.iub__us-widget {
+  display: none !important;
+}
 @media (max-width: 768px) {
   select {
     background-color: white !important;

@@ -20,6 +20,9 @@ import {
   formatTime,
   calculateDuration,
 } from "../../utils/dateUtils";
+import alicost from "../../assets/alicost.png";
+import seremar from "../../assets/seremar.png";
+import coastLines from "../../assets/coast-lines.png";
 
 dayjs.extend(customParseFormat);
 const gtag = window.gtag || function () {}; // Add this line
@@ -140,8 +143,21 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
                 {data.company === "Alilauro" && (
                   <img className="img-logo" src={alilauro} alt="Alilauro" />
                 )}
+                {data.company === "Alicost" && (
+                  <img className="img-logo" src={alicost} alt="Alicost" />
+                )}
                 {data.company === "Nlg" && (
                   <img className="img-logo" src={Nlg} alt="Nlg" />
+                )}
+                {data.company === "Seremar" && (
+                  <img className="img-logo" src={seremar} alt="Seremar" />
+                )}
+                {data.company === "Coast Lines" && (
+                  <img
+                    className="img-logo coast-lines"
+                    src={coastLines}
+                    alt="Coast Lines"
+                  />
                 )}
                 {data.company === "Alilauro Gruson" && (
                   <img
