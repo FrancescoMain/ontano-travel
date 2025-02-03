@@ -53,8 +53,8 @@
     "build:prod": "env-cmd -f .env.production react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy:prod": "env-cmd -f .env.production react-scripts build firebase deploy --only hosting:prodquickferries",
-    "deploy:dev": "env-cmd -f .env.development react-scripts build firebase deploy --only hosting:quickferries-a95b3",
+    "deploy:prod": "env-cmd -f .env.production react-scripts build && firebase deploy --only hosting:prodquickferries",
+    "deploy:dev": "env-cmd -f .env.development react-scripts build && firebase deploy --only hosting:quickferries-a95b3",
     "deploy:all": "env-cmd -f .env.production react-scripts build && env-cmd -f .env.production firebase deploy --only hosting:prodquickferries && env-cmd -f .env.development react-scripts build && env-cmd -f .env.development firebase deploy --only hosting:quickferries-a95b3"
   },
   "eslintConfig": {
