@@ -10,6 +10,11 @@ import { formatDateTime } from "../utils/dateUtils"; // Import formatDateTime fu
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
 import alicost from "../assets/alicost.png";
 import coastLines from "../assets/coast-lines.png";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export const CheckoutTratta = ({
   route,
@@ -21,14 +26,14 @@ export const CheckoutTratta = ({
   const { i18n } = useTranslation();
   const language = i18n.language;
 
-  const formattedDeparture = formatDateTime(dayjs(route.departure), language);
-  const formattedArrival = formatDateTime(dayjs(route.arrive), language);
+  const formattedDeparture = formatDateTime(dayjs(route.departure).tz("Europe/Rome"), language);
+  const formattedArrival = formatDateTime(dayjs(route.arrive).tz("Europe/Rome"), language);
 
   // Process tariffs
   let processedTariffs = [];
 
   if (route.company === "Snav") {
-    // Group ADU, CHD, INF into 'Passeggeri'
+    // Group ADU, CHD, INF into 'Passeggeri'  
     let passengerTariffs = route.tariffs.filter((t) =>
       ["ADU", "CHD", "INF"].includes(t.category_code)
     );

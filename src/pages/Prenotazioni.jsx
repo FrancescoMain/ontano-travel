@@ -22,6 +22,12 @@ import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa"; // Import sorting
 import { styled } from "@mui/material/styles"; // Import styled from @mui/material/styles
 import "./Prenotazioni.css"; // Import the CSS file
 import { format } from "date-fns"; // Import date-fns for date formatting
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const HeaderTableRow = styled(TableRow)({
   backgroundColor: "#f5f5f5",
@@ -33,8 +39,7 @@ const HeaderTableRow = styled(TableRow)({
 
 const formatDate = (dateString) => {
   if (!dateString) return ""; // Return empty string if dateString is null or empty
-  const date = new Date(dateString);
-  return format(date, "dd-MM-yyyy HH:mm");
+  return dayjs(dateString).tz("Europe/Rome").format("DD-MM-YYYY HH:mm"); // Modify this line
 };
 
 function reservationStatusMapping(status) {

@@ -3,6 +3,8 @@ import i18n from "../../i18n";
 import "./ResultCard.css";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import "dayjs/locale/it"; // Import Italian locale
 import "dayjs/locale/en"; // Import English locale
 import { useDispatch, useSelector } from "react-redux";
@@ -25,6 +27,8 @@ import seremar from "../../assets/seremar.png";
 import coastLines from "../../assets/coast-lines.png";
 
 dayjs.extend(customParseFormat);
+dayjs.extend(utc);
+dayjs.extend(timezone);
 const gtag = window.gtag || function () {}; // Add this line
 
 export const ResultCard = ({ data, selected, hidden, id, index }) => {
@@ -35,10 +39,11 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
   const language = i18n.language;
   dayjs.locale(language); // Set dayjs locale based on i18n language
 
-  const departureDate = dayjs(data.departure);
+  const departureDate = dayjs(data.departure).tz("Europe/Rome"); // Modify this line
+  console.log(departureDate);
   const dateDep = formatDate(departureDate, language);
   const timeDep = formatTime(departureDate);
-  const arrivalDate = dayjs(data.arrive);
+  const arrivalDate = dayjs(data.arrive).tz("Europe/Rome"); // Modify this line
   const dateArr = formatDate(arrivalDate, language);
   const timeArr = formatTime(arrivalDate);
   const { hours, minutes } = calculateDuration(departureDate, arrivalDate);

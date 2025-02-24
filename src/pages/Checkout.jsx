@@ -1,6 +1,8 @@
 import React from "react";
 import { useReservations } from "../_hooks/useReservations";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import { reserve } from "../_api/reservations/reserve";
 import { lightboxReserve } from "../_api/reservations/lightboxReserve";
 import { payByLinkReserve } from "../_api/reservations/payByLinkReserve";
@@ -35,6 +37,9 @@ const TransparentAccordion = styled(Accordion)({
   boxShadow: "none",
   border: "none",
 });
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export const Checkout = () => {
   const location = useLocation(); // Add useLocation
@@ -295,7 +300,7 @@ export const Checkout = () => {
                                         prenotazione?.reservationRoutes[
                                           trattaIndex
                                         ]?.departure
-                                      ),
+                                      ).tz("Europe/Rome"), // Modify this line
                                       language
                                     ).date
                                   }{" "}
@@ -305,7 +310,7 @@ export const Checkout = () => {
                                         prenotazione?.reservationRoutes[
                                           trattaIndex
                                         ]?.departure
-                                      ),
+                                      ).tz("Europe/Rome"), // Modify this line
                                       language
                                     ).time
                                   }
