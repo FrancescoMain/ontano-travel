@@ -18,6 +18,11 @@ import { useSelector } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FaUserCircle } from "react-icons/fa";
 
+const basePath =
+  process.env.REACT_APP_ENV === "production"
+    ? "https://configuration.quickferries.com/"
+    : "https://dev-bookingferries.com/";
+
 // Component for authenticated user links
 const AuthenticatedLinks = ({
   t,
@@ -233,7 +238,7 @@ const AuthenticatedLinks = ({
                   }`}
                   onClick={() => {
                     window.open(
-                      "https://configuration.quickferries.com/",
+                      basePath,
                       "_blank"
                     );
                     handleOffcanvasClose();
