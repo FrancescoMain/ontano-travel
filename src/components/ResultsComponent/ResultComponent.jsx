@@ -72,14 +72,41 @@ export const ResultComponent = () => {
   useEffect(() => {
     const fetchQuote = async () => {
       if (tratte.length > 0) {
-        const result = await postQuote({ tratte });
-        setQuote(result);
-        const data = { result, tratte };
-        localStorage.setItem("linkQuote", JSON.stringify(data));
-        localStorage.removeItem("tourQuote");
-        navigate("/checkout");
+        try {
+          const result = await postQuote({ tratte });
+
+          // Se la risposta è nulla o errore, mostra un toast e non navigare
+          if (!result || result.error) {
+            toast.error(
+              "Errore nel generare il preventivo. Riprova più tardi.",
+              {
+                position: "top-center",
+                autoClose: 5000,
+                theme: "colored",
+              }
+            );
+            return;
+          }
+
+          setQuote(result);
+          const data = { result, tratte };
+          localStorage.setItem("linkQuote", JSON.stringify(data));
+          localStorage.removeItem("tourQuote");
+          navigate("/checkout");
+        } catch (error) {
+          console.error("Errore nella chiamata postQuote:", error);
+          toast.error(
+            "Errore tecnico. Controlla la connessione o riprova più tardi.",
+            {
+              position: "top-center",
+              autoClose: 5000,
+              theme: "colored",
+            }
+          );
+        }
       }
     };
+
     fetchQuote();
   }, [tratte]);
 
