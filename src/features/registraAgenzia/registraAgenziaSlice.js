@@ -8,9 +8,14 @@ export const postAgency = createAsyncThunk(
   async (formData, { dispatch, rejectWithValue }) => {
     try {
       dispatch(startLoading());
+
+      // Clean the payload: remove confirmPassword and termsAccepted (frontend-only fields)
+      // Keep referente even if empty (backend requires it)
+      const { confirmPassword, termsAccepted, ...payload } = formData;
+
       const response = await axios.post(
         `${config.basePath}${config.postAgency.route}`,
-        formData
+        payload
       );
       dispatch(stopLoading());
       return response.data;

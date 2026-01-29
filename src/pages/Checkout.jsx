@@ -159,7 +159,27 @@ export const Checkout = () => {
             reserveLightbox.PaymentToken,
             function callback(response) {
               setLoading(false); // Stop spinner
-              if (response.status === "OK") {
+
+              // Parse URL parameters correctly (responseURL may have leading/trailing spaces)
+              const cleanUrl = response.responseURL?.trim();
+              const urlParams = new URLSearchParams(cleanUrl?.split('?')[1]);
+              const statusFromUrl = urlParams.get('Status'); // Note: 'Status' with capital S
+              const paymentID = urlParams.get('paymentID');
+              const reservationCode = urlParams.get('code');
+
+              // Check if payment was successful:
+              // - statusFromUrl === "OK" (parsed from URL) OR
+              // - response.status === "OK" (old format, if backend sends it correctly)
+              const isSuccess = statusFromUrl === "OK" || response.status === "OK";
+
+              console.log("Payment result:", {
+                isSuccess,
+                statusFromUrl,
+                paymentID,
+                reservationCode,
+              });
+
+              if (isSuccess) {
                 Cookies.remove("codice"); // Remove the codice cookie if payment is successful
                 dispatch(resetSelected({ id: 0 }));
                 dispatch(resetResults());
@@ -167,6 +187,12 @@ export const Checkout = () => {
                 dispatch(resetTourDetails());
                 localStorage.removeItem("linkQuote");
                 gtagPurchase();
+
+                // Store reservation code for success page
+                if (reservationCode) {
+                  sessionStorage.setItem("reservationCode", reservationCode);
+                }
+
                 navigate("/success");
               } else {
                 toast.error("Errore durante il pagamento");
@@ -215,6 +241,12 @@ export const Checkout = () => {
             dispatch(resetTourDetails());
             localStorage.removeItem("linkQuote");
             gtagPurchase();
+
+            // Store reservation code for success page
+            if (prenotazione?.code) {
+              sessionStorage.setItem("reservationCode", prenotazione.code);
+            }
+
             navigate("/success");
           } else {
             toast.error("Errore durante il pagamento tramite Estratto Conto");
