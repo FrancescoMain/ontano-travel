@@ -6,7 +6,7 @@ export const fetchReservationThunk = createAsyncThunk(
   async ({ bookingCode, email }, { rejectWithValue }) => {
     try {
       const response = await fetchReservation(bookingCode, email);
-      return response;
+      return { data: response, email }; // Return both data and email
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -46,12 +46,14 @@ const reservationSlice = createSlice({
   name: "reservation",
   initialState: {
     data: null,
+    guestEmail: null,
     status: "idle",
     error: null,
   },
   reducers: {
     resetReservation: (state) => {
       state.data = null;
+      state.guestEmail = null;
       state.status = "idle";
       state.error = null;
     },
@@ -63,7 +65,8 @@ const reservationSlice = createSlice({
       })
       .addCase(fetchReservationThunk.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data = action.payload;
+        state.data = action.payload.data;
+        state.guestEmail = action.payload.email;
       })
       .addCase(fetchReservationThunk.rejected, (state, action) => {
         state.status = "failed";

@@ -1,16 +1,21 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-import useSearchReservation from "../_hooks/useSearchReservation";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
 import { CheckoutTratta } from "../components/CheckoutTratta";
 import { resetReservation } from "../features/reservation/reservationSlice"; // Import the reset action
+import { sendTicketsEmail } from "../_api/reservations/sendTicketsEmail"; // Import API
+import { toast } from "react-toastify"; // Import toast
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const SearchGuest = () => {
   const reservation = useSelector((state) => state.reservation.data);
+  const guestEmail = useSelector((state) => state.reservation.guestEmail);
   const dispatch = useDispatch();
   const navigate = useNavigate(); // Initialize useNavigate
+  const { t } = useTranslation(); // Initialize translation
+  const [isSending, setIsSending] = useState(false); // Loading state for button
 
   useEffect(() => {
     if (!reservation) {
@@ -22,6 +27,23 @@ const SearchGuest = () => {
     };
   }, [dispatch, navigate, reservation]);
 
+  const handleSendTickets = async () => {
+    if (!reservation?.code || !guestEmail) {
+      toast.error(t("Riprova più tardi"));
+      return;
+    }
+
+    setIsSending(true);
+    try {
+      await sendTicketsEmail(reservation.code, guestEmail);
+      toast.success(t("Biglietti inviati via email"));
+    } catch (error) {
+      toast.error(t("Riprova più tardi"));
+    } finally {
+      setIsSending(false);
+    }
+  };
+
   return (
     <div className="container">
       <div className="  align-items-center">
@@ -30,6 +52,15 @@ const SearchGuest = () => {
             <h3 className="text-primary text-center">
               Prenotazione {<span>{reservation?.code}</span>}
             </h3>
+            <div className="text-center mt-3 mb-3">
+              <button
+                className="btn btn-primary"
+                onClick={handleSendTickets}
+                disabled={isSending}
+              >
+                {isSending ? t("Invio in corso...") : t("Invia mail TKT")}
+              </button>
+            </div>
           </div>
           {reservation?.tour && (
             <div>
