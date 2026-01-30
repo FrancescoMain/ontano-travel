@@ -25,6 +25,7 @@ import {
 import alicost from "../../assets/alicost.png";
 import seremar from "../../assets/seremar.png";
 import coastLines from "../../assets/coast-lines.png";
+import grimaldi from "../../assets/Logo-Grimaldi-Lines.jpg";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -169,6 +170,13 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
                     className="img-logo"
                     src={alilauroGruson}
                     alt="Alilauro Gruson"
+                  />
+                )}
+                {data.company === "Grimaldi" && (
+                  <img
+                    className="img-logo"
+                    src={grimaldi}
+                    alt="Grimaldi"
                   />
                 )}
               </div>
