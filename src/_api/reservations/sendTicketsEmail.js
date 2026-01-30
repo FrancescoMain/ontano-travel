@@ -31,7 +31,16 @@ export const sendTicketsEmail = async (reservationCode, email) => {
 
     const contentType = response.headers.get("content-type");
     if (contentType && contentType.includes("application/json")) {
-      return await response.json();
+      const data = await response.json();
+
+      // Check for KO status in response body
+      if (data.status === "KO") {
+        const error = new Error(data.message || "Failed to send tickets");
+        error.apiMessage = data.message;
+        throw error;
+      }
+
+      return data;
     }
 
     return { status: "OK" };
