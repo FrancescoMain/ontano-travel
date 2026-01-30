@@ -10,6 +10,8 @@ import { formatDateTime } from "../utils/dateUtils"; // Import formatDateTime fu
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
 import alicost from "../assets/alicost.png";
 import coastLines from "../assets/coast-lines.png";
+import seremar from "../assets/seremar.png";
+import grimaldi from "../assets/Logo-Grimaldi-Lines.jpg";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 
@@ -151,6 +153,12 @@ export const CheckoutTratta = ({
               src={coastLines}
               alt="Coast Lines"
             />
+          )}
+          {route.company === "Seremar" && (
+            <img className="img-logo" src={seremar} alt="Seremar" />
+          )}
+          {route.company === "Grimaldi" && (
+            <img className="img-logo" src={grimaldi} alt="Grimaldi" />
           )}
         </div>
         <div class="text-end col-5">
