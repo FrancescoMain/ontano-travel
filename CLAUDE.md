@@ -170,16 +170,17 @@ refactor/<nome-descrittivo>   # Refactoring senza cambio funzionalità
    git commit -m "Descrizione chiara del cambiamento"
    ```
 
-3. **Prima di aprire PR, eseguire i test:**
+3. **Eseguire i test (obbligatorio):**
    ```bash
    npm run test:ci
    ```
 
-4. **Push e Pull Request verso develop:**
+4. **Push e apertura PR automatica:**
    ```bash
    git push origin feature/nome-feature
-   # Aprire PR su GitHub verso develop
+   gh pr create --base develop --title "Titolo PR" --body "Descrizione"
    ```
+   **IMPORTANTE:** Aprire sempre la PR automaticamente dopo il push usando `gh pr create`.
 
 5. **Release su master:**
    - Merge da `develop` a `master` solo quando pronto per produzione

@@ -1,10 +1,13 @@
-import { basePathDev, basePathProd } from "./basePath";
+import { basePathDev, basePathProd, axerveScriptDev, axerveScriptProd } from "./basePath";
 
-const basePath =
-  process.env.REACT_APP_ENV === "production" ? basePathProd : basePathDev;
+const isProduction = process.env.REACT_APP_ENV === "production";
+
+const basePath = isProduction ? basePathProd : basePathDev;
+const axerveScriptUrl = isProduction ? axerveScriptProd : axerveScriptDev;
 
 export const config = {
   basePath: basePath,
+  axerveScriptUrl: axerveScriptUrl,
   authenticate: { route: "/api/authenticate", method: "POST" },
   getRoute: { route: "/api/booking/route", method: "GET" },
   fetchPriceData: { route: "/api/booking/route/search", method: "GET" },
