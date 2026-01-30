@@ -17,6 +17,7 @@ import { Success } from "./pages/Success";
 import { Login } from "./pages/Login";
 import { RecoveryPassword } from "./pages/RecoveryPassword";
 import { fetchAccountData } from "./utils/auth";
+import { config } from "./config/config";
 import { PayByLinkSuccess } from "./pages/PayByLinkSuccess";
 import { CercaPrenotazione } from "./pages/CercaPrenotazione";
 import SearchGuest from "./pages/SearchGuest"; // Import SearchGuest
@@ -40,6 +41,19 @@ import { Footer } from "./components/Footer/Footer";
 const App = () => {
   const token =
     localStorage.getItem("id_token") || sessionStorage.getItem("id_token");
+
+  // Load Axerve script dynamically based on environment
+  useEffect(() => {
+    const existingScript = document.querySelector('script[data-axerve]');
+    if (!existingScript) {
+      const script = document.createElement('script');
+      script.src = config.axerveScriptUrl;
+      script.async = true;
+      script.setAttribute('data-axerve', 'true');
+      document.body.appendChild(script);
+    }
+  }, []);
+
   useEffect(() => {
     if (token) {
       fetchAccountData();
