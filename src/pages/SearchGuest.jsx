@@ -38,7 +38,8 @@ const SearchGuest = () => {
       await sendTicketsEmail(reservation.code, guestEmail);
       toast.success(t("Biglietti inviati via email"));
     } catch (error) {
-      toast.error(t("Riprova più tardi"));
+      const errorMessage = error.apiMessage || t("Riprova più tardi");
+      toast.error(errorMessage);
     } finally {
       setIsSending(false);
     }
@@ -52,15 +53,6 @@ const SearchGuest = () => {
             <h3 className="text-primary text-center">
               Prenotazione {<span>{reservation?.code}</span>}
             </h3>
-            <div className="text-center mt-3 mb-3">
-              <button
-                className="btn btn-primary"
-                onClick={handleSendTickets}
-                disabled={isSending}
-              >
-                {isSending ? t("Invio in corso...") : t("Invia mail TKT")}
-              </button>
-            </div>
           </div>
           {reservation?.tour && (
             <div>
@@ -197,6 +189,15 @@ const SearchGuest = () => {
               </div>
             </div>
           )}
+          <div className="d-flex justify-content-end mt-4">
+            <button
+              className="btn btn-success"
+              onClick={handleSendTickets}
+              disabled={isSending}
+            >
+              {isSending ? t("Invio in corso...") : t("Reinvia email con biglietto")}
+            </button>
+          </div>
         </div>
       </div>
     </div>
