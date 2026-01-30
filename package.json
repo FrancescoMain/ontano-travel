@@ -42,6 +42,7 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "env-cmd": "^10.1.0"
   },
   "scripts": {
@@ -52,6 +53,9 @@
     "build:dev": "env-cmd -f .env.development react-scripts build",
     "build:prod": "env-cmd -f .env.production react-scripts build",
     "test": "react-scripts test",
+    "test:ci": "react-scripts test --ci --coverage --watchAll=false",
+    "test:coverage": "react-scripts test --coverage --watchAll=false",
+    "test:watch": "react-scripts test --watch",
     "eject": "react-scripts eject",
     "deploy:prod": "env-cmd -f .env.production react-scripts build && firebase deploy --only hosting:prodquickferries",
     "deploy:dev": "env-cmd -f .env.development react-scripts build && firebase deploy --only hosting:quickferries-a95b3",
@@ -73,6 +77,11 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "node_modules/(?!(axios)/)"
     ]
   }
 }
