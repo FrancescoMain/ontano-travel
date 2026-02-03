@@ -236,7 +236,12 @@ export const ViaggioDiAndataForm = ({
           options={fromLocations}
           filterOptions={filterOptions}
           sx={{ height: 56 }}
-          onChange={(e) => handleChangeAndata(e, id)}
+          onChange={(e, option) => {
+            if (option?.label) {
+              const syntheticEvent = { target: { textContent: option.label } };
+              handleChangeAndata(syntheticEvent, id);
+            }
+          }}
           id={`tratta-autocomplete-${id}`}
           aria-label={t("Seleziona una tratta")}
         />
@@ -326,10 +331,10 @@ export const ViaggoiDiRitornoForm = ({ id, resultMode }) => {
           options={fromLocations}
           filterOptions={filterOptions}
           sx={{ height: 56 }}
-          onChange={(e) => handleChangeRitorno(e, id)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
+          onChange={(e, option) => {
+            if (option?.label) {
+              const syntheticEvent = { target: { textContent: option.label } };
+              handleChangeRitorno(syntheticEvent, id);
             }
           }}
         />
