@@ -27,6 +27,7 @@ export const ResultComponent = () => {
   const { t } = useTranslation();
   const [tratte, setTratte] = React.useState([]);
   const [quote, setQuote] = React.useState(null);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
   const isHidden = (groupIndex, index) => {
     if (selected.length === 0 || selected[groupIndex]?.data.length === 0)
       return false;
@@ -36,6 +37,8 @@ export const ResultComponent = () => {
   const navigate = useNavigate(); // Se la partenza di biglietto di andata è minore rispetto a biglietto di ritorno
   const dispatch = useDispatch();
   const handleSubmit = () => {
+    if (isSubmitting) return;
+
     for (let i = 1; i < selected.length; i++) {
       if (
         selected[i]?.data.departure &&
@@ -60,6 +63,7 @@ export const ResultComponent = () => {
       }
     }
 
+    setIsSubmitting(true);
     selected.forEach((element) => {
       if (element.prezzo) {
         setTratte((prev) => [...prev, element]);
@@ -93,6 +97,8 @@ export const ResultComponent = () => {
                 theme: "colored",
               }
             );
+            setIsSubmitting(false);
+            setTratte([]);
             return;
           }
 
@@ -111,6 +117,8 @@ export const ResultComponent = () => {
               theme: "colored",
             }
           );
+          setIsSubmitting(false);
+          setTratte([]);
         }
       }
     };
@@ -255,6 +263,8 @@ export const ResultComponent = () => {
                 color="warning"
                 variant="solid"
                 aria-label={t("Procedi al checkout")}
+                disabled={isSubmitting}
+                loading={isSubmitting}
               >
                 Avanti
               </Button>
