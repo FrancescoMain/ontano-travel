@@ -182,7 +182,7 @@ describe("postQuote - accommodations", () => {
     });
   });
 
-  it("should include accommodations in request body when provided", async () => {
+  it("should include accommodations inside params when provided", async () => {
     const tratte = [
       {
         adulti: 2,
@@ -203,13 +203,13 @@ describe("postQuote - accommodations", () => {
     expect(global.fetch).toHaveBeenCalled();
     const requestBody = JSON.parse(global.fetch.mock.calls[0][1].body);
 
-    expect(requestBody[0].accomodations).toEqual([
+    expect(requestBody[0].params.accomodations).toEqual([
       { code: "DS", qty: 2, hosted_people: 1, type: "CHAIR" },
       { code: "A2", qty: 1, hosted_people: 2, type: "CABIN" },
     ]);
   });
 
-  it("should not include accommodations when array is empty", async () => {
+  it("should not include accommodations in params when array is empty", async () => {
     const tratte = [
       {
         adulti: 2,
@@ -227,10 +227,10 @@ describe("postQuote - accommodations", () => {
     expect(global.fetch).toHaveBeenCalled();
     const requestBody = JSON.parse(global.fetch.mock.calls[0][1].body);
 
-    expect(requestBody[0].accomodations).toBeUndefined();
+    expect(requestBody[0].params.accomodations).toBeUndefined();
   });
 
-  it("should not include accommodations when undefined", async () => {
+  it("should not include accommodations in params when undefined", async () => {
     const tratte = [
       {
         adulti: 2,
@@ -248,7 +248,7 @@ describe("postQuote - accommodations", () => {
     expect(global.fetch).toHaveBeenCalled();
     const requestBody = JSON.parse(global.fetch.mock.calls[0][1].body);
 
-    expect(requestBody[0].accomodations).toBeUndefined();
+    expect(requestBody[0].params.accomodations).toBeUndefined();
   });
 
   it("should handle multiple tratte with different accommodations", async () => {
@@ -278,9 +278,9 @@ describe("postQuote - accommodations", () => {
     expect(global.fetch).toHaveBeenCalled();
     const requestBody = JSON.parse(global.fetch.mock.calls[0][1].body);
 
-    expect(requestBody[0].accomodations).toEqual([
+    expect(requestBody[0].params.accomodations).toEqual([
       { code: "DS", qty: 2, hosted_people: 1, type: "CHAIR" },
     ]);
-    expect(requestBody[1].accomodations).toBeUndefined();
+    expect(requestBody[1].params.accomodations).toBeUndefined();
   });
 });
