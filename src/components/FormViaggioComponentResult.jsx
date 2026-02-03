@@ -253,7 +253,12 @@ export const FormViaggioComponentResultAndata = ({ reset, viewReset }) => {
             options={fromLocations}
             filterOptions={filterOptions}
             sx={{ height: 56 }}
-            onChange={handleChangeAndata}
+            onChange={(e, option) => {
+              if (option?.label) {
+                const syntheticEvent = { target: { textContent: option.label } };
+                handleChangeAndata(syntheticEvent);
+              }
+            }}
           />
 
           <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="it">
@@ -442,7 +447,12 @@ export const FormViaggioComponentResultRitorno = ({ reset, viewReset }) => {
           options={fromLocations}
           filterOptions={filterOptions}
           sx={{ height: 56 }}
-          onChange={handleChangeRitorno}
+          onChange={(e, option) => {
+            if (option?.label) {
+              const syntheticEvent = { target: { textContent: option.label } };
+              handleChangeRitorno(syntheticEvent);
+            }
+          }}
         />
 
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="it">
