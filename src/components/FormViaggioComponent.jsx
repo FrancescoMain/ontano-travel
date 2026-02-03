@@ -425,7 +425,7 @@ export const DettagliViaggio = ({ id, selected, resetHandle }) => {
         </Typography>
       )}
       {Array.from({ length: dettagli[id]?.bambini }).map((_, index) => (
-        <div className="col">
+        <div className="col" key={`child-age-${index}`}>
           <Input
             onChange={(e) => {
               if (e.target.value > 11) {
@@ -450,7 +450,6 @@ export const DettagliViaggio = ({ id, selected, resetHandle }) => {
                 : dettagli[id]?.etaBambini?.[index] || ""
             }
             type="number"
-            key={index}
             color="neutral"
             placeholder={`${etaBambinoString} ${index + 1}`}
             variant="outlined"

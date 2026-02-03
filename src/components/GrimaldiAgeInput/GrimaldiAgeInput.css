@@ -1,0 +1,15 @@
+.grimaldi-age-card {
+  border-left: 4px solid #f0ad4e;
+}
+
+.grimaldi-logo-small {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.grimaldi-age-field {
+  display: flex;
+  flex-direction: column;
+}

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import {
   ViaggioDiAndataForm,
   ViaggoiDiRitornoForm,
@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { postQuote } from "../../_api/reservations/quote";
 import { setNTratte } from "../../features/viaggio/findTratta";
 import { useDispatch } from "react-redux";
+import { GrimaldiAgeInput } from "../GrimaldiAgeInput/GrimaldiAgeInput";
 
 export const ResultComponent = () => {
   const {
@@ -69,6 +70,14 @@ export const ResultComponent = () => {
 
   const isLoading = (id) => loadingIds.includes(id);
 
+  // Check if any results contain Grimaldi routes
+  const hasGrimaldiResults = useMemo(() => {
+    return results.some(
+      (resultGroup) =>
+        resultGroup?.data?.some((result) => result.company === "Grimaldi")
+    );
+  }, [results]);
+
   useEffect(() => {
     const fetchQuote = async () => {
       if (tratte.length > 0) {
@@ -117,6 +126,7 @@ export const ResultComponent = () => {
         role="region"
         aria-label={t("Risultati della ricerca")}
       >
+        {hasGrimaldiResults && <GrimaldiAgeInput id={0} />}
         <ViaggioDiAndataForm resultMode={true} id={0} />
         <div className="mb-3"></div>
         {isLoading(0) ? (
