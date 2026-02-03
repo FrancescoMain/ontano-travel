@@ -302,7 +302,45 @@ export const useFormViaggioComponent = (disableFetch) => {
   };
 
   const handleClickSearch = () => {
-    navigate("/results");
+    // Build query params to persist search state on refresh
+    const params = new URLSearchParams();
+
+    // Departure route
+    if (tratte[0]?.tratta?.route_id) {
+      params.set("departure_route_id", tratte[0].tratta.route_id);
+    }
+    if (date[0]?.dateFormatted) {
+      params.set(
+        "departure_data",
+        dayjs(date[0].dateFormatted).format("YYYY-MM-DD")
+      );
+    }
+
+    // Return route (if present)
+    if (tratte[1]?.tratta?.route_id) {
+      params.set("return_route_id", tratte[1].tratta.route_id);
+    }
+    if (date[1]?.dateFormatted) {
+      params.set(
+        "return_data",
+        dayjs(date[1].dateFormatted).format("YYYY-MM-DD")
+      );
+    }
+
+    // Details
+    if (dettagli[0]) {
+      params.set("adulti", dettagli[0].adulti || 1);
+      params.set("bambini", dettagli[0].bambini || 0);
+      params.set("etaBambini", JSON.stringify(dettagli[0].etaBambini || []));
+      params.set("etaAdulti", JSON.stringify(dettagli[0].etaAdulti || []));
+      params.set("animali", dettagli[0].animali || 0);
+      params.set("bagagli", dettagli[0].bagagli || 0);
+    }
+
+    // Multitratta flag
+    params.set("multitratta", multitratta);
+
+    navigate(`/results?${params.toString()}`);
   };
 
   useEffect(() => {

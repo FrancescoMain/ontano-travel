@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import { upsertResult } from "../features/viaggio/resultTratta";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
+  setMultitratta,
   setNTratte,
   upsertDate,
   upsertDettagli,
@@ -118,9 +119,13 @@ export const useResult = () => {
     const bambini = queryParams.get("bambini");
     const etaBambini = queryParams.get("etaBambini");
     // Parse 'etaBambini' as an array
-    const etaBambiniArray = JSON.parse(etaBambini);
+    const etaBambiniArray = etaBambini ? JSON.parse(etaBambini) : [];
+    const etaAdulti = queryParams.get("etaAdulti");
+    // Parse 'etaAdulti' as an array
+    const etaAdultiArray = etaAdulti ? JSON.parse(etaAdulti) : [];
     const animali = queryParams.get("animali");
     const bagagli = queryParams.get("bagagli");
+    const multitrattaParam = queryParams.get("multitratta");
 
     if (departure_route_id && departure_data) {
       if (routes.length === 0) {
@@ -129,6 +134,7 @@ export const useResult = () => {
           dispatch(setRoutes(route));
         };
         fetchRoutes();
+        return; // Wait for routes to load, useEffect will re-run when routes change
       }
       const tratta = routes.find(
         (route) => route.route_id == departure_route_id
@@ -183,26 +189,33 @@ export const useResult = () => {
       }
     }
 
-    if (adulti && bambini && etaBambini && animali && bagagli) {
+    // Set multitratta from query params
+    if (multitrattaParam !== null) {
+      dispatch(setMultitratta(multitrattaParam === "true"));
+    }
+
+    if (adulti) {
       // localhost:3000/results?departure_route_id=1038&departure_data=2024-10-18&return_route_id=1038&return_data=2024-10-25&adulti=2&bambini=2&etaBambini=[1,2]&animali=1&bagagli=1
       dispatch(
         upsertDettagli({
           id: 0,
-          adulti,
-          bambini,
+          adulti: Number(adulti),
+          bambini: Number(bambini) || 0,
           etaBambini: etaBambiniArray,
-          animali,
-          bagagli,
+          etaAdulti: etaAdultiArray,
+          animali: Number(animali) || 0,
+          bagagli: Number(bagagli) || 0,
         })
       );
       dispatch(
         upsertDettagli({
           id: 1,
-          adulti,
-          bambini,
+          adulti: Number(adulti),
+          bambini: Number(bambini) || 0,
           etaBambini: etaBambiniArray,
-          animali,
-          bagagli,
+          etaAdulti: etaAdultiArray,
+          animali: Number(animali) || 0,
+          bagagli: Number(bagagli) || 0,
         })
       );
     }
