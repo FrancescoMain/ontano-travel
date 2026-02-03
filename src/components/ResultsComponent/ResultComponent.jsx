@@ -13,7 +13,6 @@ import { useNavigate } from "react-router-dom";
 import { postQuote } from "../../_api/reservations/quote";
 import { setNTratte } from "../../features/viaggio/findTratta";
 import { useDispatch } from "react-redux";
-import { GrimaldiAgeInput } from "../GrimaldiAgeInput/GrimaldiAgeInput";
 
 export const ResultComponent = () => {
   const {
@@ -126,8 +125,7 @@ export const ResultComponent = () => {
         role="region"
         aria-label={t("Risultati della ricerca")}
       >
-        {hasGrimaldiResults && <GrimaldiAgeInput id={0} />}
-        <ViaggioDiAndataForm resultMode={true} id={0} />
+        <ViaggioDiAndataForm resultMode={true} id={0} hasGrimaldiResults={hasGrimaldiResults} />
         <div className="mb-3"></div>
         {isLoading(0) ? (
           <div className="row d-flex justify-content-center">
@@ -156,7 +154,7 @@ export const ResultComponent = () => {
             ))}
           </div>
         )}
-        {!multitratta && <ViaggoiDiRitornoForm resultMode={true} id={1} />}
+        {!multitratta && <ViaggoiDiRitornoForm resultMode={true} id={1} hasGrimaldiResults={hasGrimaldiResults} />}
         <div className="mb-3"></div>
         {!multitratta && isLoading(1) ? (
           <div className="row d-flex justify-content-center">
@@ -196,6 +194,7 @@ export const ResultComponent = () => {
                       id={id}
                       nTratte={nTratte}
                       setNTratte={setNTratte}
+                      hasGrimaldiResults={hasGrimaldiResults}
                     />
                     <div className="mb-3"></div>
                     {isLoading(id) ? (
