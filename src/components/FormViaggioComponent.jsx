@@ -25,7 +25,7 @@ import { useTranslation } from "react-i18next";
 
 dayjs.extend(isSameOrAfter);
 
-const VALIDATION_DEBOUNCE = 1500; // 1.5 seconds debounce for validation
+const VALIDATION_DEBOUNCE = 800; // 0.8 seconds debounce for validation
 
 // Separate component for adult age input with local state and debounce
 const AdultAgeInput = ({ index, id, dettagli, multitratta, placeholder }) => {
