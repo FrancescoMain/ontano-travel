@@ -161,4 +161,85 @@ describe("useFetchPriceData", () => {
       expect(matches).toHaveLength(3);
     });
   });
+
+  describe("accommodations parameter", () => {
+    it("should include accommodations in URL with Spring dot notation format when provided", async () => {
+      const accommodations = [
+        { code: "DS", qty: 2, hosted_people: 1, type: "CHAIR" },
+        { code: "A2", qty: 1, hosted_people: 2, type: "CABIN" },
+      ];
+
+      renderHook(() =>
+        useFetchPriceData({
+          ...defaultProps,
+          accommodations,
+        })
+      );
+
+      await act(async () => {
+        jest.advanceTimersByTime(DEBOUNCE_DELAY + 100);
+      });
+
+      expect(global.fetch).toHaveBeenCalled();
+      const fetchUrl = global.fetch.mock.calls[0][0];
+
+      // Check Spring dot notation format
+      expect(fetchUrl).toContain("accomodations[0].code=DS");
+      expect(fetchUrl).toContain("accomodations[0].qty=2");
+      expect(fetchUrl).toContain("accomodations[0].type=CHAIR");
+      expect(fetchUrl).toContain("accomodations[0].hosted_people=1");
+      expect(fetchUrl).toContain("accomodations[1].code=A2");
+      expect(fetchUrl).toContain("accomodations[1].qty=1");
+      expect(fetchUrl).toContain("accomodations[1].type=CABIN");
+      expect(fetchUrl).toContain("accomodations[1].hosted_people=2");
+    });
+
+    it("should not include accommodations params when array is empty", async () => {
+      renderHook(() =>
+        useFetchPriceData({
+          ...defaultProps,
+          accommodations: [],
+        })
+      );
+
+      await act(async () => {
+        jest.advanceTimersByTime(DEBOUNCE_DELAY + 100);
+      });
+
+      expect(global.fetch).toHaveBeenCalled();
+      const fetchUrl = global.fetch.mock.calls[0][0];
+      expect(fetchUrl).not.toContain("accomodations");
+    });
+
+    it("should refetch when accommodations change", async () => {
+      const { rerender } = renderHook(
+        ({ accommodations }) =>
+          useFetchPriceData({
+            ...defaultProps,
+            accommodations,
+          }),
+        { initialProps: { accommodations: [] } }
+      );
+
+      await act(async () => {
+        jest.advanceTimersByTime(DEBOUNCE_DELAY + 100);
+      });
+
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+
+      // Change accommodations
+      rerender({
+        accommodations: [{ code: "DS", qty: 1, hosted_people: 1, type: "CHAIR" }],
+      });
+
+      await act(async () => {
+        jest.advanceTimersByTime(DEBOUNCE_DELAY + 100);
+      });
+
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+      const secondFetchUrl = global.fetch.mock.calls[1][0];
+      expect(secondFetchUrl).toContain("accomodations[0].code=DS");
+      expect(secondFetchUrl).toContain("accomodations[0].qty=1");
+    });
+  });
 });

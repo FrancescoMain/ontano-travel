@@ -51,4 +51,5 @@ export const config = {
   approveEstrattoConto: { route: "/api/booking/estrattoconto", method: "POST" }, // Add approveEstrattoConto route
   fetchNationalities: { route: "/api/booking/nationalities", method: "GET" }, // Add fetchNationalities route
   fetchDocumentTypes: { route: "/api/booking/documentTypes", method: "GET" }, // Add fetchDocumentTypes route
+  getAccommodations: { route: "/api/booking/accomodation", method: "GET" },
 };

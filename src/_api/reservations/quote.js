@@ -18,7 +18,7 @@ export const postQuote = async ({ tratte, etaBambini }) => {
     ];
 
     // Crea l'oggetto per ogni tratta
-    return {
+    const trattaData = {
       search_result_id: tratta.data.result_id,
       params: {
         passengers,
@@ -26,6 +26,18 @@ export const postQuote = async ({ tratte, etaBambini }) => {
         luggages: parseInt(tratta.bagagli, 10) || 0,
       },
     };
+
+    // Add accommodations if present (for Grimaldi routes)
+    if (tratta.accommodations?.length > 0) {
+      trattaData.accomodations = tratta.accommodations.map((acc) => ({
+        code: acc.code,
+        qty: acc.qty,
+        hosted_people: acc.hosted_people,
+        type: acc.type,
+      }));
+    }
+
+    return trattaData;
   });
 
   // Get the current language or default to 'it'
