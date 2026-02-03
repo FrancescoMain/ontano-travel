@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import {
   ViaggioDiAndataForm,
   ViaggoiDiRitornoForm,
@@ -69,6 +69,14 @@ export const ResultComponent = () => {
 
   const isLoading = (id) => loadingIds.includes(id);
 
+  // Check if any results contain Grimaldi routes
+  const hasGrimaldiResults = useMemo(() => {
+    return results.some(
+      (resultGroup) =>
+        resultGroup?.data?.some((result) => result.company === "Grimaldi")
+    );
+  }, [results]);
+
   useEffect(() => {
     const fetchQuote = async () => {
       if (tratte.length > 0) {
@@ -117,7 +125,7 @@ export const ResultComponent = () => {
         role="region"
         aria-label={t("Risultati della ricerca")}
       >
-        <ViaggioDiAndataForm resultMode={true} id={0} />
+        <ViaggioDiAndataForm resultMode={true} id={0} hasGrimaldiResults={hasGrimaldiResults} />
         <div className="mb-3"></div>
         {isLoading(0) ? (
           <div className="row d-flex justify-content-center">
@@ -146,7 +154,7 @@ export const ResultComponent = () => {
             ))}
           </div>
         )}
-        {!multitratta && <ViaggoiDiRitornoForm resultMode={true} id={1} />}
+        {!multitratta && <ViaggoiDiRitornoForm resultMode={true} id={1} hasGrimaldiResults={hasGrimaldiResults} />}
         <div className="mb-3"></div>
         {!multitratta && isLoading(1) ? (
           <div className="row d-flex justify-content-center">
@@ -186,6 +194,7 @@ export const ResultComponent = () => {
                       id={id}
                       nTratte={nTratte}
                       setNTratte={setNTratte}
+                      hasGrimaldiResults={hasGrimaldiResults}
                     />
                     <div className="mb-3"></div>
                     {isLoading(id) ? (

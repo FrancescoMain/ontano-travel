@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import i18n from "../../i18n";
 import "./ResultCard.css";
 import dayjs from "dayjs";
@@ -36,6 +37,7 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
   const [loading, setLoading] = useState(false);
   const [priceData, setPriceData] = useState(null);
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const language = i18n.language;
   dayjs.locale(language); // Set dayjs locale based on i18n language
@@ -49,13 +51,28 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
   const timeArr = formatTime(arrivalDate);
   const { hours, minutes } = calculateDuration(departureDate, arrivalDate);
 
-  const { adulti, bambini, etaBambini, animali, bagagli } = useSelector(
-    (state) => state.tratte.dettagli[id]
-  );
+  const { adulti, bambini, etaBambini, etaAdulti, animali, bagagli } =
+    useSelector((state) => state.tratte.dettagli[id]);
 
   const selectedExt = useSelector((state) => state.resultsTratta.selected);
 
+  // Check if this is a Grimaldi route
+  const isGrimaldi = data.company === "Grimaldi";
+  const adultiNum = parseInt(adulti, 10) || 1;
+
+  // For Grimaldi, check if all adult ages are valid
+  const grimaldiAgesValid =
+    etaAdulti?.length === adultiNum &&
+    etaAdulti.every((age) => age !== "" && parseInt(age, 10) >= 12);
+
+  // Skip fetch for Grimaldi if ages are not valid
+  const skipFetch = isGrimaldi && !grimaldiAgesValid;
+
   const onClick = () => {
+    // For Grimaldi, don't allow selection until ages are entered
+    if (isGrimaldi && !grimaldiAgesValid) {
+      return;
+    }
     const dataToDispatch = {
       id: id,
       prezzo: priceData.price,
@@ -66,6 +83,7 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
       adulti: adulti,
       bambini: bambini,
       etaBambini: etaBambini,
+      etaAdulti: etaAdulti,
     };
     dispatch(upsertSelected(dataToDispatch));
     const element = document.getElementById("result-ritorno");
@@ -97,10 +115,12 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
     data,
     adulti,
     etaBambini,
+    etaAdulti,
     animali,
     bagagli,
     setLoading,
     setPriceData,
+    skipFetch,
   });
 
   useEffect(() => {
@@ -113,6 +133,7 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
           prezzo: priceData?.price,
           idSelected: index,
           data,
+          etaAdulti: etaAdulti,
         })
       );
     }
@@ -198,7 +219,11 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
         <div className="col-lg-4 no-pet-mode ">
           <div className="prezzo text-center d-flex flex-column align-items-center row  p-2 gx-1 gx-lg-3  justify-content-center fs-1 fw-bold  ">
             <div className="col fs-2">
-              {loading ? (
+              {isGrimaldi && !grimaldiAgesValid ? (
+                <span className="text-muted fs-6">
+                  {t("Inserisci età adulti")}
+                </span>
+              ) : loading ? (
                 <SpinnerOnly active={loading} />
               ) : priceData?.priceFormatted ? (
                 priceData?.priceFormatted

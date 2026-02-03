@@ -17,6 +17,7 @@ import {
   setAdulti,
   setBambini,
   setEtaBambini,
+  setEtaAdulti,
 } from "../../../features/viaggio/viaggioFormSlice";
 
 export const ModalPassengers = ({ open, setOpen }) => {
@@ -24,7 +25,7 @@ export const ModalPassengers = ({ open, setOpen }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
 
   const dispatch = useDispatch();
-  const { adulti, bambini, etaBambini } = useSelector(
+  const { adulti, bambini, etaBambini, etaAdulti } = useSelector(
     (state) => state.viaggioForm
   );
 
@@ -33,13 +34,16 @@ export const ModalPassengers = ({ open, setOpen }) => {
   };
 
   const etaBambinoString = t("Inserire età bambino");
+  const etaAdultoString = t("Età adulto");
 
   useEffect(() => {
-    // Controlla se tutti i campi di età dei bambini sono compilati
-    const allAgesFilled =
+    // Controlla se tutti i campi di età sono compilati
+    const allChildAgesFilled =
       etaBambini.length === bambini && etaBambini.every((age) => age !== "");
-    setButtonDisabled(!allAgesFilled);
-  }, [etaBambini, bambini]);
+    const allAdultAgesFilled =
+      etaAdulti.length === adulti && etaAdulti.every((age) => age !== "");
+    setButtonDisabled(!allChildAgesFilled || !allAdultAgesFilled);
+  }, [etaBambini, bambini, etaAdulti, adulti]);
 
   return (
     <Modal open={open} onClose={() => setOpen(false)}>
@@ -77,7 +81,10 @@ export const ModalPassengers = ({ open, setOpen }) => {
               <IconButton
                 size="sm"
                 variant="outlined"
-                onClick={() => dispatch(setAdulti(adulti > 0 ? adulti - 1 : 0))}
+                onClick={() => {
+                  dispatch(setAdulti(adulti > 1 ? adulti - 1 : 1));
+                  dispatch(setEtaAdulti(etaAdulti.slice(0, -1)));
+                }}
               >
                 <Remove />
               </IconButton>
@@ -92,6 +99,26 @@ export const ModalPassengers = ({ open, setOpen }) => {
                 <Add />
               </IconButton>
             </Box>
+            {Array.from({ length: adulti }).map((_, index) => (
+              <Input
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value !== "" && parseInt(value, 10) < 12) {
+                    e.target.value = 12;
+                  }
+                  const newAdultAge = [...etaAdulti];
+                  newAdultAge[index] = e.target.value;
+                  dispatch(setEtaAdulti(newAdultAge));
+                }}
+                value={etaAdulti[index] || ""}
+                type="number"
+                key={`adult-${index}`}
+                color="neutral"
+                placeholder={`${etaAdultoString} ${index + 1}`}
+                variant="outlined"
+                sx={{ mb: 1 }}
+              />
+            ))}
           </div>
           <div className="modal-passengers__counter">
             <Typography

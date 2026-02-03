@@ -137,11 +137,27 @@ export const useFormViaggioComponent = (disableFetch) => {
   };
 
   const handleChangeAdulti = (e, id) => {
-    const value = e.target.value;
+    const value = Number(e.target.value);
     dispatch(upsertDettagli({ id, adulti: value }));
-    dispatch(upsertDettagli({ id: id + 1, adulti: value }));
-    if (!multitratta && id === 0) {
+
+    // Trim etaAdulti array if number of adults decreased
+    if (dettagli[id]?.etaAdulti?.length > value) {
+      const newEtaAdulti = dettagli[id].etaAdulti.slice(0, value);
+      dispatch(upsertDettagli({ id, etaAdulti: newEtaAdulti }));
+    }
+
+    if (multitratta) {
+      dispatch(upsertDettagli({ id: id + 1, adulti: value }));
+      if (dettagli[id + 1]?.etaAdulti?.length > value) {
+        const newEtaAdulti = dettagli[id + 1].etaAdulti.slice(0, value);
+        dispatch(upsertDettagli({ id: id + 1, etaAdulti: newEtaAdulti }));
+      }
+    } else if (id === 0) {
       dispatch(upsertDettagli({ id: 1, adulti: value }));
+      if (dettagli[1]?.etaAdulti?.length > value) {
+        const newEtaAdulti = dettagli[1].etaAdulti.slice(0, value);
+        dispatch(upsertDettagli({ id: 1, etaAdulti: newEtaAdulti }));
+      }
     }
     dispatch(resetSelected({ id }));
   };

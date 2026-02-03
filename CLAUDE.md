@@ -200,3 +200,47 @@ refactor/<nome-descrittivo>   # Refactoring senza cambio funzionalità
 - Redux uses createSlice pattern with async thunks for API operations
 - Toast notifications via react-toastify for user feedback
 - Affiliate tracking via `yafl` query parameter stored in cookies
+
+## Errori Critici da Evitare
+
+### Traduzioni (i18next)
+
+**NON** importare `t` direttamente da `i18n.js`:
+```javascript
+// SBAGLIATO - `t` non è esportato da i18n.js
+import i18n, { t } from "../../i18n";
+
+// CORRETTO - usare il hook useTranslation
+import { useTranslation } from "react-i18next";
+
+const MyComponent = () => {
+  const { t } = useTranslation();
+  return <div>{t("chiave")}</div>;
+};
+```
+
+### Loop Infiniti in useEffect
+
+Quando si passano array/oggetti come dipendenze a `useEffect` o a custom hooks, **attenzione ai riferimenti**:
+
+```javascript
+// SBAGLIATO - crea nuovo array ad ogni render, causa loop infinito
+useFetchPriceData({
+  etaAdulti: localAdultAges.map((a) => parseInt(a, 10)), // Nuovo array ogni volta!
+});
+
+// CORRETTO - memoizzare l'array
+const computedEtaAdulti = useMemo(() => {
+  return localAdultAges.map((a) => parseInt(a, 10));
+}, [localAdultAges]);
+
+useFetchPriceData({
+  etaAdulti: computedEtaAdulti, // Riferimento stabile
+});
+```
+
+**Regole:**
+1. Mai creare array/oggetti inline nelle props passate a hooks con useEffect
+2. Usare `useMemo` per memoizzare valori calcolati
+3. Verificare sempre le dipendenze degli useEffect per evitare loop
+4. Testare il comportamento runtime dopo ogni modifica a hook/useEffect

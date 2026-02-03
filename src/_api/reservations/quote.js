@@ -5,11 +5,15 @@ import { config } from "../../config/config"; // Import config
 // Funzione per fare la chiamata POST
 export const postQuote = async ({ tratte, etaBambini }) => {
   let body = tratte.map((tratta) => {
+    // Use etaAdulti if available and matches adulti count, otherwise default to 18
+    const adultAges =
+      tratta.etaAdulti?.length === parseInt(tratta.adulti, 10)
+        ? tratta.etaAdulti
+        : Array.from({ length: parseInt(tratta.adulti, 10) }, () => 18);
+
     // Crea l'array dei passeggeri
     const passengers = [
-      ...Array.from({ length: parseInt(tratta.adulti, 10) }, () => ({
-        age: 18,
-      })), // Aggiungi 18 per ogni adulto
+      ...adultAges.map((age) => ({ age: parseInt(age, 10) })), // Aggiungi l'età reale di ogni adulto
       ...tratta.etaBambini.map((age) => ({ age: parseInt(age, 10) })), // Aggiungi l'età di ogni bambino
     ];
 
