@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from "@testing-library/react";
+import { renderHook, waitFor, act } from "@testing-library/react";
 import { useFetchPriceData } from "../../_hooks/useFetchPriceData";
 
 // Mock fetch
@@ -20,6 +20,8 @@ jest.mock("../../config/config", () => ({
   },
 }));
 
+const DEBOUNCE_DELAY = 1500;
+
 describe("useFetchPriceData", () => {
   const mockSetLoading = jest.fn();
   const mockSetPriceData = jest.fn();
@@ -37,10 +39,15 @@ describe("useFetchPriceData", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.useFakeTimers();
     global.fetch.mockResolvedValue({
       ok: true,
       json: () => Promise.resolve({ price: 100, priceFormatted: "100,00 €" }),
     });
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
   });
 
   describe("skipFetch parameter", () => {
@@ -52,11 +59,14 @@ describe("useFetchPriceData", () => {
         })
       );
 
-      await waitFor(() => {
-        expect(global.fetch).not.toHaveBeenCalled();
-        expect(mockSetLoading).toHaveBeenCalledWith(false);
-        expect(mockSetPriceData).toHaveBeenCalledWith(null);
+      // Advance timers past debounce
+      act(() => {
+        jest.advanceTimersByTime(DEBOUNCE_DELAY + 100);
       });
+
+      expect(global.fetch).not.toHaveBeenCalled();
+      expect(mockSetLoading).toHaveBeenCalledWith(false);
+      expect(mockSetPriceData).toHaveBeenCalledWith(null);
     });
 
     it("should fetch when skipFetch is false", async () => {
@@ -67,18 +77,24 @@ describe("useFetchPriceData", () => {
         })
       );
 
-      await waitFor(() => {
-        expect(global.fetch).toHaveBeenCalled();
+      // Advance timers past debounce
+      await act(async () => {
+        jest.advanceTimersByTime(DEBOUNCE_DELAY + 100);
       });
+
+      expect(global.fetch).toHaveBeenCalled();
     });
 
     it("should fetch when skipFetch is not provided (default)", async () => {
       const { etaAdulti, ...propsWithoutEtaAdulti } = defaultProps;
       renderHook(() => useFetchPriceData(propsWithoutEtaAdulti));
 
-      await waitFor(() => {
-        expect(global.fetch).toHaveBeenCalled();
+      // Advance timers past debounce
+      await act(async () => {
+        jest.advanceTimersByTime(DEBOUNCE_DELAY + 100);
       });
+
+      expect(global.fetch).toHaveBeenCalled();
     });
   });
 
@@ -91,13 +107,16 @@ describe("useFetchPriceData", () => {
         })
       );
 
-      await waitFor(() => {
-        expect(global.fetch).toHaveBeenCalled();
-        const fetchUrl = global.fetch.mock.calls[0][0];
-        // Should have 2 adults with age 18 and 1 child with age 5
-        expect(fetchUrl).toContain("passengers_age=18");
-        expect(fetchUrl).toContain("passengers_age=5");
+      // Advance timers past debounce
+      await act(async () => {
+        jest.advanceTimersByTime(DEBOUNCE_DELAY + 100);
       });
+
+      expect(global.fetch).toHaveBeenCalled();
+      const fetchUrl = global.fetch.mock.calls[0][0];
+      // Should have 2 adults with age 18 and 1 child with age 5
+      expect(fetchUrl).toContain("passengers_age=18");
+      expect(fetchUrl).toContain("passengers_age=5");
     });
 
     it("should use etaAdulti when provided and matches adulti count", async () => {
@@ -109,13 +128,16 @@ describe("useFetchPriceData", () => {
         })
       );
 
-      await waitFor(() => {
-        expect(global.fetch).toHaveBeenCalled();
-        const fetchUrl = global.fetch.mock.calls[0][0];
-        expect(fetchUrl).toContain("passengers_age=25");
-        expect(fetchUrl).toContain("passengers_age=30");
-        expect(fetchUrl).toContain("passengers_age=5");
+      // Advance timers past debounce
+      await act(async () => {
+        jest.advanceTimersByTime(DEBOUNCE_DELAY + 100);
       });
+
+      expect(global.fetch).toHaveBeenCalled();
+      const fetchUrl = global.fetch.mock.calls[0][0];
+      expect(fetchUrl).toContain("passengers_age=25");
+      expect(fetchUrl).toContain("passengers_age=30");
+      expect(fetchUrl).toContain("passengers_age=5");
     });
 
     it("should fall back to default age when etaAdulti length does not match adulti count", async () => {
@@ -127,13 +149,16 @@ describe("useFetchPriceData", () => {
         })
       );
 
-      await waitFor(() => {
-        expect(global.fetch).toHaveBeenCalled();
-        const fetchUrl = global.fetch.mock.calls[0][0];
-        // Should use default ages (18) since count doesn't match
-        const matches = fetchUrl.match(/passengers_age=18/g);
-        expect(matches).toHaveLength(3);
+      // Advance timers past debounce
+      await act(async () => {
+        jest.advanceTimersByTime(DEBOUNCE_DELAY + 100);
       });
+
+      expect(global.fetch).toHaveBeenCalled();
+      const fetchUrl = global.fetch.mock.calls[0][0];
+      // Should use default ages (18) since count doesn't match
+      const matches = fetchUrl.match(/passengers_age=18/g);
+      expect(matches).toHaveLength(3);
     });
   });
 });

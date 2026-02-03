@@ -1,6 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import i18n from "../i18n";
 import { config } from "../config/config";
+
+const DEBOUNCE_DELAY = 1500; // 1.5 seconds debounce for API calls
 
 export const useFetchPriceData = ({
   data,
@@ -13,6 +15,8 @@ export const useFetchPriceData = ({
   setPriceData,
   skipFetch = false,
 }) => {
+  const debounceTimerRef = useRef(null);
+
   useEffect(() => {
     if (skipFetch) {
       setLoading(false);
@@ -20,9 +24,15 @@ export const useFetchPriceData = ({
       return;
     }
 
-    const fetchPriceData = async () => {
-      setLoading(true);
+    // Clear previous timer
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
 
+    // Show loading immediately
+    setLoading(true);
+
+    const fetchPriceData = async () => {
       const language = i18n.language || "it";
 
       // Use etaAdulti if available and matches adulti count, otherwise default to 18
@@ -52,6 +62,16 @@ export const useFetchPriceData = ({
       }
     };
 
-    fetchPriceData();
+    // Debounce the API call
+    debounceTimerRef.current = setTimeout(() => {
+      fetchPriceData();
+    }, DEBOUNCE_DELAY);
+
+    // Cleanup on unmount or dependency change
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
   }, [data, adulti, etaBambini, etaAdulti, animali, bagagli, skipFetch]);
 };

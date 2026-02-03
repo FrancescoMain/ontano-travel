@@ -3,7 +3,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import { Button, Card, Input, Typography } from "@mui/joy";
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Autocomplete from "@mui/joy/Autocomplete";
 import dayjs from "dayjs";
 import "dayjs/locale/it";
@@ -20,8 +20,82 @@ import { resetSelected } from "../features/viaggio/resultTratta";
 import { CiCircleInfo } from "react-icons/ci";
 import { Tooltip as MuiTooltip } from "@mui/material";
 import { TourComponent } from "./TourComponent";
+import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 dayjs.extend(isSameOrAfter);
+
+const VALIDATION_DEBOUNCE = 1500; // 1.5 seconds debounce for validation
+
+// Separate component for adult age input with local state and debounce
+const AdultAgeInput = ({ index, id, dettagli, multitratta, placeholder }) => {
+  const dispatch = useDispatch();
+  const [localValue, setLocalValue] = useState(
+    dettagli[id]?.etaAdulti?.[index] || ""
+  );
+  const debounceRef = useRef(null);
+
+  // Sync local state when Redux state changes externally
+  useEffect(() => {
+    const reduxValue = dettagli[id]?.etaAdulti?.[index] || "";
+    if (reduxValue !== localValue && !debounceRef.current) {
+      setLocalValue(reduxValue);
+    }
+  }, [dettagli[id]?.etaAdulti?.[index]]);
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setLocalValue(value);
+
+    // Clear previous timer
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+
+    // Debounce validation and dispatch
+    debounceRef.current = setTimeout(() => {
+      let validatedValue = value;
+      if (value !== "" && parseInt(value, 10) < 12) {
+        validatedValue = "12";
+        setLocalValue("12");
+      }
+
+      const newAdultAge = [...(dettagli[id]?.etaAdulti || [])];
+      newAdultAge[index] = validatedValue;
+      dispatch(upsertDettagli({ id, etaAdulti: newAdultAge }));
+      dispatch(upsertDettagli({ id: id + 1, etaAdulti: newAdultAge }));
+      if (!multitratta && id === 0) {
+        dispatch(upsertDettagli({ id: 1, etaAdulti: newAdultAge }));
+      }
+      debounceRef.current = null;
+    }, VALIDATION_DEBOUNCE);
+  };
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+      }
+    };
+  }, []);
+
+  const isEmpty = localValue === undefined || localValue === "";
+
+  return (
+    <div className="col" key={`adult-age-${index}`}>
+      <Input
+        onChange={handleChange}
+        value={localValue}
+        type="number"
+        color="neutral"
+        placeholder={placeholder}
+        variant="outlined"
+        className={`input-eta ${isEmpty ? "error" : ""}`}
+      />
+    </div>
+  );
+};
 
 export const FormViaggioComponent = () => {
   const {
@@ -428,36 +502,14 @@ export const DettagliViaggio = ({ id, selected, resetHandle, hasGrimaldiResults 
       )}
       {hasGrimaldiResults &&
         Array.from({ length: dettagli[id]?.adulti || 0 }).map((_, index) => (
-          <div className="col" key={`adult-age-${index}`}>
-            <Input
-              onChange={(e) => {
-                let value = e.target.value;
-                if (value !== "" && parseInt(value, 10) < 12) {
-                  value = "12";
-                }
-                const newAdultAge = [...(dettagli[id]?.etaAdulti || [])];
-                newAdultAge[index] = value;
-                dispatch(upsertDettagli({ id, etaAdulti: newAdultAge }));
-                dispatch(
-                  upsertDettagli({ id: id + 1, etaAdulti: newAdultAge })
-                );
-                if (!multitratta && id === 0) {
-                  dispatch(upsertDettagli({ id: 1, etaAdulti: newAdultAge }));
-                }
-              }}
-              value={dettagli[id]?.etaAdulti?.[index] || ""}
-              type="number"
-              color="neutral"
-              placeholder={`${t("Età adulto")} ${index + 1}`}
-              variant="outlined"
-              className={`input-eta ${
-                dettagli[id]?.etaAdulti?.[index] === undefined ||
-                dettagli[id]?.etaAdulti?.[index] === ""
-                  ? "error"
-                  : ""
-              }`}
-            />
-          </div>
+          <AdultAgeInput
+            key={`adult-age-${index}`}
+            index={index}
+            id={id}
+            dettagli={dettagli}
+            multitratta={multitratta}
+            placeholder={`${t("Età adulto")} ${index + 1}`}
+          />
         ))}
       {dettagli[id]?.bambini > 0 && (
         <Typography
