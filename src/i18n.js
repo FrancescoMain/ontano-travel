@@ -169,6 +169,9 @@ const resources = {
       "Error fetching tours. Please try again.": "Error fetching tours. Please try again.",
       "Error posting tour quote. Please try again.": "Error posting tour quote. Please try again.",
       "Errore nella ricerca del tour. Riprova con un'altra data o contatta l'assistenza.": "Error searching for tour. Please try again with another date or contact support.",
+      "Per calcolare il prezzo, inserisci l'età degli adulti": "To calculate the price, enter adult ages",
+      "Età adulto": "Adult age",
+      "Calcola prezzo": "Calculate price",
     },
   },
   it: {
@@ -332,6 +335,9 @@ const resources = {
       "Error fetching tours. Please try again.": "Errore nel recupero dei tour. Per favore riprova.",
       "Error posting tour quote. Please try again.": "Errore nell'invio del preventivo. Per favore riprova.",
       "Errore nella ricerca del tour. Riprova con un'altra data o contatta l'assistenza.": "Errore nella ricerca del tour. Riprova con un'altra data o contatta l'assistenza.",
+      "Per calcolare il prezzo, inserisci l'età degli adulti": "Per calcolare il prezzo, inserisci l'età degli adulti",
+      "Età adulto": "Età adulto",
+      "Calcola prezzo": "Calcola prezzo",
     },
   },
 };

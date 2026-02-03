@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import i18n from "../../i18n";
 import "./ResultCard.css";
 import dayjs from "dayjs";
@@ -15,6 +16,7 @@ import alilauro from "../../assets/Logo-AliLauro.png";
 import alilauroGruson from "../../assets/Alilauro Gruson.png";
 import Nlg from "../../assets/nlg.png";
 import { upsertSelected } from "../../features/viaggio/resultTratta";
+import { upsertDettagli } from "../../features/viaggio/findTratta";
 import { animateScroll as scroll } from "react-scroll";
 import { useFetchPriceData } from "../../_hooks/useFetchPriceData";
 import {
@@ -35,7 +37,10 @@ const gtag = window.gtag || function () {}; // Add this line
 export const ResultCard = ({ data, selected, hidden, id, index }) => {
   const [loading, setLoading] = useState(false);
   const [priceData, setPriceData] = useState(null);
+  const [localAdultAges, setLocalAdultAges] = useState([]);
+  const [agesConfirmed, setAgesConfirmed] = useState(false);
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const language = i18n.language;
   dayjs.locale(language); // Set dayjs locale based on i18n language
@@ -49,13 +54,53 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
   const timeArr = formatTime(arrivalDate);
   const { hours, minutes } = calculateDuration(departureDate, arrivalDate);
 
-  const { adulti, bambini, etaBambini, animali, bagagli } = useSelector(
-    (state) => state.tratte.dettagli[id]
-  );
+  const { adulti, bambini, etaBambini, etaAdulti, animali, bagagli } =
+    useSelector((state) => state.tratte.dettagli[id]);
 
   const selectedExt = useSelector((state) => state.resultsTratta.selected);
 
+  // Detect if this is a Grimaldi route
+  const isGrimaldi = data.company === "Grimaldi";
+
+  // Initialize local adult ages when adulti changes
+  const adultiNum = parseInt(adulti, 10) || 1;
+
+  useEffect(() => {
+    if (isGrimaldi && localAdultAges.length !== adultiNum) {
+      setLocalAdultAges(Array.from({ length: adultiNum }, () => ""));
+      setAgesConfirmed(false);
+    }
+  }, [adultiNum, isGrimaldi]);
+
+  // Check if all ages are valid (positive numbers)
+  const allAgesValid =
+    localAdultAges.length === adultiNum &&
+    localAdultAges.every((age) => age !== "" && parseInt(age, 10) > 0);
+
+  // For Grimaldi, skip fetch until ages are confirmed
+  const skipFetch = isGrimaldi && !agesConfirmed;
+
+  const handleAgeChange = (idx, value) => {
+    const newAges = [...localAdultAges];
+    newAges[idx] = value;
+    setLocalAdultAges(newAges);
+  };
+
+  const handleConfirmAges = (e) => {
+    e.stopPropagation();
+    if (allAgesValid) {
+      const numericAges = localAdultAges.map((age) => parseInt(age, 10));
+      dispatch(upsertDettagli({ id, etaAdulti: numericAges }));
+      setAgesConfirmed(true);
+    }
+  };
+
   const onClick = () => {
+    // For Grimaldi, don't allow selection until price is calculated
+    if (isGrimaldi && !agesConfirmed) {
+      return;
+    }
+
     const dataToDispatch = {
       id: id,
       prezzo: priceData.price,
@@ -66,6 +111,7 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
       adulti: adulti,
       bambini: bambini,
       etaBambini: etaBambini,
+      etaAdulti: computedEtaAdulti,
     };
     dispatch(upsertSelected(dataToDispatch));
     const element = document.getElementById("result-ritorno");
@@ -93,14 +139,24 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
     }
   };
 
+  // Memoize the computed adult ages to prevent infinite loops
+  const computedEtaAdulti = useMemo(() => {
+    if (agesConfirmed && localAdultAges.length > 0) {
+      return localAdultAges.map((a) => parseInt(a, 10));
+    }
+    return etaAdulti || [];
+  }, [agesConfirmed, localAdultAges, etaAdulti]);
+
   useFetchPriceData({
     data,
     adulti,
     etaBambini,
+    etaAdulti: computedEtaAdulti,
     animali,
     bagagli,
     setLoading,
     setPriceData,
+    skipFetch,
   });
 
   useEffect(() => {
@@ -113,6 +169,7 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
           prezzo: priceData?.price,
           idSelected: index,
           data,
+          etaAdulti: computedEtaAdulti,
         })
       );
     }
@@ -196,26 +253,69 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
           </div>
         </div>
         <div className="col-lg-4 no-pet-mode ">
-          <div className="prezzo text-center d-flex flex-column align-items-center row  p-2 gx-1 gx-lg-3  justify-content-center fs-1 fw-bold  ">
-            <div className="col fs-2">
-              {loading ? (
-                <SpinnerOnly active={loading} />
-              ) : priceData?.priceFormatted ? (
-                priceData?.priceFormatted
-              ) : (
-                "-"
+          {isGrimaldi && !agesConfirmed ? (
+            <div className="grimaldi-age-input p-3">
+              <div className="grimaldi-age-message mb-2 text-center">
+                <small className="text-muted">
+                  {t("Per calcolare il prezzo, inserisci l'età degli adulti")}
+                </small>
+              </div>
+              <div className="grimaldi-age-fields d-flex flex-wrap justify-content-center gap-2 mb-2">
+                {localAdultAges.map((age, idx) => (
+                  <div key={idx} className="grimaldi-age-field">
+                    <label className="form-label small mb-1">
+                      {t("Età adulto")} {idx + 1}
+                    </label>
+                    <input
+                      type="number"
+                      className="form-control form-control-sm grimaldi-age-input-field"
+                      min="1"
+                      max="120"
+                      value={age}
+                      onClick={(e) => e.stopPropagation()}
+                      onChange={(e) => handleAgeChange(idx, e.target.value)}
+                      placeholder="18"
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="text-center">
+                <button
+                  type="button"
+                  className="btn btn-primary btn-sm"
+                  disabled={!allAgesValid}
+                  onClick={handleConfirmAges}
+                >
+                  {t("Calcola prezzo")}
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="prezzo text-center d-flex flex-column align-items-center row  p-2 gx-1 gx-lg-3  justify-content-center fs-1 fw-bold  ">
+              <div className="col fs-2">
+                {loading ? (
+                  <SpinnerOnly active={loading} />
+                ) : priceData?.priceFormatted ? (
+                  priceData?.priceFormatted
+                ) : (
+                  "-"
+                )}
+              </div>
+              <div className="fs-6 fw-light lh-sm">
+                {parseInt(adulti, 10) + etaBambini.length + " Passeggeri"}
+              </div>
+              {animali > 0 && (
+                <div className="fs-6 fw-light lh-sm">
+                  {animali + " Animali"}
+                </div>
+              )}
+              {bagagli > 0 && (
+                <div className="fs-6 fw-light lh-sm">
+                  {bagagli + " Bagagli"}
+                </div>
               )}
             </div>
-            <div className="fs-6 fw-light lh-sm">
-              {parseInt(adulti, 10) + etaBambini.length + " Passeggeri"}
-            </div>
-            {animali > 0 && (
-              <div className="fs-6 fw-light lh-sm">{animali + " Animali"}</div>
-            )}
-            {bagagli > 0 && (
-              <div className="fs-6 fw-light lh-sm">{bagagli + " Bagagli"}</div>
-            )}
-          </div>
+          )}
         </div>
       </div>
     </div>
