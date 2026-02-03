@@ -416,6 +416,49 @@ export const DettagliViaggio = ({ id, selected, resetHandle, hasGrimaldiResults 
           </select>
         </div>
       </div>
+      {hasGrimaldiResults && dettagli[id]?.adulti > 0 && (
+        <Typography
+          color="primary"
+          level="body-md"
+          noWrap={false}
+          variant="plain"
+        >
+          {t("Inserire età adulti")}
+        </Typography>
+      )}
+      {hasGrimaldiResults &&
+        Array.from({ length: dettagli[id]?.adulti || 0 }).map((_, index) => (
+          <div className="col" key={`adult-age-${index}`}>
+            <Input
+              onChange={(e) => {
+                let value = e.target.value;
+                if (value !== "" && parseInt(value, 10) < 12) {
+                  value = "12";
+                }
+                const newAdultAge = [...(dettagli[id]?.etaAdulti || [])];
+                newAdultAge[index] = value;
+                dispatch(upsertDettagli({ id, etaAdulti: newAdultAge }));
+                dispatch(
+                  upsertDettagli({ id: id + 1, etaAdulti: newAdultAge })
+                );
+                if (!multitratta && id === 0) {
+                  dispatch(upsertDettagli({ id: 1, etaAdulti: newAdultAge }));
+                }
+              }}
+              value={dettagli[id]?.etaAdulti?.[index] || ""}
+              type="number"
+              color="neutral"
+              placeholder={`${t("Età adulto")} ${index + 1}`}
+              variant="outlined"
+              className={`input-eta ${
+                dettagli[id]?.etaAdulti?.[index] === undefined ||
+                dettagli[id]?.etaAdulti?.[index] === ""
+                  ? "error"
+                  : ""
+              }`}
+            />
+          </div>
+        ))}
       {dettagli[id]?.bambini > 0 && (
         <Typography
           color="primary"
@@ -461,49 +504,6 @@ export const DettagliViaggio = ({ id, selected, resetHandle, hasGrimaldiResults 
           />
         </div>
       ))}
-      {hasGrimaldiResults && dettagli[id]?.adulti > 0 && (
-        <Typography
-          color="primary"
-          level="body-md"
-          noWrap={false}
-          variant="plain"
-        >
-          {t("Inserire età adulti")} (Grimaldi)
-        </Typography>
-      )}
-      {hasGrimaldiResults &&
-        Array.from({ length: dettagli[id]?.adulti || 0 }).map((_, index) => (
-          <div className="col" key={`adult-age-${index}`}>
-            <Input
-              onChange={(e) => {
-                let value = e.target.value;
-                if (value !== "" && parseInt(value, 10) < 12) {
-                  value = "12";
-                }
-                const newAdultAge = [...(dettagli[id]?.etaAdulti || [])];
-                newAdultAge[index] = value;
-                dispatch(upsertDettagli({ id, etaAdulti: newAdultAge }));
-                dispatch(
-                  upsertDettagli({ id: id + 1, etaAdulti: newAdultAge })
-                );
-                if (!multitratta && id === 0) {
-                  dispatch(upsertDettagli({ id: 1, etaAdulti: newAdultAge }));
-                }
-              }}
-              value={dettagli[id]?.etaAdulti?.[index] || ""}
-              type="number"
-              color="neutral"
-              placeholder={`${t("Età adulto")} ${index + 1}`}
-              variant="outlined"
-              className={`input-eta ${
-                dettagli[id]?.etaAdulti?.[index] === undefined ||
-                dettagli[id]?.etaAdulti?.[index] === ""
-                  ? "error"
-                  : ""
-              }`}
-            />
-          </div>
-        ))}
       {selected[id]?.data?.result_id && (
         <span
           className=" fs-6 fst-italic pointer underline text-secondary"
