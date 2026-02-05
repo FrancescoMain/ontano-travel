@@ -46,12 +46,17 @@ export const useFetchPriceData = ({
         .map((age) => `passengers_age=${age}`)
         .join("&");
 
-      // Build accommodations params for Grimaldi routes (Spring format with dot notation)
+      // Build accommodations params for Grimaldi routes (repeated JSON objects)
       const accommodationsParams = accommodations
-        .map(
-          (acc, index) =>
-            `accomodations[${index}].code=${encodeURIComponent(acc.code)}&accomodations[${index}].qty=${acc.qty}&accomodations[${index}].type=${encodeURIComponent(acc.type)}&accomodations[${index}].hosted_people=${acc.hosted_people}`
-        )
+        .map((acc) => {
+          const accObj = {
+            code: acc.code,
+            qty: acc.qty,
+            type: acc.type,
+            hosted_people: acc.hosted_people,
+          };
+          return `accomodations=${JSON.stringify(accObj)}`;
+        })
         .join("&");
 
       const baseUrl = `${config.basePath}${config.fetchPriceSearchResult.route}?language=${language}&search_result_id=${data.result_id}&animals=${animali}&luggages=${bagagli}&${passengersAgeParams}`;

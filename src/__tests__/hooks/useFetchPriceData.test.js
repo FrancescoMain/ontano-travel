@@ -163,7 +163,7 @@ describe("useFetchPriceData", () => {
   });
 
   describe("accommodations parameter", () => {
-    it("should include accommodations in URL with Spring dot notation format when provided", async () => {
+    it("should include accommodations in URL with repeated JSON format when provided", async () => {
       const accommodations = [
         { code: "DS", qty: 2, hosted_people: 1, type: "CHAIR" },
         { code: "A2", qty: 1, hosted_people: 2, type: "CABIN" },
@@ -183,15 +183,11 @@ describe("useFetchPriceData", () => {
       expect(global.fetch).toHaveBeenCalled();
       const fetchUrl = global.fetch.mock.calls[0][0];
 
-      // Check Spring dot notation format
-      expect(fetchUrl).toContain("accomodations[0].code=DS");
-      expect(fetchUrl).toContain("accomodations[0].qty=2");
-      expect(fetchUrl).toContain("accomodations[0].type=CHAIR");
-      expect(fetchUrl).toContain("accomodations[0].hosted_people=1");
-      expect(fetchUrl).toContain("accomodations[1].code=A2");
-      expect(fetchUrl).toContain("accomodations[1].qty=1");
-      expect(fetchUrl).toContain("accomodations[1].type=CABIN");
-      expect(fetchUrl).toContain("accomodations[1].hosted_people=2");
+      // Check repeated JSON object format (not URL-encoded)
+      const expectedAcc1 = JSON.stringify({ code: "DS", qty: 2, type: "CHAIR", hosted_people: 1 });
+      const expectedAcc2 = JSON.stringify({ code: "A2", qty: 1, type: "CABIN", hosted_people: 2 });
+      expect(fetchUrl).toContain(`accomodations=${expectedAcc1}`);
+      expect(fetchUrl).toContain(`accomodations=${expectedAcc2}`);
     });
 
     it("should not include accommodations params when array is empty", async () => {
@@ -238,8 +234,8 @@ describe("useFetchPriceData", () => {
 
       expect(global.fetch).toHaveBeenCalledTimes(2);
       const secondFetchUrl = global.fetch.mock.calls[1][0];
-      expect(secondFetchUrl).toContain("accomodations[0].code=DS");
-      expect(secondFetchUrl).toContain("accomodations[0].qty=1");
+      const expectedAcc = JSON.stringify({ code: "DS", qty: 1, type: "CHAIR", hosted_people: 1 });
+      expect(secondFetchUrl).toContain(`accomodations=${expectedAcc}`);
     });
   });
 });
