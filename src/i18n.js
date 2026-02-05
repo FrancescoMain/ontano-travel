@@ -177,6 +177,10 @@ const resources = {
       "Tratte Grimaldi - Inserire età adulti": "Grimaldi Routes - Enter Adult Ages",
       "Per calcolare il prezzo delle tratte Grimaldi, inserisci l'età di ogni adulto": "To calculate Grimaldi route prices, enter the age of each adult",
       "Inserisci l'età di tutti gli adulti per vedere i prezzi Grimaldi": "Enter the age of all adults to see Grimaldi prices",
+      "Seleziona sistemazione": "Select accommodation",
+      "posti": "seats",
+      "Capienza totale": "Total capacity",
+      "passeggeri": "passengers",
     },
   },
   it: {
@@ -348,6 +352,10 @@ const resources = {
       "Tratte Grimaldi - Inserire età adulti": "Tratte Grimaldi - Inserire età adulti",
       "Per calcolare il prezzo delle tratte Grimaldi, inserisci l'età di ogni adulto": "Per calcolare il prezzo delle tratte Grimaldi, inserisci l'età di ogni adulto",
       "Inserisci l'età di tutti gli adulti per vedere i prezzi Grimaldi": "Inserisci l'età di tutti gli adulti per vedere i prezzi Grimaldi",
+      "Seleziona sistemazione": "Seleziona sistemazione",
+      "posti": "posti",
+      "Capienza totale": "Capienza totale",
+      "passeggeri": "passeggeri",
     },
   },
 };

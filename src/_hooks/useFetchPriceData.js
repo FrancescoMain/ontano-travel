@@ -11,6 +11,7 @@ export const useFetchPriceData = ({
   etaAdulti,
   animali,
   bagagli,
+  accommodations = [],
   setLoading,
   setPriceData,
   skipFetch = false,
@@ -45,11 +46,28 @@ export const useFetchPriceData = ({
         .map((age) => `passengers_age=${age}`)
         .join("&");
 
+      // Build accommodations params for Grimaldi routes (repeated JSON objects)
+      const accommodationsParams = accommodations
+        .map((acc) => {
+          const accObj = {
+            code: acc.code,
+            qty: acc.qty,
+            type: acc.type,
+            hosted_people: acc.hosted_people,
+          };
+          return `accomodations=${JSON.stringify(accObj)}`;
+        })
+        .join("&");
+
+      const baseUrl = `${config.basePath}${config.fetchPriceSearchResult.route}?language=${language}&search_result_id=${data.result_id}&animals=${animali}&luggages=${bagagli}&${passengersAgeParams}`;
+      const url = accommodationsParams
+        ? `${baseUrl}&${accommodationsParams}`
+        : baseUrl;
+
       try {
-        const response = await fetch(
-          `${config.basePath}${config.fetchPriceSearchResult.route}?language=${language}&search_result_id=${data.result_id}&animals=${animali}&luggages=${bagagli}&${passengersAgeParams}`,
-          { method: config.fetchPriceSearchResult.method }
-        );
+        const response = await fetch(url, {
+          method: config.fetchPriceSearchResult.method,
+        });
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -73,5 +91,5 @@ export const useFetchPriceData = ({
         clearTimeout(debounceTimerRef.current);
       }
     };
-  }, [data, adulti, etaBambini, etaAdulti, animali, bagagli, skipFetch]);
+  }, [data, adulti, etaBambini, etaAdulti, animali, bagagli, accommodations, skipFetch]);
 };

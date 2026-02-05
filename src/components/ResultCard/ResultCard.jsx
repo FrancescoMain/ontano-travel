@@ -18,6 +18,7 @@ import Nlg from "../../assets/nlg.png";
 import { upsertSelected } from "../../features/viaggio/resultTratta";
 import { animateScroll as scroll } from "react-scroll";
 import { useFetchPriceData } from "../../_hooks/useFetchPriceData";
+import { useFetchAccommodations } from "../../_hooks/useFetchAccommodations";
 import {
   formatDate,
   formatTime,
@@ -27,6 +28,7 @@ import alicost from "../../assets/alicost.png";
 import seremar from "../../assets/seremar.png";
 import coastLines from "../../assets/coast-lines.png";
 import grimaldi from "../../assets/Logo-Grimaldi-Lines.jpg";
+import { AccommodationSelector } from "./AccommodationSelector";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -36,6 +38,9 @@ const gtag = window.gtag || function () {}; // Add this line
 export const ResultCard = ({ data, selected, hidden, id, index }) => {
   const [loading, setLoading] = useState(false);
   const [priceData, setPriceData] = useState(null);
+  const [accommodations, setAccommodations] = useState([]);
+  const [accommodationsLoading, setAccommodationsLoading] = useState(false);
+  const [selectedAccommodations, setSelectedAccommodations] = useState([]);
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
@@ -84,6 +89,7 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
       bambini: bambini,
       etaBambini: etaBambini,
       etaAdulti: etaAdulti,
+      accommodations: selectedAccommodations,
     };
     dispatch(upsertSelected(dataToDispatch));
     const element = document.getElementById("result-ritorno");
@@ -118,9 +124,17 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
     etaAdulti,
     animali,
     bagagli,
+    accommodations: selectedAccommodations,
     setLoading,
     setPriceData,
     skipFetch,
+  });
+
+  useFetchAccommodations({
+    searchResultId: data.result_id,
+    isGrimaldi,
+    setLoading: setAccommodationsLoading,
+    setAccommodations,
   });
 
   useEffect(() => {
@@ -134,10 +148,11 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
           idSelected: index,
           data,
           etaAdulti: etaAdulti,
+          accommodations: selectedAccommodations,
         })
       );
     }
-  }, [priceData]);
+  }, [priceData, selectedAccommodations]);
 
   return (
     <div
@@ -243,6 +258,15 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
           </div>
         </div>
       </div>
+      {isGrimaldi && (
+        <AccommodationSelector
+          accommodations={accommodations}
+          selectedAccommodations={selectedAccommodations}
+          onSelectionChange={setSelectedAccommodations}
+          totalPassengers={adultiNum + etaBambini.length}
+          loading={accommodationsLoading}
+        />
+      )}
     </div>
   );
 };

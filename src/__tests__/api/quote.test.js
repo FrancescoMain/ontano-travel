@@ -169,3 +169,118 @@ describe("postQuote - etaAdulti", () => {
     ]);
   });
 });
+
+describe("postQuote - accommodations", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    global.fetch.mockResolvedValue({
+      ok: true,
+      headers: {
+        get: () => "application/json",
+      },
+      json: () => Promise.resolve({ success: true }),
+    });
+  });
+
+  it("should include accommodations inside params when provided", async () => {
+    const tratte = [
+      {
+        adulti: 2,
+        etaBambini: [],
+        etaAdulti: [25, 30],
+        animali: 0,
+        bagagli: 0,
+        data: { result_id: "123" },
+        accommodations: [
+          { code: "DS", qty: 2, hosted_people: 1, type: "CHAIR" },
+          { code: "A2", qty: 1, hosted_people: 2, type: "CABIN" },
+        ],
+      },
+    ];
+
+    await postQuote({ tratte });
+
+    expect(global.fetch).toHaveBeenCalled();
+    const requestBody = JSON.parse(global.fetch.mock.calls[0][1].body);
+
+    expect(requestBody[0].params.accomodations).toEqual([
+      { code: "DS", qty: 2, hosted_people: 1, type: "CHAIR" },
+      { code: "A2", qty: 1, hosted_people: 2, type: "CABIN" },
+    ]);
+  });
+
+  it("should not include accommodations in params when array is empty", async () => {
+    const tratte = [
+      {
+        adulti: 2,
+        etaBambini: [],
+        etaAdulti: [25, 30],
+        animali: 0,
+        bagagli: 0,
+        data: { result_id: "123" },
+        accommodations: [],
+      },
+    ];
+
+    await postQuote({ tratte });
+
+    expect(global.fetch).toHaveBeenCalled();
+    const requestBody = JSON.parse(global.fetch.mock.calls[0][1].body);
+
+    expect(requestBody[0].params.accomodations).toBeUndefined();
+  });
+
+  it("should not include accommodations in params when undefined", async () => {
+    const tratte = [
+      {
+        adulti: 2,
+        etaBambini: [],
+        etaAdulti: [25, 30],
+        animali: 0,
+        bagagli: 0,
+        data: { result_id: "123" },
+        // accommodations not provided
+      },
+    ];
+
+    await postQuote({ tratte });
+
+    expect(global.fetch).toHaveBeenCalled();
+    const requestBody = JSON.parse(global.fetch.mock.calls[0][1].body);
+
+    expect(requestBody[0].params.accomodations).toBeUndefined();
+  });
+
+  it("should handle multiple tratte with different accommodations", async () => {
+    const tratte = [
+      {
+        adulti: 2,
+        etaBambini: [],
+        etaAdulti: [25, 30],
+        animali: 0,
+        bagagli: 0,
+        data: { result_id: "123" },
+        accommodations: [{ code: "DS", qty: 2, hosted_people: 1, type: "CHAIR" }],
+      },
+      {
+        adulti: 2,
+        etaBambini: [],
+        etaAdulti: [25, 30],
+        animali: 0,
+        bagagli: 0,
+        data: { result_id: "456" },
+        accommodations: [], // No accommodations for return
+      },
+    ];
+
+    await postQuote({ tratte });
+
+    expect(global.fetch).toHaveBeenCalled();
+    const requestBody = JSON.parse(global.fetch.mock.calls[0][1].body);
+
+    expect(requestBody[0].params.accomodations).toEqual([
+      { code: "DS", qty: 2, hosted_people: 1, type: "CHAIR" },
+    ]);
+    expect(requestBody[1].params.accomodations).toBeUndefined();
+  });
+});

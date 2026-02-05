@@ -17,14 +17,27 @@ export const postQuote = async ({ tratte, etaBambini }) => {
       ...tratta.etaBambini.map((age) => ({ age: parseInt(age, 10) })), // Aggiungi l'età di ogni bambino
     ];
 
+    // Crea l'oggetto params
+    const params = {
+      passengers,
+      animals: parseInt(tratta.animali, 10) || 0,
+      luggages: parseInt(tratta.bagagli, 10) || 0,
+    };
+
+    // Add accommodations if present (for Grimaldi routes)
+    if (tratta.accommodations?.length > 0) {
+      params.accomodations = tratta.accommodations.map((acc) => ({
+        code: acc.code,
+        qty: acc.qty,
+        hosted_people: acc.hosted_people,
+        type: acc.type,
+      }));
+    }
+
     // Crea l'oggetto per ogni tratta
     return {
       search_result_id: tratta.data.result_id,
-      params: {
-        passengers,
-        animals: parseInt(tratta.animali, 10) || 0,
-        luggages: parseInt(tratta.bagagli, 10) || 0,
-      },
+      params,
     };
   });
 
