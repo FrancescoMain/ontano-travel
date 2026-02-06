@@ -70,8 +70,40 @@ export const AccommodationSelector = ({
     0
   );
 
+  // Check if capacity matches or exceeds passengers
+  const isCapacityMatched = totalCapacity >= totalPassengers;
+
+  // Calculate spare capacity (empty spots)
+  const spareCapacity = totalCapacity - totalPassengers;
+
   const handleContainerClick = (e) => {
     e.stopPropagation();
+  };
+
+  // Check if adding one more unit of this accommodation would exceed the limit
+  // Rule: spare capacity must be less than the largest unit's capacity
+  // (you can't have enough empty spots to fill another whole unit)
+  const canIncreaseQty = (acc) => {
+    const newCapacity = totalCapacity + acc.hosted_people;
+    const newSpare = newCapacity - totalPassengers;
+    // Find the max hosted_people among selected accommodations (including this one)
+    const maxHosted = Math.max(
+      acc.hosted_people,
+      ...selectedAccommodations.map((a) => a.hosted_people)
+    );
+    return newSpare < maxHosted;
+  };
+
+  // Check if adding a new accommodation type is allowed
+  const canAddAccommodation = (acc) => {
+    const newCapacity = totalCapacity + acc.hosted_people;
+    const newSpare = newCapacity - totalPassengers;
+    // Find the max hosted_people (considering the new one too)
+    const currentMax = selectedAccommodations.length > 0
+      ? Math.max(...selectedAccommodations.map((a) => a.hosted_people))
+      : 0;
+    const maxHosted = Math.max(acc.hosted_people, currentMax);
+    return newSpare < maxHosted;
   };
 
   if (loading) {
@@ -98,6 +130,14 @@ export const AccommodationSelector = ({
         getOptionLabel={(option) =>
           `${option.description} (${option.hosted_people} ${t("posti")})`
         }
+        getOptionDisabled={(option) => {
+          // Disable options not already selected if adding would exceed limit
+          const isSelected = selectedAccommodations.some(
+            (acc) => acc.code === option.code
+          );
+          if (isSelected) return false;
+          return !canAddAccommodation(option);
+        }}
         isOptionEqualToValue={(option, value) => option.code === value.code}
         value={selectedAccommodations}
         onChange={handleAutocompleteChange}
@@ -127,13 +167,28 @@ export const AccommodationSelector = ({
       />
 
       {selectedAccommodations.length > 0 && (
-        <Box className="accommodation-qty-container">
+        <Box className="accommodation-qty-container" sx={{ width: "100%", overflow: "hidden" }}>
           {selectedAccommodations.map((acc) => (
-            <Box key={acc.code} className="accommodation-qty-row">
-              <Typography variant="body2" className="accommodation-description">
+            <Box
+              key={acc.code}
+              className="accommodation-qty-row"
+              sx={{ width: "100%", maxWidth: "100%", overflow: "hidden" }}
+            >
+              <Typography
+                variant="body2"
+                className="accommodation-description"
+                noWrap
+                sx={{
+                  flex: 1,
+                  minWidth: 0,
+                  maxWidth: "calc(100% - 100px)",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
                 {acc.description} ({acc.hosted_people} {t("posti")})
               </Typography>
-              <Box className="accommodation-qty-controls">
+              <Box className="accommodation-qty-controls" sx={{ flexShrink: 0 }}>
                 <IconButton
                   size="small"
                   onClick={() => decreaseQty(acc.code)}
@@ -144,7 +199,11 @@ export const AccommodationSelector = ({
                 <Typography variant="body2" className="accommodation-qty-value">
                   {acc.qty}
                 </Typography>
-                <IconButton size="small" onClick={() => increaseQty(acc.code)}>
+                <IconButton
+                  size="small"
+                  onClick={() => increaseQty(acc.code)}
+                  disabled={!canIncreaseQty(acc)}
+                >
                   <AddIcon fontSize="small" />
                 </IconButton>
               </Box>
@@ -152,9 +211,14 @@ export const AccommodationSelector = ({
           ))}
 
           <Box className="accommodation-capacity-info">
-            <Typography variant="caption" color="textSecondary">
+            <Typography
+              variant="caption"
+              color={isCapacityMatched ? "success.main" : "textSecondary"}
+              sx={{ fontWeight: isCapacityMatched ? 600 : 400 }}
+            >
               {t("Capienza totale")}: {totalCapacity} / {totalPassengers}{" "}
               {t("passeggeri")}
+              {isCapacityMatched && ` ✓`}
             </Typography>
           </Box>
         </Box>
