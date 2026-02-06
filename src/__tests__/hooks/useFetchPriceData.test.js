@@ -183,9 +183,9 @@ describe("useFetchPriceData", () => {
       expect(global.fetch).toHaveBeenCalled();
       const fetchUrl = global.fetch.mock.calls[0][0];
 
-      // Check repeated JSON object format (not URL-encoded)
-      const expectedAcc1 = JSON.stringify({ code: "DS", qty: 2, type: "CHAIR", hosted_people: 1 });
-      const expectedAcc2 = JSON.stringify({ code: "A2", qty: 1, type: "CABIN", hosted_people: 2 });
+      // Check repeated JSON object format (URL-encoded)
+      const expectedAcc1 = encodeURIComponent(JSON.stringify({ code: "DS", qty: 2, type: "CHAIR", hosted_people: 1 }));
+      const expectedAcc2 = encodeURIComponent(JSON.stringify({ code: "A2", qty: 1, type: "CABIN", hosted_people: 2 }));
       expect(fetchUrl).toContain(`accomodations=${expectedAcc1}`);
       expect(fetchUrl).toContain(`accomodations=${expectedAcc2}`);
     });
@@ -234,7 +234,7 @@ describe("useFetchPriceData", () => {
 
       expect(global.fetch).toHaveBeenCalledTimes(2);
       const secondFetchUrl = global.fetch.mock.calls[1][0];
-      const expectedAcc = JSON.stringify({ code: "DS", qty: 1, type: "CHAIR", hosted_people: 1 });
+      const expectedAcc = encodeURIComponent(JSON.stringify({ code: "DS", qty: 1, type: "CHAIR", hosted_people: 1 }));
       expect(secondFetchUrl).toContain(`accomodations=${expectedAcc}`);
     });
   });
