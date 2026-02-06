@@ -217,7 +217,7 @@ export const AccommodationSelector = ({
               sx={{ fontWeight: isCapacityMatched ? 600 : 400 }}
             >
               {t("Capienza totale")}: {totalCapacity} / {totalPassengers}{" "}
-              {t("passeggeri")}
+              {t("passeggeri")} ({t("esclusi infant")})
               {isCapacityMatched && ` ✓`}
             </Typography>
           </Box>
