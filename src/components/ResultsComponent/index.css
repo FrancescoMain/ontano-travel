@@ -152,6 +152,10 @@
   .md-ms-4 {
     margin-left: 25px !important;
   }
+  /* Force Iubenda button below the to-checkout bar */
+  #iubenda-tp-btn {
+    z-index: 1 !important;
+  }
 }
 @media (max-width: 380px) {
   .md-ms-4 {
