@@ -188,6 +188,11 @@ refactor/<nome-descrittivo>   # Refactoring senza cambio funzionalità
 
 ### Regole
 
+- **OBBLIGATORIO: Creare branch e PR PRIMA di scrivere codice.** Per ogni nuovo sviluppo (feature, fix, refactor):
+  1. Creare il branch da develop
+  2. Fare push del branch vuoto
+  3. Aprire la PR in draft con `gh pr create --draft`
+  4. Solo DOPO iniziare a scrivere codice
 - Mai committare direttamente su `master` o `develop`
 - Ogni PR deve avere tutti i test passanti
 - Usare messaggi di commit descrittivi in italiano o inglese (coerenti nel progetto)
@@ -200,6 +205,40 @@ refactor/<nome-descrittivo>   # Refactoring senza cambio funzionalità
 - Redux uses createSlice pattern with async thunks for API operations
 - Toast notifications via react-toastify for user feedback
 - Affiliate tracking via `yafl` query parameter stored in cookies
+
+## Responsive Design (Mobile-First)
+
+**OBBLIGATORIO:** Ogni componente e funzionalità deve essere responsive e funzionare correttamente su mobile.
+
+### Regole CSS per Mobile
+
+1. **Overflow:** Usare sempre `overflow: hidden` o `overflow-x: hidden` sui container per evitare scroll orizzontale
+2. **Max-width:** Usare `max-width: 100%` o `max-width: 100vw` per impedire elementi più larghi del viewport
+3. **Testo lungo:** Usare `text-overflow: ellipsis`, `white-space: nowrap` e `overflow: hidden` per troncare testi lunghi
+4. **Flexbox:** Usare `min-width: 0` sui flex children per permettere il troncamento
+5. **Bootstrap rows:** I `.row` di Bootstrap hanno margini negativi - usare `overflow: hidden` sul parent
+
+### Media Query Standard
+
+```css
+/* Tablet e mobile */
+@media (max-width: 768px) {
+  /* Stili mobile */
+}
+
+/* Solo mobile piccoli */
+@media (max-width: 480px) {
+  /* Stili mobile piccoli */
+}
+```
+
+### Checklist Pre-Deploy
+
+- [ ] Testare su viewport 375px (iPhone SE)
+- [ ] Testare su viewport 390px (iPhone 12/13/14)
+- [ ] Verificare che non ci sia scroll orizzontale
+- [ ] Verificare che i testi lunghi vengano troncati correttamente
+- [ ] Verificare che i bottoni siano cliccabili (min 44px touch target)
 
 ## Errori Critici da Evitare
 
