@@ -34,6 +34,17 @@ export const postQuote = async ({ tratte, etaBambini }) => {
       }));
     }
 
+    // Add vehicles if present (for Grimaldi routes)
+    if (tratta.vehicles?.length > 0) {
+      params.vehicles = tratta.vehicles.map((v) => ({
+        type: v.type,
+        height: v.height,
+        length: v.length,
+        has_trailer: v.has_trailer,
+        trailer_length: v.has_trailer ? v.trailer_length : undefined,
+      }));
+    }
+
     // Crea l'oggetto per ogni tratta
     return {
       search_result_id: tratta.data.result_id,

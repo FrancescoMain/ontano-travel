@@ -1,7 +1,7 @@
 import React from "react";
 import { IoMdPeople } from "react-icons/io";
 import { MdLuggage, MdHelpOutline } from "react-icons/md";
-import { FaChild, FaDog, FaBaby } from "react-icons/fa";
+import { FaChild, FaDog, FaBaby, FaCar } from "react-icons/fa";
 
 // Mapping categoryCode -> icon
 const CATEGORY_ICONS = {
@@ -14,6 +14,7 @@ const CATEGORY_ICONS = {
   INF: <FaBaby />,
   ANI: <FaDog />,
   LUG: <MdLuggage />,
+  VEH: <FaCar />,
 };
 
 // Mapping categoryCode -> label
@@ -26,6 +27,7 @@ const CATEGORY_LABELS = {
   INF: "Infant",
   ANI: "Animali",
   LUG: "Bagagli",
+  VEH: "Veicoli",
 };
 
 export const CheckoutTariffe = ({ tariffa, company }) => {

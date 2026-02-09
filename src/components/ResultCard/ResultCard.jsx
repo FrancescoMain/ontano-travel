@@ -56,7 +56,7 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
   const timeArr = formatTime(arrivalDate);
   const { hours, minutes } = calculateDuration(departureDate, arrivalDate);
 
-  const { adulti, bambini, etaBambini, etaAdulti, animali, bagagli } =
+  const { adulti, bambini, etaBambini, etaAdulti, animali, bagagli, vehicles } =
     useSelector((state) => state.tratte.dettagli[id]);
 
   const selectedExt = useSelector((state) => state.resultsTratta.selected);
@@ -94,6 +94,7 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
       etaBambini: etaBambini,
       etaAdulti: etaAdulti,
       accommodations: selectedAccommodations,
+      vehicles: vehicles,
     };
     dispatch(upsertSelected(dataToDispatch));
     const element = document.getElementById("result-ritorno");
@@ -129,6 +130,7 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
     animali,
     bagagli,
     accommodations: selectedAccommodations,
+    vehicles: vehicles,
     setLoading,
     setPriceData,
     skipFetch,
@@ -153,10 +155,11 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
           data,
           etaAdulti: etaAdulti,
           accommodations: selectedAccommodations,
+          vehicles: vehicles,
         })
       );
     }
-  }, [priceData, selectedAccommodations]);
+  }, [priceData, selectedAccommodations, vehicles]);
 
   return (
     <div

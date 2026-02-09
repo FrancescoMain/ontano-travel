@@ -238,4 +238,78 @@ describe("useFetchPriceData", () => {
       expect(secondFetchUrl).toContain(`accomodations=${expectedAcc}`);
     });
   });
+
+  describe("vehicles parameter", () => {
+    it("should include vehicles in URL with repeated JSON format when provided", async () => {
+      const vehicles = [
+        { type: "CAR", height: "1.80", length: "4.50", has_trailer: false, trailer_length: "" },
+        { type: "CAMPER", height: "2.80", length: "7.00", has_trailer: true, trailer_length: "3.00" },
+      ];
+
+      renderHook(() =>
+        useFetchPriceData({
+          ...defaultProps,
+          vehicles,
+        })
+      );
+
+      await act(async () => {
+        jest.advanceTimersByTime(DEBOUNCE_DELAY + 100);
+      });
+
+      expect(global.fetch).toHaveBeenCalled();
+      const fetchUrl = global.fetch.mock.calls[0][0];
+
+      const expectedV1 = encodeURIComponent(JSON.stringify({
+        type: "CAR", height: "1.80", length: "4.50", has_trailer: false, trailer_length: undefined,
+      }));
+      const expectedV2 = encodeURIComponent(JSON.stringify({
+        type: "CAMPER", height: "2.80", length: "7.00", has_trailer: true, trailer_length: "3.00",
+      }));
+      expect(fetchUrl).toContain(`vehicles=${expectedV1}`);
+      expect(fetchUrl).toContain(`vehicles=${expectedV2}`);
+    });
+
+    it("should not include vehicles params when array is empty", async () => {
+      renderHook(() =>
+        useFetchPriceData({
+          ...defaultProps,
+          vehicles: [],
+        })
+      );
+
+      await act(async () => {
+        jest.advanceTimersByTime(DEBOUNCE_DELAY + 100);
+      });
+
+      expect(global.fetch).toHaveBeenCalled();
+      const fetchUrl = global.fetch.mock.calls[0][0];
+      expect(fetchUrl).not.toContain("vehicles");
+    });
+
+    it("should exclude trailer_length when has_trailer is false", async () => {
+      const vehicles = [
+        { type: "CAR", height: "1.80", length: "4.50", has_trailer: false, trailer_length: "2.00" },
+      ];
+
+      renderHook(() =>
+        useFetchPriceData({
+          ...defaultProps,
+          vehicles,
+        })
+      );
+
+      await act(async () => {
+        jest.advanceTimersByTime(DEBOUNCE_DELAY + 100);
+      });
+
+      expect(global.fetch).toHaveBeenCalled();
+      const fetchUrl = global.fetch.mock.calls[0][0];
+      // trailer_length should be undefined (not "2.00") since has_trailer is false
+      const expectedV = encodeURIComponent(JSON.stringify({
+        type: "CAR", height: "1.80", length: "4.50", has_trailer: false, trailer_length: undefined,
+      }));
+      expect(fetchUrl).toContain(`vehicles=${expectedV}`);
+    });
+  });
 });

@@ -284,3 +284,108 @@ describe("postQuote - accommodations", () => {
     expect(requestBody[1].params.accomodations).toBeUndefined();
   });
 });
+
+describe("postQuote - vehicles", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    global.fetch.mockResolvedValue({
+      ok: true,
+      headers: {
+        get: () => "application/json",
+      },
+      json: () => Promise.resolve({ success: true }),
+    });
+  });
+
+  it("should include vehicles inside params when provided", async () => {
+    const tratte = [
+      {
+        adulti: 2,
+        etaBambini: [],
+        etaAdulti: [25, 30],
+        animali: 0,
+        bagagli: 0,
+        data: { result_id: "123" },
+        accommodations: [],
+        vehicles: [
+          { type: "CAR", height: "1.80", length: "4.50", has_trailer: false, trailer_length: "" },
+          { type: "CAMPER", height: "2.80", length: "7.00", has_trailer: true, trailer_length: "3.00" },
+        ],
+      },
+    ];
+
+    await postQuote({ tratte });
+
+    expect(global.fetch).toHaveBeenCalled();
+    const requestBody = JSON.parse(global.fetch.mock.calls[0][1].body);
+
+    expect(requestBody[0].params.vehicles).toEqual([
+      { type: "CAR", height: "1.80", length: "4.50", has_trailer: false, trailer_length: undefined },
+      { type: "CAMPER", height: "2.80", length: "7.00", has_trailer: true, trailer_length: "3.00" },
+    ]);
+  });
+
+  it("should not include vehicles in params when array is empty", async () => {
+    const tratte = [
+      {
+        adulti: 2,
+        etaBambini: [],
+        etaAdulti: [25, 30],
+        animali: 0,
+        bagagli: 0,
+        data: { result_id: "123" },
+        vehicles: [],
+      },
+    ];
+
+    await postQuote({ tratte });
+
+    expect(global.fetch).toHaveBeenCalled();
+    const requestBody = JSON.parse(global.fetch.mock.calls[0][1].body);
+
+    expect(requestBody[0].params.vehicles).toBeUndefined();
+  });
+
+  it("should not include vehicles in params when undefined", async () => {
+    const tratte = [
+      {
+        adulti: 2,
+        etaBambini: [],
+        etaAdulti: [25, 30],
+        animali: 0,
+        bagagli: 0,
+        data: { result_id: "123" },
+      },
+    ];
+
+    await postQuote({ tratte });
+
+    expect(global.fetch).toHaveBeenCalled();
+    const requestBody = JSON.parse(global.fetch.mock.calls[0][1].body);
+
+    expect(requestBody[0].params.vehicles).toBeUndefined();
+  });
+
+  it("should exclude trailer_length when has_trailer is false", async () => {
+    const tratte = [
+      {
+        adulti: 1,
+        etaBambini: [],
+        etaAdulti: [30],
+        animali: 0,
+        bagagli: 0,
+        data: { result_id: "123" },
+        vehicles: [
+          { type: "CAR", height: "1.80", length: "4.50", has_trailer: false, trailer_length: "2.00" },
+        ],
+      },
+    ];
+
+    await postQuote({ tratte });
+
+    expect(global.fetch).toHaveBeenCalled();
+    const requestBody = JSON.parse(global.fetch.mock.calls[0][1].body);
+
+    expect(requestBody[0].params.vehicles[0].trailer_length).toBeUndefined();
+  });
+});
