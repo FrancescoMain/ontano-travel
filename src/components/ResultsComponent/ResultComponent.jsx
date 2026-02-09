@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { postQuote } from "../../_api/reservations/quote";
 import { setNTratte } from "../../features/viaggio/findTratta";
 import { useDispatch } from "react-redux";
+import { useFetchTaxPreview } from "../../_hooks/useFetchTaxPreview";
 
 export const ResultComponent = () => {
   const {
@@ -25,6 +26,11 @@ export const ResultComponent = () => {
     // setNTratte,
   } = useResult();
   const { t } = useTranslation();
+  const { taxData, taxLoading } = useFetchTaxPreview(totalPrice);
+
+  const taxAmount = taxData?.price ?? 0;
+  const grandTotal = (totalPrice || 0) + taxAmount;
+
   const [tratte, setTratte] = React.useState([]);
   const [quote, setQuote] = React.useState(null);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -251,9 +257,37 @@ export const ResultComponent = () => {
         <div className="to-checkout" role="contentinfo">
           <div className="to-checkout-cont">
             <div className="to-checkout-cont__left">
-              <div className="fs-5">
-                TOTALE:
-                {" " + totalPrice?.toFixed(2) || ""}€
+              <div className="to-checkout-price-row">
+                <span>{t("Totale Biglietti")}:</span>
+                <span>{totalPrice?.toFixed(2) || "0.00"}€</span>
+              </div>
+              <div className="to-checkout-price-row">
+                <span>{t("Diritti di prenotazione")}:</span>
+                <span>
+                  {taxLoading ? (
+                    <span
+                      className="spinner-border spinner-border-sm text-light"
+                      role="status"
+                      aria-label={t("Caricamento")}
+                    />
+                  ) : (
+                    `${taxData?.priceFormatted ?? `${taxAmount.toFixed(2)}€`}`
+                  )}
+                </span>
+              </div>
+              <div className="to-checkout-price-row to-checkout-price-total">
+                <span>{t("Totale")}:</span>
+                <span>
+                  {taxLoading ? (
+                    <span
+                      className="spinner-border spinner-border-sm text-light"
+                      role="status"
+                      aria-label={t("Caricamento")}
+                    />
+                  ) : (
+                    `${grandTotal.toFixed(2)}€`
+                  )}
+                </span>
               </div>
             </div>
             <div className="to-checkout-cont__center">

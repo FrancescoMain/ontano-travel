@@ -19,7 +19,7 @@
 
 .to-checkout {
   background-color: #266e9e;
-  height: 6rem;
+  min-height: 6rem;
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -27,6 +27,7 @@
   display: flex;
   align-items: center;
   justify-content: end;
+  padding: 8px 0;
 }
 
 .last-component {
@@ -44,6 +45,22 @@
   color: white;
   font-weight: 800;
   font-size: 1.5rem;
+}
+
+.to-checkout-price-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.to-checkout-price-total {
+  font-size: 1.1rem;
+  font-weight: 800;
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  padding-top: 4px;
+  margin-top: 2px;
 }
 
 .hidden {
@@ -113,6 +130,13 @@
     font-size: small;
   }
 
+  .to-checkout-price-row {
+    font-size: 0.7rem;
+    gap: 8px;
+  }
+  .to-checkout-price-total {
+    font-size: 0.8rem;
+  }
   .to-checkout-cont__left div {
     font-size: 0.7rem;
   }
