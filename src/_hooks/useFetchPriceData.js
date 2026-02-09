@@ -55,7 +55,7 @@ export const useFetchPriceData = ({
             type: acc.type,
             hosted_people: acc.hosted_people,
           };
-          return `accomodations=${JSON.stringify(accObj)}`;
+          return `accomodations=${encodeURIComponent(JSON.stringify(accObj))}`;
         })
         .join("&");
 

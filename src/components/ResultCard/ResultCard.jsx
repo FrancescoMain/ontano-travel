@@ -65,6 +65,10 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
   const isGrimaldi = data.company === "Grimaldi";
   const adultiNum = parseInt(adulti, 10) || 1;
 
+  // Calculate passengers that need accommodation spots (excluding infants aged 0-2)
+  const infantCount = etaBambini.filter((age) => parseInt(age, 10) <= 2).length;
+  const passengersNeedingAccommodation = adultiNum + (etaBambini.length - infantCount);
+
   // For Grimaldi, check if all adult ages are valid
   const grimaldiAgesValid =
     etaAdulti?.length === adultiNum &&
@@ -263,7 +267,7 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
           accommodations={accommodations}
           selectedAccommodations={selectedAccommodations}
           onSelectionChange={setSelectedAccommodations}
-          totalPassengers={adultiNum + etaBambini.length}
+          totalPassengers={passengersNeedingAccommodation}
           loading={accommodationsLoading}
         />
       )}

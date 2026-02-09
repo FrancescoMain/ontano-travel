@@ -2,18 +2,37 @@
   padding: 12px 16px;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   background-color: rgba(255, 255, 255, 0.5);
+  overflow: hidden;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .accommodation-selector .MuiAutocomplete-root {
   width: 100%;
+  max-width: 100%;
 }
 
 .accommodation-selector .MuiOutlinedInput-root {
   background-color: white;
+  flex-wrap: wrap;
+}
+
+.accommodation-selector .MuiChip-root {
+  max-width: 100%;
+}
+
+.accommodation-selector .MuiChip-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
 }
 
 .accommodation-qty-container {
   margin-top: 12px;
+  max-width: 100%;
+  width: 100%;
+  overflow: hidden;
 }
 
 .accommodation-qty-row {
@@ -22,6 +41,8 @@
   align-items: center;
   padding: 8px 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .accommodation-qty-row:last-of-type {
@@ -31,12 +52,19 @@
 .accommodation-description {
   flex: 1;
   font-size: 0.875rem;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-right: 8px;
 }
 
 .accommodation-qty-controls {
   display: flex;
   align-items: center;
   gap: 4px;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
 }
 
 .accommodation-qty-value {
@@ -55,15 +83,23 @@
 @media (max-width: 768px) {
   .accommodation-selector {
     padding: 8px 12px;
+    max-width: calc(100vw - 24px);
+  }
+
+  .accommodation-qty-container {
+    max-width: calc(100vw - 48px);
   }
 
   .accommodation-qty-row {
-    flex-direction: column;
-    gap: 4px;
-    align-items: flex-start;
+    max-width: 100%;
   }
 
-  .accommodation-qty-controls {
-    align-self: flex-end;
+  .accommodation-selector .MuiChip-label {
+    max-width: 150px;
+  }
+
+  .accommodation-description {
+    font-size: 0.75rem;
+    max-width: calc(100vw - 150px);
   }
 }
