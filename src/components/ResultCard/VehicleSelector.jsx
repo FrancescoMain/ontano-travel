@@ -31,6 +31,24 @@ const DEFAULT_VEHICLE = {
 };
 
 /**
+ * Checks if a single vehicle has all required fields filled
+ */
+const isVehicleComplete = (vehicle) => {
+  if (!vehicle.height || !vehicle.length) return false;
+  if (vehicle.has_trailer && !vehicle.trailer_length) return false;
+  return true;
+};
+
+/**
+ * Checks if all vehicles in the array have complete data.
+ * Returns true if there are no vehicles or all vehicles are complete.
+ */
+export const areVehiclesValid = (vehicles) => {
+  if (!vehicles || vehicles.length === 0) return true;
+  return vehicles.every(isVehicleComplete);
+};
+
+/**
  * Vehicle selector component for Grimaldi routes
  * @param {Object} props
  * @param {Array} props.vehicles - Currently selected vehicles
@@ -114,6 +132,8 @@ export const VehicleSelector = ({ vehicles, onVehiclesChange }) => {
                   className="vehicle-field-size"
                   label={t("Altezza (m)")}
                   placeholder="1.80"
+                  required
+                  error={!vehicle.height}
                   value={vehicle.height}
                   onChange={(e) =>
                     updateVehicle(index, "height", e.target.value)
@@ -126,6 +146,8 @@ export const VehicleSelector = ({ vehicles, onVehiclesChange }) => {
                   className="vehicle-field-size"
                   label={t("Lunghezza (m)")}
                   placeholder="4.50"
+                  required
+                  error={!vehicle.length}
                   value={vehicle.length}
                   onChange={(e) =>
                     updateVehicle(index, "length", e.target.value)
@@ -153,6 +175,8 @@ export const VehicleSelector = ({ vehicles, onVehiclesChange }) => {
                     className="vehicle-trailer-length"
                     label={t("Lunghezza rimorchio (m)")}
                     placeholder="2.50"
+                    required
+                    error={!vehicle.trailer_length}
                     value={vehicle.trailer_length}
                     onChange={(e) =>
                       updateVehicle(index, "trailer_length", e.target.value)

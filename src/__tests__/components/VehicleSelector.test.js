@@ -1,6 +1,9 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { VehicleSelector } from "../../components/ResultCard/VehicleSelector";
+import {
+  VehicleSelector,
+  areVehiclesValid,
+} from "../../components/ResultCard/VehicleSelector";
 
 // Mock react-i18next
 jest.mock("react-i18next", () => ({
@@ -64,8 +67,8 @@ describe("VehicleSelector", () => {
 
     expect(screen.getByText("Veicolo 1")).toBeInTheDocument();
     expect(screen.getByLabelText("Tipo")).toBeInTheDocument();
-    expect(screen.getByLabelText("Altezza (m)")).toBeInTheDocument();
-    expect(screen.getByLabelText("Lunghezza (m)")).toBeInTheDocument();
+    expect(screen.getByLabelText(/Altezza \(m\)/)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Lunghezza \(m\)/)).toBeInTheDocument();
   });
 
   it("should update vehicle type", () => {
@@ -120,7 +123,7 @@ describe("VehicleSelector", () => {
       />
     );
 
-    const heightInput = screen.getByLabelText("Altezza (m)");
+    const heightInput = screen.getByLabelText(/Altezza \(m\)/);
     fireEvent.change(heightInput, { target: { value: "1.80" } });
 
     expect(mockOnVehiclesChange).toHaveBeenCalledWith([
@@ -135,7 +138,7 @@ describe("VehicleSelector", () => {
 
     mockOnVehiclesChange.mockClear();
 
-    const lengthInput = screen.getByLabelText("Lunghezza (m)");
+    const lengthInput = screen.getByLabelText(/Lunghezza \(m\)/);
     fireEvent.change(lengthInput, { target: { value: "4.50" } });
 
     expect(mockOnVehiclesChange).toHaveBeenCalledWith([
@@ -168,7 +171,7 @@ describe("VehicleSelector", () => {
     );
 
     expect(
-      screen.getByLabelText("Lunghezza rimorchio (m)")
+      screen.getByLabelText(/Lunghezza rimorchio \(m\)/)
     ).toBeInTheDocument();
   });
 
@@ -191,7 +194,7 @@ describe("VehicleSelector", () => {
     );
 
     expect(
-      screen.queryByLabelText("Lunghezza rimorchio (m)")
+      screen.queryByLabelText(/Lunghezza rimorchio \(m\)/)
     ).not.toBeInTheDocument();
   });
 
@@ -298,7 +301,7 @@ describe("VehicleSelector", () => {
     expect(screen.getByText("Veicolo 1")).toBeInTheDocument();
     expect(screen.getByText("Veicolo 2")).toBeInTheDocument();
     expect(
-      screen.getByLabelText("Lunghezza rimorchio (m)")
+      screen.getByLabelText(/Lunghezza rimorchio \(m\)/)
     ).toBeInTheDocument();
   });
 
@@ -314,5 +317,146 @@ describe("VehicleSelector", () => {
     fireEvent.click(screen.getByText("Aggiungi veicolo"));
 
     expect(parentClickHandler).not.toHaveBeenCalled();
+  });
+
+  it("should show error state on empty required fields", () => {
+    const vehicles = [
+      {
+        type: "CAR",
+        height: "",
+        length: "",
+        has_trailer: false,
+        trailer_length: "",
+      },
+    ];
+
+    render(
+      <VehicleSelector
+        vehicles={vehicles}
+        onVehiclesChange={mockOnVehiclesChange}
+      />
+    );
+
+    const heightInput = screen.getByLabelText(/Altezza \(m\)/);
+    const lengthInput = screen.getByLabelText(/Lunghezza \(m\)/);
+
+    expect(heightInput).toHaveAttribute("aria-invalid", "true");
+    expect(lengthInput).toHaveAttribute("aria-invalid", "true");
+  });
+
+  it("should show error on empty trailer_length when has_trailer is true", () => {
+    const vehicles = [
+      {
+        type: "CAR",
+        height: "1.80",
+        length: "4.50",
+        has_trailer: true,
+        trailer_length: "",
+      },
+    ];
+
+    render(
+      <VehicleSelector
+        vehicles={vehicles}
+        onVehiclesChange={mockOnVehiclesChange}
+      />
+    );
+
+    const trailerInput = screen.getByLabelText(/Lunghezza rimorchio \(m\)/);
+    expect(trailerInput).toHaveAttribute("aria-invalid", "true");
+  });
+
+  it("should not show error when fields are filled", () => {
+    const vehicles = [
+      {
+        type: "CAR",
+        height: "1.80",
+        length: "4.50",
+        has_trailer: false,
+        trailer_length: "",
+      },
+    ];
+
+    render(
+      <VehicleSelector
+        vehicles={vehicles}
+        onVehiclesChange={mockOnVehiclesChange}
+      />
+    );
+
+    const heightInput = screen.getByLabelText(/Altezza \(m\)/);
+    const lengthInput = screen.getByLabelText(/Lunghezza \(m\)/);
+
+    expect(heightInput).toHaveAttribute("aria-invalid", "false");
+    expect(lengthInput).toHaveAttribute("aria-invalid", "false");
+  });
+});
+
+describe("areVehiclesValid", () => {
+  it("should return true for empty array", () => {
+    expect(areVehiclesValid([])).toBe(true);
+  });
+
+  it("should return true for null/undefined", () => {
+    expect(areVehiclesValid(null)).toBe(true);
+    expect(areVehiclesValid(undefined)).toBe(true);
+  });
+
+  it("should return false when height is missing", () => {
+    expect(
+      areVehiclesValid([
+        { type: "CAR", height: "", length: "4.50", has_trailer: false, trailer_length: "" },
+      ])
+    ).toBe(false);
+  });
+
+  it("should return false when length is missing", () => {
+    expect(
+      areVehiclesValid([
+        { type: "CAR", height: "1.80", length: "", has_trailer: false, trailer_length: "" },
+      ])
+    ).toBe(false);
+  });
+
+  it("should return false when trailer_length is missing with has_trailer true", () => {
+    expect(
+      areVehiclesValid([
+        { type: "CAR", height: "1.80", length: "4.50", has_trailer: true, trailer_length: "" },
+      ])
+    ).toBe(false);
+  });
+
+  it("should return true when all fields are filled (no trailer)", () => {
+    expect(
+      areVehiclesValid([
+        { type: "CAR", height: "1.80", length: "4.50", has_trailer: false, trailer_length: "" },
+      ])
+    ).toBe(true);
+  });
+
+  it("should return true when all fields are filled (with trailer)", () => {
+    expect(
+      areVehiclesValid([
+        { type: "CAR", height: "1.80", length: "4.50", has_trailer: true, trailer_length: "2.50" },
+      ])
+    ).toBe(true);
+  });
+
+  it("should return false if any vehicle in array is incomplete", () => {
+    expect(
+      areVehiclesValid([
+        { type: "CAR", height: "1.80", length: "4.50", has_trailer: false, trailer_length: "" },
+        { type: "MOTO", height: "", length: "2.00", has_trailer: false, trailer_length: "" },
+      ])
+    ).toBe(false);
+  });
+
+  it("should return true when all vehicles are complete", () => {
+    expect(
+      areVehiclesValid([
+        { type: "CAR", height: "1.80", length: "4.50", has_trailer: false, trailer_length: "" },
+        { type: "CAMPER", height: "2.80", length: "7.00", has_trailer: true, trailer_length: "3.00" },
+      ])
+    ).toBe(true);
   });
 });
