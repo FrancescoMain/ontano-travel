@@ -16,6 +16,7 @@ import { CheckoutTratta } from "../components/CheckoutTratta";
 import { Condizioni } from "../components/Condizioni";
 import { Pagamento } from "../components/Pagamento";
 import { CheckoutPasseggero } from "../components/Checkouts/CheckoutPassegero";
+import { CheckoutVehicleDetails } from "../components/Checkouts/CheckoutVehicleDetails";
 import { setPayByLink } from "../features/payByLink/payByLinkSlice";
 import { useCheckoutForm } from "../_hooks/useCheckoutForm"; // Import custom hook
 import { submitExternalPayment } from "../_api/reservations/submitExternalPayment"; // Import the new API function
@@ -132,18 +133,51 @@ export const Checkout = () => {
       const parsed = JSON.parse(linkQuote);
       const allVehicles = parsed.tratte
         ?.flatMap((tratta) => tratta.vehicles || [])
-        .filter((v) => v && v.regNumber);
+        .filter((v) => v && v.type);
       return allVehicles?.length > 0 ? allVehicles : null;
     } catch {
       return null;
     }
   }, []);
 
+  // Stato per targa e carburante (raccolti al checkout)
+  const [vehicleDetails, setVehicleDetails] = React.useState([]);
+
+  React.useEffect(() => {
+    if (vehiclesFromQuote && vehiclesFromQuote.length > 0) {
+      setVehicleDetails(
+        vehiclesFromQuote.map(() => ({ regNumber: "", fuelType: "BENZINA" }))
+      );
+    }
+  }, [vehiclesFromQuote]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Valida targa per veicoli non-BCY
+    if (vehiclesFromQuote && vehiclesFromQuote.length > 0) {
+      const missingPlate = vehiclesFromQuote.some(
+        (v, i) => v.type !== "BCY" && !vehicleDetails[i]?.regNumber
+      );
+      if (missingPlate) {
+        toast.error("Inserire la targa per tutti i veicoli");
+        return;
+      }
+    }
+
     setLoading(true); // Start spinner
     dispatch(startLoading());
     const extraFields = prenotazione?.requestExtraFields;
+
+    // Unisci type da vehiclesFromQuote + regNumber/fuelType da vehicleDetails
+    const vehiclesForReserve = vehiclesFromQuote
+      ? vehiclesFromQuote.map((v, i) => ({
+          type: v.type,
+          regNumber: vehicleDetails[i]?.regNumber || "",
+          fuelType: vehicleDetails[i]?.fuelType || "BENZINA",
+        }))
+      : null;
+
     const resultReserve = await reserve(
       nomi,
       cognomi,
@@ -159,7 +193,7 @@ export const Checkout = () => {
       extraFields ? luoghiDiNascita : null,
       extraFields ? dateDiNascita : null,
       extraFields ? disabilità : null,
-      vehiclesFromQuote
+      vehiclesForReserve
     );
     if (resultReserve) {
       if (paymentMethodCheck === "CREDIT_CARD") {
@@ -437,6 +471,13 @@ export const Checkout = () => {
                   </div>
                 </div>
               </div>
+              {vehiclesFromQuote && vehiclesFromQuote.length > 0 && (
+                <CheckoutVehicleDetails
+                  vehicles={vehiclesFromQuote}
+                  vehicleDetails={vehicleDetails}
+                  onVehicleDetailsChange={setVehicleDetails}
+                />
+              )}
               <Condizioni
                 value={dto}
                 onChange={handleDtoChange}

@@ -43,13 +43,11 @@ describe("VehicleSelector", () => {
         length: "",
         has_trailer: false,
         trailer_length: "",
-        regNumber: "",
-        fuelType: "BENZINA",
       },
     ]);
   });
 
-  it("should render vehicle with type select, plate and fuel fields", () => {
+  it("should render vehicle with type select and size fields", () => {
     const vehicles = [
       {
         type: "CAR",
@@ -57,8 +55,6 @@ describe("VehicleSelector", () => {
         length: "4.50",
         has_trailer: false,
         trailer_length: "",
-        regNumber: "AA000BB",
-        fuelType: "BENZINA",
       },
     ];
 
@@ -71,8 +67,6 @@ describe("VehicleSelector", () => {
 
     expect(screen.getByText("Veicolo 1")).toBeInTheDocument();
     expect(screen.getByLabelText("Tipo")).toBeInTheDocument();
-    expect(screen.getByLabelText(/Targa/)).toBeInTheDocument();
-    expect(screen.getByLabelText("Carburante")).toBeInTheDocument();
     expect(screen.getByLabelText(/Altezza \(m\)/)).toBeInTheDocument();
     expect(screen.getByLabelText(/Lunghezza \(m\)/)).toBeInTheDocument();
   });
@@ -85,8 +79,6 @@ describe("VehicleSelector", () => {
         length: "",
         has_trailer: false,
         trailer_length: "",
-        regNumber: "",
-        fuelType: "BENZINA",
       },
     ];
 
@@ -109,81 +101,6 @@ describe("VehicleSelector", () => {
         length: "",
         has_trailer: false,
         trailer_length: "",
-        regNumber: "",
-        fuelType: "BENZINA",
-      },
-    ]);
-  });
-
-  it("should update regNumber in uppercase", () => {
-    const vehicles = [
-      {
-        type: "CAR",
-        height: "",
-        length: "",
-        has_trailer: false,
-        trailer_length: "",
-        regNumber: "",
-        fuelType: "BENZINA",
-      },
-    ];
-
-    render(
-      <VehicleSelector
-        vehicles={vehicles}
-        onVehiclesChange={mockOnVehiclesChange}
-      />
-    );
-
-    const plateInput = screen.getByLabelText(/Targa/);
-    fireEvent.change(plateInput, { target: { value: "ab123cd" } });
-
-    expect(mockOnVehiclesChange).toHaveBeenCalledWith([
-      {
-        type: "CAR",
-        height: "",
-        length: "",
-        has_trailer: false,
-        trailer_length: "",
-        regNumber: "AB123CD",
-        fuelType: "BENZINA",
-      },
-    ]);
-  });
-
-  it("should update fuelType", () => {
-    const vehicles = [
-      {
-        type: "CAR",
-        height: "",
-        length: "",
-        has_trailer: false,
-        trailer_length: "",
-        regNumber: "",
-        fuelType: "BENZINA",
-      },
-    ];
-
-    render(
-      <VehicleSelector
-        vehicles={vehicles}
-        onVehiclesChange={mockOnVehiclesChange}
-      />
-    );
-
-    const fuelSelect = screen.getByLabelText("Carburante");
-    fireEvent.mouseDown(fuelSelect);
-    fireEvent.click(screen.getByText("Diesel"));
-
-    expect(mockOnVehiclesChange).toHaveBeenCalledWith([
-      {
-        type: "CAR",
-        height: "",
-        length: "",
-        has_trailer: false,
-        trailer_length: "",
-        regNumber: "",
-        fuelType: "DIESEL",
       },
     ]);
   });
@@ -196,8 +113,6 @@ describe("VehicleSelector", () => {
         length: "",
         has_trailer: false,
         trailer_length: "",
-        regNumber: "",
-        fuelType: "BENZINA",
       },
     ];
 
@@ -218,8 +133,6 @@ describe("VehicleSelector", () => {
         length: "",
         has_trailer: false,
         trailer_length: "",
-        regNumber: "",
-        fuelType: "BENZINA",
       },
     ]);
 
@@ -235,8 +148,6 @@ describe("VehicleSelector", () => {
         length: "4.50",
         has_trailer: false,
         trailer_length: "",
-        regNumber: "",
-        fuelType: "BENZINA",
       },
     ]);
   });
@@ -249,8 +160,6 @@ describe("VehicleSelector", () => {
         length: "",
         has_trailer: true,
         trailer_length: "2.50",
-        regNumber: "",
-        fuelType: "BENZINA",
       },
     ];
 
@@ -274,8 +183,6 @@ describe("VehicleSelector", () => {
         length: "",
         has_trailer: false,
         trailer_length: "",
-        regNumber: "",
-        fuelType: "BENZINA",
       },
     ];
 
@@ -299,8 +206,6 @@ describe("VehicleSelector", () => {
         length: "",
         has_trailer: true,
         trailer_length: "2.50",
-        regNumber: "",
-        fuelType: "BENZINA",
       },
     ];
 
@@ -321,8 +226,6 @@ describe("VehicleSelector", () => {
         length: "",
         has_trailer: false,
         trailer_length: "",
-        regNumber: "",
-        fuelType: "BENZINA",
       },
     ]);
   });
@@ -335,8 +238,6 @@ describe("VehicleSelector", () => {
         length: "4.50",
         has_trailer: false,
         trailer_length: "",
-        regNumber: "AA000BB",
-        fuelType: "BENZINA",
       },
       {
         type: "MCY",
@@ -344,8 +245,6 @@ describe("VehicleSelector", () => {
         length: "2.00",
         has_trailer: false,
         trailer_length: "",
-        regNumber: "CC111DD",
-        fuelType: "BENZINA",
       },
     ];
 
@@ -370,8 +269,6 @@ describe("VehicleSelector", () => {
         length: "2.00",
         has_trailer: false,
         trailer_length: "",
-        regNumber: "CC111DD",
-        fuelType: "BENZINA",
       },
     ]);
   });
@@ -384,8 +281,6 @@ describe("VehicleSelector", () => {
         length: "4.50",
         has_trailer: false,
         trailer_length: "",
-        regNumber: "AA000BB",
-        fuelType: "BENZINA",
       },
       {
         type: "CAMPER",
@@ -393,8 +288,6 @@ describe("VehicleSelector", () => {
         length: "7.00",
         has_trailer: true,
         trailer_length: "3.00",
-        regNumber: "CC111DD",
-        fuelType: "DIESEL",
       },
     ];
 
@@ -434,8 +327,6 @@ describe("VehicleSelector", () => {
         length: "",
         has_trailer: false,
         trailer_length: "",
-        regNumber: "",
-        fuelType: "BENZINA",
       },
     ];
 
@@ -448,11 +339,9 @@ describe("VehicleSelector", () => {
 
     const heightInput = screen.getByLabelText(/Altezza \(m\)/);
     const lengthInput = screen.getByLabelText(/Lunghezza \(m\)/);
-    const plateInput = screen.getByLabelText(/Targa/);
 
     expect(heightInput).toHaveAttribute("aria-invalid", "true");
     expect(lengthInput).toHaveAttribute("aria-invalid", "true");
-    expect(plateInput).toHaveAttribute("aria-invalid", "true");
   });
 
   it("should show error on empty trailer_length when has_trailer is true", () => {
@@ -463,8 +352,6 @@ describe("VehicleSelector", () => {
         length: "4.50",
         has_trailer: true,
         trailer_length: "",
-        regNumber: "AA000BB",
-        fuelType: "BENZINA",
       },
     ];
 
@@ -487,8 +374,6 @@ describe("VehicleSelector", () => {
         length: "4.50",
         has_trailer: false,
         trailer_length: "",
-        regNumber: "AA000BB",
-        fuelType: "BENZINA",
       },
     ];
 
@@ -501,11 +386,9 @@ describe("VehicleSelector", () => {
 
     const heightInput = screen.getByLabelText(/Altezza \(m\)/);
     const lengthInput = screen.getByLabelText(/Lunghezza \(m\)/);
-    const plateInput = screen.getByLabelText(/Targa/);
 
     expect(heightInput).toHaveAttribute("aria-invalid", "false");
     expect(lengthInput).toHaveAttribute("aria-invalid", "false");
-    expect(plateInput).toHaveAttribute("aria-invalid", "false");
   });
 });
 
@@ -522,7 +405,7 @@ describe("areVehiclesValid", () => {
   it("should return false when height is missing", () => {
     expect(
       areVehiclesValid([
-        { type: "CAR", height: "", length: "4.50", has_trailer: false, trailer_length: "", regNumber: "AA000BB", fuelType: "BENZINA" },
+        { type: "CAR", height: "", length: "4.50", has_trailer: false, trailer_length: "" },
       ])
     ).toBe(false);
   });
@@ -530,15 +413,7 @@ describe("areVehiclesValid", () => {
   it("should return false when length is missing", () => {
     expect(
       areVehiclesValid([
-        { type: "CAR", height: "1.80", length: "", has_trailer: false, trailer_length: "", regNumber: "AA000BB", fuelType: "BENZINA" },
-      ])
-    ).toBe(false);
-  });
-
-  it("should return false when regNumber is missing", () => {
-    expect(
-      areVehiclesValid([
-        { type: "CAR", height: "1.80", length: "4.50", has_trailer: false, trailer_length: "", regNumber: "", fuelType: "BENZINA" },
+        { type: "CAR", height: "1.80", length: "", has_trailer: false, trailer_length: "" },
       ])
     ).toBe(false);
   });
@@ -546,7 +421,7 @@ describe("areVehiclesValid", () => {
   it("should return false when trailer_length is missing with has_trailer true", () => {
     expect(
       areVehiclesValid([
-        { type: "CAR", height: "1.80", length: "4.50", has_trailer: true, trailer_length: "", regNumber: "AA000BB", fuelType: "BENZINA" },
+        { type: "CAR", height: "1.80", length: "4.50", has_trailer: true, trailer_length: "" },
       ])
     ).toBe(false);
   });
@@ -554,7 +429,7 @@ describe("areVehiclesValid", () => {
   it("should return true when all fields are filled (no trailer)", () => {
     expect(
       areVehiclesValid([
-        { type: "CAR", height: "1.80", length: "4.50", has_trailer: false, trailer_length: "", regNumber: "AA000BB", fuelType: "BENZINA" },
+        { type: "CAR", height: "1.80", length: "4.50", has_trailer: false, trailer_length: "" },
       ])
     ).toBe(true);
   });
@@ -562,7 +437,7 @@ describe("areVehiclesValid", () => {
   it("should return true when all fields are filled (with trailer)", () => {
     expect(
       areVehiclesValid([
-        { type: "CAR", height: "1.80", length: "4.50", has_trailer: true, trailer_length: "2.50", regNumber: "AA000BB", fuelType: "BENZINA" },
+        { type: "CAR", height: "1.80", length: "4.50", has_trailer: true, trailer_length: "2.50" },
       ])
     ).toBe(true);
   });
@@ -570,8 +445,8 @@ describe("areVehiclesValid", () => {
   it("should return false if any vehicle in array is incomplete", () => {
     expect(
       areVehiclesValid([
-        { type: "CAR", height: "1.80", length: "4.50", has_trailer: false, trailer_length: "", regNumber: "AA000BB", fuelType: "BENZINA" },
-        { type: "MCY", height: "", length: "2.00", has_trailer: false, trailer_length: "", regNumber: "CC111DD", fuelType: "BENZINA" },
+        { type: "CAR", height: "1.80", length: "4.50", has_trailer: false, trailer_length: "" },
+        { type: "MCY", height: "", length: "2.00", has_trailer: false, trailer_length: "" },
       ])
     ).toBe(false);
   });
@@ -579,8 +454,8 @@ describe("areVehiclesValid", () => {
   it("should return true when all vehicles are complete", () => {
     expect(
       areVehiclesValid([
-        { type: "CAR", height: "1.80", length: "4.50", has_trailer: false, trailer_length: "", regNumber: "AA000BB", fuelType: "BENZINA" },
-        { type: "CAMPER", height: "2.80", length: "7.00", has_trailer: true, trailer_length: "3.00", regNumber: "CC111DD", fuelType: "DIESEL" },
+        { type: "CAR", height: "1.80", length: "4.50", has_trailer: false, trailer_length: "" },
+        { type: "CAMPER", height: "2.80", length: "7.00", has_trailer: true, trailer_length: "3.00" },
       ])
     ).toBe(true);
   });

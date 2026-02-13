@@ -13,7 +13,7 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import "./VehicleSelector.css";
 
-const VEHICLE_TYPES = [
+export const VEHICLE_TYPES = [
   { value: "CAR", label: "Automobile" },
   { value: "VEI", label: "Furgone" },
   { value: "CMPMINIBUS", label: "Camper e Minibus" },
@@ -21,7 +21,7 @@ const VEHICLE_TYPES = [
   { value: "BCY", label: "Bicicletta/Surf" },
 ];
 
-const FUEL_TYPES = [
+export const FUEL_TYPES = [
   { value: "BENZINA", label: "Benzina" },
   { value: "DIESEL", label: "Diesel" },
   { value: "GPL", label: "GPL" },
@@ -36,15 +36,13 @@ const DEFAULT_VEHICLE = {
   length: "",
   has_trailer: false,
   trailer_length: "",
-  regNumber: "",
-  fuelType: "BENZINA",
 };
 
 /**
  * Checks if a single vehicle has all required fields filled
  */
 const isVehicleComplete = (vehicle) => {
-  if (!vehicle.height || !vehicle.length || !vehicle.regNumber) return false;
+  if (!vehicle.height || !vehicle.length) return false;
   if (vehicle.has_trailer && !vehicle.trailer_length) return false;
   return true;
 };
@@ -133,41 +131,6 @@ export const VehicleSelector = ({ vehicles, onVehiclesChange }) => {
                   {VEHICLE_TYPES.map((vt) => (
                     <MenuItem key={vt.value} value={vt.value}>
                       {vt.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-
-                <TextField
-                  size="small"
-                  className="vehicle-field-plate"
-                  label={t("Targa")}
-                  placeholder="AA000BB"
-                  required
-                  error={!vehicle.regNumber}
-                  value={vehicle.regNumber}
-                  onChange={(e) =>
-                    updateVehicle(
-                      index,
-                      "regNumber",
-                      e.target.value.toUpperCase()
-                    )
-                  }
-                  inputProps={{ maxLength: 10 }}
-                />
-
-                <TextField
-                  select
-                  size="small"
-                  className="vehicle-field-fuel"
-                  label={t("Carburante")}
-                  value={vehicle.fuelType}
-                  onChange={(e) =>
-                    updateVehicle(index, "fuelType", e.target.value)
-                  }
-                >
-                  {FUEL_TYPES.map((ft) => (
-                    <MenuItem key={ft.value} value={ft.value}>
-                      {ft.label}
                     </MenuItem>
                   ))}
                 </TextField>
