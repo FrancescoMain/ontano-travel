@@ -14,10 +14,11 @@ const getVehicleLabel = (type) => {
 /**
  * Checkout section for collecting vehicle plate and fuel type.
  * BCY (Bicicletta/Surf) vehicles are skipped (no plate/fuel needed).
+ * Vehicles with has_trailer also show trailer plate/fuel fields.
  *
  * @param {Object} props
- * @param {Array} props.vehicles - Vehicles from quote (with type)
- * @param {Array} props.vehicleDetails - Array of {regNumber, fuelType} per vehicle
+ * @param {Array} props.vehicles - Vehicles from quote (with type, has_trailer)
+ * @param {Array} props.vehicleDetails - Array of {regNumber, fuelType, trailerRegNumber?, trailerFuelType?}
  * @param {Function} props.onVehicleDetailsChange - Callback with updated vehicleDetails array
  */
 export const CheckoutVehicleDetails = ({
@@ -88,6 +89,56 @@ export const CheckoutVehicleDetails = ({
                     </TextField>
                   </div>
                 </div>
+                {vehicle.has_trailer && (
+                  <div className="mt-2">
+                    <h6 className="text-secondary">{t("Rimorchio")}</h6>
+                    <div className="row g-2">
+                      <div className="col-sm-6">
+                        <TextField
+                          fullWidth
+                          size="small"
+                          label={t("Targa rimorchio")}
+                          placeholder="AA000BB"
+                          required
+                          error={!vehicleDetails[index]?.trailerRegNumber}
+                          value={vehicleDetails[index]?.trailerRegNumber || ""}
+                          onChange={(e) =>
+                            handleChange(
+                              index,
+                              "trailerRegNumber",
+                              e.target.value.toUpperCase()
+                            )
+                          }
+                          inputProps={{ maxLength: 10 }}
+                        />
+                      </div>
+                      <div className="col-sm-6">
+                        <TextField
+                          select
+                          fullWidth
+                          size="small"
+                          label={t("Carburante rimorchio")}
+                          value={
+                            vehicleDetails[index]?.trailerFuelType || "BENZINA"
+                          }
+                          onChange={(e) =>
+                            handleChange(
+                              index,
+                              "trailerFuelType",
+                              e.target.value
+                            )
+                          }
+                        >
+                          {FUEL_TYPES.map((ft) => (
+                            <MenuItem key={ft.value} value={ft.value}>
+                              {ft.label}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })}

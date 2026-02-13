@@ -146,7 +146,13 @@ export const Checkout = () => {
   React.useEffect(() => {
     if (vehiclesFromQuote && vehiclesFromQuote.length > 0) {
       setVehicleDetails(
-        vehiclesFromQuote.map(() => ({ regNumber: "", fuelType: "BENZINA" }))
+        vehiclesFromQuote.map((v) => ({
+          regNumber: "",
+          fuelType: "BENZINA",
+          ...(v.has_trailer
+            ? { trailerRegNumber: "", trailerFuelType: "BENZINA" }
+            : {}),
+        }))
       );
     }
   }, [vehiclesFromQuote]);
@@ -154,10 +160,13 @@ export const Checkout = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Valida targa per veicoli non-BCY
+    // Valida targa per veicoli non-BCY e rimorchi
     if (vehiclesFromQuote && vehiclesFromQuote.length > 0) {
       const missingPlate = vehiclesFromQuote.some(
-        (v, i) => v.type !== "BCY" && !vehicleDetails[i]?.regNumber
+        (v, i) =>
+          v.type !== "BCY" &&
+          (!vehicleDetails[i]?.regNumber ||
+            (v.has_trailer && !vehicleDetails[i]?.trailerRegNumber))
       );
       if (missingPlate) {
         toast.error("Inserire la targa per tutti i veicoli");
@@ -170,12 +179,26 @@ export const Checkout = () => {
     const extraFields = prenotazione?.requestExtraFields;
 
     // Unisci type da vehiclesFromQuote + regNumber/fuelType da vehicleDetails
+    // Per veicoli con rimorchio, aggiungi entry separata TRL
     const vehiclesForReserve = vehiclesFromQuote
-      ? vehiclesFromQuote.map((v, i) => ({
-          type: v.type,
-          regNumber: vehicleDetails[i]?.regNumber || "",
-          fuelType: vehicleDetails[i]?.fuelType || "BENZINA",
-        }))
+      ? vehiclesFromQuote.flatMap((v, i) => {
+          const main = {
+            type: v.type,
+            regNumber: vehicleDetails[i]?.regNumber || "",
+            fuelType: vehicleDetails[i]?.fuelType || "BENZINA",
+          };
+          if (v.has_trailer) {
+            return [
+              main,
+              {
+                type: "TRL",
+                regNumber: vehicleDetails[i]?.trailerRegNumber || "",
+                fuelType: vehicleDetails[i]?.trailerFuelType || "BENZINA",
+              },
+            ];
+          }
+          return [main];
+        })
       : null;
 
     const resultReserve = await reserve(

@@ -148,7 +148,102 @@ describe("CheckoutVehicleDetails", () => {
       />
     );
 
-    const plateInput = screen.getByLabelText(/Targa/);
+    const plateInput = screen.getByLabelText(/^Targa/);
     expect(plateInput).toHaveAttribute("aria-invalid", "false");
+  });
+
+  it("should render trailer fields when vehicle has_trailer", () => {
+    const vehicles = [{ type: "CAR", has_trailer: true }];
+    const details = [
+      {
+        regNumber: "AA000BB",
+        fuelType: "BENZINA",
+        trailerRegNumber: "",
+        trailerFuelType: "BENZINA",
+      },
+    ];
+
+    render(
+      <CheckoutVehicleDetails
+        vehicles={vehicles}
+        vehicleDetails={details}
+        onVehicleDetailsChange={mockOnChange}
+      />
+    );
+
+    expect(screen.getByText("Rimorchio")).toBeInTheDocument();
+    expect(screen.getByLabelText(/Targa rimorchio/)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Carburante rimorchio/)).toBeInTheDocument();
+  });
+
+  it("should not render trailer fields when has_trailer is false", () => {
+    const vehicles = [{ type: "CAR", has_trailer: false }];
+    const details = [{ regNumber: "AA000BB", fuelType: "BENZINA" }];
+
+    render(
+      <CheckoutVehicleDetails
+        vehicles={vehicles}
+        vehicleDetails={details}
+        onVehicleDetailsChange={mockOnChange}
+      />
+    );
+
+    expect(screen.queryByText("Rimorchio")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText(/Targa rimorchio/)).not.toBeInTheDocument();
+  });
+
+  it("should update trailerRegNumber in uppercase", () => {
+    const vehicles = [{ type: "CAR", has_trailer: true }];
+    const details = [
+      {
+        regNumber: "AA000BB",
+        fuelType: "BENZINA",
+        trailerRegNumber: "",
+        trailerFuelType: "BENZINA",
+      },
+    ];
+
+    render(
+      <CheckoutVehicleDetails
+        vehicles={vehicles}
+        vehicleDetails={details}
+        onVehicleDetailsChange={mockOnChange}
+      />
+    );
+
+    const trailerPlateInput = screen.getByLabelText(/Targa rimorchio/);
+    fireEvent.change(trailerPlateInput, { target: { value: "xy789zz" } });
+
+    expect(mockOnChange).toHaveBeenCalledWith([
+      {
+        regNumber: "AA000BB",
+        fuelType: "BENZINA",
+        trailerRegNumber: "XY789ZZ",
+        trailerFuelType: "BENZINA",
+      },
+    ]);
+  });
+
+  it("should show error when trailerRegNumber is empty", () => {
+    const vehicles = [{ type: "CAR", has_trailer: true }];
+    const details = [
+      {
+        regNumber: "AA000BB",
+        fuelType: "BENZINA",
+        trailerRegNumber: "",
+        trailerFuelType: "BENZINA",
+      },
+    ];
+
+    render(
+      <CheckoutVehicleDetails
+        vehicles={vehicles}
+        vehicleDetails={details}
+        onVehicleDetailsChange={mockOnChange}
+      />
+    );
+
+    const trailerPlateInput = screen.getByLabelText(/Targa rimorchio/);
+    expect(trailerPlateInput).toHaveAttribute("aria-invalid", "true");
   });
 });
