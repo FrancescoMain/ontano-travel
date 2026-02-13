@@ -124,6 +124,21 @@ export const Checkout = () => {
     });
   }, [prenotazione]);
 
+  // Estrai i veicoli da linkQuote (se presenti)
+  const vehiclesFromQuote = React.useMemo(() => {
+    try {
+      const linkQuote = localStorage.getItem("linkQuote");
+      if (!linkQuote) return null;
+      const parsed = JSON.parse(linkQuote);
+      const allVehicles = parsed.tratte
+        ?.flatMap((tratta) => tratta.vehicles || [])
+        .filter((v) => v && v.regNumber);
+      return allVehicles?.length > 0 ? allVehicles : null;
+    } catch {
+      return null;
+    }
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true); // Start spinner
@@ -143,7 +158,8 @@ export const Checkout = () => {
       extraFields ? nazionalità : null,
       extraFields ? luoghiDiNascita : null,
       extraFields ? dateDiNascita : null,
-      extraFields ? disabilità : null
+      extraFields ? disabilità : null,
+      vehiclesFromQuote
     );
     if (resultReserve) {
       if (paymentMethodCheck === "CREDIT_CARD") {

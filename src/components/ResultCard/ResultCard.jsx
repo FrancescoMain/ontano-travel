@@ -29,6 +29,7 @@ import seremar from "../../assets/seremar.png";
 import coastLines from "../../assets/coast-lines.png";
 import grimaldi from "../../assets/Logo-Grimaldi-Lines.jpg";
 import { AccommodationSelector } from "./AccommodationSelector";
+import { areVehiclesValid } from "./VehicleSelector";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -56,7 +57,7 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
   const timeArr = formatTime(arrivalDate);
   const { hours, minutes } = calculateDuration(departureDate, arrivalDate);
 
-  const { adulti, bambini, etaBambini, etaAdulti, animali, bagagli } =
+  const { adulti, bambini, etaBambini, etaAdulti, animali, bagagli, vehicles } =
     useSelector((state) => state.tratte.dettagli[id]);
 
   const selectedExt = useSelector((state) => state.resultsTratta.selected);
@@ -74,12 +75,15 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
     etaAdulti?.length === adultiNum &&
     etaAdulti.every((age) => age !== "" && parseInt(age, 10) >= 12);
 
-  // Skip fetch for Grimaldi if ages are not valid
-  const skipFetch = isGrimaldi && !grimaldiAgesValid;
+  // Check if all vehicles have required fields filled
+  const vehiclesValid = areVehiclesValid(vehicles);
+
+  // Skip fetch for Grimaldi if ages are not valid or vehicles are incomplete
+  const skipFetch = isGrimaldi && (!grimaldiAgesValid || !vehiclesValid);
 
   const onClick = () => {
-    // For Grimaldi, don't allow selection until ages are entered
-    if (isGrimaldi && !grimaldiAgesValid) {
+    // For Grimaldi, don't allow selection until ages are entered and vehicles are complete
+    if (isGrimaldi && (!grimaldiAgesValid || !vehiclesValid)) {
       return;
     }
     const dataToDispatch = {
@@ -94,6 +98,7 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
       etaBambini: etaBambini,
       etaAdulti: etaAdulti,
       accommodations: selectedAccommodations,
+      vehicles: vehicles,
     };
     dispatch(upsertSelected(dataToDispatch));
     const element = document.getElementById("result-ritorno");
@@ -129,6 +134,7 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
     animali,
     bagagli,
     accommodations: selectedAccommodations,
+    vehicles: vehicles,
     setLoading,
     setPriceData,
     skipFetch,
@@ -153,10 +159,11 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
           data,
           etaAdulti: etaAdulti,
           accommodations: selectedAccommodations,
+          vehicles: vehicles,
         })
       );
     }
-  }, [priceData, selectedAccommodations]);
+  }, [priceData, selectedAccommodations, vehicles]);
 
   return (
     <div
@@ -241,6 +248,10 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
               {isGrimaldi && !grimaldiAgesValid ? (
                 <span className="text-muted fs-6">
                   {t("Inserisci età adulti")}
+                </span>
+              ) : isGrimaldi && !vehiclesValid ? (
+                <span className="text-muted fs-6">
+                  {t("Completa i dati del veicolo")}
                 </span>
               ) : loading ? (
                 <SpinnerOnly active={loading} />

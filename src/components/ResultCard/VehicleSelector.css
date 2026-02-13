@@ -1,0 +1,133 @@
+.vehicle-selector {
+  padding: 8px 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.vehicle-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  color: #1976d2;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 4px 0;
+  background: none;
+  border: none;
+}
+
+.vehicle-add-btn:hover {
+  color: #1565c0;
+}
+
+.vehicle-list {
+  margin-top: 8px;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.vehicle-item {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+  background-color: #fff;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.vehicle-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.vehicle-item-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #555;
+}
+
+.vehicle-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  max-width: 100%;
+}
+
+.vehicle-fields .MuiFormControl-root {
+  min-width: 0;
+}
+
+.vehicle-item .MuiInputLabel-root {
+  background-color: #fff;
+  padding: 0 6px;
+  color: rgba(0, 0, 0, 0.7) !important;
+}
+
+.vehicle-item .MuiInputLabel-root.Mui-focused {
+  color: #1976d2 !important;
+}
+
+.vehicle-field-type {
+  flex: 1 1 calc(50% - 4px);
+  min-width: 0;
+}
+
+.vehicle-field-plate {
+  flex: 1 1 calc(50% - 4px);
+  min-width: 0;
+}
+
+.vehicle-field-fuel {
+  flex: 1 1 100%;
+}
+
+.vehicle-field-size {
+  flex: 1 1 calc(50% - 4px);
+  min-width: 0;
+}
+
+.vehicle-trailer-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.vehicle-trailer-length {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 200px;
+}
+
+@media (max-width: 768px) {
+  .vehicle-selector {
+    padding: 8px 0;
+  }
+
+  .vehicle-item {
+    padding: 8px;
+  }
+
+  .vehicle-list {
+    max-width: calc(100vw - 48px);
+  }
+
+  .vehicle-field-size {
+    flex: 1 1 calc(50% - 4px);
+  }
+
+  .vehicle-trailer-length {
+    max-width: 100%;
+  }
+}

@@ -1,0 +1,587 @@
+import React from "react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import {
+  VehicleSelector,
+  areVehiclesValid,
+} from "../../components/ResultCard/VehicleSelector";
+
+// Mock react-i18next
+jest.mock("react-i18next", () => ({
+  useTranslation: () => ({
+    t: (key) => key,
+  }),
+}));
+
+describe("VehicleSelector", () => {
+  const mockOnVehiclesChange = jest.fn();
+
+  const defaultProps = {
+    vehicles: [],
+    onVehiclesChange: mockOnVehiclesChange,
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("should render correctly with no vehicles", () => {
+    render(<VehicleSelector {...defaultProps} />);
+
+    expect(screen.getByText("Aggiungi veicolo")).toBeInTheDocument();
+    expect(screen.queryByText(/Veicolo 1/)).not.toBeInTheDocument();
+  });
+
+  it("should add a new vehicle when clicking add button", () => {
+    render(<VehicleSelector {...defaultProps} />);
+
+    fireEvent.click(screen.getByText("Aggiungi veicolo"));
+
+    expect(mockOnVehiclesChange).toHaveBeenCalledWith([
+      {
+        type: "CAR",
+        height: "",
+        length: "",
+        has_trailer: false,
+        trailer_length: "",
+        regNumber: "",
+        fuelType: "BENZINA",
+      },
+    ]);
+  });
+
+  it("should render vehicle with type select, plate and fuel fields", () => {
+    const vehicles = [
+      {
+        type: "CAR",
+        height: "1.80",
+        length: "4.50",
+        has_trailer: false,
+        trailer_length: "",
+        regNumber: "AA000BB",
+        fuelType: "BENZINA",
+      },
+    ];
+
+    render(
+      <VehicleSelector
+        vehicles={vehicles}
+        onVehiclesChange={mockOnVehiclesChange}
+      />
+    );
+
+    expect(screen.getByText("Veicolo 1")).toBeInTheDocument();
+    expect(screen.getByLabelText("Tipo")).toBeInTheDocument();
+    expect(screen.getByLabelText(/Targa/)).toBeInTheDocument();
+    expect(screen.getByLabelText("Carburante")).toBeInTheDocument();
+    expect(screen.getByLabelText(/Altezza \(m\)/)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Lunghezza \(m\)/)).toBeInTheDocument();
+  });
+
+  it("should update vehicle type", () => {
+    const vehicles = [
+      {
+        type: "CAR",
+        height: "",
+        length: "",
+        has_trailer: false,
+        trailer_length: "",
+        regNumber: "",
+        fuelType: "BENZINA",
+      },
+    ];
+
+    render(
+      <VehicleSelector
+        vehicles={vehicles}
+        onVehiclesChange={mockOnVehiclesChange}
+      />
+    );
+
+    // MUI Select: open dropdown and select option
+    const select = screen.getByLabelText("Tipo");
+    fireEvent.mouseDown(select);
+    fireEvent.click(screen.getByText("Moto/Scooter"));
+
+    expect(mockOnVehiclesChange).toHaveBeenCalledWith([
+      {
+        type: "MCY",
+        height: "",
+        length: "",
+        has_trailer: false,
+        trailer_length: "",
+        regNumber: "",
+        fuelType: "BENZINA",
+      },
+    ]);
+  });
+
+  it("should update regNumber in uppercase", () => {
+    const vehicles = [
+      {
+        type: "CAR",
+        height: "",
+        length: "",
+        has_trailer: false,
+        trailer_length: "",
+        regNumber: "",
+        fuelType: "BENZINA",
+      },
+    ];
+
+    render(
+      <VehicleSelector
+        vehicles={vehicles}
+        onVehiclesChange={mockOnVehiclesChange}
+      />
+    );
+
+    const plateInput = screen.getByLabelText(/Targa/);
+    fireEvent.change(plateInput, { target: { value: "ab123cd" } });
+
+    expect(mockOnVehiclesChange).toHaveBeenCalledWith([
+      {
+        type: "CAR",
+        height: "",
+        length: "",
+        has_trailer: false,
+        trailer_length: "",
+        regNumber: "AB123CD",
+        fuelType: "BENZINA",
+      },
+    ]);
+  });
+
+  it("should update fuelType", () => {
+    const vehicles = [
+      {
+        type: "CAR",
+        height: "",
+        length: "",
+        has_trailer: false,
+        trailer_length: "",
+        regNumber: "",
+        fuelType: "BENZINA",
+      },
+    ];
+
+    render(
+      <VehicleSelector
+        vehicles={vehicles}
+        onVehiclesChange={mockOnVehiclesChange}
+      />
+    );
+
+    const fuelSelect = screen.getByLabelText("Carburante");
+    fireEvent.mouseDown(fuelSelect);
+    fireEvent.click(screen.getByText("Diesel"));
+
+    expect(mockOnVehiclesChange).toHaveBeenCalledWith([
+      {
+        type: "CAR",
+        height: "",
+        length: "",
+        has_trailer: false,
+        trailer_length: "",
+        regNumber: "",
+        fuelType: "DIESEL",
+      },
+    ]);
+  });
+
+  it("should update height and length", () => {
+    const vehicles = [
+      {
+        type: "CAR",
+        height: "",
+        length: "",
+        has_trailer: false,
+        trailer_length: "",
+        regNumber: "",
+        fuelType: "BENZINA",
+      },
+    ];
+
+    render(
+      <VehicleSelector
+        vehicles={vehicles}
+        onVehiclesChange={mockOnVehiclesChange}
+      />
+    );
+
+    const heightInput = screen.getByLabelText(/Altezza \(m\)/);
+    fireEvent.change(heightInput, { target: { value: "1.80" } });
+
+    expect(mockOnVehiclesChange).toHaveBeenCalledWith([
+      {
+        type: "CAR",
+        height: "1.80",
+        length: "",
+        has_trailer: false,
+        trailer_length: "",
+        regNumber: "",
+        fuelType: "BENZINA",
+      },
+    ]);
+
+    mockOnVehiclesChange.mockClear();
+
+    const lengthInput = screen.getByLabelText(/Lunghezza \(m\)/);
+    fireEvent.change(lengthInput, { target: { value: "4.50" } });
+
+    expect(mockOnVehiclesChange).toHaveBeenCalledWith([
+      {
+        type: "CAR",
+        height: "",
+        length: "4.50",
+        has_trailer: false,
+        trailer_length: "",
+        regNumber: "",
+        fuelType: "BENZINA",
+      },
+    ]);
+  });
+
+  it("should show trailer_length field when has_trailer is checked", () => {
+    const vehicles = [
+      {
+        type: "CAR",
+        height: "",
+        length: "",
+        has_trailer: true,
+        trailer_length: "2.50",
+        regNumber: "",
+        fuelType: "BENZINA",
+      },
+    ];
+
+    render(
+      <VehicleSelector
+        vehicles={vehicles}
+        onVehiclesChange={mockOnVehiclesChange}
+      />
+    );
+
+    expect(
+      screen.getByLabelText(/Lunghezza rimorchio \(m\)/)
+    ).toBeInTheDocument();
+  });
+
+  it("should hide trailer_length field when has_trailer is unchecked", () => {
+    const vehicles = [
+      {
+        type: "CAR",
+        height: "",
+        length: "",
+        has_trailer: false,
+        trailer_length: "",
+        regNumber: "",
+        fuelType: "BENZINA",
+      },
+    ];
+
+    render(
+      <VehicleSelector
+        vehicles={vehicles}
+        onVehiclesChange={mockOnVehiclesChange}
+      />
+    );
+
+    expect(
+      screen.queryByLabelText(/Lunghezza rimorchio \(m\)/)
+    ).not.toBeInTheDocument();
+  });
+
+  it("should clear trailer_length when unchecking has_trailer", () => {
+    const vehicles = [
+      {
+        type: "CAR",
+        height: "",
+        length: "",
+        has_trailer: true,
+        trailer_length: "2.50",
+        regNumber: "",
+        fuelType: "BENZINA",
+      },
+    ];
+
+    render(
+      <VehicleSelector
+        vehicles={vehicles}
+        onVehiclesChange={mockOnVehiclesChange}
+      />
+    );
+
+    const checkbox = screen.getByRole("checkbox");
+    fireEvent.click(checkbox);
+
+    expect(mockOnVehiclesChange).toHaveBeenCalledWith([
+      {
+        type: "CAR",
+        height: "",
+        length: "",
+        has_trailer: false,
+        trailer_length: "",
+        regNumber: "",
+        fuelType: "BENZINA",
+      },
+    ]);
+  });
+
+  it("should remove a vehicle", () => {
+    const vehicles = [
+      {
+        type: "CAR",
+        height: "1.80",
+        length: "4.50",
+        has_trailer: false,
+        trailer_length: "",
+        regNumber: "AA000BB",
+        fuelType: "BENZINA",
+      },
+      {
+        type: "MCY",
+        height: "1.20",
+        length: "2.00",
+        has_trailer: false,
+        trailer_length: "",
+        regNumber: "CC111DD",
+        fuelType: "BENZINA",
+      },
+    ];
+
+    render(
+      <VehicleSelector
+        vehicles={vehicles}
+        onVehiclesChange={mockOnVehiclesChange}
+      />
+    );
+
+    expect(screen.getByText("Veicolo 1")).toBeInTheDocument();
+    expect(screen.getByText("Veicolo 2")).toBeInTheDocument();
+
+    // Click delete on first vehicle
+    const deleteButtons = screen.getAllByTestId("DeleteIcon");
+    fireEvent.click(deleteButtons[0].closest("button"));
+
+    expect(mockOnVehiclesChange).toHaveBeenCalledWith([
+      {
+        type: "MCY",
+        height: "1.20",
+        length: "2.00",
+        has_trailer: false,
+        trailer_length: "",
+        regNumber: "CC111DD",
+        fuelType: "BENZINA",
+      },
+    ]);
+  });
+
+  it("should handle multiple vehicles", () => {
+    const vehicles = [
+      {
+        type: "CAR",
+        height: "1.80",
+        length: "4.50",
+        has_trailer: false,
+        trailer_length: "",
+        regNumber: "AA000BB",
+        fuelType: "BENZINA",
+      },
+      {
+        type: "CAMPER",
+        height: "2.80",
+        length: "7.00",
+        has_trailer: true,
+        trailer_length: "3.00",
+        regNumber: "CC111DD",
+        fuelType: "DIESEL",
+      },
+    ];
+
+    render(
+      <VehicleSelector
+        vehicles={vehicles}
+        onVehiclesChange={mockOnVehiclesChange}
+      />
+    );
+
+    expect(screen.getByText("Veicolo 1")).toBeInTheDocument();
+    expect(screen.getByText("Veicolo 2")).toBeInTheDocument();
+    expect(
+      screen.getByLabelText(/Lunghezza rimorchio \(m\)/)
+    ).toBeInTheDocument();
+  });
+
+  it("should stop click propagation", () => {
+    const parentClickHandler = jest.fn();
+
+    render(
+      <div onClick={parentClickHandler}>
+        <VehicleSelector {...defaultProps} />
+      </div>
+    );
+
+    fireEvent.click(screen.getByText("Aggiungi veicolo"));
+
+    expect(parentClickHandler).not.toHaveBeenCalled();
+  });
+
+  it("should show error state on empty required fields", () => {
+    const vehicles = [
+      {
+        type: "CAR",
+        height: "",
+        length: "",
+        has_trailer: false,
+        trailer_length: "",
+        regNumber: "",
+        fuelType: "BENZINA",
+      },
+    ];
+
+    render(
+      <VehicleSelector
+        vehicles={vehicles}
+        onVehiclesChange={mockOnVehiclesChange}
+      />
+    );
+
+    const heightInput = screen.getByLabelText(/Altezza \(m\)/);
+    const lengthInput = screen.getByLabelText(/Lunghezza \(m\)/);
+    const plateInput = screen.getByLabelText(/Targa/);
+
+    expect(heightInput).toHaveAttribute("aria-invalid", "true");
+    expect(lengthInput).toHaveAttribute("aria-invalid", "true");
+    expect(plateInput).toHaveAttribute("aria-invalid", "true");
+  });
+
+  it("should show error on empty trailer_length when has_trailer is true", () => {
+    const vehicles = [
+      {
+        type: "CAR",
+        height: "1.80",
+        length: "4.50",
+        has_trailer: true,
+        trailer_length: "",
+        regNumber: "AA000BB",
+        fuelType: "BENZINA",
+      },
+    ];
+
+    render(
+      <VehicleSelector
+        vehicles={vehicles}
+        onVehiclesChange={mockOnVehiclesChange}
+      />
+    );
+
+    const trailerInput = screen.getByLabelText(/Lunghezza rimorchio \(m\)/);
+    expect(trailerInput).toHaveAttribute("aria-invalid", "true");
+  });
+
+  it("should not show error when fields are filled", () => {
+    const vehicles = [
+      {
+        type: "CAR",
+        height: "1.80",
+        length: "4.50",
+        has_trailer: false,
+        trailer_length: "",
+        regNumber: "AA000BB",
+        fuelType: "BENZINA",
+      },
+    ];
+
+    render(
+      <VehicleSelector
+        vehicles={vehicles}
+        onVehiclesChange={mockOnVehiclesChange}
+      />
+    );
+
+    const heightInput = screen.getByLabelText(/Altezza \(m\)/);
+    const lengthInput = screen.getByLabelText(/Lunghezza \(m\)/);
+    const plateInput = screen.getByLabelText(/Targa/);
+
+    expect(heightInput).toHaveAttribute("aria-invalid", "false");
+    expect(lengthInput).toHaveAttribute("aria-invalid", "false");
+    expect(plateInput).toHaveAttribute("aria-invalid", "false");
+  });
+});
+
+describe("areVehiclesValid", () => {
+  it("should return true for empty array", () => {
+    expect(areVehiclesValid([])).toBe(true);
+  });
+
+  it("should return true for null/undefined", () => {
+    expect(areVehiclesValid(null)).toBe(true);
+    expect(areVehiclesValid(undefined)).toBe(true);
+  });
+
+  it("should return false when height is missing", () => {
+    expect(
+      areVehiclesValid([
+        { type: "CAR", height: "", length: "4.50", has_trailer: false, trailer_length: "", regNumber: "AA000BB", fuelType: "BENZINA" },
+      ])
+    ).toBe(false);
+  });
+
+  it("should return false when length is missing", () => {
+    expect(
+      areVehiclesValid([
+        { type: "CAR", height: "1.80", length: "", has_trailer: false, trailer_length: "", regNumber: "AA000BB", fuelType: "BENZINA" },
+      ])
+    ).toBe(false);
+  });
+
+  it("should return false when regNumber is missing", () => {
+    expect(
+      areVehiclesValid([
+        { type: "CAR", height: "1.80", length: "4.50", has_trailer: false, trailer_length: "", regNumber: "", fuelType: "BENZINA" },
+      ])
+    ).toBe(false);
+  });
+
+  it("should return false when trailer_length is missing with has_trailer true", () => {
+    expect(
+      areVehiclesValid([
+        { type: "CAR", height: "1.80", length: "4.50", has_trailer: true, trailer_length: "", regNumber: "AA000BB", fuelType: "BENZINA" },
+      ])
+    ).toBe(false);
+  });
+
+  it("should return true when all fields are filled (no trailer)", () => {
+    expect(
+      areVehiclesValid([
+        { type: "CAR", height: "1.80", length: "4.50", has_trailer: false, trailer_length: "", regNumber: "AA000BB", fuelType: "BENZINA" },
+      ])
+    ).toBe(true);
+  });
+
+  it("should return true when all fields are filled (with trailer)", () => {
+    expect(
+      areVehiclesValid([
+        { type: "CAR", height: "1.80", length: "4.50", has_trailer: true, trailer_length: "2.50", regNumber: "AA000BB", fuelType: "BENZINA" },
+      ])
+    ).toBe(true);
+  });
+
+  it("should return false if any vehicle in array is incomplete", () => {
+    expect(
+      areVehiclesValid([
+        { type: "CAR", height: "1.80", length: "4.50", has_trailer: false, trailer_length: "", regNumber: "AA000BB", fuelType: "BENZINA" },
+        { type: "MCY", height: "", length: "2.00", has_trailer: false, trailer_length: "", regNumber: "CC111DD", fuelType: "BENZINA" },
+      ])
+    ).toBe(false);
+  });
+
+  it("should return true when all vehicles are complete", () => {
+    expect(
+      areVehiclesValid([
+        { type: "CAR", height: "1.80", length: "4.50", has_trailer: false, trailer_length: "", regNumber: "AA000BB", fuelType: "BENZINA" },
+        { type: "CAMPER", height: "2.80", length: "7.00", has_trailer: true, trailer_length: "3.00", regNumber: "CC111DD", fuelType: "DIESEL" },
+      ])
+    ).toBe(true);
+  });
+});

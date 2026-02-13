@@ -18,6 +18,7 @@ const initialState = {
       bambini: 0,
       animali: 0,
       bagagli: 0,
+      vehicles: [],
     },
     {
       id: 1,
@@ -27,6 +28,7 @@ const initialState = {
       bambini: 0,
       animali: 0,
       bagagli: 0,
+      vehicles: [],
     },
     // fino a 10
     {
@@ -37,6 +39,7 @@ const initialState = {
       bambini: 0,
       animali: 0,
       bagagli: 0,
+      vehicles: [],
     },
     {
       id: 3,
@@ -46,6 +49,7 @@ const initialState = {
       bambini: 0,
       animali: 0,
       bagagli: 0,
+      vehicles: [],
     },
     {
       id: 4,
@@ -55,6 +59,7 @@ const initialState = {
       bambini: 0,
       animali: 0,
       bagagli: 0,
+      vehicles: [],
     },
     {
       id: 5,
@@ -64,6 +69,7 @@ const initialState = {
       bambini: 0,
       animali: 0,
       bagagli: 0,
+      vehicles: [],
     },
     // fino a 10
     {
@@ -74,6 +80,7 @@ const initialState = {
       bambini: 0,
       animali: 0,
       bagagli: 0,
+      vehicles: [],
     },
     {
       id: 7,
@@ -83,6 +90,7 @@ const initialState = {
       bambini: 0,
       animali: 0,
       bagagli: 0,
+      vehicles: [],
     },
     {
       id: 8,
@@ -92,6 +100,7 @@ const initialState = {
       bambini: 0,
       animali: 0,
       bagagli: 0,
+      vehicles: [],
     },
     {
       id: 9,
@@ -101,6 +110,7 @@ const initialState = {
       bambini: 0,
       animali: 0,
       bagagli: 0,
+      vehicles: [],
     },
   ],
   multitratta: true,
@@ -225,6 +235,7 @@ export const viaggioSlice = createSlice({
           bambini: 0,
           animali: 0,
           bagagli: 0,
+          vehicles: [],
         };
       }
     },
