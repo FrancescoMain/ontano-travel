@@ -18,7 +18,8 @@ export const reserve = async (
   nazionalità,
   luoghiDiNascita,
   dateDiNascita,
-  disabilità
+  disabilità,
+  vehicles = null
 ) => {
   const body = {
     passengers: [],
@@ -88,6 +89,17 @@ export const reserve = async (
   // Aggiungi invoiceDTO se presente
   if (invoiceDTO) {
     body.invoiceDTO = invoiceDTO;
+  }
+
+  // Aggiungi vehicles se presenti
+  if (vehicles && vehicles.length > 0) {
+    body.vehicles = {
+      details: vehicles.map((v) => ({
+        code: v.type,
+        regNumber: v.regNumber,
+        fuelType: v.fuelType,
+      })),
+    };
   }
 
   // Get the current language or default to 'it'

@@ -14,12 +14,20 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import "./VehicleSelector.css";
 
 const VEHICLE_TYPES = [
-  { value: "CAR", label: "Auto" },
-  { value: "MOTO", label: "Moto" },
-  { value: "CAMPER", label: "Camper" },
-  { value: "VAN", label: "Furgone" },
-  { value: "MINIBUS", label: "Minibus" },
-  { value: "CARAVAN", label: "Caravan" },
+  { value: "CAR", label: "Automobile" },
+  { value: "VEI", label: "Furgone" },
+  { value: "CMPMINIBUS", label: "Camper e Minibus" },
+  { value: "MCY", label: "Moto/Scooter" },
+  { value: "BCY", label: "Bicicletta/Surf" },
+];
+
+const FUEL_TYPES = [
+  { value: "BENZINA", label: "Benzina" },
+  { value: "DIESEL", label: "Diesel" },
+  { value: "GPL", label: "GPL" },
+  { value: "METANO", label: "Metano" },
+  { value: "ELETTRICA", label: "Elettrica" },
+  { value: "IBRIDA", label: "Ibrida" },
 ];
 
 const DEFAULT_VEHICLE = {
@@ -28,13 +36,15 @@ const DEFAULT_VEHICLE = {
   length: "",
   has_trailer: false,
   trailer_length: "",
+  regNumber: "",
+  fuelType: "BENZINA",
 };
 
 /**
  * Checks if a single vehicle has all required fields filled
  */
 const isVehicleComplete = (vehicle) => {
-  if (!vehicle.height || !vehicle.length) return false;
+  if (!vehicle.height || !vehicle.length || !vehicle.regNumber) return false;
   if (vehicle.has_trailer && !vehicle.trailer_length) return false;
   return true;
 };
@@ -129,6 +139,42 @@ export const VehicleSelector = ({ vehicles, onVehiclesChange }) => {
 
                 <TextField
                   size="small"
+                  className="vehicle-field-plate"
+                  label={t("Targa")}
+                  placeholder="AA000BB"
+                  required
+                  error={!vehicle.regNumber}
+                  value={vehicle.regNumber}
+                  onChange={(e) =>
+                    updateVehicle(
+                      index,
+                      "regNumber",
+                      e.target.value.toUpperCase()
+                    )
+                  }
+                  inputProps={{ maxLength: 10 }}
+                />
+
+                <TextField
+                  select
+                  size="small"
+                  className="vehicle-field-fuel"
+                  label={t("Carburante")}
+                  value={vehicle.fuelType}
+                  onChange={(e) =>
+                    updateVehicle(index, "fuelType", e.target.value)
+                  }
+                >
+                  {FUEL_TYPES.map((ft) => (
+                    <MenuItem key={ft.value} value={ft.value}>
+                      {ft.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+
+                <TextField
+                  size="small"
+                  type="number"
                   className="vehicle-field-size"
                   label={t("Altezza (m)")}
                   placeholder="1.80"
@@ -138,11 +184,12 @@ export const VehicleSelector = ({ vehicles, onVehiclesChange }) => {
                   onChange={(e) =>
                     updateVehicle(index, "height", e.target.value)
                   }
-                  inputProps={{ inputMode: "decimal" }}
+                  inputProps={{ inputMode: "decimal", step: "0.01", min: "0" }}
                 />
 
                 <TextField
                   size="small"
+                  type="number"
                   className="vehicle-field-size"
                   label={t("Lunghezza (m)")}
                   placeholder="4.50"
@@ -152,7 +199,7 @@ export const VehicleSelector = ({ vehicles, onVehiclesChange }) => {
                   onChange={(e) =>
                     updateVehicle(index, "length", e.target.value)
                   }
-                  inputProps={{ inputMode: "decimal" }}
+                  inputProps={{ inputMode: "decimal", step: "0.01", min: "0" }}
                 />
               </Box>
 
@@ -172,6 +219,7 @@ export const VehicleSelector = ({ vehicles, onVehiclesChange }) => {
                 {vehicle.has_trailer && (
                   <TextField
                     size="small"
+                    type="number"
                     className="vehicle-trailer-length"
                     label={t("Lunghezza rimorchio (m)")}
                     placeholder="2.50"
@@ -181,7 +229,7 @@ export const VehicleSelector = ({ vehicles, onVehiclesChange }) => {
                     onChange={(e) =>
                       updateVehicle(index, "trailer_length", e.target.value)
                     }
-                    inputProps={{ inputMode: "decimal" }}
+                    inputProps={{ inputMode: "decimal", step: "0.01", min: "0" }}
                   />
                 )}
               </Box>
