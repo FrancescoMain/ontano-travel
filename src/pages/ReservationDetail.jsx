@@ -8,6 +8,7 @@ import {
   fetchReservationThunk,
 } from "../features/reservation/reservationSlice";
 import { CheckoutTratta } from "../components/CheckoutTratta";
+import { useTranslation } from "react-i18next";
 
 export const ReservationDetail = () => {
   const { reservationCode } = useParams();
@@ -19,6 +20,7 @@ export const ReservationDetail = () => {
   const navigate = useNavigate(); // Initialize useNavigate
   const accountData = useSelector((state) => state.account.data);
   const isAdmin = accountData?.authorities?.includes("ROLE_WEB_ADMIN");
+  const { t } = useTranslation();
 
   useEffect(() => {
     dispatch(fetchReservationByCodeThunk(reservationCode)); // Use the new thunk
@@ -39,7 +41,7 @@ export const ReservationDetail = () => {
         <div className="col  bg-aliceblue rounded mb-3 d-flex flex-column  mt-3 p-3">
           <div>
             <h3 className="text-primary text-center">
-              Prenotazione {<span>{reservation?.code}</span>}
+              {t("Prenotazione")} {<span>{reservation?.code}</span>}
             </h3>
           </div>
           {reservation?.tour && (
@@ -60,7 +62,7 @@ export const ReservationDetail = () => {
               />
               {route.descriptionTour && (
                 <div className="col bg-aliceblue rounded mb-3 d-flex flex-column mt-3 p-3">
-                  <h4 className="text-primary text-center">Dettaglio Tour</h4>
+                  <h4 className="text-primary text-center">{t("Dettaglio Tour")}</h4>
                   <div
                     dangerouslySetInnerHTML={{ __html: route.descriptionTour }}
                   />
@@ -73,14 +75,14 @@ export const ReservationDetail = () => {
               id="div_DonazioneRiepilogo"
               className="d-flex justify-content-between align-items-center mb-2 d-none"
             >
-              <span>Donazione</span>
+              <span>{t("Donazione")}</span>
               <span>0,00</span>
             </div>
             <div
               id="div_AssicurazioneRiepilogo"
               className="d-flex justify-content-between align-items-center mb-2 d-none"
             >
-              <span>Garanzia di rimborso</span>
+              <span>{t("Garanzia di rimborso")}</span>
               <span>0,00</span>
             </div>
           </div>
@@ -92,17 +94,17 @@ export const ReservationDetail = () => {
           </div> */}
           <div className="spacer my-3 sconto d-none"></div>
           <div className="d-flex justify-content-between align-items-center">
-            <span>Diritti di prenotazione</span>
+            <span>{t("Diritti di prenotazione")}</span>
             <span>{reservation?.taxPreview?.priceFormatted}</span>
           </div>
           <div className="d-flex justify-content-between align-items-center">
-            <span>Metodo di pagamento</span>
+            <span>{t("Metodo di pagamento")}</span>
             <span>{reservation?.paymentmethod}</span>
           </div>
           <div className="spacer my-3 sconto d-none"></div>
 
           <div className="d-flex justify-content-between align-items-center sconto d-none">
-            <span>Sconto</span>
+            <span>{t("Sconto")}</span>
             <span id="span_ImportoSonto">- 0,00</span>
           </div>
           <div className="spacer my-3"></div>
@@ -110,31 +112,31 @@ export const ReservationDetail = () => {
             id="total"
             className="d-flex justify-content-between align-items-center"
           >
-            <span className="h4">Totale</span>
+            <span className="h4">{t("Totale")}</span>
             <span className="h4 total-price" data-total-price-in-cents="11150">
               {reservation?.priceToPay?.priceFormatted}
             </span>
           </div>
           {reservation?.invoice && (
             <div className="mt-3 ">
-              <h4 className="text-primary text-center">Dati Fattura</h4>
+              <h4 className="text-primary text-center">{t("Dati Fattura")}</h4>
               <div className="row mb-3 justify-content-center">
                 <div className="col-md-4">
-                  <label className="form-label">Nome Azienda</label>
+                  <label className="form-label">{t("Nome Azienda")}</label>
                   <p className="text-muted small">
                     {reservation.invoice.intestazione}
                   </p>
                 </div>
                 <div className="col-md-4">
                   <label className="form-label">
-                    Partita IVA / Codice Fiscale
+                    {t("Partita IVA / Codice Fiscale")}
                   </label>
                   <p className="text-muted small">
                     {reservation.invoice.pIvaCodiceFiscale}
                   </p>
                 </div>
                 <div className="col-4">
-                  <label className="form-label">Indirizzo</label>
+                  <label className="form-label">{t("Indirizzo")}</label>
                   <p className="text-muted small">
                     {reservation.invoice.indirizzo}
                   </p>
@@ -142,17 +144,17 @@ export const ReservationDetail = () => {
               </div>
               <div className="row mb-3 justify-content-center">
                 <div className="col-md-4">
-                  <label className="form-label">CAP</label>
+                  <label className="form-label">{t("CAP")}</label>
                   <p className="text-muted small">{reservation.invoice.cap}</p>
                 </div>
                 <div className="col-md-4">
-                  <label className="form-label">Città</label>
+                  <label className="form-label">{t("Città")}</label>
                   <p className="text-muted small">
                     {reservation.invoice.citta}
                   </p>
                 </div>
                 <div className="col-md-4">
-                  <label className="form-label">Provincia</label>
+                  <label className="form-label">{t("Provincia")}</label>
                   <p className="text-muted small">
                     {reservation.invoice.provincia}
                   </p>
@@ -160,13 +162,13 @@ export const ReservationDetail = () => {
               </div>
               <div className="row mb-3">
                 <div className="col-md-4">
-                  <label className="form-label">Nazione</label>
+                  <label className="form-label">{t("Nazione")}</label>
                   <p className="text-muted small">
                     {reservation.invoice.nazione}
                   </p>
                 </div>
                 <div className="col-md-4">
-                  <label className="form-label">Codice Univoco</label>
+                  <label className="form-label">{t("Codice Univoco")}</label>
                   <p className="text-muted small">
                     {reservation.invoice.codiceUnivoco}
                   </p>
@@ -174,7 +176,7 @@ export const ReservationDetail = () => {
               </div>
               <div className="row mb-3 ">
                 <div className="col-md-4">
-                  <label className="form-label">Email PEC</label>
+                  <label className="form-label">{t("Email PEC")}</label>
                   <p className="text-muted small">
                     {reservation.invoice.emailPec}
                   </p>
