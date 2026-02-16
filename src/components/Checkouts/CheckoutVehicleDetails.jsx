@@ -76,7 +76,7 @@ export const CheckoutVehicleDetails = ({
                       fullWidth
                       size="small"
                       label={t("Carburante")}
-                      value={vehicleDetails[index]?.fuelType || "BENZINA"}
+                      value={vehicleDetails[index]?.fuelType || "ICE"}
                       onChange={(e) =>
                         handleChange(index, "fuelType", e.target.value)
                       }
@@ -119,7 +119,7 @@ export const CheckoutVehicleDetails = ({
                           size="small"
                           label={t("Carburante rimorchio")}
                           value={
-                            vehicleDetails[index]?.trailerFuelType || "BENZINA"
+                            vehicleDetails[index]?.trailerFuelType || "ICE"
                           }
                           onChange={(e) =>
                             handleChange(

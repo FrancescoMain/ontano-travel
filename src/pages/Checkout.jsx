@@ -153,9 +153,9 @@ export const Checkout = () => {
       setVehicleDetails(
         vehiclesFromQuote.map((v) => ({
           regNumber: "",
-          fuelType: "BENZINA",
+          fuelType: "ICE",
           ...(v.has_trailer
-            ? { trailerRegNumber: "", trailerFuelType: "BENZINA" }
+            ? { trailerRegNumber: "", trailerFuelType: "ICE" }
             : {}),
         }))
       );
@@ -191,7 +191,7 @@ export const Checkout = () => {
           const main = {
             type: v.type,
             regNumber: vehicleDetails[i]?.regNumber || "",
-            fuelType: vehicleDetails[i]?.fuelType || "BENZINA",
+            fuelType: vehicleDetails[i]?.fuelType || "ICE",
           };
           if (v.has_trailer) {
             return [
@@ -199,7 +199,7 @@ export const Checkout = () => {
               {
                 type: "TRL",
                 regNumber: vehicleDetails[i]?.trailerRegNumber || "",
-                fuelType: vehicleDetails[i]?.trailerFuelType || "BENZINA",
+                fuelType: vehicleDetails[i]?.trailerFuelType || "ICE",
               },
             ];
           }

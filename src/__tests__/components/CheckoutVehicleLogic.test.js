@@ -31,7 +31,7 @@ describe("Checkout vehicle logic", () => {
       const main = {
         type: v.type,
         regNumber: vehicleDetails[i]?.regNumber || "",
-        fuelType: vehicleDetails[i]?.fuelType || "BENZINA",
+        fuelType: vehicleDetails[i]?.fuelType || "ICE",
       };
       if (v.has_trailer) {
         return [
@@ -39,7 +39,7 @@ describe("Checkout vehicle logic", () => {
           {
             type: "TRL",
             regNumber: vehicleDetails[i]?.trailerRegNumber || "",
-            fuelType: vehicleDetails[i]?.trailerFuelType || "BENZINA",
+            fuelType: vehicleDetails[i]?.trailerFuelType || "ICE",
           },
         ];
       }
@@ -142,7 +142,7 @@ describe("Checkout vehicle logic", () => {
       const vehiclesFromQuote = [
         { type: "CAR", height: "1.8", length: "4.5" },
       ];
-      const vehicleDetails = [{ regNumber: "AA000BB", fuelType: "BENZINA" }];
+      const vehicleDetails = [{ regNumber: "AA000BB", fuelType: "ICE" }];
 
       const result = buildVehiclesForReserve(vehiclesFromQuote, vehicleDetails);
 
@@ -150,7 +150,7 @@ describe("Checkout vehicle logic", () => {
       expect(result[0]).toEqual({
         type: "CAR",
         regNumber: "AA000BB",
-        fuelType: "BENZINA",
+        fuelType: "ICE",
       });
     });
 
@@ -160,8 +160,8 @@ describe("Checkout vehicle logic", () => {
         { type: "MCY", height: "1.2", length: "2.0" },
       ];
       const vehicleDetails = [
-        { regNumber: "AA000BB", fuelType: "BENZINA" },
-        { regNumber: "CC111DD", fuelType: "DIESEL" },
+        { regNumber: "AA000BB", fuelType: "ICE" },
+        { regNumber: "CC111DD", fuelType: "GAS" },
       ];
 
       const result = buildVehiclesForReserve(vehiclesFromQuote, vehicleDetails);
@@ -170,12 +170,12 @@ describe("Checkout vehicle logic", () => {
       expect(result[0]).toEqual({
         type: "CAR",
         regNumber: "AA000BB",
-        fuelType: "BENZINA",
+        fuelType: "ICE",
       });
       expect(result[1]).toEqual({
         type: "MCY",
         regNumber: "CC111DD",
-        fuelType: "DIESEL",
+        fuelType: "GAS",
       });
     });
 
@@ -186,9 +186,9 @@ describe("Checkout vehicle logic", () => {
       const vehicleDetails = [
         {
           regNumber: "AA000BB",
-          fuelType: "BENZINA",
+          fuelType: "ICE",
           trailerRegNumber: "XY789ZZ",
-          trailerFuelType: "DIESEL",
+          trailerFuelType: "GAS",
         },
       ];
 
@@ -198,12 +198,12 @@ describe("Checkout vehicle logic", () => {
       expect(result[0]).toEqual({
         type: "CAR",
         regNumber: "AA000BB",
-        fuelType: "BENZINA",
+        fuelType: "ICE",
       });
       expect(result[1]).toEqual({
         type: "TRL",
         regNumber: "XY789ZZ",
-        fuelType: "DIESEL",
+        fuelType: "GAS",
       });
     });
 
@@ -219,19 +219,19 @@ describe("Checkout vehicle logic", () => {
       const vehicleDetails = [
         {
           regNumber: "AA000BB",
-          fuelType: "BENZINA",
+          fuelType: "ICE",
           trailerRegNumber: "TT111RR",
-          trailerFuelType: "BENZINA",
+          trailerFuelType: "ICE",
         },
-        { regNumber: "CC111DD", fuelType: "DIESEL" },
+        { regNumber: "CC111DD", fuelType: "GAS" },
       ];
 
       const result = buildVehiclesForReserve(vehiclesFromQuote, vehicleDetails);
 
       expect(result).toHaveLength(3); // CAR + TRL + MCY
-      expect(result[0]).toEqual({ type: "CAR", regNumber: "AA000BB", fuelType: "BENZINA" });
-      expect(result[1]).toEqual({ type: "TRL", regNumber: "TT111RR", fuelType: "BENZINA" });
-      expect(result[2]).toEqual({ type: "MCY", regNumber: "CC111DD", fuelType: "DIESEL" });
+      expect(result[0]).toEqual({ type: "CAR", regNumber: "AA000BB", fuelType: "ICE" });
+      expect(result[1]).toEqual({ type: "TRL", regNumber: "TT111RR", fuelType: "ICE" });
+      expect(result[2]).toEqual({ type: "MCY", regNumber: "CC111DD", fuelType: "GAS" });
     });
   });
 });

@@ -22,8 +22,8 @@ describe("CheckoutVehicleDetails", () => {
       { type: "MCY" },
     ];
     const details = [
-      { regNumber: "", fuelType: "BENZINA" },
-      { regNumber: "", fuelType: "BENZINA" },
+      { regNumber: "", fuelType: "ICE" },
+      { regNumber: "", fuelType: "ICE" },
     ];
 
     render(
@@ -47,8 +47,8 @@ describe("CheckoutVehicleDetails", () => {
       { type: "BCY" },
     ];
     const details = [
-      { regNumber: "", fuelType: "BENZINA" },
-      { regNumber: "", fuelType: "BENZINA" },
+      { regNumber: "", fuelType: "ICE" },
+      { regNumber: "", fuelType: "ICE" },
     ];
 
     render(
@@ -66,7 +66,7 @@ describe("CheckoutVehicleDetails", () => {
 
   it("should return null when all vehicles are BCY", () => {
     const vehicles = [{ type: "BCY" }];
-    const details = [{ regNumber: "", fuelType: "BENZINA" }];
+    const details = [{ regNumber: "", fuelType: "ICE" }];
 
     const { container } = render(
       <CheckoutVehicleDetails
@@ -81,7 +81,7 @@ describe("CheckoutVehicleDetails", () => {
 
   it("should update regNumber in uppercase", () => {
     const vehicles = [{ type: "CAR" }];
-    const details = [{ regNumber: "", fuelType: "BENZINA" }];
+    const details = [{ regNumber: "", fuelType: "ICE" }];
 
     render(
       <CheckoutVehicleDetails
@@ -95,13 +95,13 @@ describe("CheckoutVehicleDetails", () => {
     fireEvent.change(plateInput, { target: { value: "ab123cd" } });
 
     expect(mockOnChange).toHaveBeenCalledWith([
-      { regNumber: "AB123CD", fuelType: "BENZINA" },
+      { regNumber: "AB123CD", fuelType: "ICE" },
     ]);
   });
 
   it("should update fuelType", () => {
     const vehicles = [{ type: "CAR" }];
-    const details = [{ regNumber: "AA000BB", fuelType: "BENZINA" }];
+    const details = [{ regNumber: "AA000BB", fuelType: "ICE" }];
 
     render(
       <CheckoutVehicleDetails
@@ -113,16 +113,16 @@ describe("CheckoutVehicleDetails", () => {
 
     const fuelSelect = screen.getByLabelText(/Carburante/);
     fireEvent.mouseDown(fuelSelect);
-    fireEvent.click(screen.getByText("Diesel"));
+    fireEvent.click(screen.getByText("Veicoli elettrici"));
 
     expect(mockOnChange).toHaveBeenCalledWith([
-      { regNumber: "AA000BB", fuelType: "DIESEL" },
+      { regNumber: "AA000BB", fuelType: "EV" },
     ]);
   });
 
   it("should show error when regNumber is empty", () => {
     const vehicles = [{ type: "CAR" }];
-    const details = [{ regNumber: "", fuelType: "BENZINA" }];
+    const details = [{ regNumber: "", fuelType: "ICE" }];
 
     render(
       <CheckoutVehicleDetails
@@ -138,7 +138,7 @@ describe("CheckoutVehicleDetails", () => {
 
   it("should not show error when regNumber is filled", () => {
     const vehicles = [{ type: "CAR" }];
-    const details = [{ regNumber: "AA000BB", fuelType: "BENZINA" }];
+    const details = [{ regNumber: "AA000BB", fuelType: "ICE" }];
 
     render(
       <CheckoutVehicleDetails
@@ -157,9 +157,9 @@ describe("CheckoutVehicleDetails", () => {
     const details = [
       {
         regNumber: "AA000BB",
-        fuelType: "BENZINA",
+        fuelType: "ICE",
         trailerRegNumber: "",
-        trailerFuelType: "BENZINA",
+        trailerFuelType: "ICE",
       },
     ];
 
@@ -178,7 +178,7 @@ describe("CheckoutVehicleDetails", () => {
 
   it("should not render trailer fields when has_trailer is false", () => {
     const vehicles = [{ type: "CAR", has_trailer: false }];
-    const details = [{ regNumber: "AA000BB", fuelType: "BENZINA" }];
+    const details = [{ regNumber: "AA000BB", fuelType: "ICE" }];
 
     render(
       <CheckoutVehicleDetails
@@ -197,9 +197,9 @@ describe("CheckoutVehicleDetails", () => {
     const details = [
       {
         regNumber: "AA000BB",
-        fuelType: "BENZINA",
+        fuelType: "ICE",
         trailerRegNumber: "",
-        trailerFuelType: "BENZINA",
+        trailerFuelType: "ICE",
       },
     ];
 
@@ -217,9 +217,9 @@ describe("CheckoutVehicleDetails", () => {
     expect(mockOnChange).toHaveBeenCalledWith([
       {
         regNumber: "AA000BB",
-        fuelType: "BENZINA",
+        fuelType: "ICE",
         trailerRegNumber: "XY789ZZ",
-        trailerFuelType: "BENZINA",
+        trailerFuelType: "ICE",
       },
     ]);
   });
@@ -229,9 +229,9 @@ describe("CheckoutVehicleDetails", () => {
     const details = [
       {
         regNumber: "AA000BB",
-        fuelType: "BENZINA",
+        fuelType: "ICE",
         trailerRegNumber: "",
-        trailerFuelType: "BENZINA",
+        trailerFuelType: "ICE",
       },
     ];
 

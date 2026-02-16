@@ -22,12 +22,10 @@ export const VEHICLE_TYPES = [
 ];
 
 export const FUEL_TYPES = [
-  { value: "BENZINA", label: "Benzina" },
-  { value: "DIESEL", label: "Diesel" },
-  { value: "GPL", label: "GPL" },
-  { value: "METANO", label: "Metano" },
-  { value: "ELETTRICA", label: "Elettrica" },
-  { value: "IBRIDA", label: "Ibrida" },
+  { value: "ICE", label: "Diesel / Benzina" },
+  { value: "EV", label: "Veicoli elettrici" },
+  { value: "GAS", label: "GPL / Metano" },
+  { value: "HEV", label: "Ibridi elettrico + benzina o diesel" },
 ];
 
 const DEFAULT_VEHICLE = {
