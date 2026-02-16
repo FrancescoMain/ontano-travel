@@ -1,41 +1,33 @@
 /**
- * Tests for vehicle duplication logic used in Checkout.jsx
+ * Tests for vehicle logic used in Checkout.jsx
  *
  * Key behavior:
  * - Frontend: user enters plate ONCE per unique vehicle (from first tratta)
- * - Backend: vehicle details are duplicated N times (one per tratta with vehicles)
- * - No regression: multiple vehicles with multiple tratte = still one plate per vehicle
+ * - Backend: receives vehicle details once, distributes per tratta internally
+ * - No regression: round-trip/multi-tratta shows same plate fields as single tratta
  */
 
 describe("Checkout vehicle logic", () => {
-  // Simulates the vehiclesFromQuote + numTratteWithVehicles extraction from linkQuote
+  // Simulates the vehiclesFromQuote extraction from linkQuote
   function extractVehiclesFromLinkQuote(linkQuoteJson) {
     try {
       const parsed = JSON.parse(linkQuoteJson);
-      const tratteWithVehicles =
-        parsed.tratte?.filter((tratta) =>
-          tratta.vehicles?.some((v) => v && v.type)
-        ) || [];
-      const firstTrattaVehicles =
-        tratteWithVehicles[0]?.vehicles?.filter((v) => v && v.type) || [];
-      return {
-        vehiclesFromQuote:
-          firstTrattaVehicles.length > 0 ? firstTrattaVehicles : null,
-        numTratteWithVehicles: tratteWithVehicles.length,
-      };
+      const firstTrattaWithVehicles = parsed.tratte?.find(
+        (tratta) => tratta.vehicles?.some((v) => v && v.type)
+      );
+      const vehicles = firstTrattaWithVehicles?.vehicles?.filter(
+        (v) => v && v.type
+      ) || [];
+      return vehicles.length > 0 ? vehicles : null;
     } catch {
-      return { vehiclesFromQuote: null, numTratteWithVehicles: 0 };
+      return null;
     }
   }
 
   // Simulates the vehiclesForReserve construction
-  function buildVehiclesForReserve(
-    vehiclesFromQuote,
-    vehicleDetails,
-    numTratteWithVehicles
-  ) {
+  function buildVehiclesForReserve(vehiclesFromQuote, vehicleDetails) {
     if (!vehiclesFromQuote) return null;
-    const singleSet = vehiclesFromQuote.flatMap((v, i) => {
+    return vehiclesFromQuote.flatMap((v, i) => {
       const main = {
         type: v.type,
         regNumber: vehicleDetails[i]?.regNumber || "",
@@ -53,11 +45,6 @@ describe("Checkout vehicle logic", () => {
       }
       return [main];
     });
-    const repeated = [];
-    for (let t = 0; t < numTratteWithVehicles; t++) {
-      repeated.push(...singleSet);
-    }
-    return repeated;
   }
 
   describe("extractVehiclesFromLinkQuote", () => {
@@ -70,12 +57,10 @@ describe("Checkout vehicle logic", () => {
         ],
       });
 
-      const { vehiclesFromQuote, numTratteWithVehicles } =
-        extractVehiclesFromLinkQuote(linkQuote);
+      const vehicles = extractVehiclesFromLinkQuote(linkQuote);
 
-      expect(vehiclesFromQuote).toHaveLength(1);
-      expect(vehiclesFromQuote[0].type).toBe("CAR");
-      expect(numTratteWithVehicles).toBe(2);
+      expect(vehicles).toHaveLength(1);
+      expect(vehicles[0].type).toBe("CAR");
     });
 
     it("should extract vehicles from first tratta only (round-trip, 2 vehicles)", () => {
@@ -97,14 +82,14 @@ describe("Checkout vehicle logic", () => {
         ],
       });
 
-      const { vehiclesFromQuote, numTratteWithVehicles } =
-        extractVehiclesFromLinkQuote(linkQuote);
+      const vehicles = extractVehiclesFromLinkQuote(linkQuote);
 
-      expect(vehiclesFromQuote).toHaveLength(2);
-      expect(numTratteWithVehicles).toBe(2);
+      expect(vehicles).toHaveLength(2);
+      expect(vehicles[0].type).toBe("CAR");
+      expect(vehicles[1].type).toBe("MCY");
     });
 
-    it("should handle multi-tratta (3 legs)", () => {
+    it("should handle multi-tratta (3 legs) - still only first tratta vehicles", () => {
       const linkQuote = JSON.stringify({
         result: "quote123",
         tratte: [
@@ -114,11 +99,10 @@ describe("Checkout vehicle logic", () => {
         ],
       });
 
-      const { vehiclesFromQuote, numTratteWithVehicles } =
-        extractVehiclesFromLinkQuote(linkQuote);
+      const vehicles = extractVehiclesFromLinkQuote(linkQuote);
 
-      expect(vehiclesFromQuote).toHaveLength(1);
-      expect(numTratteWithVehicles).toBe(3);
+      expect(vehicles).toHaveLength(1);
+      expect(vehicles[0].type).toBe("CAR");
     });
 
     it("should handle single tratta (solo andata)", () => {
@@ -129,11 +113,9 @@ describe("Checkout vehicle logic", () => {
         ],
       });
 
-      const { vehiclesFromQuote, numTratteWithVehicles } =
-        extractVehiclesFromLinkQuote(linkQuote);
+      const vehicles = extractVehiclesFromLinkQuote(linkQuote);
 
-      expect(vehiclesFromQuote).toHaveLength(1);
-      expect(numTratteWithVehicles).toBe(1);
+      expect(vehicles).toHaveLength(1);
     });
 
     it("should return null when no vehicles", () => {
@@ -142,11 +124,7 @@ describe("Checkout vehicle logic", () => {
         tratte: [{ vehicles: [] }, { vehicles: [] }],
       });
 
-      const { vehiclesFromQuote, numTratteWithVehicles } =
-        extractVehiclesFromLinkQuote(linkQuote);
-
-      expect(vehiclesFromQuote).toBeNull();
-      expect(numTratteWithVehicles).toBe(0);
+      expect(extractVehiclesFromLinkQuote(linkQuote)).toBeNull();
     });
 
     it("should return null when tratte have no vehicles key", () => {
@@ -155,37 +133,28 @@ describe("Checkout vehicle logic", () => {
         tratte: [{}, {}],
       });
 
-      const { vehiclesFromQuote, numTratteWithVehicles } =
-        extractVehiclesFromLinkQuote(linkQuote);
-
-      expect(vehiclesFromQuote).toBeNull();
-      expect(numTratteWithVehicles).toBe(0);
+      expect(extractVehiclesFromLinkQuote(linkQuote)).toBeNull();
     });
   });
 
   describe("buildVehiclesForReserve", () => {
-    it("should duplicate 1 vehicle for 2 tratte (round-trip)", () => {
+    it("should send 1 vehicle once (not duplicated for round-trip)", () => {
       const vehiclesFromQuote = [
         { type: "CAR", height: "1.8", length: "4.5" },
       ];
       const vehicleDetails = [{ regNumber: "AA000BB", fuelType: "BENZINA" }];
 
-      const result = buildVehiclesForReserve(vehiclesFromQuote, vehicleDetails, 2);
+      const result = buildVehiclesForReserve(vehiclesFromQuote, vehicleDetails);
 
-      expect(result).toHaveLength(2);
+      expect(result).toHaveLength(1);
       expect(result[0]).toEqual({
-        type: "CAR",
-        regNumber: "AA000BB",
-        fuelType: "BENZINA",
-      });
-      expect(result[1]).toEqual({
         type: "CAR",
         regNumber: "AA000BB",
         fuelType: "BENZINA",
       });
     });
 
-    it("should duplicate 2 vehicles for 2 tratte (round-trip, no regression)", () => {
+    it("should send 2 vehicles once each", () => {
       const vehiclesFromQuote = [
         { type: "CAR", height: "1.8", length: "4.5" },
         { type: "MCY", height: "1.2", length: "2.0" },
@@ -195,10 +164,9 @@ describe("Checkout vehicle logic", () => {
         { regNumber: "CC111DD", fuelType: "DIESEL" },
       ];
 
-      const result = buildVehiclesForReserve(vehiclesFromQuote, vehicleDetails, 2);
+      const result = buildVehiclesForReserve(vehiclesFromQuote, vehicleDetails);
 
-      expect(result).toHaveLength(4);
-      // First tratta
+      expect(result).toHaveLength(2);
       expect(result[0]).toEqual({
         type: "CAR",
         regNumber: "AA000BB",
@@ -209,20 +177,9 @@ describe("Checkout vehicle logic", () => {
         regNumber: "CC111DD",
         fuelType: "DIESEL",
       });
-      // Second tratta (duplicated)
-      expect(result[2]).toEqual({
-        type: "CAR",
-        regNumber: "AA000BB",
-        fuelType: "BENZINA",
-      });
-      expect(result[3]).toEqual({
-        type: "MCY",
-        regNumber: "CC111DD",
-        fuelType: "DIESEL",
-      });
     });
 
-    it("should duplicate vehicle with trailer for 2 tratte", () => {
+    it("should add TRL entry for vehicle with trailer", () => {
       const vehiclesFromQuote = [
         { type: "CAR", height: "1.8", length: "4.5", has_trailer: true },
       ];
@@ -235,10 +192,9 @@ describe("Checkout vehicle logic", () => {
         },
       ];
 
-      const result = buildVehiclesForReserve(vehiclesFromQuote, vehicleDetails, 2);
+      const result = buildVehiclesForReserve(vehiclesFromQuote, vehicleDetails);
 
-      expect(result).toHaveLength(4); // (CAR + TRL) x 2
-      // First tratta
+      expect(result).toHaveLength(2); // CAR + TRL
       expect(result[0]).toEqual({
         type: "CAR",
         regNumber: "AA000BB",
@@ -249,59 +205,13 @@ describe("Checkout vehicle logic", () => {
         regNumber: "XY789ZZ",
         fuelType: "DIESEL",
       });
-      // Second tratta
-      expect(result[2]).toEqual({
-        type: "CAR",
-        regNumber: "AA000BB",
-        fuelType: "BENZINA",
-      });
-      expect(result[3]).toEqual({
-        type: "TRL",
-        regNumber: "XY789ZZ",
-        fuelType: "DIESEL",
-      });
-    });
-
-    it("should not duplicate for single tratta", () => {
-      const vehiclesFromQuote = [
-        { type: "CAR", height: "1.8", length: "4.5" },
-      ];
-      const vehicleDetails = [{ regNumber: "AA000BB", fuelType: "BENZINA" }];
-
-      const result = buildVehiclesForReserve(vehiclesFromQuote, vehicleDetails, 1);
-
-      expect(result).toHaveLength(1);
-      expect(result[0]).toEqual({
-        type: "CAR",
-        regNumber: "AA000BB",
-        fuelType: "BENZINA",
-      });
-    });
-
-    it("should duplicate 1 vehicle for 3 tratte (multi-tratta)", () => {
-      const vehiclesFromQuote = [
-        { type: "CAR", height: "1.8", length: "4.5" },
-      ];
-      const vehicleDetails = [{ regNumber: "AA000BB", fuelType: "BENZINA" }];
-
-      const result = buildVehiclesForReserve(vehiclesFromQuote, vehicleDetails, 3);
-
-      expect(result).toHaveLength(3);
-      result.forEach((v) => {
-        expect(v).toEqual({
-          type: "CAR",
-          regNumber: "AA000BB",
-          fuelType: "BENZINA",
-        });
-      });
     });
 
     it("should return null when no vehicles", () => {
-      const result = buildVehiclesForReserve(null, [], 2);
-      expect(result).toBeNull();
+      expect(buildVehiclesForReserve(null, [])).toBeNull();
     });
 
-    it("should handle 2 vehicles + trailer for 2 tratte (complex case, no regression)", () => {
+    it("should handle 2 vehicles + trailer (complex case)", () => {
       const vehiclesFromQuote = [
         { type: "CAR", height: "1.8", length: "4.5", has_trailer: true },
         { type: "MCY", height: "1.2", length: "2.0" },
@@ -316,18 +226,12 @@ describe("Checkout vehicle logic", () => {
         { regNumber: "CC111DD", fuelType: "DIESEL" },
       ];
 
-      const result = buildVehiclesForReserve(vehiclesFromQuote, vehicleDetails, 2);
+      const result = buildVehiclesForReserve(vehiclesFromQuote, vehicleDetails);
 
-      // (CAR + TRL + MCY) x 2 = 6
-      expect(result).toHaveLength(6);
-      // First tratta
+      expect(result).toHaveLength(3); // CAR + TRL + MCY
       expect(result[0]).toEqual({ type: "CAR", regNumber: "AA000BB", fuelType: "BENZINA" });
       expect(result[1]).toEqual({ type: "TRL", regNumber: "TT111RR", fuelType: "BENZINA" });
       expect(result[2]).toEqual({ type: "MCY", regNumber: "CC111DD", fuelType: "DIESEL" });
-      // Second tratta
-      expect(result[3]).toEqual({ type: "CAR", regNumber: "AA000BB", fuelType: "BENZINA" });
-      expect(result[4]).toEqual({ type: "TRL", regNumber: "TT111RR", fuelType: "BENZINA" });
-      expect(result[5]).toEqual({ type: "MCY", regNumber: "CC111DD", fuelType: "DIESEL" });
     });
   });
 });

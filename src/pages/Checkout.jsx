@@ -127,24 +127,21 @@ export const Checkout = () => {
 
   // Estrai i veicoli da linkQuote (se presenti)
   // Prendi i veicoli solo dalla prima tratta (sono gli stessi per tutte le tratte)
-  // e conta quante tratte hanno veicoli per duplicarli al momento della reserve
-  const { vehiclesFromQuote, numTratteWithVehicles } = React.useMemo(() => {
+  // Il backend gestisce internamente la distribuzione per tratta
+  const vehiclesFromQuote = React.useMemo(() => {
     try {
       const linkQuote = localStorage.getItem("linkQuote");
-      if (!linkQuote) return { vehiclesFromQuote: null, numTratteWithVehicles: 0 };
+      if (!linkQuote) return null;
       const parsed = JSON.parse(linkQuote);
-      const tratteWithVehicles = parsed.tratte?.filter(
+      const firstTrattaWithVehicles = parsed.tratte?.find(
         (tratta) => tratta.vehicles?.some((v) => v && v.type)
-      ) || [];
-      const firstTrattaVehicles = tratteWithVehicles[0]?.vehicles?.filter(
+      );
+      const vehicles = firstTrattaWithVehicles?.vehicles?.filter(
         (v) => v && v.type
       ) || [];
-      return {
-        vehiclesFromQuote: firstTrattaVehicles.length > 0 ? firstTrattaVehicles : null,
-        numTratteWithVehicles: tratteWithVehicles.length,
-      };
+      return vehicles.length > 0 ? vehicles : null;
     } catch {
-      return { vehiclesFromQuote: null, numTratteWithVehicles: 0 };
+      return null;
     }
   }, []);
 
@@ -188,34 +185,26 @@ export const Checkout = () => {
 
     // Unisci type da vehiclesFromQuote + regNumber/fuelType da vehicleDetails
     // Per veicoli con rimorchio, aggiungi entry separata TRL
-    // Duplica i veicoli N volte per le N tratte (il backend li vuole ripetuti per ogni tratta)
+    // I veicoli vengono inviati una sola volta, il backend li distribuisce per tratta
     const vehiclesForReserve = vehiclesFromQuote
-      ? (() => {
-          const singleSet = vehiclesFromQuote.flatMap((v, i) => {
-            const main = {
-              type: v.type,
-              regNumber: vehicleDetails[i]?.regNumber || "",
-              fuelType: vehicleDetails[i]?.fuelType || "BENZINA",
-            };
-            if (v.has_trailer) {
-              return [
-                main,
-                {
-                  type: "TRL",
-                  regNumber: vehicleDetails[i]?.trailerRegNumber || "",
-                  fuelType: vehicleDetails[i]?.trailerFuelType || "BENZINA",
-                },
-              ];
-            }
-            return [main];
-          });
-          // Ripeti per ogni tratta
-          const repeated = [];
-          for (let t = 0; t < numTratteWithVehicles; t++) {
-            repeated.push(...singleSet);
+      ? vehiclesFromQuote.flatMap((v, i) => {
+          const main = {
+            type: v.type,
+            regNumber: vehicleDetails[i]?.regNumber || "",
+            fuelType: vehicleDetails[i]?.fuelType || "BENZINA",
+          };
+          if (v.has_trailer) {
+            return [
+              main,
+              {
+                type: "TRL",
+                regNumber: vehicleDetails[i]?.trailerRegNumber || "",
+                fuelType: vehicleDetails[i]?.trailerFuelType || "BENZINA",
+              },
+            ];
           }
-          return repeated;
-        })()
+          return [main];
+        })
       : null;
 
     const resultReserve = await reserve(
