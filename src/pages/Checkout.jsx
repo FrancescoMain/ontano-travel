@@ -207,23 +207,32 @@ export const Checkout = () => {
         })
       : null;
 
-    const resultReserve = await reserve(
-      nomi,
-      cognomi,
-      dto,
-      paymentMethodCheck,
-      prenotazione.reservationRoutes.length,
-      quote,
-      fattura ? invoiceDTO : null, // Pass invoiceDTO if fattura is checked
-      extraFields ? generi : null,
-      extraFields ? numeriDiDocumento : null,
-      extraFields ? tipiDiDocumento : null,
-      extraFields ? nazionalità : null,
-      extraFields ? luoghiDiNascita : null,
-      extraFields ? dateDiNascita : null,
-      extraFields ? disabilità : null,
-      vehiclesForReserve
-    );
+    let resultReserve;
+    try {
+      resultReserve = await reserve(
+        nomi,
+        cognomi,
+        dto,
+        paymentMethodCheck,
+        prenotazione.reservationRoutes.length,
+        quote,
+        fattura ? invoiceDTO : null, // Pass invoiceDTO if fattura is checked
+        extraFields ? generi : null,
+        extraFields ? numeriDiDocumento : null,
+        extraFields ? tipiDiDocumento : null,
+        extraFields ? nazionalità : null,
+        extraFields ? luoghiDiNascita : null,
+        extraFields ? dateDiNascita : null,
+        extraFields ? disabilità : null,
+        vehiclesForReserve
+      );
+    } catch (error) {
+      setLoading(false);
+      dispatch(stopLoading());
+      const msg = error.apiMessage || t("Errore durante la prenotazione");
+      toast.error(msg);
+      return;
+    }
     if (resultReserve) {
       if (paymentMethodCheck === "CREDIT_CARD") {
         const reserveLightbox = await lightboxReserve(quote);
