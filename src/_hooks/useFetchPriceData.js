@@ -13,6 +13,7 @@ export const useFetchPriceData = ({
   bagagli,
   accommodations = [],
   vehicles = [],
+  tariff,
   setLoading,
   setPriceData,
   skipFetch = false,
@@ -81,6 +82,9 @@ export const useFetchPriceData = ({
       if (vehiclesParams) {
         url += `&${vehiclesParams}`;
       }
+      if (tariff) {
+        url += `&tariff=${encodeURIComponent(tariff)}`;
+      }
 
       try {
         const response = await fetch(url, {
@@ -109,5 +113,5 @@ export const useFetchPriceData = ({
         clearTimeout(debounceTimerRef.current);
       }
     };
-  }, [data, adulti, etaBambini, etaAdulti, animali, bagagli, accommodations, vehicles, skipFetch]);
+  }, [data, adulti, etaBambini, etaAdulti, animali, bagagli, accommodations, vehicles, tariff, skipFetch]);
 };

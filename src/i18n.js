@@ -207,6 +207,9 @@ const resources = {
       "Altezza (m)": "Height (m)",
       "Lunghezza (m)": "Length (m)",
       "Lunghezza rimorchio (m)": "Trailer length (m)",
+      "Completa i dati del veicolo": "Complete vehicle data",
+      "Ogni veicolo richiede almeno un passeggero maggiorenne (18+)":
+        "Each vehicle requires at least one adult passenger (18+)",
       // Checkout - Sezioni
       "Dati Veicoli": "Vehicle Data",
       "Dati Passeggeri": "Passenger Data",
@@ -253,6 +256,10 @@ const resources = {
       "Riprova più tardi": "Try again later",
       "Biglietti inviati via email": "Tickets sent by email",
       "Sconto": "Discount",
+      // Tariffe Grimaldi
+      "Tariffa": "Tariff",
+      "Rimborsabile": "Refundable",
+      "Non rimborsabile": "Non-refundable",
     },
   },
   it: {
@@ -452,6 +459,9 @@ const resources = {
       "Altezza (m)": "Altezza (m)",
       "Lunghezza (m)": "Lunghezza (m)",
       "Lunghezza rimorchio (m)": "Lunghezza rimorchio (m)",
+      "Completa i dati del veicolo": "Completa i dati del veicolo",
+      "Ogni veicolo richiede almeno un passeggero maggiorenne (18+)":
+        "Ogni veicolo richiede almeno un passeggero maggiorenne (18+)",
       // Checkout - Sezioni
       "Dati Veicoli": "Dati Veicoli",
       "Dati Passeggeri": "Dati Passeggeri",
@@ -498,6 +508,10 @@ const resources = {
       "Riprova più tardi": "Riprova più tardi",
       "Biglietti inviati via email": "Biglietti inviati via email",
       "Sconto": "Sconto",
+      // Tariffe Grimaldi
+      "Tariffa": "Tariffa",
+      "Rimborsabile": "Rimborsabile",
+      "Non rimborsabile": "Non rimborsabile",
     },
   },
 };

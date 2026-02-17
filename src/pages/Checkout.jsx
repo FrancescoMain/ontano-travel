@@ -447,6 +447,11 @@ export const Checkout = () => {
                                 onChangeNomi={handleNomiChange}
                                 n={index + 1}
                                 key={`adulto-${trattaIndex}-${index}`}
+                                eta={
+                                  tratta.etaAdulti?.[index] != null
+                                    ? tratta.etaAdulti[index]
+                                    : null
+                                }
                                 lenght={tratta.adulti}
                                 numeroCampo={trattaIndex}
                                 nomi={nomi}
