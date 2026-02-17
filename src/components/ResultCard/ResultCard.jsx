@@ -330,12 +330,12 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
             <FormControlLabel
               value="STANDARD"
               control={<Radio size="small" />}
-              label={`Standard (${t("Rimborsabile")})`}
+              label={`Standard (${t("Non rimborsabile")})`}
             />
             <FormControlLabel
               value="SPECIAL"
               control={<Radio size="small" />}
-              label={`Special (${t("Non rimborsabile")})`}
+              label={`Special (${t("Rimborsabile")})`}
             />
           </RadioGroup>
         </FormControl>
