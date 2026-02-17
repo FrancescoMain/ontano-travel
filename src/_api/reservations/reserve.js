@@ -125,20 +125,27 @@ export const reserve = async (
         handleLogout();
         window.location.href = "/login"; // Redirect to login
       }
-      throw new Error("Network response was not ok");
+      // Leggi il body dell'errore per diagnostica
+      let errorMessage = "Network response was not ok";
+      try {
+        const errorBody = await response.json();
+        errorMessage = errorBody.message || errorBody.error || JSON.stringify(errorBody);
+      } catch {
+        // Se non è JSON, usa il testo
+        try {
+          errorMessage = await response.text();
+        } catch {
+          // ignora
+        }
+      }
+      const error = new Error(errorMessage);
+      error.apiMessage = errorMessage;
+      throw error;
     }
-    if (response.ok) {
-      return true;
-    } else {
-      throw new Error("Network response was not ok");
-    }
-    const contentType = response.headers.get("content-type");
-    if (contentType && contentType.includes("application/json")) {
-    } else {
-      const text = await response.text();
-      return text;
-    }
+
+    return true;
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Reserve error:", error);
+    throw error;
   }
 };

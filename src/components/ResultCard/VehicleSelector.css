@@ -77,17 +77,8 @@
 }
 
 .vehicle-field-type {
-  flex: 1 1 calc(50% - 4px);
-  min-width: 0;
-}
-
-.vehicle-field-plate {
-  flex: 1 1 calc(50% - 4px);
-  min-width: 0;
-}
-
-.vehicle-field-fuel {
   flex: 1 1 100%;
+  min-width: 0;
 }
 
 .vehicle-field-size {

@@ -45,6 +45,11 @@ export const postQuote = async ({ tratte, etaBambini }) => {
       }));
     }
 
+    // Add tariff if present (for Grimaldi routes)
+    if (tratta.tariff) {
+      params.tariff = tratta.tariff;
+    }
+
     // Crea l'oggetto per ogni tratta
     return {
       search_result_id: tratta.data.result_id,
