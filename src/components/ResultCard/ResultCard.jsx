@@ -305,15 +305,6 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
         </div>
       </div>
       {isGrimaldi && (
-        <AccommodationSelector
-          accommodations={accommodations}
-          selectedAccommodations={selectedAccommodations}
-          onSelectionChange={setSelectedAccommodations}
-          totalPassengers={passengersNeedingAccommodation}
-          loading={accommodationsLoading}
-        />
-      )}
-      {isGrimaldi && (
         <FormControl
           component="fieldset"
           sx={{ px: 3, pb: 2 }}
@@ -339,6 +330,15 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
             />
           </RadioGroup>
         </FormControl>
+      )}
+      {isGrimaldi && (
+        <AccommodationSelector
+          accommodations={accommodations}
+          selectedAccommodations={selectedAccommodations}
+          onSelectionChange={setSelectedAccommodations}
+          totalPassengers={passengersNeedingAccommodation}
+          loading={accommodationsLoading}
+        />
       )}
     </div>
   );
