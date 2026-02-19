@@ -260,6 +260,13 @@ const resources = {
       "Tariffa": "Tariff",
       "Rimborsabile": "Refundable",
       "Non rimborsabile": "Non-refundable",
+      // Rimborso
+      "Richiedi Rimborso": "Request Refund",
+      "Messaggio (opzionale)": "Message (optional)",
+      "Invia richiesta": "Submit request",
+      "Annulla": "Cancel",
+      "Richiesta di rimborso inviata": "Refund request sent successfully",
+      "Invio richiesta in corso...": "Sending request...",
     },
   },
   it: {
@@ -512,6 +519,13 @@ const resources = {
       "Tariffa": "Tariffa",
       "Rimborsabile": "Rimborsabile",
       "Non rimborsabile": "Non rimborsabile",
+      // Rimborso
+      "Richiedi Rimborso": "Richiedi Rimborso",
+      "Messaggio (opzionale)": "Messaggio (opzionale)",
+      "Invia richiesta": "Invia richiesta",
+      "Annulla": "Annulla",
+      "Richiesta di rimborso inviata": "Richiesta di rimborso inviata con successo",
+      "Invio richiesta in corso...": "Invio richiesta in corso...",
     },
   },
 };
