@@ -6,8 +6,17 @@ import "../index.css";
 import { CheckoutTratta } from "../components/CheckoutTratta";
 import { resetReservation } from "../features/reservation/reservationSlice"; // Import the reset action
 import { sendTicketsEmail } from "../_api/reservations/sendTicketsEmail"; // Import API
+import { askRefund } from "../_api/reservations/askRefund";
 import { toast } from "react-toastify"; // Import toast
 import { useTranslation } from "react-i18next"; // Import useTranslation
+import {
+  Modal,
+  ModalClose,
+  ModalDialog,
+  Typography,
+  Button,
+  Textarea,
+} from "@mui/joy";
 
 const SearchGuest = () => {
   const reservation = useSelector((state) => state.reservation.data);
@@ -16,6 +25,9 @@ const SearchGuest = () => {
   const navigate = useNavigate(); // Initialize useNavigate
   const { t } = useTranslation(); // Initialize translation
   const [isSending, setIsSending] = useState(false); // Loading state for button
+  const [showRefundModal, setShowRefundModal] = useState(false);
+  const [refundMessage, setRefundMessage] = useState("");
+  const [isRequestingRefund, setIsRequestingRefund] = useState(false);
 
   useEffect(() => {
     if (!reservation) {
@@ -42,6 +54,26 @@ const SearchGuest = () => {
       toast.error(errorMessage);
     } finally {
       setIsSending(false);
+    }
+  };
+
+  const handleAskRefund = async () => {
+    if (!reservation?.code || !guestEmail) {
+      toast.error(t("Riprova più tardi"));
+      return;
+    }
+
+    setIsRequestingRefund(true);
+    try {
+      await askRefund(reservation.code, guestEmail, refundMessage);
+      toast.success(t("Richiesta di rimborso inviata"));
+      setShowRefundModal(false);
+      setRefundMessage("");
+    } catch (error) {
+      const errorMessage = error.apiMessage || t("Riprova più tardi");
+      toast.error(errorMessage);
+    } finally {
+      setIsRequestingRefund(false);
     }
   };
 
@@ -189,7 +221,13 @@ const SearchGuest = () => {
               </div>
             </div>
           )}
-          <div className="d-flex justify-content-end mt-4">
+          <div className="d-flex justify-content-end flex-wrap gap-2 mt-4">
+            <button
+              className="btn btn-warning"
+              onClick={() => setShowRefundModal(true)}
+            >
+              {t("Richiedi Rimborso")}
+            </button>
             <button
               className="btn btn-success"
               onClick={handleSendTickets}
@@ -200,6 +238,39 @@ const SearchGuest = () => {
           </div>
         </div>
       </div>
+
+      <Modal open={showRefundModal} onClose={() => setShowRefundModal(false)}>
+        <ModalDialog sx={{ maxWidth: "95vw", width: 500 }} color="primary" variant="outlined">
+          <ModalClose />
+          <Typography level="h4">{t("Richiedi Rimborso")}</Typography>
+          <Textarea
+            placeholder={t("Messaggio (opzionale)")}
+            minRows={3}
+            value={refundMessage}
+            onChange={(e) => setRefundMessage(e.target.value)}
+            sx={{ mt: 2 }}
+          />
+          <div className="d-flex justify-content-end gap-2 mt-3">
+            <Button
+              variant="plain"
+              color="neutral"
+              onClick={() => setShowRefundModal(false)}
+            >
+              {t("Annulla")}
+            </Button>
+            <Button
+              variant="solid"
+              color="warning"
+              loading={isRequestingRefund}
+              onClick={handleAskRefund}
+            >
+              {isRequestingRefund
+                ? t("Invio richiesta in corso...")
+                : t("Invia richiesta")}
+            </Button>
+          </div>
+        </ModalDialog>
+      </Modal>
     </div>
   );
 };

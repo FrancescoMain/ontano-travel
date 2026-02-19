@@ -52,4 +52,5 @@ export const config = {
   fetchNationalities: { route: "/api/booking/nationalities", method: "GET" }, // Add fetchNationalities route
   fetchDocumentTypes: { route: "/api/booking/documentTypes", method: "GET" }, // Add fetchDocumentTypes route
   getAccommodations: { route: "/api/booking/accomodation", method: "GET" },
+  askRefund: { route: "/api/booking/reservation/askrefund", method: "POST" },
 };
