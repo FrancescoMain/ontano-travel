@@ -1,9 +1,9 @@
-import { basePathDev, basePathProd, axerveScriptDev, axerveScriptProd } from "./basePath";
+import { basePathLocal, basePathDev, basePathProd, axerveScriptDev, axerveScriptProd } from "./basePath";
 
-const isProduction = process.env.REACT_APP_ENV === "production";
+const env = process.env.REACT_APP_ENV;
 
-const basePath = isProduction ? basePathProd : basePathDev;
-const axerveScriptUrl = isProduction ? axerveScriptProd : axerveScriptDev;
+const basePath = env === "production" ? basePathProd : env === "local" ? basePathLocal : basePathDev;
+const axerveScriptUrl = env === "production" ? axerveScriptProd : axerveScriptDev;
 
 export const config = {
   basePath: basePath,
