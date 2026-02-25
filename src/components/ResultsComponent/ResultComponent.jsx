@@ -29,7 +29,6 @@ export const ResultComponent = () => {
   const { taxData, taxLoading } = useFetchTaxPreview(totalPrice);
 
   const taxAmount = taxData?.price ?? 0;
-  const grandTotal = (totalPrice || 0) + taxAmount;
 
   const [tratte, setTratte] = React.useState([]);
   const [quote, setQuote] = React.useState(null);
@@ -272,20 +271,6 @@ export const ResultComponent = () => {
                     />
                   ) : (
                     `${taxData?.priceFormatted ?? `${taxAmount.toFixed(2)}€`}`
-                  )}
-                </span>
-              </div>
-              <div className="to-checkout-price-row to-checkout-price-total">
-                <span>{t("Totale")}:</span>
-                <span>
-                  {taxLoading ? (
-                    <span
-                      className="spinner-border spinner-border-sm text-light"
-                      role="status"
-                      aria-label={t("Caricamento")}
-                    />
-                  ) : (
-                    `${grandTotal.toFixed(2)}€`
                   )}
                 </span>
               </div>

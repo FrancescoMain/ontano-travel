@@ -55,14 +55,6 @@
   line-height: 1.4;
 }
 
-.to-checkout-price-total {
-  font-size: 1.1rem;
-  font-weight: 800;
-  border-top: 1px solid rgba(255, 255, 255, 0.4);
-  padding-top: 4px;
-  margin-top: 2px;
-}
-
 .hidden {
   opacity: 0 !important;
   visibility: hidden !important;
@@ -133,9 +125,6 @@
   .to-checkout-price-row {
     font-size: 0.7rem;
     gap: 8px;
-  }
-  .to-checkout-price-total {
-    font-size: 0.8rem;
   }
   .to-checkout-cont__left div {
     font-size: 0.7rem;
