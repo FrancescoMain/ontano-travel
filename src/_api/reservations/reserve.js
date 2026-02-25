@@ -18,7 +18,8 @@ export const reserve = async (
   nazionalità,
   luoghiDiNascita,
   dateDiNascita,
-  disabilità
+  disabilità,
+  vehicles = null
 ) => {
   const body = {
     passengers: [],
@@ -90,6 +91,17 @@ export const reserve = async (
     body.invoiceDTO = invoiceDTO;
   }
 
+  // Aggiungi vehicles se presenti
+  if (vehicles && vehicles.length > 0) {
+    body.vehicles = {
+      details: vehicles.map((v) => ({
+        code: v.type,
+        regNumber: v.regNumber,
+        fuelType: v.fuelType,
+      })),
+    };
+  }
+
   // Get the current language or default to 'it'
   const language = i18n.language || "it";
 
@@ -113,20 +125,27 @@ export const reserve = async (
         handleLogout();
         window.location.href = "/login"; // Redirect to login
       }
-      throw new Error("Network response was not ok");
+      // Leggi il body dell'errore per diagnostica
+      let errorMessage = "Network response was not ok";
+      try {
+        const errorBody = await response.json();
+        errorMessage = errorBody.message || errorBody.error || JSON.stringify(errorBody);
+      } catch {
+        // Se non è JSON, usa il testo
+        try {
+          errorMessage = await response.text();
+        } catch {
+          // ignora
+        }
+      }
+      const error = new Error(errorMessage);
+      error.apiMessage = errorMessage;
+      throw error;
     }
-    if (response.ok) {
-      return true;
-    } else {
-      throw new Error("Network response was not ok");
-    }
-    const contentType = response.headers.get("content-type");
-    if (contentType && contentType.includes("application/json")) {
-    } else {
-      const text = await response.text();
-      return text;
-    }
+
+    return true;
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Reserve error:", error);
+    throw error;
   }
 };

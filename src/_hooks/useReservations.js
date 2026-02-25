@@ -49,7 +49,7 @@ export const useReservations = () => {
       const parsedData = JSON.parse(linkQuote);
       const tratte = parsedData.tratte;
       tratte.forEach((tratta) => {
-        const { id, adulti, bambini, etaBambini } = tratta;
+        const { id, adulti, bambini, etaBambini, etaAdulti } = tratta;
 
         // Crea un oggetto per ogni tratta con le informazioni richieste
         const trattaInfo = {
@@ -58,6 +58,9 @@ export const useReservations = () => {
           bambini: parseInt(bambini, 10),
           tot: parseInt(adulti, 10) + parseInt(bambini, 10),
           etaBambini: etaBambini.map((eta) => parseInt(eta, 10)),
+          etaAdulti: etaAdulti
+            ? etaAdulti.map((eta) => parseInt(eta, 10))
+            : [],
         };
 
         // Aggiungi l'oggetto all'array dei passeggeri

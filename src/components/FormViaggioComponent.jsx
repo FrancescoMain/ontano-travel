@@ -22,6 +22,7 @@ import { Tooltip as MuiTooltip } from "@mui/material";
 import { TourComponent } from "./TourComponent";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
+import { VehicleSelector } from "./ResultCard/VehicleSelector";
 
 dayjs.extend(isSameOrAfter);
 
@@ -561,6 +562,18 @@ export const DettagliViaggio = ({ id, selected, resetHandle, hasGrimaldiResults 
           />
         </div>
       ))}
+      {hasGrimaldiResults && (
+        <VehicleSelector
+          vehicles={dettagli[id]?.vehicles || []}
+          onVehiclesChange={(vehicles) => {
+            dispatch(upsertDettagli({ id, vehicles }));
+            dispatch(upsertDettagli({ id: id + 1, vehicles }));
+            if (!multitratta && id === 0) {
+              dispatch(upsertDettagli({ id: 1, vehicles }));
+            }
+          }}
+        />
+      )}
       {selected[id]?.data?.result_id && (
         <span
           className=" fs-6 fst-italic pointer underline text-secondary"

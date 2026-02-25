@@ -1,9 +1,11 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 export const Pagamento = ({ methods, checked, onChange, email, setEmail }) => {
+  const { t } = useTranslation();
   return (
     <div className="col-lg-12  col bg-passeggeri rounded mt-3 mb-3 p-4">
-      <h2 className="text-primary">Metodo di pagamento</h2>
+      <h2 className="text-primary">{t("Metodo di pagamento")}</h2>
 
       {methods.map((method) => (
         <div className="form-check" key={method}>
@@ -19,9 +21,9 @@ export const Pagamento = ({ methods, checked, onChange, email, setEmail }) => {
             className="form-check-label"
             htmlFor={`flexRadioDefault-${method}`}
           >
-            {method === "CREDIT_CARD" && "Carta di Credito"}
-            {method === "PAY_BY_LINK" && "PaybyLink"}
-            {method === "EXTERNAL_PAYMENT" && "Estratto Conto"}
+            {method === "CREDIT_CARD" && t("Carta di Credito")}
+            {method === "PAY_BY_LINK" && t("PaybyLink")}
+            {method === "EXTERNAL_PAYMENT" && t("Estratto Conto")}
           </label>
         </div>
       ))}
@@ -29,7 +31,7 @@ export const Pagamento = ({ methods, checked, onChange, email, setEmail }) => {
       {checked === "PAY_BY_LINK" && (
         <div className="mt-3">
           <label htmlFor="payByLinkEmail" className="form-label">
-            A quale email inviare il link
+            {t("A quale email inviare il link")}
           </label>
           <input
             type="email"

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import i18n from "../../i18n";
 import "./ResultCard.css";
@@ -29,6 +29,13 @@ import seremar from "../../assets/seremar.png";
 import coastLines from "../../assets/coast-lines.png";
 import grimaldi from "../../assets/Logo-Grimaldi-Lines.jpg";
 import { AccommodationSelector } from "./AccommodationSelector";
+import { areVehiclesValid } from "./VehicleSelector";
+import { toast } from "react-toastify";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -41,6 +48,7 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
   const [accommodations, setAccommodations] = useState([]);
   const [accommodationsLoading, setAccommodationsLoading] = useState(false);
   const [selectedAccommodations, setSelectedAccommodations] = useState([]);
+  const [selectedTariff, setSelectedTariff] = useState("STANDARD");
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
@@ -56,7 +64,7 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
   const timeArr = formatTime(arrivalDate);
   const { hours, minutes } = calculateDuration(departureDate, arrivalDate);
 
-  const { adulti, bambini, etaBambini, etaAdulti, animali, bagagli } =
+  const { adulti, bambini, etaBambini, etaAdulti, animali, bagagli, vehicles } =
     useSelector((state) => state.tratte.dettagli[id]);
 
   const selectedExt = useSelector((state) => state.resultsTratta.selected);
@@ -74,12 +82,32 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
     etaAdulti?.length === adultiNum &&
     etaAdulti.every((age) => age !== "" && parseInt(age, 10) >= 12);
 
-  // Skip fetch for Grimaldi if ages are not valid
-  const skipFetch = isGrimaldi && !grimaldiAgesValid;
+  // Check if all vehicles have required fields filled
+  const vehiclesValid = areVehiclesValid(vehicles);
+
+  // For Grimaldi, check that each vehicle (excluding BCY) has a corresponding adult >= 18
+  const vehiclesRequiringDriver = vehicles?.filter((v) => v.type !== "BCY").length || 0;
+  const adultsOver18 = etaAdulti?.filter((age) => parseInt(age, 10) >= 18).length || 0;
+  const driversValid = vehiclesRequiringDriver === 0 || adultsOver18 >= vehiclesRequiringDriver;
+
+  // Skip fetch for Grimaldi if ages are not valid or vehicles are incomplete
+  const skipFetch = isGrimaldi && (!grimaldiAgesValid || !vehiclesValid || !driversValid);
+
+  const handleTariffChange = useCallback((e) => {
+    e.stopPropagation();
+    setSelectedTariff(e.target.value);
+  }, []);
 
   const onClick = () => {
-    // For Grimaldi, don't allow selection until ages are entered
-    if (isGrimaldi && !grimaldiAgesValid) {
+    // For Grimaldi, don't allow selection until ages are entered and vehicles are complete
+    if (isGrimaldi && (!grimaldiAgesValid || !vehiclesValid)) {
+      return;
+    }
+    if (isGrimaldi && !driversValid) {
+      toast.error(
+        t("Ogni veicolo richiede almeno un passeggero maggiorenne (18+)"),
+        { position: "top-center", autoClose: 5000, theme: "colored" }
+      );
       return;
     }
     const dataToDispatch = {
@@ -94,6 +122,8 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
       etaBambini: etaBambini,
       etaAdulti: etaAdulti,
       accommodations: selectedAccommodations,
+      vehicles: vehicles,
+      tariff: isGrimaldi ? selectedTariff : undefined,
     };
     dispatch(upsertSelected(dataToDispatch));
     const element = document.getElementById("result-ritorno");
@@ -129,6 +159,8 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
     animali,
     bagagli,
     accommodations: selectedAccommodations,
+    vehicles: vehicles,
+    tariff: isGrimaldi ? selectedTariff : undefined,
     setLoading,
     setPriceData,
     skipFetch,
@@ -153,10 +185,12 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
           data,
           etaAdulti: etaAdulti,
           accommodations: selectedAccommodations,
+          vehicles: vehicles,
+          tariff: isGrimaldi ? selectedTariff : undefined,
         })
       );
     }
-  }, [priceData, selectedAccommodations]);
+  }, [priceData, selectedAccommodations, vehicles, selectedTariff]);
 
   return (
     <div
@@ -242,6 +276,14 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
                 <span className="text-muted fs-6">
                   {t("Inserisci età adulti")}
                 </span>
+              ) : isGrimaldi && !vehiclesValid ? (
+                <span className="text-muted fs-6">
+                  {t("Completa i dati del veicolo")}
+                </span>
+              ) : isGrimaldi && !driversValid ? (
+                <span className="text-muted fs-6">
+                  {t("Ogni veicolo richiede almeno un passeggero maggiorenne (18+)")}
+                </span>
               ) : loading ? (
                 <SpinnerOnly active={loading} />
               ) : priceData?.priceFormatted ? (
@@ -262,6 +304,33 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
           </div>
         </div>
       </div>
+      {isGrimaldi && (
+        <FormControl
+          component="fieldset"
+          sx={{ px: 3, pb: 2 }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <FormLabel component="legend" sx={{ fontSize: "0.875rem", fontWeight: 600 }}>
+            {t("Tariffa")}
+          </FormLabel>
+          <RadioGroup
+            row
+            value={selectedTariff}
+            onChange={handleTariffChange}
+          >
+            <FormControlLabel
+              value="STANDARD"
+              control={<Radio size="small" />}
+              label={`Standard (${t("Non rimborsabile")})`}
+            />
+            <FormControlLabel
+              value="SPECIAL"
+              control={<Radio size="small" />}
+              label={`Special (${t("Rimborsabile")})`}
+            />
+          </RadioGroup>
+        </FormControl>
+      )}
       {isGrimaldi && (
         <AccommodationSelector
           accommodations={accommodations}

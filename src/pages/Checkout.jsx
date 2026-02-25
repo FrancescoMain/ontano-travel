@@ -16,6 +16,7 @@ import { CheckoutTratta } from "../components/CheckoutTratta";
 import { Condizioni } from "../components/Condizioni";
 import { Pagamento } from "../components/Pagamento";
 import { CheckoutPasseggero } from "../components/Checkouts/CheckoutPassegero";
+import { CheckoutVehicleDetails } from "../components/Checkouts/CheckoutVehicleDetails";
 import { setPayByLink } from "../features/payByLink/payByLinkSlice";
 import { useCheckoutForm } from "../_hooks/useCheckoutForm"; // Import custom hook
 import { submitExternalPayment } from "../_api/reservations/submitExternalPayment"; // Import the new API function
@@ -81,7 +82,7 @@ export const Checkout = () => {
     React.useState("CREDIT_CARD");
   const [loading, setLoading] = React.useState(false); // Add loading state
 
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const language = i18n.language;
 
   React.useEffect(() => {
@@ -124,27 +125,114 @@ export const Checkout = () => {
     });
   }, [prenotazione]);
 
+  // Estrai i veicoli da linkQuote (se presenti)
+  // Prendi i veicoli solo dalla prima tratta (sono gli stessi per tutte le tratte)
+  // Il backend gestisce internamente la distribuzione per tratta
+  const vehiclesFromQuote = React.useMemo(() => {
+    try {
+      const linkQuote = localStorage.getItem("linkQuote");
+      if (!linkQuote) return null;
+      const parsed = JSON.parse(linkQuote);
+      const firstTrattaWithVehicles = parsed.tratte?.find(
+        (tratta) => tratta.vehicles?.some((v) => v && v.type)
+      );
+      const vehicles = firstTrattaWithVehicles?.vehicles?.filter(
+        (v) => v && v.type
+      ) || [];
+      return vehicles.length > 0 ? vehicles : null;
+    } catch {
+      return null;
+    }
+  }, []);
+
+  // Stato per targa e carburante (raccolti al checkout)
+  const [vehicleDetails, setVehicleDetails] = React.useState([]);
+
+  React.useEffect(() => {
+    if (vehiclesFromQuote && vehiclesFromQuote.length > 0) {
+      setVehicleDetails(
+        vehiclesFromQuote.map((v) => ({
+          regNumber: "",
+          fuelType: "ICE",
+          ...(v.has_trailer
+            ? { trailerRegNumber: "", trailerFuelType: "ICE" }
+            : {}),
+        }))
+      );
+    }
+  }, [vehiclesFromQuote]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Valida targa per veicoli non-BCY e rimorchi
+    if (vehiclesFromQuote && vehiclesFromQuote.length > 0) {
+      const missingPlate = vehiclesFromQuote.some(
+        (v, i) =>
+          v.type !== "BCY" &&
+          (!vehicleDetails[i]?.regNumber ||
+            (v.has_trailer && !vehicleDetails[i]?.trailerRegNumber))
+      );
+      if (missingPlate) {
+        toast.error(t("Inserire la targa per tutti i veicoli"));
+        return;
+      }
+    }
+
     setLoading(true); // Start spinner
     dispatch(startLoading());
     const extraFields = prenotazione?.requestExtraFields;
-    const resultReserve = await reserve(
-      nomi,
-      cognomi,
-      dto,
-      paymentMethodCheck,
-      prenotazione.reservationRoutes.length,
-      quote,
-      fattura ? invoiceDTO : null, // Pass invoiceDTO if fattura is checked
-      extraFields ? generi : null,
-      extraFields ? numeriDiDocumento : null,
-      extraFields ? tipiDiDocumento : null,
-      extraFields ? nazionalità : null,
-      extraFields ? luoghiDiNascita : null,
-      extraFields ? dateDiNascita : null,
-      extraFields ? disabilità : null
-    );
+
+    // Unisci type da vehiclesFromQuote + regNumber/fuelType da vehicleDetails
+    // Per veicoli con rimorchio, aggiungi entry separata TRL
+    // I veicoli vengono inviati una sola volta, il backend li distribuisce per tratta
+    const vehiclesForReserve = vehiclesFromQuote
+      ? vehiclesFromQuote.flatMap((v, i) => {
+          const main = {
+            type: v.type,
+            regNumber: vehicleDetails[i]?.regNumber || "",
+            fuelType: vehicleDetails[i]?.fuelType || "ICE",
+          };
+          if (v.has_trailer) {
+            return [
+              main,
+              {
+                type: "TRL",
+                regNumber: vehicleDetails[i]?.trailerRegNumber || "",
+                fuelType: vehicleDetails[i]?.trailerFuelType || "ICE",
+              },
+            ];
+          }
+          return [main];
+        })
+      : null;
+
+    let resultReserve;
+    try {
+      resultReserve = await reserve(
+        nomi,
+        cognomi,
+        dto,
+        paymentMethodCheck,
+        prenotazione.reservationRoutes.length,
+        quote,
+        fattura ? invoiceDTO : null, // Pass invoiceDTO if fattura is checked
+        extraFields ? generi : null,
+        extraFields ? numeriDiDocumento : null,
+        extraFields ? tipiDiDocumento : null,
+        extraFields ? nazionalità : null,
+        extraFields ? luoghiDiNascita : null,
+        extraFields ? dateDiNascita : null,
+        extraFields ? disabilità : null,
+        vehiclesForReserve
+      );
+    } catch (error) {
+      setLoading(false);
+      dispatch(stopLoading());
+      const msg = error.apiMessage || t("Errore durante la prenotazione");
+      toast.error(msg);
+      return;
+    }
     if (resultReserve) {
       if (paymentMethodCheck === "CREDIT_CARD") {
         const reserveLightbox = await lightboxReserve(quote);
@@ -195,7 +283,7 @@ export const Checkout = () => {
 
                 navigate("/success");
               } else {
-                toast.error("Errore durante il pagamento");
+                toast.error(t("Errore durante il pagamento"));
               }
             }
           );
@@ -227,7 +315,7 @@ export const Checkout = () => {
         } catch (error) {
           setLoading(false); // Stop spinner
           console.error("Error:", error);
-          toast.error("Errore durante il pagamento tramite PaybyLink");
+          toast.error(t("Errore durante il pagamento tramite PaybyLink"));
         }
       } else if (paymentMethodCheck === "EXTERNAL_PAYMENT") {
         try {
@@ -249,7 +337,7 @@ export const Checkout = () => {
 
             navigate("/success");
           } else {
-            toast.error("Errore durante il pagamento tramite Estratto Conto");
+            toast.error(t("Errore durante il pagamento tramite Estratto Conto"));
           }
         } catch (error) {
           setLoading(false); // Stop spinner
@@ -298,7 +386,7 @@ export const Checkout = () => {
               <div className="col-lg-12 col bg-passeggeri rounded mt-3 mb-3">
                 <div className="row">
                   <div className="col">
-                    <h2 className="text-primary ms-3 mt-2">Dati Passeggeri</h2>
+                    <h2 className="text-primary ms-3 mt-2">{t("Dati Passeggeri")}</h2>
                     {passeggeri.map((tratta, trattaIndex) => (
                       <TransparentAccordion
                         key={trattaIndex}
@@ -359,6 +447,11 @@ export const Checkout = () => {
                                 onChangeNomi={handleNomiChange}
                                 n={index + 1}
                                 key={`adulto-${trattaIndex}-${index}`}
+                                eta={
+                                  tratta.etaAdulti?.[index] != null
+                                    ? tratta.etaAdulti[index]
+                                    : null
+                                }
                                 lenght={tratta.adulti}
                                 numeroCampo={trattaIndex}
                                 nomi={nomi}
@@ -421,6 +514,13 @@ export const Checkout = () => {
                   </div>
                 </div>
               </div>
+              {vehiclesFromQuote && vehiclesFromQuote.length > 0 && (
+                <CheckoutVehicleDetails
+                  vehicles={vehiclesFromQuote}
+                  vehicleDetails={vehicleDetails}
+                  onVehicleDetailsChange={setVehicleDetails}
+                />
+              )}
               <Condizioni
                 value={dto}
                 onChange={handleDtoChange}
@@ -440,7 +540,7 @@ export const Checkout = () => {
             <div className="col-lg-4 col bg-aliceblue mte-3 rounded mb-3 sticky-lg-top d-flex flex-column flex-basis-0 flex-grow-0 mt-3">
               <div>
                 {!isTour ? (
-                  <h3 className="text-primary text-center">Il tuo viaggio</h3>
+                  <h3 className="text-primary text-center">{t("Il tuo viaggio")}</h3>
                 ) : (
                   <h3 className="text-primary text-center">
                     {prenotazione?.tour}
@@ -453,7 +553,7 @@ export const Checkout = () => {
                   {route.descriptionTour && (
                     <div className="col bg-aliceblue rounded mb-3 d-flex flex-column mt-3 p-3">
                       <h4 className="text-primary text-center">
-                        Dettaglio Tour
+                        {t("Dettaglio Tour")}
                       </h4>
                       <div
                         dangerouslySetInnerHTML={{
@@ -470,18 +570,18 @@ export const Checkout = () => {
                   id="div_DonazioneRiepilogo"
                   className="d-flex justify-content-between align-items-center mb-2 d-none"
                 >
-                  <span>Donazione</span>
+                  <span>{t("Donazione")}</span>
                   <span>0,00</span>
                 </div>
                 <div
                   id="div_AssicurazioneRiepilogo"
                   className="d-flex justify-content-between align-items-center mb-2 d-none"
                 >
-                  <span>Garanzia di rimborso</span>
+                  <span>{t("Garanzia di rimborso")}</span>
                   <span>0,00</span>
                 </div>
                 <div className="d-flex justify-content-between align-items-center">
-                  <span>Diritti di prenotazione</span>
+                  <span>{t("Diritti di prenotazione")}</span>
                   <span>{prenotazione?.taxPreview.priceFormatted}</span>
                 </div>
                 <div className="spacer my-3 sconto d-none"></div>
@@ -489,14 +589,14 @@ export const Checkout = () => {
                   id="div_Listino"
                   className="d-flex justify-content-between align-items-center sconto d-none"
                 >
-                  <span className="h5">Prezzo listino</span>
+                  <span className="h5">{t("Prezzo listino")}</span>
                   <span
                     className="h5 text-decoration-line-through listino"
                     data-regular-price-in-cents="11150"
                   ></span>
                 </div>
                 <div className="d-flex justify-content-between align-items-center sconto d-none">
-                  <span>Sconto</span>
+                  <span>{t("Sconto")}</span>
                   <span id="span_ImportoSonto">- 0,00</span>
                 </div>
                 <div className="spacer my-3"></div>
@@ -504,7 +604,7 @@ export const Checkout = () => {
                   id="total"
                   className="d-flex justify-content-between align-items-center"
                 >
-                  <span className="h4">Totale</span>
+                  <span className="h4">{t("Totale")}</span>
                   <span
                     className="h4 total-price"
                     data-total-price-in-cents="11150"
@@ -517,7 +617,7 @@ export const Checkout = () => {
                     type="submit"
                     className="btn btn-success btn btn-lg w-100 text-white bg-green border-0 ms-auto fw-bold py-3 fs-5"
                   >
-                    CONFERMA
+                    {t("CONFERMA")}
                   </button>
                 </div>
               </div>

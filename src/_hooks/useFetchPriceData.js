@@ -12,6 +12,8 @@ export const useFetchPriceData = ({
   animali,
   bagagli,
   accommodations = [],
+  vehicles = [],
+  tariff,
   setLoading,
   setPriceData,
   skipFetch = false,
@@ -59,10 +61,30 @@ export const useFetchPriceData = ({
         })
         .join("&");
 
-      const baseUrl = `${config.basePath}${config.fetchPriceSearchResult.route}?language=${language}&search_result_id=${data.result_id}&animals=${animali}&luggages=${bagagli}&${passengersAgeParams}`;
-      const url = accommodationsParams
-        ? `${baseUrl}&${accommodationsParams}`
-        : baseUrl;
+      // Build vehicles params (repeated JSON objects like accommodations)
+      const vehiclesParams = vehicles
+        .map((v) => {
+          const vObj = {
+            type: v.type,
+            height: v.height,
+            length: v.length,
+            has_trailer: v.has_trailer,
+            trailer_length: v.has_trailer ? v.trailer_length : undefined,
+          };
+          return `vehicles=${encodeURIComponent(JSON.stringify(vObj))}`;
+        })
+        .join("&");
+
+      let url = `${config.basePath}${config.fetchPriceSearchResult.route}?language=${language}&search_result_id=${data.result_id}&animals=${animali}&luggages=${bagagli}&${passengersAgeParams}`;
+      if (accommodationsParams) {
+        url += `&${accommodationsParams}`;
+      }
+      if (vehiclesParams) {
+        url += `&${vehiclesParams}`;
+      }
+      if (tariff) {
+        url += `&tariff=${encodeURIComponent(tariff)}`;
+      }
 
       try {
         const response = await fetch(url, {
@@ -91,5 +113,5 @@ export const useFetchPriceData = ({
         clearTimeout(debounceTimerRef.current);
       }
     };
-  }, [data, adulti, etaBambini, etaAdulti, animali, bagagli, accommodations, skipFetch]);
+  }, [data, adulti, etaBambini, etaAdulti, animali, bagagli, accommodations, vehicles, tariff, skipFetch]);
 };

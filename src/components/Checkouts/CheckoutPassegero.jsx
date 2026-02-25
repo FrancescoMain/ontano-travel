@@ -107,7 +107,12 @@ export const CheckoutPasseggero = ({
   return (
     <>
       <h5 className="text-secondary">
-        {n}° {eta != null ? "Bambino" + " " + eta + " anni" : "Passeggero"}
+        {n}°{" "}
+        {eta != null
+          ? (eta < 12
+              ? "Bambino " + eta + " anni"
+              : "Passeggero " + eta + " anni")
+          : "Passeggero"}
       </h5>
       <div className="nomeCognome row justify-content-center align-items-center g-2 mb-2 flex-column flex-lg-row">
         <div className="col">
