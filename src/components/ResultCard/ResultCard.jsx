@@ -48,7 +48,7 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
   const [accommodations, setAccommodations] = useState([]);
   const [accommodationsLoading, setAccommodationsLoading] = useState(false);
   const [selectedAccommodations, setSelectedAccommodations] = useState([]);
-  const [selectedTariff, setSelectedTariff] = useState("STANDARD");
+  const [selectedTariff, setSelectedTariff] = useState("SPECIAL");
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
@@ -319,14 +319,14 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
             onChange={handleTariffChange}
           >
             <FormControlLabel
-              value="STANDARD"
-              control={<Radio size="small" />}
-              label={`Standard (${t("Non rimborsabile")})`}
-            />
-            <FormControlLabel
               value="SPECIAL"
               control={<Radio size="small" />}
               label={`Special (${t("Rimborsabile")})`}
+            />
+            <FormControlLabel
+              value="STANDARD"
+              control={<Radio size="small" />}
+              label={`Standard (${t("Non rimborsabile")})`}
             />
           </RadioGroup>
         </FormControl>
