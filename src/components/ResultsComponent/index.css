@@ -55,6 +55,11 @@
   line-height: 1.4;
 }
 
+.to-checkout-price-row span:last-child {
+  text-align: right;
+  white-space: nowrap;
+}
+
 .hidden {
   opacity: 0 !important;
   visibility: hidden !important;

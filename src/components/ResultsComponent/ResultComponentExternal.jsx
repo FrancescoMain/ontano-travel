@@ -273,7 +273,7 @@ export const ResultComponentExternal = () => {
             <div className="to-checkout-cont__left">
               <div>
                 TOTALE BIGLIETTI:
-                {" " + totalPrice?.toFixed(2) || ""}€
+                {" " + (totalPrice?.toLocaleString("it-IT", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || "0,00")}€
               </div>
             </div>
             <div className="to-checkout-cont__center">

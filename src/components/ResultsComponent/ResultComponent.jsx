@@ -258,7 +258,7 @@ export const ResultComponent = () => {
             <div className="to-checkout-cont__left">
               <div className="to-checkout-price-row">
                 <span>{t("Totale Biglietti")}:</span>
-                <span>{totalPrice?.toFixed(2) || "0.00"}€</span>
+                <span>{totalPrice?.toLocaleString("it-IT", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || "0,00"}€</span>
               </div>
               <div className="to-checkout-price-row">
                 <span>{t("Diritti di prenotazione")}:</span>
