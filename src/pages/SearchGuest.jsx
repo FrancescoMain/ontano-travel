@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -24,7 +24,8 @@ const SearchGuest = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate(); // Initialize useNavigate
   const { t } = useTranslation(); // Initialize translation
-  const [isSending, setIsSending] = useState(false); // Loading state for button
+  const [isSending, setIsSending] = useState(false);
+  const isSendingRef = useRef(false);
   const [showRefundModal, setShowRefundModal] = useState(false);
   const [refundMessage, setRefundMessage] = useState("");
   const [isRequestingRefund, setIsRequestingRefund] = useState(false);
@@ -40,11 +41,13 @@ const SearchGuest = () => {
   }, [dispatch, navigate, reservation]);
 
   const handleSendTickets = async () => {
+    if (isSendingRef.current) return;
     if (!reservation?.code || !guestEmail) {
       toast.error(t("Riprova più tardi"));
       return;
     }
 
+    isSendingRef.current = true;
     setIsSending(true);
     try {
       await sendTicketsEmail(reservation.code, guestEmail);
@@ -53,6 +56,7 @@ const SearchGuest = () => {
       const errorMessage = error.apiMessage || t("Riprova più tardi");
       toast.error(errorMessage);
     } finally {
+      isSendingRef.current = false;
       setIsSending(false);
     }
   };
