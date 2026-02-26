@@ -270,7 +270,7 @@ export const ResultComponent = () => {
                       aria-label={t("Caricamento")}
                     />
                   ) : (
-                    `${taxData?.priceFormatted ?? `${taxAmount.toFixed(2)}€`}`
+                    `${(taxData?.price ?? taxAmount).toLocaleString("it-IT", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}€`
                   )}
                 </span>
               </div>

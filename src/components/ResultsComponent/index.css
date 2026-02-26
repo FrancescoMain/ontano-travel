@@ -44,13 +44,16 @@
 .to-checkout-cont__left {
   color: white;
   font-weight: 800;
-  font-size: 1.5rem;
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 2px 12px;
 }
 
 .to-checkout-price-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
+  display: contents;
+}
+
+.to-checkout-price-row span {
   font-size: 0.85rem;
   line-height: 1.4;
 }
@@ -58,6 +61,7 @@
 .to-checkout-price-row span:last-child {
   text-align: right;
   white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .hidden {
@@ -127,11 +131,10 @@
     font-size: small;
   }
 
-  .to-checkout-price-row {
+  .to-checkout-price-row span {
     font-size: 0.7rem;
-    gap: 8px;
   }
-  .to-checkout-cont__left div {
+  .to-checkout-cont__left > div:not(.to-checkout-price-row) {
     font-size: 0.7rem;
   }
   .to-checkout-cont {
