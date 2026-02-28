@@ -111,7 +111,7 @@ export const CheckoutPasseggero = ({
         {eta != null
           ? (eta < 12
               ? "Bambino " + eta + " anni"
-              : "Passeggero " + eta + " anni")
+              : "Adulto")
           : "Passeggero"}
       </h5>
       <div className="nomeCognome row justify-content-center align-items-center g-2 mb-2 flex-column flex-lg-row">
