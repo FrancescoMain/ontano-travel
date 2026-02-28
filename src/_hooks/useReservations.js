@@ -88,7 +88,8 @@ export const useReservations = () => {
         adulti,
         bambini,
         tot: adulti + bambini,
-        etaBambini: parsedData.etaBambini, // Assuming etaBambini is not available in this context
+        etaBambini: parsedData.etaBambini || [],
+        etaAdulti: Array(adulti).fill(18),
       };
 
       // Aggiungi l'oggetto all'array dei passeggeri

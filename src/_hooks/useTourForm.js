@@ -84,21 +84,22 @@ export const useTourForm = () => {
         }
       }
     }
-    let newDettagli;
-    if (adulti) {
-      newDettagli = { ...dettagli[0], adulti: parseInt(adulti) };
-    }
-    if (bambini) {
-      newDettagli = { ...newDettagli, bambini: parseInt(bambini) };
-      if (etaBambini) {
-        newDettagli = { ...newDettagli, etaBambini: etaBambini };
+    if (adulti || bambini || animali) {
+      let newDettagli = { ...dettagli[0] };
+      if (adulti) {
+        newDettagli.adulti = parseInt(adulti);
       }
+      if (bambini) {
+        newDettagli.bambini = parseInt(bambini);
+        if (etaBambini) {
+          newDettagli.etaBambini = etaBambini;
+        }
+      }
+      if (animali) {
+        newDettagli.animali = parseInt(animali);
+      }
+      handleChange(newDettagli);
     }
-    if (animali) {
-      newDettagli = { ...newDettagli, animali: parseInt(animali) };
-    }
-
-    handleChange(newDettagli);
   }, [location.search, tours, dispatch]);
 
   useEffect(() => {
