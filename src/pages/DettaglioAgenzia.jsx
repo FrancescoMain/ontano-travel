@@ -288,6 +288,19 @@ export const DettaglioAgenzia = () => {
                     default del sito
                   </small>
                 </div>
+                {data.importFido != null && (
+                  <div className="col-md-6 mb-3">
+                    <label className="form-label">Importo Fido</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={`€ ${data.importFido.toLocaleString("it-IT", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                      readOnly
+                      style={{ backgroundColor: "#e9ecef" }}
+                      disabled
+                    />
+                  </div>
+                )}
                 <div className="col-md-6 mb-3">
                   <label className="form-label">
                     Abilita Pagamento Estratto Conto

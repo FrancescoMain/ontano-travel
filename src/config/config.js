@@ -54,4 +54,5 @@ export const config = {
   getAccommodations: { route: "/api/booking/accomodation", method: "GET" },
   getTaxPreview: { route: "/api/booking/price/taxpreview", method: "GET" },
   askRefund: { route: "/api/booking/reservation/askrefund", method: "POST" },
+  fetchFido: { route: "/api/booking/agency/fido", method: "GET" },
 };

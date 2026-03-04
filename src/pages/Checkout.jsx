@@ -6,7 +6,7 @@ import timezone from "dayjs/plugin/timezone";
 import { reserve } from "../_api/reservations/reserve";
 import { lightboxReserve } from "../_api/reservations/lightboxReserve";
 import { payByLinkReserve } from "../_api/reservations/payByLinkReserve";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
 import { getStore } from "../_api/reservations/getStore";
 import { toast } from "react-toastify";
@@ -24,6 +24,7 @@ import { resetSelected, resetResults } from "../features/viaggio/resultTratta"; 
 import { resetAll as resetViaggio } from "../features/viaggio/findTratta"; // Import resetAll action for viaggio
 import { resetTourDetails } from "../features/tour/tourSlice"; // Import resetTourDetails action for tour
 import { formatDateTime } from "../utils/dateUtils"; // Import formatDateTime function
+import { fetchFido } from "../_api/agency/fetchFido"; // Import fetchFido API
 import Cookies from "js-cookie"; // Import js-cookie
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -81,6 +82,10 @@ export const Checkout = () => {
   const [paymentMethodCheck, setPyamentMethodCheck] =
     React.useState("CREDIT_CARD");
   const [loading, setLoading] = React.useState(false); // Add loading state
+  const [fido, setFido] = React.useState(undefined); // undefined = not fetched, null = no fido
+
+  const accountData = useSelector((state) => state.account.data);
+  const isAgency = accountData?.authorities?.includes("ROLE_AGENCY_USER");
 
   const { t, i18n } = useTranslation();
   const language = i18n.language;
@@ -93,6 +98,17 @@ export const Checkout = () => {
 
     fetchStore();
   }, []);
+
+  // Fetch fido per agenzie con EXTERNAL_PAYMENT
+  React.useEffect(() => {
+    if (isAgency && paymentsMethod.includes("EXTERNAL_PAYMENT")) {
+      const loadFido = async () => {
+        const result = await fetchFido();
+        setFido(result);
+      };
+      loadFido();
+    }
+  }, [isAgency, paymentsMethod]);
   function gtagPurchase() {
     const items = prenotazione?.reservationRoutes.map((route) => ({
       item_name: `${route.from} - ${route.to}`,
@@ -535,6 +551,8 @@ export const Checkout = () => {
                 onChange={setPyamentMethodCheck}
                 email={payByLinkEmail}
                 setEmail={handlePayByLinkEmailChange}
+                fido={fido}
+                total={prenotazione?.priceToPay?.price}
               />
             </div>
             <div className="col-lg-4 col bg-aliceblue mte-3 rounded mb-3 sticky-lg-top d-flex flex-column flex-basis-0 flex-grow-0 mt-3">

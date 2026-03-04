@@ -249,6 +249,7 @@ const resources = {
       "Errore durante il pagamento": "Error during payment",
       "Errore durante il pagamento tramite PaybyLink": "Error during PaybyLink payment",
       "Errore durante il pagamento tramite Estratto Conto": "Error during Account Statement payment",
+      "importo disponibile": "available amount",
       // Prenotazione
       "Prenotazione": "Reservation",
       "Invio in corso...": "Sending...",
@@ -508,6 +509,7 @@ const resources = {
       "Errore durante il pagamento": "Errore durante il pagamento",
       "Errore durante il pagamento tramite PaybyLink": "Errore durante il pagamento tramite PaybyLink",
       "Errore durante il pagamento tramite Estratto Conto": "Errore durante il pagamento tramite Estratto Conto",
+      "importo disponibile": "importo disponibile",
       // Prenotazione
       "Prenotazione": "Prenotazione",
       "Invio in corso...": "Invio in corso...",
