@@ -24,7 +24,8 @@ export const fetchFido = async () => {
 
     const contentType = response.headers.get("content-type");
     if (contentType && contentType.includes("application/json")) {
-      return await response.json();
+      const data = await response.json();
+      return data?.price ?? data;
     } else {
       const text = await response.text();
       return text ? parseFloat(text) : null;
