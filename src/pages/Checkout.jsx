@@ -6,7 +6,7 @@ import timezone from "dayjs/plugin/timezone";
 import { reserve } from "../_api/reservations/reserve";
 import { lightboxReserve } from "../_api/reservations/lightboxReserve";
 import { payByLinkReserve } from "../_api/reservations/payByLinkReserve";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { startLoading, stopLoading } from "../features/spinner/spinnerSlice";
 import { getStore } from "../_api/reservations/getStore";
 import { toast } from "react-toastify";
@@ -84,9 +84,6 @@ export const Checkout = () => {
   const [loading, setLoading] = React.useState(false); // Add loading state
   const [fido, setFido] = React.useState(undefined); // undefined = not fetched, null = no fido
 
-  const accountData = useSelector((state) => state.account.data);
-  const isAgency = accountData?.authorities?.includes("ROLE_AGENCY_USER");
-
   const { t, i18n } = useTranslation();
   const language = i18n.language;
 
@@ -101,14 +98,17 @@ export const Checkout = () => {
 
   // Fetch fido per agenzie con EXTERNAL_PAYMENT
   React.useEffect(() => {
-    if (isAgency && paymentsMethod.includes("EXTERNAL_PAYMENT")) {
+    console.log("paymentsMethod:", paymentsMethod, "type:", typeof paymentsMethod, "isArray:", Array.isArray(paymentsMethod));
+    if (Array.isArray(paymentsMethod) && paymentsMethod.includes("EXTERNAL_PAYMENT")) {
+      console.log("Fetching fido...");
       const loadFido = async () => {
         const result = await fetchFido();
+        console.log("Fido result:", result);
         setFido(result);
       };
       loadFido();
     }
-  }, [isAgency, paymentsMethod]);
+  }, [paymentsMethod]);
   function gtagPurchase() {
     const items = prenotazione?.reservationRoutes.map((route) => ({
       item_name: `${route.from} - ${route.to}`,
