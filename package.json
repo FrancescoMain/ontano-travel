@@ -61,7 +61,9 @@
     "eject": "react-scripts eject",
     "deploy:prod": "env-cmd -f .env.production react-scripts build && firebase deploy --only hosting:prodquickferries",
     "deploy:dev": "env-cmd -f .env.development react-scripts build && firebase deploy --only hosting:quickferries-a95b3",
-    "deploy:all": "env-cmd -f .env.production react-scripts build && env-cmd -f .env.production firebase deploy --only hosting:prodquickferries && env-cmd -f .env.development react-scripts build && env-cmd -f .env.development firebase deploy --only hosting:quickferries-a95b3"
+    "deploy:all": "env-cmd -f .env.production react-scripts build && env-cmd -f .env.production firebase deploy --only hosting:prodquickferries && env-cmd -f .env.development react-scripts build && env-cmd -f .env.development firebase deploy --only hosting:quickferries-a95b3",
+    "tunnel": "npx cloudflared tunnel --url http://localhost:3000",
+    "dev:tunnel": "cross-env DANGEROUSLY_DISABLE_HOST_CHECK=true react-scripts start & npx cloudflared tunnel --url http://localhost:3000"
   },
   "eslintConfig": {
     "extends": [
