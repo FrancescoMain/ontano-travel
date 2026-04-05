@@ -2,6 +2,7 @@ import React from "react";
 import "./Footer.css";
 import { BsTelephoneFill } from "react-icons/bs";
 import { IoLogoWhatsapp } from "react-icons/io";
+const version = process.env.REACT_APP_VERSION || "1.0.0";
 
 export const Footer = () => {
   if (window.location.pathname.includes("tabellone-partenze")) {
@@ -60,8 +61,11 @@ export const Footer = () => {
             </a>
           </p>
         </div>
-        Copyright © 2024 QuickFerries By ONTANO SRL Largo Angioino Snc, 80133
+        Copyright © 2026 QuickFerries By ONTANO SRL Largo Angioino Snc, 80133
         Naples (NA) Italy - VAT number 06723760630
+        <span style={{ fontSize: "0.75rem", color: "#999", display: "block", marginTop: "0.25rem" }}>
+          v{version}
+        </span>
       </div>
     </footer>
   );
