@@ -2,7 +2,7 @@ import React from "react";
 import "./Footer.css";
 import { BsTelephoneFill } from "react-icons/bs";
 import { IoLogoWhatsapp } from "react-icons/io";
-import { version } from "../../../package.json";
+const version = process.env.REACT_APP_VERSION || "1.0.0";
 
 export const Footer = () => {
   if (window.location.pathname.includes("tabellone-partenze")) {
