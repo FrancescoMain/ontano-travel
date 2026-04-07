@@ -551,8 +551,8 @@ export const Checkout = () => {
                 <CouponInput
                   reservationCode={prenotazione?.code}
                   couponCode={prenotazione?.couponCode}
-                  onCouponApplied={(updated) => setPrenotazione(updated)}
-                  onCouponRemoved={(updated) => setPrenotazione(updated)}
+                  onCouponApplied={(updated) => setPrenotazione(prev => ({...prev, ...updated}))}
+                  onCouponRemoved={(updated) => setPrenotazione(prev => ({...prev, ...updated}))}
                 />
               </div>
               <Pagamento

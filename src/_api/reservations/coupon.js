@@ -7,7 +7,7 @@ export const applyCoupon = async (reservationCode, couponCode) => {
 
   try {
     const response = await fetch(
-      `${config.basePath}${config.applyCoupon.route.replace("{reservation_code}", reservationCode)}?language=${language}`,
+      `${config.basePath}${config.applyCoupon.route.replace(":reservation_code", reservationCode)}?language=${language}`,
       {
         method: config.applyCoupon.method,
         headers: {
@@ -40,7 +40,7 @@ export const removeCoupon = async (reservationCode) => {
 
   try {
     const response = await fetch(
-      `${config.basePath}${config.removeCoupon.route.replace("{reservation_code}", reservationCode)}?language=${language}`,
+      `${config.basePath}${config.removeCoupon.route.replace(":reservation_code", reservationCode)}?language=${language}`,
       {
         method: config.removeCoupon.method,
         headers: {
@@ -55,7 +55,8 @@ export const removeCoupon = async (reservationCode) => {
         handleLogout();
         window.location.href = "/login";
       }
-      throw new Error("Errore nella rimozione del coupon");
+      const errorData = await response.json().catch(() => null);
+      throw new Error(errorData?.message || "Errore nella rimozione del coupon");
     }
 
     const result = await response.json();

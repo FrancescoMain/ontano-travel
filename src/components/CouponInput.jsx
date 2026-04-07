@@ -26,7 +26,7 @@ export const CouponInput = ({
       setInputValue("");
       onCouponApplied(updatedReservation);
     } catch (err) {
-      setError(t("Coupon non valido"));
+      setError(err.message || t("Coupon non valido"));
     } finally {
       setLoading(false);
     }
@@ -39,7 +39,7 @@ export const CouponInput = ({
       const updatedReservation = await removeCoupon(reservationCode);
       onCouponRemoved(updatedReservation);
     } catch (err) {
-      setError(t("Errore nella rimozione del coupon"));
+      setError(err.message || t("Errore nella rimozione del coupon"));
     } finally {
       setLoading(false);
     }

@@ -269,6 +269,7 @@ const resources = {
       "Richiesta di rimborso inviata": "Refund request sent successfully",
       "Invio richiesta in corso...": "Sending request...",
       // Coupon
+      "Coupon": "Coupon",
       "Codice coupon": "Coupon code",
       "Applica": "Apply",
       "Rimuovi coupon": "Remove coupon",
@@ -537,6 +538,7 @@ const resources = {
       "Richiesta di rimborso inviata": "Richiesta di rimborso inviata con successo",
       "Invio richiesta in corso...": "Invio richiesta in corso...",
       // Coupon
+      "Coupon": "Coupon",
       "Codice coupon": "Codice coupon",
       "Applica": "Applica",
       "Rimuovi coupon": "Rimuovi coupon",
