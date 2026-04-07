@@ -584,6 +584,16 @@ export const Checkout = () => {
                 </div>
               ))}
 
+              <div className="bg-white rounded p-3 mb-3 border">
+                <h6 className="text-primary mb-2">{t("Coupon")}</h6>
+                <CouponInput
+                  reservationCode={prenotazione?.code}
+                  couponCode={prenotazione?.couponCode}
+                  onCouponApplied={(updated) => setPrenotazione(updated)}
+                  onCouponRemoved={(updated) => setPrenotazione(updated)}
+                />
+              </div>
+
               <div className="card-footer bg-ice-white py-lg-3 rounded-bottom-left-4x rounded-bottom-right-4x border-top border-primary">
                 <div
                   id="div_DonazioneRiepilogo"
@@ -624,13 +634,6 @@ export const Checkout = () => {
                   <span>{t("Sconto")}</span>
                   <span id="span_ImportoSonto">- 0,00</span>
                 </div>
-                <div className="spacer my-3"></div>
-                <CouponInput
-                  reservationCode={prenotazione?.code}
-                  couponCode={prenotazione?.couponCode}
-                  onCouponApplied={(updated) => setPrenotazione(updated)}
-                  onCouponRemoved={(updated) => setPrenotazione(updated)}
-                />
                 <div className="spacer my-3"></div>
                 <div
                   id="total"
