@@ -546,6 +546,15 @@ export const Checkout = () => {
                 invoiceDTO={invoiceDTO}
                 onInvoiceDTOChange={handleInvoiceDTOChange}
               />
+              <div className="col-lg-12 col bg-passeggeri rounded mt-3 mb-3 p-3">
+                <h2 className="text-primary ms-1">{t("Coupon")}</h2>
+                <CouponInput
+                  reservationCode={prenotazione?.code}
+                  couponCode={prenotazione?.couponCode}
+                  onCouponApplied={(updated) => setPrenotazione(updated)}
+                  onCouponRemoved={(updated) => setPrenotazione(updated)}
+                />
+              </div>
               <Pagamento
                 methods={paymentsMethod}
                 checked={paymentMethodCheck}
@@ -583,16 +592,6 @@ export const Checkout = () => {
                   )}
                 </div>
               ))}
-
-              <div className="bg-white rounded p-3 mb-3 border">
-                <h6 className="text-primary mb-2">{t("Coupon")}</h6>
-                <CouponInput
-                  reservationCode={prenotazione?.code}
-                  couponCode={prenotazione?.couponCode}
-                  onCouponApplied={(updated) => setPrenotazione(updated)}
-                  onCouponRemoved={(updated) => setPrenotazione(updated)}
-                />
-              </div>
 
               <div className="card-footer bg-ice-white py-lg-3 rounded-bottom-left-4x rounded-bottom-right-4x border-top border-primary">
                 <div
