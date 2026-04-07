@@ -12,13 +12,28 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 2
+
+      - name: Skip if version bump commit
+        id: skip
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%s)
+          if [[ "$COMMIT_MSG" == chore:\ bump\ version* ]]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Setup Node 18
+        if: steps.skip.outputs.skip == 'false'
         uses: actions/setup-node@v4
         with:
           node-version: 18
 
       - name: Cache node_modules
+        if: steps.skip.outputs.skip == 'false'
         uses: actions/cache@v4
         with:
           path: node_modules
@@ -27,20 +42,45 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
+        if: steps.skip.outputs.skip == 'false'
         run: npm ci
 
-      - name: Get version
-        id: version
-        run: echo "APP_VERSION=$(grep '"version"' package.json | head -1 | sed 's/.*"version".*"\(.*\)".*/\1/')" >> $GITHUB_OUTPUT
+      - name: Auto version bump
+        if: steps.skip.outputs.skip == 'false'
+        id: bump
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%s)
+          if echo "$COMMIT_MSG" | grep -qi "BREAKING CHANGE"; then
+            BUMP="major"
+          elif echo "$COMMIT_MSG" | grep -q "^feat"; then
+            BUMP="minor"
+          else
+            BUMP="patch"
+          fi
+          NEW_VERSION=$(npm version $BUMP --no-git-tag-version)
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "bump=$BUMP" >> $GITHUB_OUTPUT
+
+      - name: Commit and push version bump
+        if: steps.skip.outputs.skip == 'false'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json
+          git commit -m "chore: bump version to ${{ steps.bump.outputs.version }}"
+          git push
 
       - name: Build (dev)
+        if: steps.skip.outputs.skip == 'false'
         run: npx env-cmd -f .env.development npx react-scripts build
         env:
           CI: false
-          REACT_APP_VERSION: ${{ steps.version.outputs.APP_VERSION }}
+          REACT_APP_VERSION: ${{ steps.bump.outputs.version }}
 
       - name: Install Firebase CLI
+        if: steps.skip.outputs.skip == 'false'
         run: npm install -g firebase-tools
 
       - name: Deploy to Firebase
+        if: steps.skip.outputs.skip == 'false'
         run: firebase deploy --only hosting:quickferries-a95b3 --token ${{ secrets.FIREBASE_TOKEN }}
