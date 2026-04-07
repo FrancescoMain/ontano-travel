@@ -225,6 +225,7 @@ const resources = {
       "Garanzia di rimborso": "Refund Guarantee",
       "Diritti di prenotazione": "Booking Fees",
       // Checkout - Pagamento
+      "Pagamento": "Payment",
       "Metodo di pagamento": "Payment Method",
       "Carta di Credito": "Credit Card",
       "PaybyLink": "PaybyLink",
@@ -495,6 +496,7 @@ const resources = {
       "Garanzia di rimborso": "Garanzia di rimborso",
       "Diritti di prenotazione": "Diritti di prenotazione",
       // Checkout - Pagamento
+      "Pagamento": "Pagamento",
       "Metodo di pagamento": "Metodo di pagamento",
       "Carta di Credito": "Carta di Credito",
       "PaybyLink": "PaybyLink",

@@ -33,7 +33,6 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/material/styles";
 import { Spinner } from "../components/Spinner/Spinner"; // Import Spinner component
 import { IoMdArrowBack } from "react-icons/io"; // Import the back arrow icon
-import { CouponInput } from "../components/CouponInput";
 
 const TransparentAccordion = styled(Accordion)({
   backgroundColor: "transparent",
@@ -546,15 +545,6 @@ export const Checkout = () => {
                 invoiceDTO={invoiceDTO}
                 onInvoiceDTOChange={handleInvoiceDTOChange}
               />
-              <div className="col-lg-12 col bg-passeggeri rounded mt-3 mb-3 p-3">
-                <h2 className="text-primary ms-1">{t("Coupon")}</h2>
-                <CouponInput
-                  reservationCode={prenotazione?.code}
-                  couponCode={prenotazione?.couponCode}
-                  onCouponApplied={(updated) => setPrenotazione(prev => ({...prev, ...updated}))}
-                  onCouponRemoved={(updated) => setPrenotazione(prev => ({...prev, ...updated}))}
-                />
-              </div>
               <Pagamento
                 methods={paymentsMethod}
                 checked={paymentMethodCheck}
@@ -563,6 +553,10 @@ export const Checkout = () => {
                 setEmail={handlePayByLinkEmailChange}
                 fido={fido}
                 total={prenotazione?.priceToPay?.price}
+                reservationCode={prenotazione?.code}
+                couponCode={prenotazione?.couponCode}
+                onCouponApplied={(updated) => setPrenotazione(prev => ({...prev, ...updated}))}
+                onCouponRemoved={(updated) => setPrenotazione(prev => ({...prev, ...updated}))}
               />
             </div>
             <div className="col-lg-4 col bg-aliceblue mte-3 rounded mb-3 sticky-lg-top d-flex flex-column flex-basis-0 flex-grow-0 mt-3">
