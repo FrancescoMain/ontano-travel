@@ -268,6 +268,15 @@ const resources = {
       "Annulla": "Cancel",
       "Richiesta di rimborso inviata": "Refund request sent successfully",
       "Invio richiesta in corso...": "Sending request...",
+      // Coupon
+      "Coupon": "Coupon",
+      "Codice coupon": "Coupon code",
+      "Applica": "Apply",
+      "Rimuovi coupon": "Remove coupon",
+      "Coupon non valido": "Invalid coupon",
+      "Coupon applicato": "Coupon applied",
+      "Sconto coupon": "Coupon discount",
+      "Errore nella rimozione del coupon": "Error removing coupon",
     },
   },
   it: {
@@ -528,6 +537,15 @@ const resources = {
       "Annulla": "Annulla",
       "Richiesta di rimborso inviata": "Richiesta di rimborso inviata con successo",
       "Invio richiesta in corso...": "Invio richiesta in corso...",
+      // Coupon
+      "Coupon": "Coupon",
+      "Codice coupon": "Codice coupon",
+      "Applica": "Applica",
+      "Rimuovi coupon": "Rimuovi coupon",
+      "Coupon non valido": "Coupon non valido",
+      "Coupon applicato": "Coupon applicato",
+      "Sconto coupon": "Sconto coupon",
+      "Errore nella rimozione del coupon": "Errore nella rimozione del coupon",
     },
   },
 };

@@ -33,6 +33,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/material/styles";
 import { Spinner } from "../components/Spinner/Spinner"; // Import Spinner component
 import { IoMdArrowBack } from "react-icons/io"; // Import the back arrow icon
+import { CouponInput } from "../components/CouponInput";
 
 const TransparentAccordion = styled(Accordion)({
   backgroundColor: "transparent",
@@ -46,7 +47,7 @@ dayjs.extend(timezone);
 export const Checkout = () => {
   const location = useLocation(); // Add useLocation
 
-  const { passeggeri, prenotazione, paymentsMethod, quote, isTour } =
+  const { passeggeri, prenotazione, setPrenotazione, paymentsMethod, quote, isTour } =
     useReservations();
   const {
     nomi,
@@ -545,6 +546,15 @@ export const Checkout = () => {
                 invoiceDTO={invoiceDTO}
                 onInvoiceDTOChange={handleInvoiceDTOChange}
               />
+              <div className="col-lg-12 col bg-passeggeri rounded mt-3 mb-3 p-3">
+                <h2 className="text-primary ms-1">{t("Coupon")}</h2>
+                <CouponInput
+                  reservationCode={prenotazione?.code}
+                  couponCode={prenotazione?.couponCode}
+                  onCouponApplied={(updated) => setPrenotazione(prev => ({...prev, ...updated}))}
+                  onCouponRemoved={(updated) => setPrenotazione(prev => ({...prev, ...updated}))}
+                />
+              </div>
               <Pagamento
                 methods={paymentsMethod}
                 checked={paymentMethodCheck}
@@ -602,6 +612,12 @@ export const Checkout = () => {
                   <span>{t("Diritti di prenotazione")}</span>
                   <span>{prenotazione?.taxPreview.priceFormatted}</span>
                 </div>
+                {prenotazione?.couponCode && prenotazione?.discountAmount && (
+                  <div className="d-flex justify-content-between align-items-center mt-2 text-success">
+                    <span>{t("Sconto coupon")}</span>
+                    <span>- {prenotazione.discountAmount.priceFormatted}</span>
+                  </div>
+                )}
                 <div className="spacer my-3 sconto d-none"></div>
                 <div
                   id="div_Listino"
