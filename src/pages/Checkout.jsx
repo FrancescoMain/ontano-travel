@@ -33,6 +33,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/material/styles";
 import { Spinner } from "../components/Spinner/Spinner"; // Import Spinner component
 import { IoMdArrowBack } from "react-icons/io"; // Import the back arrow icon
+import { CouponInput } from "../components/CouponInput";
 
 const TransparentAccordion = styled(Accordion)({
   backgroundColor: "transparent",
@@ -46,7 +47,7 @@ dayjs.extend(timezone);
 export const Checkout = () => {
   const location = useLocation(); // Add useLocation
 
-  const { passeggeri, prenotazione, paymentsMethod, quote, isTour } =
+  const { passeggeri, prenotazione, setPrenotazione, paymentsMethod, quote, isTour } =
     useReservations();
   const {
     nomi,
@@ -602,6 +603,12 @@ export const Checkout = () => {
                   <span>{t("Diritti di prenotazione")}</span>
                   <span>{prenotazione?.taxPreview.priceFormatted}</span>
                 </div>
+                {prenotazione?.couponCode && prenotazione?.discountAmount && (
+                  <div className="d-flex justify-content-between align-items-center mt-2 text-success">
+                    <span>{t("Sconto coupon")}</span>
+                    <span>- {prenotazione.discountAmount.priceFormatted}</span>
+                  </div>
+                )}
                 <div className="spacer my-3 sconto d-none"></div>
                 <div
                   id="div_Listino"
@@ -617,6 +624,13 @@ export const Checkout = () => {
                   <span>{t("Sconto")}</span>
                   <span id="span_ImportoSonto">- 0,00</span>
                 </div>
+                <div className="spacer my-3"></div>
+                <CouponInput
+                  reservationCode={prenotazione?.code}
+                  couponCode={prenotazione?.couponCode}
+                  onCouponApplied={(updated) => setPrenotazione(updated)}
+                  onCouponRemoved={(updated) => setPrenotazione(updated)}
+                />
                 <div className="spacer my-3"></div>
                 <div
                   id="total"

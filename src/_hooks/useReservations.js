@@ -158,5 +158,5 @@ export const useReservations = () => {
     })();
   }, []);
 
-  return { passeggeri, prenotazione, paymentsMethod, quote, isTour };
+  return { passeggeri, prenotazione, setPrenotazione, paymentsMethod, quote, isTour };
 };
