@@ -26,7 +26,14 @@ export const CouponInput = ({
       setInputValue("");
       onCouponApplied(updatedReservation);
     } catch (err) {
-      setError(err.message || t("Coupon non valido"));
+      const msg = err.message || "";
+      if (msg.includes("coupon_not_found") || msg.includes("not_found")) {
+        setError(t("Coupon non valido"));
+      } else if (msg.includes("expired")) {
+        setError(t("Coupon scaduto"));
+      } else {
+        setError(t("Coupon non valido"));
+      }
     } finally {
       setLoading(false);
     }
