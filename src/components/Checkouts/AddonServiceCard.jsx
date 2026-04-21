@@ -1,6 +1,5 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import Tooltip from "@mui/material/Tooltip";
 import { getAddonTheme, MAX_ADDON_QTY } from "../../utils/addonServiceConfig";
 import "./AddonServiceCard.css";
 
@@ -39,20 +38,9 @@ export const AddonServiceCard = ({ addon, appliedQty, onApply, onRemove, disable
         )}
         <span className="addon-card-icon" aria-hidden="true">{theme.icon}</span>
         {addon.tooltip && (
-          <Tooltip
-            title={addon.tooltip}
-            arrow
-            enterTouchDelay={0}
-            leaveTouchDelay={4000}
-          >
-            <button
-              type="button"
-              className="addon-card-info"
-              aria-label={t("Maggiori informazioni")}
-            >
-              <i className="bi bi-info-circle-fill"></i>
-            </button>
-          </Tooltip>
+          <span className="addon-card-tooltip-badge" title={addon.tooltip}>
+            {addon.tooltip}
+          </span>
         )}
       </div>
       <div className="addon-card-body">

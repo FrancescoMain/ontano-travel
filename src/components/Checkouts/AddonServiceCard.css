@@ -43,29 +43,22 @@
   font-size: 18px;
 }
 
-.addon-card-info {
+.addon-card-tooltip-badge {
   position: absolute;
   top: 8px;
   right: 8px;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.85);
-  color: #0d6efd;
-  border: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  cursor: pointer;
-  padding: 0;
-  transition: background-color 0.15s ease;
-}
-
-.addon-card-info:hover,
-.addon-card-info:focus-visible {
-  background-color: #fff;
-  outline: none;
+  max-width: calc(100% - 56px);
+  background-color: rgba(255, 255, 255, 0.92);
+  color: #0f3d6e;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 12px;
+  line-height: 1.2;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .addon-card-body {

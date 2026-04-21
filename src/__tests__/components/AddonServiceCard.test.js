@@ -29,18 +29,18 @@ describe('AddonServiceCard', () => {
     jest.clearAllMocks();
   });
 
-  it('renders title, price badge, info button and description', () => {
+  it('renders title, price badge, tooltip badge and description', () => {
     render(<AddonServiceCard {...defaultProps} />);
     expect(screen.getByText('Assicurazione Viaggio')).toBeInTheDocument();
     expect(screen.getByText(/€ 5,00/)).toBeInTheDocument();
-    expect(screen.getByLabelText('Maggiori informazioni')).toBeInTheDocument();
+    expect(screen.getByText('Copre cancellazioni')).toBeInTheDocument();
     expect(screen.getByText('Proteggi il tuo viaggio')).toBeInTheDocument();
   });
 
-  it('hides info button when tooltip is missing', () => {
+  it('hides tooltip badge when tooltip is missing', () => {
     const addon = { ...baseAddon, tooltip: '' };
     render(<AddonServiceCard {...defaultProps} addon={addon} />);
-    expect(screen.queryByLabelText('Maggiori informazioni')).not.toBeInTheDocument();
+    expect(screen.queryByText('Copre cancellazioni')).not.toBeInTheDocument();
   });
 
   it('calls onApply when increment is clicked', () => {
