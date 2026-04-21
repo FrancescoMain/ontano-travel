@@ -57,4 +57,7 @@ export const config = {
   fetchFido: { route: "/api/booking/agency/fido", method: "GET" },
   applyCoupon: { route: "/api/booking/reservation/:reservation_code/coupon", method: "POST" },
   removeCoupon: { route: "/api/booking/reservation/:reservation_code/coupon", method: "DELETE" },
+  suggestAddons: { route: "/api/booking/addon-service/suggest/:reservation_code", method: "GET" },
+  applyAddon: { route: "/api/booking/reservation/:reservation_code/addon", method: "POST" },
+  removeAddon: { route: "/api/booking/reservation/:reservation_code/addon/:addon_id", method: "DELETE" },
 };

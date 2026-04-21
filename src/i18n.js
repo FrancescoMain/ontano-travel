@@ -279,6 +279,21 @@ const resources = {
       "Coupon applicato": "Coupon applied",
       "Sconto coupon": "Coupon discount",
       "Errore nella rimozione del coupon": "Error removing coupon",
+      // Addon services
+      "Arricchisci il tuo viaggio": "Enhance your trip",
+      "NOVITÀ": "NEW",
+      "Aggiungi servizi opzionali alla tua prenotazione per un'esperienza ancora migliore.":
+        "Add optional services to your booking for an even better experience.",
+      "Servizi Aggiuntivi": "Additional services",
+      "Caricamento addon in corso...": "Loading add-ons...",
+      "Errore nel caricamento degli addon": "Error loading add-ons",
+      "Errore nell'applicazione dell'addon": "Error applying add-on",
+      "Errore nella rimozione dell'addon": "Error removing add-on",
+      "Selezionato": "Selected",
+      "Diminuisci quantità": "Decrease quantity",
+      "Aumenta quantità": "Increase quantity",
+      "/ pers.": "/ pers.",
+      "/ giorno": "/ day",
     },
   },
   it: {
@@ -550,6 +565,21 @@ const resources = {
       "Coupon applicato": "Coupon applicato",
       "Sconto coupon": "Sconto coupon",
       "Errore nella rimozione del coupon": "Errore nella rimozione del coupon",
+      // Addon services
+      "Arricchisci il tuo viaggio": "Arricchisci il tuo viaggio",
+      "NOVITÀ": "NOVITÀ",
+      "Aggiungi servizi opzionali alla tua prenotazione per un'esperienza ancora migliore.":
+        "Aggiungi servizi opzionali alla tua prenotazione per un'esperienza ancora migliore.",
+      "Servizi Aggiuntivi": "Servizi Aggiuntivi",
+      "Caricamento addon in corso...": "Caricamento addon in corso...",
+      "Errore nel caricamento degli addon": "Errore nel caricamento degli addon",
+      "Errore nell'applicazione dell'addon": "Errore nell'applicazione dell'addon",
+      "Errore nella rimozione dell'addon": "Errore nella rimozione dell'addon",
+      "Selezionato": "Selezionato",
+      "Diminuisci quantità": "Diminuisci quantità",
+      "Aumenta quantità": "Aumenta quantità",
+      "/ pers.": "/ pers.",
+      "/ giorno": "/ giorno",
     },
   },
 };
