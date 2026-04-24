@@ -36,7 +36,16 @@ export const AddonServiceCard = ({ addon, appliedQty, onApply, onRemove, disable
             <i className="bi bi-check-lg"></i>
           </span>
         )}
-        <span className="addon-card-icon" aria-hidden="true">{theme.icon}</span>
+        {addon.image ? (
+          <img
+            className="addon-card-image"
+            src={`data:image/svg+xml;base64,${addon.image}`}
+            alt=""
+            aria-hidden="true"
+          />
+        ) : (
+          <span className="addon-card-icon" aria-hidden="true">{theme.icon}</span>
+        )}
         {addon.tooltip && (
           <span className="addon-card-tooltip-badge" title={addon.tooltip}>
             {addon.tooltip}

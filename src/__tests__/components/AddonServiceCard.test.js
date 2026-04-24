@@ -82,4 +82,18 @@ describe('AddonServiceCard', () => {
     expect(screen.getByLabelText('Aumenta quantità')).toBeDisabled();
     expect(screen.getByLabelText('Diminuisci quantità')).toBeDisabled();
   });
+
+  it('renders backend image as data URI when addon.image is present', () => {
+    const addon = { ...baseAddon, image: 'PHN2Zz48L3N2Zz4=' };
+    const { container } = render(<AddonServiceCard {...defaultProps} addon={addon} />);
+    const img = container.querySelector('img.addon-card-image');
+    expect(img).toBeInTheDocument();
+    expect(img).toHaveAttribute('src', 'data:image/svg+xml;base64,PHN2Zz48L3N2Zz4=');
+  });
+
+  it('falls back to emoji theme when addon.image is missing', () => {
+    const { container } = render(<AddonServiceCard {...defaultProps} />);
+    expect(container.querySelector('img.addon-card-image')).not.toBeInTheDocument();
+    expect(container.querySelector('.addon-card-icon')).toBeInTheDocument();
+  });
 });

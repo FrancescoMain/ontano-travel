@@ -28,6 +28,12 @@
   line-height: 1;
 }
 
+.addon-card-image {
+  max-height: 80px;
+  max-width: 80%;
+  object-fit: contain;
+}
+
 .addon-card-check {
   position: absolute;
   top: 8px;
@@ -172,6 +178,10 @@
 
   .addon-card-icon {
     font-size: 36px;
+  }
+
+  .addon-card-image {
+    max-height: 64px;
   }
 
   .addon-card-title {
