@@ -97,6 +97,12 @@ export const ReservationDetail = () => {
             <span>{t("Diritti di prenotazione")}</span>
             <span>{reservation?.taxPreview?.priceFormatted}</span>
           </div>
+          {reservation?.couponCode && reservation?.discountAmount && (
+            <div className="d-flex justify-content-between align-items-center mt-2 text-success">
+              <span>{t("Sconto coupon")} ({reservation.couponCode})</span>
+              <span>- {reservation.discountAmount.priceFormatted}</span>
+            </div>
+          )}
           <div className="d-flex justify-content-between align-items-center">
             <span>{t("Metodo di pagamento")}</span>
             <span>{reservation?.paymentmethod}</span>

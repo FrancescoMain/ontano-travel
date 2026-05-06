@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { CouponInput } from "./CouponInput";
 
 export const Pagamento = ({
   methods,
@@ -9,6 +10,10 @@ export const Pagamento = ({
   setEmail,
   fido,
   total,
+  reservationCode,
+  couponCode,
+  onCouponApplied,
+  onCouponRemoved,
 }) => {
   const { t } = useTranslation();
 
@@ -17,7 +22,19 @@ export const Pagamento = ({
 
   return (
     <div className="col-lg-12  col bg-passeggeri rounded mt-3 mb-3 p-4">
-      <h2 className="text-primary">{t("Metodo di pagamento")}</h2>
+      <h2 className="text-primary">{t("Pagamento")}</h2>
+
+      <h5 className="text-primary mt-3 mb-2">{t("Coupon")}</h5>
+      <CouponInput
+        reservationCode={reservationCode}
+        couponCode={couponCode}
+        onCouponApplied={onCouponApplied}
+        onCouponRemoved={onCouponRemoved}
+      />
+
+      <hr className="my-3" />
+
+      <h5 className="text-primary mb-2">{t("Metodo di pagamento")}</h5>
 
       {methods.map((method) => {
         const isDisabled =

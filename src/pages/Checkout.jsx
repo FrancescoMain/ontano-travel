@@ -17,6 +17,7 @@ import { Condizioni } from "../components/Condizioni";
 import { Pagamento } from "../components/Pagamento";
 import { CheckoutPasseggero } from "../components/Checkouts/CheckoutPassegero";
 import { CheckoutVehicleDetails } from "../components/Checkouts/CheckoutVehicleDetails";
+import { AddonServicesSection } from "../components/Checkouts/AddonServicesSection";
 import { setPayByLink } from "../features/payByLink/payByLinkSlice";
 import { useCheckoutForm } from "../_hooks/useCheckoutForm"; // Import custom hook
 import { submitExternalPayment } from "../_api/reservations/submitExternalPayment"; // Import the new API function
@@ -46,7 +47,7 @@ dayjs.extend(timezone);
 export const Checkout = () => {
   const location = useLocation(); // Add useLocation
 
-  const { passeggeri, prenotazione, paymentsMethod, quote, isTour } =
+  const { passeggeri, prenotazione, setPrenotazione, paymentsMethod, quote, isTour } =
     useReservations();
   const {
     nomi,
@@ -537,6 +538,13 @@ export const Checkout = () => {
                   onVehicleDetailsChange={setVehicleDetails}
                 />
               )}
+              <AddonServicesSection
+                reservationCode={prenotazione?.code}
+                appliedAddons={prenotazione?.addonServices}
+                onReservationUpdated={(updated) =>
+                  setPrenotazione((prev) => ({ ...prev, ...updated }))
+                }
+              />
               <Condizioni
                 value={dto}
                 onChange={handleDtoChange}
@@ -553,6 +561,10 @@ export const Checkout = () => {
                 setEmail={handlePayByLinkEmailChange}
                 fido={fido}
                 total={prenotazione?.priceToPay?.price}
+                reservationCode={prenotazione?.code}
+                couponCode={prenotazione?.couponCode}
+                onCouponApplied={(updated) => setPrenotazione(prev => ({...prev, ...updated}))}
+                onCouponRemoved={(updated) => setPrenotazione(prev => ({...prev, ...updated}))}
               />
             </div>
             <div className="col-lg-4 col bg-aliceblue mte-3 rounded mb-3 sticky-lg-top d-flex flex-column flex-basis-0 flex-grow-0 mt-3">
@@ -602,6 +614,33 @@ export const Checkout = () => {
                   <span>{t("Diritti di prenotazione")}</span>
                   <span>{prenotazione?.taxPreview.priceFormatted}</span>
                 </div>
+                {prenotazione?.couponCode && prenotazione?.discountAmount && (
+                  <div className="d-flex justify-content-between align-items-center mt-2 text-success">
+                    <span>{t("Sconto coupon")}</span>
+                    <span>- {prenotazione.discountAmount.priceFormatted}</span>
+                  </div>
+                )}
+                {prenotazione?.addonServices && prenotazione.addonServices.length > 0 && (
+                  <div className="mt-3">
+                    <div className="text-uppercase small fw-bold text-muted mb-1">
+                      {t("Servizi Aggiuntivi")}
+                    </div>
+                    {prenotazione.addonServices.map((a) => (
+                      <div
+                        key={a.id}
+                        className="d-flex justify-content-between align-items-center mb-1 small"
+                      >
+                        <span className="text-truncate me-2">
+                          {a.title}
+                          {a.qty > 1 ? ` ×${a.qty}` : ""}
+                        </span>
+                        <span className="text-success fw-bold text-nowrap">
+                          + {a.finalPrice?.priceFormatted || ""}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
                 <div className="spacer my-3 sconto d-none"></div>
                 <div
                   id="div_Listino"
