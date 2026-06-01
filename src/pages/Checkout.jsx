@@ -25,6 +25,7 @@ import { resetSelected, resetResults } from "../features/viaggio/resultTratta"; 
 import { resetAll as resetViaggio } from "../features/viaggio/findTratta"; // Import resetAll action for viaggio
 import { resetTourDetails } from "../features/tour/tourSlice"; // Import resetTourDetails action for tour
 import { formatDateTime } from "../utils/dateUtils"; // Import formatDateTime function
+import { trackGoogleAdsConversion } from "../utils/analytics"; // Google Ads conversion tracking
 import { fetchFido } from "../_api/agency/fetchFido"; // Import fetchFido API
 import Cookies from "js-cookie"; // Import js-cookie
 import Accordion from "@mui/material/Accordion";
@@ -125,6 +126,10 @@ export const Checkout = () => {
       value: prenotazione?.priceToPay.price,
       items: items,
     });
+
+    // Google Ads conversion tracking (campagne sponsorizzate).
+    // Spara solo in produzione, gestito internamente dall'util.
+    trackGoogleAdsConversion(prenotazione);
   }
 
   React.useEffect(() => {
