@@ -28,6 +28,7 @@ import alicost from "../../assets/alicost.png";
 import seremar from "../../assets/seremar.png";
 import coastLines from "../../assets/coast-lines.png";
 import grimaldi from "../../assets/Logo-Grimaldi-Lines.jpg";
+import capitanMorgan from "../../assets/capitan-morgan.png";
 import { AccommodationSelector } from "./AccommodationSelector";
 import { areVehiclesValid } from "./VehicleSelector";
 import { toast } from "react-toastify";
@@ -251,6 +252,13 @@ export const ResultCard = ({ data, selected, hidden, id, index }) => {
                     className="img-logo"
                     src={grimaldi}
                     alt="Grimaldi"
+                  />
+                )}
+                {data.company === "CapitanMorgan" && (
+                  <img
+                    className="img-logo"
+                    src={capitanMorgan}
+                    alt="Capitan Morgan"
                   />
                 )}
               </div>
