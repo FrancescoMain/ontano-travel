@@ -12,6 +12,7 @@ import alicost from "../assets/alicost.png";
 import coastLines from "../assets/coast-lines.png";
 import seremar from "../assets/seremar.png";
 import grimaldi from "../assets/Logo-Grimaldi-Lines.jpg";
+import capitanMorgan from "../assets/capitan-morgan.png";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 
@@ -159,6 +160,9 @@ export const CheckoutTratta = ({
           )}
           {route.company === "Grimaldi" && (
             <img className="img-logo" src={grimaldi} alt="Grimaldi" />
+          )}
+          {route.company === "CapitanMorgan" && (
+            <img className="img-logo" src={capitanMorgan} alt="Capitan Morgan" />
           )}
         </div>
         <div class="text-end col-5">
